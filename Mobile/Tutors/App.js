@@ -1,4 +1,5 @@
 import React from "react";
+import MapView from "react-native-maps";
 import {
   Platform,
   StyleSheet,
@@ -6,13 +7,16 @@ import {
   StatusBar,
   Text,
   Button,
+  Dimensions,
 } from "react-native";
+
 import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
 import Login from "./app/screens/Login/Login";
+import SignUp from "./app/screens/SignUp/SignUp";
 import colors from "./app/config/colors";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import SignUp from "./app/screens/SignUp/SignUp";
 
 const Root = createStackNavigator();
 
@@ -29,6 +33,26 @@ const Screen1 = ({ navigation }) => (
       title="Go to SplashScreen"
       onPress={() => {
         navigation.push("SplashScreen");
+      }}
+    />
+    <Button
+      title="Maps"
+      onPress={() => {
+        navigation.push("Maps");
+      }}
+    />
+  </View>
+);
+
+const Maps = ({ navigation }) => (
+  <View>
+    <MapView
+      style={styles.mapWrap}
+      initialRegion={{
+        latitude: 40.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
       }}
     />
   </View>
@@ -62,6 +86,7 @@ export default function App() {
           component={SplashScreen}
           options={{ title: "Hello Screen" }}
         />
+        <Root.Screen name="Maps" component={Maps} />
         <Root.Screen name="Screen1" component={Screen1} />
         <Root.Screen name="Screen2" component={Screen2} />
         <Root.Screen
@@ -88,5 +113,13 @@ const styles = StyleSheet.create({
   title: {
     padding: 20,
     fontSize: 42,
+  },
+  mapWrap: {
+    width: "auto",
+    height: 200,
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });
