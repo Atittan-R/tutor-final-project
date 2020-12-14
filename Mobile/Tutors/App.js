@@ -5,14 +5,19 @@ import {
   View,
   StatusBar,
   Text,
-  Button,
+  Button
 } from "react-native";
+
 import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
 import Login from "./app/screens/Login/Login";
 import colors from "./app/config/colors";
+
+import SignUp from "./app/screens/SignUp/SignUp";
+
+import MapView from 'react-native-maps';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import SignUp from "./app/screens/SignUp/SignUp";
+import Maps from "./app/screens/Map/Map";
 
 const Root = createStackNavigator();
 
@@ -29,6 +34,12 @@ const Screen1 = ({ navigation }) => (
       title="Go to SplashScreen"
       onPress={() => {
         navigation.push("SplashScreen");
+      }}
+    />
+    <Button
+      title="Go to Maps"
+      onPress={() => {
+        navigation.push("Maps");
       }}
     />
   </View>
@@ -55,13 +66,15 @@ export default function App() {
             backgroundColor: "#fff",
           },
         }}
-        initialName="SplashScreen"
+        // initialName="SplashScreen"
       >
         <Root.Screen
           name="SplashScreen"
           component={SplashScreen}
           options={{ title: "Hello Screen" }}
         />
+
+        <Root.Screen name="Maps" component={Maps} />
         <Root.Screen name="Screen1" component={Screen1} />
         <Root.Screen name="Screen2" component={Screen2} />
         <Root.Screen
@@ -89,4 +102,5 @@ const styles = StyleSheet.create({
     padding: 20,
     fontSize: 42,
   },
+  
 });
