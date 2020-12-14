@@ -5,7 +5,7 @@ import {styles} from './styles';
 const ExampleScreen = () => {
     return (
         <View>
-            <Text></Text>
+            <Text>Hello Screen</Text>
         </View>
     )
 }

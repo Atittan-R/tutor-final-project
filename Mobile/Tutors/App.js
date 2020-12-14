@@ -13,6 +13,7 @@ import colors from "./app/config/colors";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import SignUp from "./app/screens/SignUp/SignUp";
+import Require from "./app/screens/Require/Require";
 
 const Root = createStackNavigator();
 
@@ -29,6 +30,12 @@ const Screen1 = ({ navigation }) => (
       title="Go to SplashScreen"
       onPress={() => {
         navigation.push("SplashScreen");
+      }}
+    />
+    <Button
+      title="Require"
+      onPress={() => {
+        navigation.navigate("Require");
       }}
     />
   </View>
@@ -64,6 +71,7 @@ export default function App() {
         />
         <Root.Screen name="Screen1" component={Screen1} />
         <Root.Screen name="Screen2" component={Screen2} />
+        <Root.Screen name="Require" component={Require} />
         <Root.Screen
           name="Login"
           component={Login}
