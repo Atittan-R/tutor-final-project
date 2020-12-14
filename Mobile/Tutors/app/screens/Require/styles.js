@@ -4,14 +4,15 @@ import { colors } from "../../config/colors";
 export const styles = StyleSheet.create({
   contrainer: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   inputItem: {
-    margin: 20,
-    marginBottom: 5,
+    margin: 5,
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#fff",
+    flex:1,
   },
   loginBtnWrapper: {
     marginTop: 10,
@@ -26,10 +27,10 @@ export const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     borderRadius: 20,
-    padding: 35,
-    alignItems: "flex-end",
+    padding: 20,
+    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -41,10 +42,25 @@ export const styles = StyleSheet.create({
   },
   openButton: {
     backgroundColor: "#BAE367",
-    borderRadius: 30,
+    borderRadius: 20,
     paddingHorizontal: 70,
     paddingVertical: 20,
     elevation: 2,
+  },
+  timeButton: {
+    backgroundColor: "#BAE367",
+    borderRadius: 20,
+    paddingHorizontal: 70,
+    paddingVertical: 5,
+    flex:0.5,
+  },
+  closeButton: {
+    backgroundColor: "#BAE367",
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    elevation: 2,
+    alignSelf: "flex-end",
     
   },
   textStyle: {
@@ -59,9 +75,16 @@ export const styles = StyleSheet.create({
     alignContent:"stretch",
     alignItems: "stretch",
     backgroundColor: "#fff",
-    paddingBottom: 20,
-
-    
+    paddingBottom: 20, 
   },
+  alignCheckBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  textTime:{
+    fontSize: 16,
+
+  }
 
 });

@@ -26,21 +26,22 @@ const Require = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [selectedHours, setSelectedHours] = useState(0);
-  const [selectedMinutes, setSelectedMinutes] = useState(0);
+  const [selectedHoursStart, setSelectedHoursStart] = useState(0);
+  const [selectedMinutesStart, setSelectedMinutesStart] = useState(0);
+
+  const [selectedHoursEnd, setSelectedHoursEnd] = useState(0);
+  const [selectedMinutesEnd, setSelectedMinutesEnd] = useState(0);
   return (
     <SafeAreaView style={styles.contrainer}>
       <ScrollView>
         <View style={styles.inputItem}>
-          <Text style={{ flex: 0.5 }}>Course Name</Text>
-          <View style={{ flex: 1 }}>
-            <PrimaryInput />
-          </View>
+          <Text style={{ flex: 1 }}>Course</Text>
+          <PrimaryInput placeHolder={"Enter your course name"} />
         </View>
 
         <View style={styles.inputItem}>
-          <Text style={{ flex: 0.5 }}>Date</Text>
-          <View style={styles.centeredView}>
+        <Text style={{ flex: 0.5 }}>Date</Text>
+          <View style={{ flex: 0.75 }}>
             <Modal
               animationType="slide"
               transparent={true}
@@ -53,8 +54,9 @@ const Require = () => {
                 <View style={styles.modalView}>
                   <View style={styles.groupCheckBox}>
                     <Text> Select date</Text>
+
                     {/* checkbox monday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedMonday}
                         onValueChange={setSelectionMonday}
@@ -64,7 +66,7 @@ const Require = () => {
                     </View>
 
                     {/* checkbox Tuesday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedTuesday}
                         onValueChange={setSelectionTuesday}
@@ -74,7 +76,7 @@ const Require = () => {
                     </View>
 
                     {/* checkbox wednesday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedWednesday}
                         onValueChange={setSelectionWednesday}
@@ -84,7 +86,7 @@ const Require = () => {
                     </View>
 
                     {/* checkbox Thursday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedThursday}
                         onValueChange={setSelectionThursday}
@@ -94,7 +96,7 @@ const Require = () => {
                     </View>
 
                     {/* checkbox Friday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedFriday}
                         onValueChange={setSelectionFriday}
@@ -104,7 +106,7 @@ const Require = () => {
                     </View>
 
                     {/* checkbox Saturday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedSaturday}
                         onValueChange={setSelectionSaturday}
@@ -114,7 +116,7 @@ const Require = () => {
                     </View>
 
                     {/* checkbox Sunday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedSunday}
                         onValueChange={setSelectionSunday}
@@ -124,7 +126,7 @@ const Require = () => {
                     </View>
 
                     {/* checkbox everyday */}
-                    <View style={styles.inputItem}>
+                    <View style={styles.alignCheckBox}>
                       <CheckBox
                         value={isSelectedEveryday}
                         onValueChange={setSelectionEveryday}
@@ -135,7 +137,10 @@ const Require = () => {
                   </View>
 
                   <TouchableHighlight
-                    style={{ ...styles.openButton, backgroundColor: "#BAE367" }}
+                    style={{
+                      ...styles.closeButton,
+                      backgroundColor: "#BAE367",
+                    }}
                     onPress={() => {
                       setModalVisible(!modalVisible);
                     }}
@@ -158,29 +163,57 @@ const Require = () => {
         </View>
 
         <View style={styles.inputItem}>
-          <Text>{isSelectedMonday ? "Monday " : ""}</Text>
-          <Text>{isSelectedTuesday ? "Tuesday " : ""}</Text>
-          <Text>{isSelectedWednesday ? "Wednesday " : ""}</Text>
-          <Text>{isSelectedThursday ? "Thursday " : ""}</Text>
-          <Text>{isSelectedFriday ? "Friday " : ""}</Text>
-          <Text>{isSelectedSaturday ? "Saturday " : ""}</Text>
-          <Text>{isSelectedSunday ? "Sunday " : ""}</Text>
+          <Text>{isSelectedMonday ? "Monday, " : ""}</Text>
+          <Text>{isSelectedTuesday ? "Tuesday, " : ""}</Text>
+          <Text>{isSelectedWednesday ? "Wednesday, " : ""}</Text>
+          <Text>{isSelectedThursday ? "Thursday, " : ""}</Text>
+          <Text>{isSelectedFriday ? "Friday, " : ""}</Text>
+          <Text>{isSelectedSaturday ? "Saturday, " : ""}</Text>
+          <Text>{isSelectedSunday ? "Sunday, " : ""}</Text>
           <Text>{isSelectedEveryday ? "Everyday " : ""}</Text>
         </View>
 
+        {/* Time Start */}
         <View style={styles.inputItem}>
-          <Text >
-            Time Start: {selectedHours}:{selectedMinutes}
-          </Text>
-        </View>
-        <TimePicker 
-            selectedHours={selectedHours}
-            selectedMinutes={selectedMinutes}
-            onChange={(hours, minutes) => {
-              setSelectedHours(hours);
-              setSelectedMinutes(minutes);
+          <Text style={{ flex: 1 }}>Time Start</Text>
+          <View style={styles.timeButton}>
+          <TimePicker
+            selectedHoursStart={selectedHoursStart}
+            selectedMinutesStart={selectedMinutesStart}
+            onChange={(hoursStart, minutesStart) => {
+              setSelectedHoursStart(hoursStart);
+              setSelectedMinutesStart(minutesStart);
             }}
           />
+          </View>
+          
+        </View>
+        <View style={styles.inputItem}>
+          <Text style={styles.textTime}>
+            {selectedHoursStart}:{selectedMinutesStart}
+          </Text>
+        </View>
+
+        {/* Time End */}
+        <View style={styles.inputItem}>
+          <Text style={{ flex: 1 }}>Time End</Text>
+          <View style={styles.timeButton} >
+            <TimePicker
+              selectedHoursEnd={selectedHoursEnd}
+              selectedMinutesEnd={selectedMinutesEnd}
+              onChange={(hoursEnd, minutesEnd) => {
+                setSelectedHoursEnd(hoursEnd);
+                setSelectedMinutesEnd(minutesEnd);
+              }}
+            />
+          </View>
+        </View>
+        <View style={styles.inputItem}>
+          <Text style={styles.textTime}>
+            {selectedHoursEnd}:{selectedMinutesEnd}
+          </Text>
+        </View>
+
         <View style={styles.loginBtnWrapper}>
           <PrimaryButton label={"OK"} screenName={"Screen1"} />
         </View>
