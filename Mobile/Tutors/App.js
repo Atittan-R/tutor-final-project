@@ -6,7 +6,6 @@ import {
   StatusBar,
   Text,
   Button,
-  Dimensions,
 } from "react-native";
 
 import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
@@ -14,8 +13,10 @@ import Login from "./app/screens/Login/Login";
 import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
 import Require from "./app/screens/Require/Require";
+import Maps from "./app/screens/Map/Map";
 import colors from "./app/config/colors";
 
+import MapView from 'react-native-maps';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 
@@ -36,6 +37,11 @@ const Screen1 = ({ navigation }) => (
         navigation.push("SplashScreen");
       }}
     />
+    <Button
+      title="Go to Maps"
+      onPress={() => {
+      navigation.push("Maps");
+      }} />
     <Button
       title="Require"
       onPress={() => {
@@ -75,6 +81,7 @@ export default function App() {
           }}
           initialName="SplashScreen"
         >
+          <Root.Screen name="Maps" component={Maps} />
           <Root.Screen
             name="Login"
             component={Login}
@@ -117,13 +124,5 @@ const styles = StyleSheet.create({
   title: {
     padding: 20,
     fontSize: 42,
-  },
-  mapWrap: {
-    width: "auto",
-    height: 200,
-  },
-  map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
 });
