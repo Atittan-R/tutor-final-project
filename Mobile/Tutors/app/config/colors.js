@@ -1,8 +1,8 @@
 export const colors = {
-  primary: "#8E97FD",
-  white: "#ffff",
-  gray: "#A1A4B2",
-  bg: "#F2F3F7",
-  heading: "#3F414E",
-  facebookBg: "#7583CA",
+  primary: "#BAE367",
+  white: "#ffffff",
+  gray: "#a1a4b2",
+  bg: "#f7f7f7",
+  heading: "#3f414e",
+  facebookBg: "#7583ca",
 };

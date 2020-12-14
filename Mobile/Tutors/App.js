@@ -13,6 +13,7 @@ import {
 import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
 import Login from "./app/screens/Login/Login";
 import SignUp from "./app/screens/SignUp/SignUp";
+import Major from "./app/screens/Major/Major";
 import colors from "./app/config/colors";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -36,23 +37,9 @@ const Screen1 = ({ navigation }) => (
       }}
     />
     <Button
-      title="Maps"
+      title="Major"
       onPress={() => {
-        navigation.push("Maps");
-      }}
-    />
-  </View>
-);
-
-const Maps = ({ navigation }) => (
-  <View>
-    <MapView
-      style={styles.mapWrap}
-      initialRegion={{
-        latitude: 40.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        navigation.push("Major");
       }}
     />
   </View>
@@ -64,7 +51,7 @@ const Screen2 = ({ navigation }) => (
     <Button
       title="Go back"
       onPress={() => {
-        navigation.pop();
+        navigation.pop("");
       }}
     />
   </View>
@@ -82,11 +69,15 @@ export default function App() {
         initialName="SplashScreen"
       >
         <Root.Screen
+          name="Major"
+          component={Major}
+          options={{ title: "Choose Your Major" }}
+        />
+        <Root.Screen
           name="SplashScreen"
           component={SplashScreen}
           options={{ title: "Hello Screen" }}
         />
-        <Root.Screen name="Maps" component={Maps} />
         <Root.Screen name="Screen1" component={Screen1} />
         <Root.Screen name="Screen2" component={Screen2} />
         <Root.Screen
