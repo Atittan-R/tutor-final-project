@@ -1,4 +1,5 @@
 import React from "react";
+import MapView from "react-native-maps";
 import {
   Platform,
   StyleSheet,
@@ -6,10 +7,15 @@ import {
   StatusBar,
   Text,
   Button,
+  Dimensions,
 } from "react-native";
+
 import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
 import Login from "./app/screens/Login/Login";
+import SignUp from "./app/screens/SignUp/SignUp";
+import Major from "./app/screens/Major/Major";
 import colors from "./app/config/colors";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import SignUp from "./app/screens/SignUp/SignUp";
@@ -35,7 +41,12 @@ const Screen1 = ({ navigation }) => (
     <Button
       title="Require"
       onPress={() => {
-        navigation.navigate("Require");
+        navigation.navigate("Require");}}
+        />
+        <Button
+      title="Major"
+      onPress={() => {
+        navigation.push("Major");
       }}
     />
   </View>
@@ -47,7 +58,7 @@ const Screen2 = ({ navigation }) => (
     <Button
       title="Go back"
       onPress={() => {
-        navigation.pop();
+        navigation.pop("");
       }}
     />
   </View>
@@ -64,6 +75,11 @@ export default function App() {
         }}
         initialName="SplashScreen"
       >
+        <Root.Screen
+          name="Major"
+          component={Major}
+          options={{ title: "Choose Your Major" }}
+        />
         <Root.Screen
           name="SplashScreen"
           component={SplashScreen}
@@ -96,5 +112,13 @@ const styles = StyleSheet.create({
   title: {
     padding: 20,
     fontSize: 42,
+  },
+  mapWrap: {
+    width: "auto",
+    height: 200,
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });
