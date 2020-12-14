@@ -1,5 +1,5 @@
 import React from "react";
-import MapView from "react-native-maps";
+
 import {
   Platform,
   StyleSheet,
@@ -18,7 +18,7 @@ import colors from "./app/config/colors";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import SignUp from "./app/screens/SignUp/SignUp";
+
 import Require from "./app/screens/Require/Require";
 
 const Root = createStackNavigator();
@@ -41,9 +41,10 @@ const Screen1 = ({ navigation }) => (
     <Button
       title="Require"
       onPress={() => {
-        navigation.navigate("Require");}}
-        />
-        <Button
+        navigation.navigate("Require");
+      }}
+    />
+    <Button
       title="Major"
       onPress={() => {
         navigation.push("Major");

@@ -6,7 +6,7 @@ import { styles } from "./styles";
 const Major = () => {
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View style={styles.container} >
         <MajorCard majorName={"IT"} />
         <MajorCard majorName={"MT"} />
         <MajorCard majorName={"PUB"} />
