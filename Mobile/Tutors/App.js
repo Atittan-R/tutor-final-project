@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   Platform,
   StyleSheet,
@@ -14,12 +13,12 @@ import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
 import Login from "./app/screens/Login/Login";
 import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
+import Require from "./app/screens/Require/Require";
 import colors from "./app/config/colors";
 
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
-
 import Require from "./app/screens/Require/Require";
+import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 
 const Root = createStackNavigator();
 
@@ -67,36 +66,42 @@ const Screen2 = ({ navigation }) => (
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Root.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: "#fff",
-          },
-        }}
-        initialName="SplashScreen"
-      >
-        <Root.Screen
-          name="Major"
-          component={Major}
-          options={{ title: "Choose Your Major" }}
-        />
-        <Root.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{ title: "Hello Screen" }}
-        />
-        <Root.Screen name="Screen1" component={Screen1} />
-        <Root.Screen name="Screen2" component={Screen2} />
-        <Root.Screen name="Require" component={Require} />
-        <Root.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Root.Screen name="SignUp" component={SignUp} options={{ title: "" }} />
-      </Root.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Root.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#fff",
+            },
+          }}
+          initialName="SplashScreen"
+        >
+          <Root.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Root.Screen
+            name="Major"
+            component={Major}
+            options={{ title: "Choose Your Major" }}
+          />
+          <Root.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{ title: "Hello Screen" }}
+          />
+          <Root.Screen name="Screen1" component={Screen1} />
+          <Root.Screen name="Screen2" component={Screen2} />
+          <Root.Screen name="Require" component={Require} />
+          <Root.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ title: "" }}
+          />
+        </Root.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
