@@ -17,7 +17,6 @@ import Require from "./app/screens/Require/Require";
 import colors from "./app/config/colors";
 
 import { createStackNavigator } from "@react-navigation/stack";
-import Require from "./app/screens/Require/Require";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 
 const Root = createStackNavigator();
