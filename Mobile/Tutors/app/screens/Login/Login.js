@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, SafeAreaView, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/buttons/SecondaryButton/SecondaryButton";
 import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";
@@ -7,7 +7,7 @@ import { styles } from "./styles";
 
 const Login = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <Image style={styles.logo} source={require("../../assets/Appicon.png")} />
       <Text
         style={styles.title}
@@ -36,7 +36,7 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.loginBtnWrapper}>
-          <PrimaryButton label={"LOG IN"} screenName={"Screen1"} />
+          <PrimaryButton label={"LOG IN"} screenName={"Major"} />
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
       </View>
@@ -52,7 +52,7 @@ const Login = ({ navigation }) => {
           </Text>
         </Text>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

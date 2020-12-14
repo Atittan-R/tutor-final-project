@@ -1,26 +1,29 @@
-import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Button, ScrollView, Text, View } from "react-native";
+import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import MajorCard from "../../components/cards/MajorCard/MajorCard";
 import { styles } from "./styles";
 
 const Major = () => {
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <MajorCard majorName={"IT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"PUB"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
-        <MajorCard majorName={"MT"} />
+    <>
+      <ScrollView style={styles.bg}>
+        <View style={styles.container}>
+          <MajorCard majorName={"IT"} />
+          <MajorCard majorName={"MT"} />
+          <MajorCard majorName={"PUB"} />
+          <MajorCard majorName={"ENG"} />
+          <MajorCard majorName={"SCI"} />
+          <MajorCard majorName={"SPC"} />
+          <MajorCard majorName={"SPC"} />
+        </View>
+      </ScrollView>
+      <View style={styles.bg}>
+        <View style={styles.btnWrap}>
+          <PrimaryButton label={"Next"} screenName={"Screen1"} />
+        </View>
       </View>
-    </ScrollView>
+    </>
   );
 };
 
