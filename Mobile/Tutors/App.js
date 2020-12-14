@@ -6,7 +6,6 @@ import {
   StatusBar,
   Text,
   Button,
-  Dimensions,
 } from "react-native";
 
 import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
@@ -14,8 +13,10 @@ import Login from "./app/screens/Login/Login";
 import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
 import Require from "./app/screens/Require/Require";
+import Maps from "./app/screens/Map/Map";
 import colors from "./app/config/colors";
 
+import MapView from "react-native-maps";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 
@@ -24,12 +25,12 @@ const Root = createStackNavigator();
 const Screen1 = ({ navigation }) => (
   <View style={styles.screen}>
     <Text style={styles.title}>Screen 1</Text>
-    <Button
+    {/* <Button
       title="Go to Screen 2"
       onPress={() => {
         navigation.push("Screen2");
       }}
-    />
+    /> */}
     <Button
       title="Go to SplashScreen"
       onPress={() => {
@@ -37,13 +38,31 @@ const Screen1 = ({ navigation }) => (
       }}
     />
     <Button
-      title="Require"
+      title="Go to Login"
+      onPress={() => {
+        navigation.push("SplashScreen");
+      }}
+    />
+    <Button
+      title="Go to Sign Up"
+      onPress={() => {
+        navigation.push("SplashScreen");
+      }}
+    />
+    <Button
+      title="Go to Maps"
+      onPress={() => {
+        navigation.push("Maps");
+      }}
+    />
+    <Button
+      title="Go to Require"
       onPress={() => {
         navigation.navigate("Require");
       }}
     />
     <Button
-      title="Major"
+      title="Go to Major"
       onPress={() => {
         navigation.push("Major");
       }}
@@ -90,6 +109,7 @@ export default function App() {
             component={SplashScreen}
             options={{ title: "Hello Screen" }}
           />
+          <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Require" component={Require} />
@@ -117,13 +137,5 @@ const styles = StyleSheet.create({
   title: {
     padding: 20,
     fontSize: 42,
-  },
-  mapWrap: {
-    width: "auto",
-    height: 200,
-  },
-  map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
 });
