@@ -5,19 +5,21 @@ import {
   View,
   StatusBar,
   Text,
-  Button
+  Button,
 } from "react-native";
 
 import SplashScreen from "./app/screens/SplashScreen/SplashScreen";
 import Login from "./app/screens/Login/Login";
-import colors from "./app/config/colors";
-
 import SignUp from "./app/screens/SignUp/SignUp";
+import Major from "./app/screens/Major/Major";
+import Require from "./app/screens/Require/Require";
+import Maps from "./app/screens/Map/Map";
+import colors from "./app/config/colors";
 
 import MapView from 'react-native-maps';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import Maps from "./app/screens/Map/Map";
+
 
 const Root = createStackNavigator();
 
@@ -39,7 +41,18 @@ const Screen1 = ({ navigation }) => (
     <Button
       title="Go to Maps"
       onPress={() => {
-        navigation.push("Maps");
+      navigation.push("Maps");
+      }} />
+    <Button
+      title="Require"
+      onPress={() => {
+        navigation.navigate("Require");
+      }}
+    />
+    <Button
+      title="Major"
+      onPress={() => {
+        navigation.push("Major");
       }}
     />
   </View>
@@ -51,7 +64,7 @@ const Screen2 = ({ navigation }) => (
     <Button
       title="Go back"
       onPress={() => {
-        navigation.pop();
+        navigation.pop("");
       }}
     />
   </View>
@@ -59,32 +72,43 @@ const Screen2 = ({ navigation }) => (
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Root.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: "#fff",
-          },
-        }}
-        // initialName="SplashScreen"
-      >
-        <Root.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{ title: "Hello Screen" }}
-        />
-
-        <Root.Screen name="Maps" component={Maps} />
-        <Root.Screen name="Screen1" component={Screen1} />
-        <Root.Screen name="Screen2" component={Screen2} />
-        <Root.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Root.Screen name="SignUp" component={SignUp} options={{ title: "" }} />
-      </Root.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Root.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#fff",
+            },
+          }}
+          initialName="SplashScreen"
+        >
+          <Root.Screen name="Maps" component={Maps} />
+          <Root.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Root.Screen
+            name="Major"
+            component={Major}
+            options={{ title: "Choose Your Major" }}
+          />
+          <Root.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{ title: "Hello Screen" }}
+          />
+          <Root.Screen name="Screen1" component={Screen1} />
+          <Root.Screen name="Screen2" component={Screen2} />
+          <Root.Screen name="Require" component={Require} />
+          <Root.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ title: "" }}
+          />
+        </Root.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
@@ -102,5 +126,4 @@ const styles = StyleSheet.create({
     padding: 20,
     fontSize: 42,
   },
-  
 });
