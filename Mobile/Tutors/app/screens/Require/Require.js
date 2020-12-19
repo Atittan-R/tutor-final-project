@@ -40,7 +40,7 @@ const Require = () => {
         </View>
 
         <View style={styles.inputItem}>
-        <Text style={{ flex: 0.5 }}>Date</Text>
+          <Text style={{ flex: 0.5 }}>Date</Text>
           <View style={{ flex: 0.75 }}>
             <Modal
               animationType="slide"
@@ -177,16 +177,15 @@ const Require = () => {
         <View style={styles.inputItem}>
           <Text style={{ flex: 1 }}>Time Start</Text>
           <View style={styles.timeButton}>
-          <TimePicker
-            selectedHoursStart={selectedHoursStart}
-            selectedMinutesStart={selectedMinutesStart}
-            onChange={(hoursStart, minutesStart) => {
-              setSelectedHoursStart(hoursStart);
-              setSelectedMinutesStart(minutesStart);
-            }}
-          />
+            <TimePicker
+              selectedHoursStart={selectedHoursStart}
+              selectedMinutesStart={selectedMinutesStart}
+              onChange={(hoursStart, minutesStart) => {
+                setSelectedHoursStart(hoursStart);
+                setSelectedMinutesStart(minutesStart);
+              }}
+            />
           </View>
-          
         </View>
         <View style={styles.inputItem}>
           <Text style={styles.textTime}>
@@ -197,7 +196,7 @@ const Require = () => {
         {/* Time End */}
         <View style={styles.inputItem}>
           <Text style={{ flex: 1 }}>Time End</Text>
-          <View style={styles.timeButton} >
+          <View style={styles.timeButton}>
             <TimePicker
               selectedHoursEnd={selectedHoursEnd}
               selectedMinutesEnd={selectedMinutesEnd}

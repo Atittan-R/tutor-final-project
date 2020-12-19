@@ -10,5 +10,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
   },
+
   btnWrap: { margin: 20 },
 });
