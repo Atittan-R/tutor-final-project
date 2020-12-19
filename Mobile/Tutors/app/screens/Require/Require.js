@@ -110,7 +110,6 @@ const Require = (props) => {
               <Text>{isSelectedSaturday ? "Sat " : null}</Text>
               <Text>{isSelectedSunday ? "Sun " : null}</Text>
             </View>
-
             <Modal
               animationType="slide"
               transparent={true}
@@ -276,6 +275,7 @@ const Require = (props) => {
               <Picker.Item label="3 Month" value="3" />
               <Picker.Item label="6 Month" value="4" />
             </Picker>
+
           </View>
         </View>
 

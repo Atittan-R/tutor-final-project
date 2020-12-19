@@ -22,9 +22,10 @@ import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 
 const Root = createStackNavigator();
 
-const Screen1 = ({ navigation }) => (
+const Screen1 = ({ navigation, route }) => (
   <View style={styles.screen}>
     <Text style={styles.title}>Screen 1</Text>
+    {/* <Text>Values passed from First page: {route.params.paramKey}</Text> */}
     {/* <Button
       title="Go to Screen 2"
       onPress={() => {
