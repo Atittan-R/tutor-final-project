@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import { colors } from "../../../config/colors";
 
 export default function MajorCard(props) {
-  const { majorName, selected, onPress, index } = props;
+  const { majorName, selected, onPress } = props;
   return (
     <View style={styles.container}>
       <TouchableOpacity
