@@ -14,15 +14,15 @@ import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
 import Require from "./app/screens/Require/Require";
 import Maps from "./app/screens/Map/Map";
+// eslint-disable-next-line no-unused-vars
 import colors from "./app/config/colors";
 
-import MapView from "react-native-maps";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 
 const Root = createStackNavigator();
 
-const Screen1 = ({ navigation, route }) => (
+const Screen1 = ({ navigation }) => (
   <View style={styles.screen}>
     <Text style={styles.title}>Screen 1</Text>
     {/* <Text>Values passed from First page: {route.params.paramKey}</Text> */}
