@@ -14,11 +14,16 @@ import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
 import Require from "./app/screens/Require/Require";
 import Maps from "./app/screens/Map/Map";
+import MyProfile from "./app/screens/MyProfile/MyProfile";
+import Notification from "./app/screens/Notification/Notification";
+import ConfirmOrder from "./app/screens/ConfirmOrder/ConfirmOrder";
+import Payment from "./app/screens/Payment/Payment";
 // eslint-disable-next-line no-unused-vars
-import colors from "./app/config/colors";
+import { colors } from "./app/config/colors";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import { Icon } from "react-native-elements";
 import Cart from "./app/screens/Cart/Cart";
 import History from "./app/screens/History/History";
 import Course from "./app/screens/Course/Course";
@@ -26,7 +31,6 @@ import Course from "./app/screens/Course/Course";
 const Root = createStackNavigator();
 
 const Screen1 = ({ navigation }) => (
-
   <View style={styles.screen}>
     <Text style={styles.title}>Screen 1</Text>
     {/* <Text>Values passed from First page: {route.params.paramKey}</Text> */}
@@ -72,7 +76,31 @@ const Screen1 = ({ navigation }) => (
         navigation.push("Major");
       }}
     />
-      <Button
+    <Button
+      title="Go to MyProfile"
+      onPress={() => {
+        navigation.push("MyProfile");
+      }}
+    />
+    <Button
+      title="Go to Notification"
+      onPress={() => {
+        navigation.push("Notification");
+      }}
+    />
+    <Button
+      title="Go to ConfirmOrder"
+      onPress={() => {
+        navigation.push("ConfirmOrder");
+      }}
+    />
+    <Button
+      title="Go to Payment"
+      onPress={() => {
+        navigation.push("Payment");
+      }}
+    />
+    <Button
       title="Go to Cart"
       onPress={() => {
         navigation.push("Cart");
@@ -83,6 +111,7 @@ const Screen1 = ({ navigation }) => (
       onPress={() => {
         navigation.push("History");
       }}
+<<<<<<< HEAD
     />
      <Button
       title="Go to Course"
@@ -90,7 +119,11 @@ const Screen1 = ({ navigation }) => (
         navigation.push("Course");
       }}
     />
+=======
+      />
+>>>>>>> 315dc33812d9644bb2ef6e8f267e2942be7f36bb
   </View>
+    
 );
 
 const Screen2 = ({ navigation }) => (
@@ -117,7 +150,6 @@ export default function App() {
           }}
           initialName="SplashScreen"
         >
-
           <Root.Screen
             name="Login"
             component={Login}
@@ -133,13 +165,29 @@ export default function App() {
             component={SplashScreen}
             tions={{ title: "Hello Screen" }}
           />
+<<<<<<< HEAD
           
            <Root.Screen name="Course" component={Course}/>
            <Root.Screen name="History" component={History}/>
+=======
+          <Root.Screen name="History" component={History} />
+>>>>>>> 315dc33812d9644bb2ef6e8f267e2942be7f36bb
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Require" component={Require} />
+          <Root.Screen
+            name="MyProfile"
+            component={MyProfile}
+            options={{ title: "My Profile" }}
+          />
+          <Root.Screen name="Notification" component={Notification} />
+          <Root.Screen
+            name="ConfirmOrder"
+            component={ConfirmOrder}
+            options={{ title: "Confirm Order" }}
+          />
+          <Root.Screen name="Payment" component={Payment} />
           <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
             name="SignUp"
@@ -155,7 +203,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   screen: {
