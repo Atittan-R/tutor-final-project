@@ -8,7 +8,8 @@ import {
   Modal,
   Image,
   Platform,
-  Picker
+  Picker,
+  StyleSheet
 
 } from "react-native";
 import { styles } from "./styles";
@@ -16,39 +17,29 @@ import CheckBox from "@react-native-community/checkbox";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { ButtonNoStyle } from "../../components/buttons/ButtonNoStyle";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { Icon } from 'react-native-elements'
+import { colors } from "../../config/colors";
+import { Pressable } from "react-native";
 
 
 
 const Require = (props) => {
   const { textValue } = props;
-
-  const [isSelectedMonday, setSelectionMonday] = useState(false);
-  const [isSelectedTuesday, setSelectionTuesday] = useState(false);
-  const [isSelectedWednesday, setSelectionWednesday] = useState(false);
-  const [isSelectedThursday, setSelectionThursday] = useState(false);
-  const [isSelectedFriday, setSelectionFriday] = useState(false);
-  const [isSelectedSaturday, setSelectionSaturday] = useState(false);
-  const [isSelectedSunday, setSelectionSunday] = useState(false);
-
-  const [modalVisible, setModalVisible] = useState(false);
-
+  //set time start
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
-
   const showTimepickerStart = () => {
     setShow(true);
   };
 
+  //set time end
   const [dateEnd, setDateEnd] = useState(new Date());
   const [showEnd, setShowEnd] = useState(false);
-
   const onChangeEnd = (event, selectedDateEnd) => {
     const currentDateEnd = selectedDateEnd || dateEnd;
     setShowEnd(Platform.OS === 'ios');
@@ -60,36 +51,80 @@ const Require = (props) => {
 
   const [selectedValue, setSelectedValue] = useState("");
 
+  //set checkbox
+  const [isSelectedMonday, setSelectionMonday] = useState(false);
+  const [isSelectedTuesday, setSelectionTuesday] = useState(false);
+  const [isSelectedWednesday, setSelectionWednesday] = useState(false);
+  const [isSelectedThursday, setSelectionThursday] = useState(false);
+  const [isSelectedFriday, setSelectionFriday] = useState(false);
+  const [isSelectedSaturday, setSelectionSaturday] = useState(false);
+  const [isSelectedSunday, setSelectionSunday] = useState(false);
   const [isSelectedEveryday, setSelectionEveryday] = useState(false);
-  const [isDay1, setDay1] = useState(false);
-  const [isDay2, setDay2] = useState(false);
 
-  const checkEveryday = () => {
-    const isMonday = isSelectedMonday;
-    const isTuesday = isSelectedTuesday;
-    const isWednesday = isSelectedWednesday;
-    const isThursday = isSelectedThursday;
-    const isFriday = isSelectedFriday;
-    const isSaturday = isSelectedSaturday;
-    const isSunday = isSelectedSunday;
-    if (isMonday == true && isTuesday == true && isWednesday == true && isThursday == true && isFriday == true && isSunday == true && isSaturday == true) {
-      setSelectionEveryday(true);
-      setSelectionMonday(false);
-      setSelectionTuesday(false);
-      setSelectionWednesday(false);
-      setSelectionThursday(false);
-      setSelectionFriday(false);
-      setSelectionSaturday(false);
-      setSelectionSunday(false);
-    } else if (isMonday == false || isTuesday == false) {
-      setSelectionEveryday(false)
-      console.log("day1 " + isDay1)
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+
+  const selectEveryday = () => {
+    if (isSelectedEveryday === false) { //check false
+      setSelectionEveryday(!isSelectedEveryday); //change to ture
+      setModalVisible(!modalVisible);
+    } else { //check true
+      setSelectionEveryday(!isSelectedEveryday); //change to false
+      setModalVisible(!modalVisible);
     }
   }
+
+  const selectDate = () => {
+    if(isSelectedSunday == true && isSelectedMonday == true && isSelectedTuesday == true){
+      setSelectionEveryday(true);
+      setSelectionSunday(false);
+      setSelectionMonday(false);
+      setSelectionTuesday(false);
+      setModalVisible(!modalVisible); 
+    }else if (isSelectedSunday == true ) {
+      setSelectionSunday(true);
+      setSelectionEveryday(false);
+      setModalVisible(!modalVisible); 
+    }else if(isSelectedMonday == true ){
+      setSelectionMonday(true);
+      setSelectionEveryday(false);
+      setModalVisible(!modalVisible); 
+    }else if(isSelectedTuesday == true ){
+      setSelectionTuesday(true);
+      setSelectionEveryday(false);
+      setModalVisible(!modalVisible); 
+    }else {
+      setModalVisible(!modalVisible); 
+    }
+  }
+
+  // const checkEveryday = () => {
+  //   const isMonday = isSelectedMonday;
+  //   const isTuesday = isSelectedTuesday;
+  //   const isWednesday = isSelectedWednesday;
+  //   const isThursday = isSelectedThursday;
+  //   const isFriday = isSelectedFriday;
+  //   const isSaturday = isSelectedSaturday;
+  //   const isSunday = isSelectedSunday;
+  //   if (isMonday == true && isTuesday == true && isWednesday == true && isThursday == true && isFriday == true && isSunday == true && isSaturday == true) {
+  //     setSelectionEveryday(true);
+  //     // setSelectionMonday(false);
+  //     // setSelectionTuesday(false);
+  //     // setSelectionWednesday(false);
+  //     // setSelectionThursday(false);
+  //     // setSelectionFriday(false);
+  //     // setSelectionSaturday(false);
+  //     // setSelectionSunday(false);
+  //   } else if (isMonday == false || isTuesday == false) {
+  //     setSelectionEveryday(false)
+  //     console.log("day1 " + isDay1)
+  //   }
+  //}
   return (
     <SafeAreaView style={styles.contrainer}>
       <ScrollView style={styles.Global}>
-        
+
         <View style={styles.inputItem}>
           <Text style={{ flex: 0.35 }}>Course</Text>
 
@@ -101,7 +136,7 @@ const Require = (props) => {
 
           <View style={styles.textDate}>
             <View style={styles.wrapText}>
-            <Text>{isSelectedEveryday ? "Everyday" : null}</Text>
+              <Text>{isSelectedEveryday ? "Everyday" : null}</Text>
               <Text>{isSelectedMonday ? "Mon " : null}</Text>
               <Text>{isSelectedTuesday ? "Tue " : null}</Text>
               <Text>{isSelectedWednesday ? "Wed " : null}</Text>
@@ -115,112 +150,118 @@ const Require = (props) => {
               transparent={true}
               visible={modalVisible}
             >
-              {/* inside modal */}
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <View style={styles.groupCheckBox}>
-                    <Text> Select date</Text>
-
-                    {/* checkbox monday */}
+                  <View
+                    style={{
+                      paddingVertical: 10,
+                      borderBottomColor: colors.second,
+                      borderBottomWidth: StyleSheet.hairlineWidth,
+                      alignItems: "center"
+                    }}>
+                    <Text style={{ fontWeight: "bold" }}>Select Date</Text>
+                  </View>
+                  {/* <Pressable
+                    style={({ pressed }) => [
+                      {
+                        backgroundColor: pressed
+                          ? colors.primary
+                          : colors.white
+                      },
+                      styles.pressStyle
+                    ]}
+                    onPress={selectEveryday}>
                     <View style={styles.alignCheckBox}>
+                      <Text>Everyday</Text>
                       <CheckBox
-                        value={isSelectedMonday}
-                        onValueChange={setSelectionMonday}
+                        value={isSelectedEveryday}
+                        onValueChange={selectEveryday}
                         style={styles.checkbox}
                       />
-                      <Text>Monday</Text>
                     </View>
-
-                    {/* checkbox Tuesday */}
+                  </Pressable> */}
+                  <Pressable
+                    style={({ pressed }) => [
+                      {
+                        backgroundColor: pressed
+                          ? colors.primary
+                          : colors.white
+                      },
+                      styles.pressStyle
+                    ]}>
                     <View style={styles.alignCheckBox}>
-                      <CheckBox
-                        value={isSelectedTuesday}
-                        onValueChange={setSelectionTuesday}
-                        style={styles.checkbox}
-                      />
-                      <Text>Tuesday</Text>
-                    </View>
-
-                    {/* checkbox wednesday */}
-                    <View style={styles.alignCheckBox}>
-                      <CheckBox
-                        value={isSelectedWednesday}
-                        onValueChange={setSelectionWednesday}
-                        style={styles.checkbox}
-                      />
-                      <Text>Wednesday</Text>
-                    </View>
-
-                    {/* checkbox Thursday */}
-                    <View style={styles.alignCheckBox}>
-                      <CheckBox
-                        value={isSelectedThursday}
-                        onValueChange={setSelectionThursday}
-                        style={styles.checkbox}
-                      />
-                      <Text>Thursday</Text>
-                    </View>
-
-                    {/* checkbox Friday */}
-                    <View style={styles.alignCheckBox}>
-                      <CheckBox
-                        value={isSelectedFriday}
-                        onValueChange={setSelectionFriday}
-                        style={styles.checkbox}
-                      />
-                      <Text>Friday</Text>
-                    </View>
-
-                    {/* checkbox Saturday */}
-                    <View style={styles.alignCheckBox}>
-                      <CheckBox
-                        value={isSelectedSaturday}
-                        onValueChange={setSelectionSaturday}
-                        style={styles.checkbox}
-                      />
-                      <Text>Saturday</Text>
-                    </View>
-
-                    {/* checkbox Sunday */}
-                    <View style={styles.alignCheckBox}>
+                      <Text>Sunday</Text>
                       <CheckBox
                         value={isSelectedSunday}
                         onValueChange={setSelectionSunday}
                         style={styles.checkbox}
                       />
-                      <Text>Sunday</Text>
                     </View>
-                  </View>
-                  <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                  </Pressable>
+                  <Pressable
+                    style={({ pressed }) => [
+                      {
+                        backgroundColor: pressed
+                          ? colors.primary
+                          : colors.white
+                      },
+                      styles.pressStyle
+                    ]}
+                  >
+                    <View style={styles.alignCheckBox}>
+                      <Text>Monday</Text>
+                      <CheckBox
+                        value={isSelectedMonday}
+                        onValueChange={setSelectionMonday}
+                        style={styles.checkbox}
+                      />
+                    </View>
+                  </Pressable>
+                  <Pressable
+                    style={({ pressed }) => [
+                      {
+                        backgroundColor: pressed
+                          ? colors.primary
+                          : colors.white
+                      },
+                      styles.pressStyle
+                    ]}
+                  >
+                    <View style={styles.alignCheckBox}>
+                      <Text>Tuesday</Text>
+                      <CheckBox
+                        value={isSelectedTuesday}
+                        onValueChange={setSelectionTuesday}
+                        style={styles.checkbox}
+                      />
+                    </View>
+                  </Pressable>
+
+                  <View style={{ flexDirection: "row", justifyContent:"center" }}>
                     <TouchableHighlight
-                      onPress={checkEveryday}
-                      style={styles.closeButton}
-                    >
+                      style={[styles.closeButton, { margin: 20, paddingHorizontal:25}]}
+                      onPress={selectDate}>
                       <Text style={styles.textStyle}>Save</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
-                      style={styles.closeButton}
+                      style={[styles.closeButton, { margin: 20 }]}
                       onPress={() => {
                         setModalVisible(!modalVisible);
-                        checkEveryday;
-                      }}
-                    >
-                      <Text style={styles.textStyle}>Close</Text>
+                      }}>
+                      <Text style={styles.textStyle}>Cancel</Text>
                     </TouchableHighlight>
                   </View>
 
                 </View>
               </View>
             </Modal>
-
-            <TouchableHighlight
-              style={{ position: "absolute", right: 20, top: 12 }}
+            <TouchableOpacity
+              style={{ justifyContent: "flex-end" }}
               onPress={() => {
                 setModalVisible(true);
-              }}
-            >
-              <Image style={styles.imageStyle} source={require("../../assets/calendar.png")} />
-            </TouchableHighlight>
+              }}>
+              <Icon name={'calendar'} type={'feather'} color={colors.second} />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -229,7 +270,7 @@ const Require = (props) => {
           <View style={styles.textDate} >
             <Text>{date.getHours()}:{date.getMinutes()}</Text>
             <TouchableOpacity onPress={showTimepickerStart}>
-              <Image style={styles.imageStyle} source={require("../../assets/clock.png")} />
+              <Icon name={'clock'} type={'feather'} color={colors.second} />
             </TouchableOpacity>
             {show && (
               <DateTimePicker
@@ -238,6 +279,7 @@ const Require = (props) => {
                 is24Hour={true}
                 display="default"
                 onChange={onChange}
+
               />
             )}
           </View>
@@ -247,8 +289,8 @@ const Require = (props) => {
           <Text style={{ flex: 0.35 }}> Time End </Text>
           <View style={styles.textDate} >
             <Text>{dateEnd.getHours()}:{dateEnd.getMinutes()}</Text>
-            <TouchableOpacity onPress={showTimepickerEnd} style={{alignSelf:"flex-end"}}>
-              <Image style={styles.imageStyle} source={require("../../assets/clock.png")} />
+            <TouchableOpacity onPress={showTimepickerEnd} style={{ alignSelf: "flex-end" }}>
+              <Icon name={'clock'} type={'feather'} color={colors.second} />
             </TouchableOpacity>
             {showEnd && (
               <DateTimePicker
@@ -280,7 +322,7 @@ const Require = (props) => {
         </View>
 
         <View style={styles.inputItem2}>
-          <ButtonNoStyle label={"OK"} screenName={"Screen1"} />
+          <ButtonNoStyle label={"OK"} screenName={"Notification"} />
         </View>
       </ScrollView>
     </SafeAreaView>
