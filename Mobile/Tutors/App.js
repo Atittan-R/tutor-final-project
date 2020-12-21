@@ -112,14 +112,13 @@ const Screen1 = ({ navigation }) => (
         navigation.push("History");
       }}
     />
-     <Button
+    <Button
       title="Go to Course"
       onPress={() => {
         navigation.push("Course");
       }}
     />
   </View>
-    
 );
 
 const Screen2 = ({ navigation }) => (
@@ -157,35 +156,34 @@ export default function App() {
             options={{ title: "Choose Your Major" }}
           />
           <Root.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ title: "" }}
+          />
+          <Root.Screen name="Course" component={Course} />
+          <Root.Screen name="Maps" component={Maps} />
+          <Root.Screen name="Require" component={Require} />
+          {/* <Root.Screen
             name="SplashScreen"
             component={SplashScreen}
             tions={{ title: "Hello Screen" }}
-          />
-          
-           <Root.Screen name="Course" component={Course}/>
-           <Root.Screen name="History" component={History}/>
-          <Root.Screen name="Maps" component={Maps} />
-          <Root.Screen name="Screen1" component={Screen1} />
-          <Root.Screen name="Screen2" component={Screen2} />
-          <Root.Screen name="Require" component={Require} />
-          <Root.Screen
-            name="MyProfile"
-            component={MyProfile}
-            options={{ title: "My Profile" }}
-          />
-          <Root.Screen name="Notification" component={Notification} />
+          /> */}
+          <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
             name="ConfirmOrder"
             component={ConfirmOrder}
             options={{ title: "Confirm Order" }}
           />
           <Root.Screen name="Payment" component={Payment} />
-          <Root.Screen name="Cart" component={Cart} />
+          <Root.Screen name="History" component={History} />
+          <Root.Screen name="Notification" component={Notification} />
           <Root.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ title: "" }}
+            name="MyProfile"
+            component={MyProfile}
+            options={{ title: "My Profile" }}
           />
+          <Root.Screen name="Screen2" component={Screen2} />
+          <Root.Screen name="Screen1" component={Screen1} />
         </Root.Navigator>
       </NavigationContainer>
     </ThemeProvider>
