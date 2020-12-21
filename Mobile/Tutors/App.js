@@ -97,7 +97,8 @@ const Screen1 = ({ navigation }) => (
     <Button
       title="Go to Payment"
       onPress={() => {
-        navigation.push("Payment");
+        navigation.push("Payment");}}
+        />
       <Button
       title="Go to Cart"
       onPress={() => {
@@ -109,8 +110,9 @@ const Screen1 = ({ navigation }) => (
       onPress={() => {
         navigation.push("History");
       }}
-    />
+      />
   </View>
+    
 );
 
 const Screen2 = ({ navigation }) => (
