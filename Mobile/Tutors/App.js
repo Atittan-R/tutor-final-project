@@ -134,7 +134,7 @@ export default function App() {
             tions={{ title: "Hello Screen" }}
           />
           
-           <Root.Screen name="Course" component={Course}/>>
+           <Root.Screen name="Course" component={Course}/>
            <Root.Screen name="History" component={History}/>
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />

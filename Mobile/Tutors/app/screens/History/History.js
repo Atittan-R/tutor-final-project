@@ -47,8 +47,8 @@ const History = () => {
                                 <Text>
                                     not yet rated
                                 </Text>
-                                <View>
-                                <Text>
+                                <View >
+                                <Text  style={styles.box_Text}>
                                 total price: {item.price}
                                 </Text>
                                     <TouchableOpacity style={styles.buttons_Add}>

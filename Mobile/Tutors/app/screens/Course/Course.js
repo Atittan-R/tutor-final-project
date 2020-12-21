@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
-import MajorCard from "../../components/cards/MajorCard/MajorCard";
+import ProductCard from "../../components/cards/ProductCard/ProductCard";
+
 import { styles } from "./styles";
 // 
 const Course = () => {
@@ -9,14 +10,14 @@ const Course = () => {
   const [itemId, setItemId] = useState(-1);
   const [
     names = [
-      { id: 0, name: "SUT", select: checked },
-      { id: 1, name: "IT", select: checked },
-      { id: 2, name: "MT", select: checked },
-      { id: 3, name: "PUB", select: checked },
-      { id: 4, name: "ENG", select: checked },
-      { id: 5, name: "SCI", select: checked },
-      { id: 6, name: "SPC", select: checked },
-      { id: 7, name: "SPC", select: checked },
+      { id: 0, name: "Database", select: checked },
+      { id: 1, name: "Compro1", select: checked },
+      { id: 2, name: "Compro2", select: checked },
+      { id: 3, name: "Java", select: checked },
+      { id: 4, name: "Oop", select: checked },
+      { id: 5, name: "HCI", select: checked },
+      { id: 6, name: "UX", select: checked },
+      { id: 7, name: "Data com", select: checked },
     ],
     setName,
   ] = useState();
@@ -53,7 +54,7 @@ const Course = () => {
   };
 
   const majors = names.map((items) => (
-    <MajorCard
+    <ProductCard
       key={items.id}
       index={items.id}
       majorName={items.name}

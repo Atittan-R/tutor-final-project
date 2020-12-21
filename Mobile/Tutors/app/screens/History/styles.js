@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent:"space-between",
         flexGrow: 1,
+        
   
     },
     box_Cart: {
