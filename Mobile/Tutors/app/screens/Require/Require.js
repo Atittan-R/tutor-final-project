@@ -6,15 +6,23 @@ import {
   ScrollView,
   TouchableHighlight,
   Modal,
+  Image,
+  Platform,
+  Picker
+
 } from "react-native";
 import { styles } from "./styles";
-import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";
-import { PrimaryButton } from "../../components/buttons/PrimaryButton";
-//import { CheckBox } from "react-native-elements";
 import CheckBox from "@react-native-community/checkbox";
-import TimePicker from "react-native-simple-time-picker";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { ButtonNoStyle } from "../../components/buttons/ButtonNoStyle";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-const Require = () => {
+
+
+
+const Require = (props) => {
+  const { textValue } = props;
+
   const [isSelectedMonday, setSelectionMonday] = useState(false);
   const [isSelectedTuesday, setSelectionTuesday] = useState(false);
   const [isSelectedWednesday, setSelectionWednesday] = useState(false);
@@ -22,34 +30,92 @@ const Require = () => {
   const [isSelectedFriday, setSelectionFriday] = useState(false);
   const [isSelectedSaturday, setSelectionSaturday] = useState(false);
   const [isSelectedSunday, setSelectionSunday] = useState(false);
-  const [isSelectedEveryday, setSelectionEveryday] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [selectedHoursStart, setSelectedHoursStart] = useState(0);
-  const [selectedMinutesStart, setSelectedMinutesStart] = useState(0);
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
-  const [selectedHoursEnd, setSelectedHoursEnd] = useState(0);
-  const [selectedMinutesEnd, setSelectedMinutesEnd] = useState(0);
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showTimepickerStart = () => {
+    setShow(true);
+  };
+
+  const [dateEnd, setDateEnd] = useState(new Date());
+  const [showEnd, setShowEnd] = useState(false);
+
+  const onChangeEnd = (event, selectedDateEnd) => {
+    const currentDateEnd = selectedDateEnd || dateEnd;
+    setShowEnd(Platform.OS === 'ios');
+    setDateEnd(currentDateEnd);
+  };
+  const showTimepickerEnd = () => {
+    setShowEnd(true);
+  };
+
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const [isSelectedEveryday, setSelectionEveryday] = useState(false);
+  const [isDay1, setDay1] = useState(false);
+  const [isDay2, setDay2] = useState(false);
+
+  const checkEveryday = () => {
+    const isMonday = isSelectedMonday;
+    const isTuesday = isSelectedTuesday;
+    const isWednesday = isSelectedWednesday;
+    const isThursday = isSelectedThursday;
+    const isFriday = isSelectedFriday;
+    const isSaturday = isSelectedSaturday;
+    const isSunday = isSelectedSunday;
+    if (isMonday == true && isTuesday == true && isWednesday == true && isThursday == true && isFriday == true && isSunday == true && isSaturday == true) {
+      setSelectionEveryday(true);
+      setSelectionMonday(false);
+      setSelectionTuesday(false);
+      setSelectionWednesday(false);
+      setSelectionThursday(false);
+      setSelectionFriday(false);
+      setSelectionSaturday(false);
+      setSelectionSunday(false);
+    } else if (isMonday == false || isTuesday == false) {
+      setSelectionEveryday(false)
+      console.log("day1 " + isDay1)
+    }
+  }
   return (
     <SafeAreaView style={styles.contrainer}>
-      <ScrollView>
+      <ScrollView style={styles.Global}>
+        
         <View style={styles.inputItem}>
-          <Text style={{ flex: 1 }}>Course</Text>
-          <PrimaryInput placeHolder={"Enter your course name"} />
+          <Text style={{ flex: 0.35 }}>Course</Text>
+
+          <TextInput value={textValue} placeholder={"Enter your course name"} style={styles.textInput} />
         </View>
 
-        <View style={styles.inputItem}>
-        <Text style={{ flex: 0.5 }}>Date</Text>
-          <View style={{ flex: 0.75 }}>
+        <View style={styles.inputItem} >
+          <Text style={{ flex: 0.35 }}>Date</Text>
+
+          <View style={styles.textDate}>
+            <View style={styles.wrapText}>
+            <Text>{isSelectedEveryday ? "Everyday" : null}</Text>
+              <Text>{isSelectedMonday ? "Mon " : null}</Text>
+              <Text>{isSelectedTuesday ? "Tue " : null}</Text>
+              <Text>{isSelectedWednesday ? "Wed " : null}</Text>
+              <Text>{isSelectedThursday ? "Thu " : null}</Text>
+              <Text>{isSelectedFriday ? "Fri " : null}</Text>
+              <Text>{isSelectedSaturday ? "Sat " : null}</Text>
+              <Text>{isSelectedSunday ? "Sun " : null}</Text>
+            </View>
             <Modal
               animationType="slide"
               transparent={true}
               visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-              }}
             >
+              {/* inside modal */}
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <View style={styles.groupCheckBox}>
@@ -124,98 +190,97 @@ const Require = () => {
                       />
                       <Text>Sunday</Text>
                     </View>
-
-                    {/* checkbox everyday */}
-                    <View style={styles.alignCheckBox}>
-                      <CheckBox
-                        value={isSelectedEveryday}
-                        onValueChange={setSelectionEveryday}
-                        style={styles.checkbox}
-                      />
-                      <Text>Everyday</Text>
-                    </View>
+                  </View>
+                  <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                    <TouchableHighlight
+                      onPress={checkEveryday}
+                      style={styles.closeButton}
+                    >
+                      <Text style={styles.textStyle}>Save</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                      style={styles.closeButton}
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                        checkEveryday;
+                      }}
+                    >
+                      <Text style={styles.textStyle}>Close</Text>
+                    </TouchableHighlight>
                   </View>
 
-                  <TouchableHighlight
-                    style={{
-                      ...styles.closeButton,
-                      backgroundColor: "#BAE367",
-                    }}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}
-                  >
-                    <Text style={styles.textStyle}>Close</Text>
-                  </TouchableHighlight>
                 </View>
               </View>
             </Modal>
 
             <TouchableHighlight
-              style={styles.openButton}
+              style={{ position: "absolute", right: 20, top: 12 }}
               onPress={() => {
                 setModalVisible(true);
               }}
             >
-              <Text style={styles.textStyle}>Select date</Text>
+              <Image style={styles.imageStyle} source={require("../../assets/calendar.png")} />
             </TouchableHighlight>
           </View>
         </View>
 
         <View style={styles.inputItem}>
-          <Text>{isSelectedMonday ? "Monday, " : ""}</Text>
-          <Text>{isSelectedTuesday ? "Tuesday, " : ""}</Text>
-          <Text>{isSelectedWednesday ? "Wednesday, " : ""}</Text>
-          <Text>{isSelectedThursday ? "Thursday, " : ""}</Text>
-          <Text>{isSelectedFriday ? "Friday, " : ""}</Text>
-          <Text>{isSelectedSaturday ? "Saturday, " : ""}</Text>
-          <Text>{isSelectedSunday ? "Sunday, " : ""}</Text>
-          <Text>{isSelectedEveryday ? "Everyday " : ""}</Text>
-        </View>
-
-        {/* Time Start */}
-        <View style={styles.inputItem}>
-          <Text style={{ flex: 1 }}>Time Start</Text>
-          <View style={styles.timeButton}>
-          <TimePicker
-            selectedHoursStart={selectedHoursStart}
-            selectedMinutesStart={selectedMinutesStart}
-            onChange={(hoursStart, minutesStart) => {
-              setSelectedHoursStart(hoursStart);
-              setSelectedMinutesStart(minutesStart);
-            }}
-          />
-          </View>
-          
-        </View>
-        <View style={styles.inputItem}>
-          <Text style={styles.textTime}>
-            {selectedHoursStart}:{selectedMinutesStart}
-          </Text>
-        </View>
-
-        {/* Time End */}
-        <View style={styles.inputItem}>
-          <Text style={{ flex: 1 }}>Time End</Text>
-          <View style={styles.timeButton} >
-            <TimePicker
-              selectedHoursEnd={selectedHoursEnd}
-              selectedMinutesEnd={selectedMinutesEnd}
-              onChange={(hoursEnd, minutesEnd) => {
-                setSelectedHoursEnd(hoursEnd);
-                setSelectedMinutesEnd(minutesEnd);
-              }}
-            />
+          <Text style={{ flex: 0.35 }}> Time Start </Text>
+          <View style={styles.textDate} >
+            <Text>{date.getHours()}:{date.getMinutes()}</Text>
+            <TouchableOpacity onPress={showTimepickerStart}>
+              <Image style={styles.imageStyle} source={require("../../assets/clock.png")} />
+            </TouchableOpacity>
+            {show && (
+              <DateTimePicker
+                value={date}
+                mode="time"
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
           </View>
         </View>
+
         <View style={styles.inputItem}>
-          <Text style={styles.textTime}>
-            {selectedHoursEnd}:{selectedMinutesEnd}
-          </Text>
+          <Text style={{ flex: 0.35 }}> Time End </Text>
+          <View style={styles.textDate} >
+            <Text>{dateEnd.getHours()}:{dateEnd.getMinutes()}</Text>
+            <TouchableOpacity onPress={showTimepickerEnd} style={{alignSelf:"flex-end"}}>
+              <Image style={styles.imageStyle} source={require("../../assets/clock.png")} />
+            </TouchableOpacity>
+            {showEnd && (
+              <DateTimePicker
+                value={dateEnd}
+                mode="time"
+                is24Hour={true}
+                display="default"
+                onChange={onChangeEnd}
+              />
+            )}
+          </View>
         </View>
 
-        <View style={styles.loginBtnWrapper}>
-          <PrimaryButton label={"OK"} screenName={"Screen1"} />
+        <View style={styles.inputItem}>
+          <Text style={{ flex: 0.35 }}> Duration </Text>
+          <View style={styles.textDate} >
+            <Picker
+              selectedValue={selectedValue}
+              style={styles.drop}
+              onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+            >
+              <Picker.Item label="14 Days" value="1" />
+              <Picker.Item label="1 Month" value="2" />
+              <Picker.Item label="3 Month" value="3" />
+              <Picker.Item label="6 Month" value="4" />
+            </Picker>
+
+          </View>
+        </View>
+
+        <View style={styles.inputItem2}>
+          <ButtonNoStyle label={"OK"} screenName={"Screen1"} />
         </View>
       </ScrollView>
     </SafeAreaView>

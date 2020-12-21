@@ -10,7 +10,7 @@ const Maps = () => {
     latitude: 51.5079145,
     longitude: -0.0899163,
     latitudeDelta: 0.01,
-    longitudeDelta: 0.01
+    longitudeDelta: 0.01,
   });
   const [date, setDateNow] = useState(new Date());
   const [duration, setDuration] = useState(3);

@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import { colors } from "../../../config/colors";
 
 
 export default function MajorCard(props) {
-  const [major,setmajor]=useState(undefined);
-  const { majorName } = props;
+  const { majorName, selected, onPress } = props;
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.box}
-      onPress={(majorName) => {
-        setmajor(majorName,console.log(major))
-      }}
+      <TouchableOpacity
+        style={selected ? styles.selected : styles.box}
+        onPress={onPress}
       >
         <Image
           style={styles.logo}
@@ -28,7 +26,7 @@ export const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    width: 190,
+    width: 173,
     paddingTop: 50,
     padding: 20,
     margin: 3,
@@ -44,6 +42,15 @@ export const styles = StyleSheet.create({
     top: -50,
   },
   box: {
+    backgroundColor: colors.wh,
+    width: 150,
+    height: 150,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  selected: {
     backgroundColor: colors.primary,
     width: 150,
     height: 150,

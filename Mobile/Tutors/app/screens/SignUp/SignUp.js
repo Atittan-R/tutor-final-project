@@ -1,5 +1,6 @@
 import React from "react";
 import { SafeAreaView, Text, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/buttons/SecondaryButton/SecondaryButton";
 import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";
@@ -7,7 +8,7 @@ import { styles } from "./styles";
 
 const SignUp = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.textTitle}>
         <Text>Sign Up</Text>
       </View>
@@ -37,7 +38,7 @@ const SignUp = ({ navigation }) => {
       <View style={styles.SignUpBtnWrapper}>
         <PrimaryButton label={"Sign Up"} screenName={"Login"} />
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

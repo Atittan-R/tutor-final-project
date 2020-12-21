@@ -32,11 +32,10 @@ const SplashScreen = ({ navigation }) => {
           <Text style={styles.loginLinkWrapper}>
             <Text style={styles.notificationContent}>
               ALREADY HAVE AN ACCOUNT?
-            </Text>{" "}
+            </Text>
             <Text
               style={styles.link}
-              onPress={() => navigation.navigate("Login")}
-            >
+              onPress={() => navigation.navigate("Login")} >
               LOG IN
             </Text>
           </Text>
