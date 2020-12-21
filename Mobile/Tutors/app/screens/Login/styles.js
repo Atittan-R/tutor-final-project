@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    color: "orange",
+    color: colors.primary,
     padding: 30,
     fontSize: 30,
   },
@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
   },
   footerWrapper: {
     position: "absolute",
-    bottom: 60,
+    bottom: 50,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
@@ -65,8 +65,6 @@ export const styles = StyleSheet.create({
     // fontFamily: 'HelveticaNeue',
     fontWeight: "400",
     fontSize: 14,
-  },
-  footerText1: {
     color: colors.gray,
   },
   footerText2: {
