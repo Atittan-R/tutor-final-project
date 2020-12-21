@@ -111,7 +111,6 @@ const Screen1 = ({ navigation }) => (
       onPress={() => {
         navigation.push("History");
       }}
-<<<<<<< HEAD
     />
      <Button
       title="Go to Course"
@@ -119,9 +118,6 @@ const Screen1 = ({ navigation }) => (
         navigation.push("Course");
       }}
     />
-=======
-      />
->>>>>>> 315dc33812d9644bb2ef6e8f267e2942be7f36bb
   </View>
     
 );
@@ -165,13 +161,9 @@ export default function App() {
             component={SplashScreen}
             tions={{ title: "Hello Screen" }}
           />
-<<<<<<< HEAD
           
            <Root.Screen name="Course" component={Course}/>
            <Root.Screen name="History" component={History}/>
-=======
-          <Root.Screen name="History" component={History} />
->>>>>>> 315dc33812d9644bb2ef6e8f267e2942be7f36bb
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />
           <Root.Screen name="Screen2" component={Screen2} />
