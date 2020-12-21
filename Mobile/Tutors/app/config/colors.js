@@ -5,5 +5,7 @@ export const colors = {
   bg: "#f7f7f7",
   heading: "#3f414e",
   facebookBg: "#7583ca",
-  second:"#47524E"
+  second:"#47524E",
+  testColor: "red",
+  subTestColor: "dodgerblue",
 };

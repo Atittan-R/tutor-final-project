@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Platform,
   StyleSheet,
@@ -14,20 +14,23 @@ import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
 import Require from "./app/screens/Require/Require";
 import Maps from "./app/screens/Map/Map";
-import {colors} from "./app/config/colors";
 import MyProfile from "./app/screens/MyProfile/MyProfile";
 import Notification from "./app/screens/Notification/Notification";
 import ConfirmOrder from "./app/screens/ConfirmOrder/ConfirmOrder";
 import Payment from "./app/screens/Payment/Payment";
+// eslint-disable-next-line no-unused-vars
+import {colors} from "./app/config/colors";
 
-import MapView from "react-native-maps";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 import { Icon } from 'react-native-elements'
+import Cart from "./app/screens/Cart/Cart";
+import History from "./app/screens/History/History";
 
 const Root = createStackNavigator();
 
-const Screen1 = ({ navigation, route }) => (
+const Screen1 = ({ navigation }) => (
+
   <View style={styles.screen}>
     <Text style={styles.title}>Screen 1</Text>
     {/* <Text>Values passed from First page: {route.params.paramKey}</Text> */}
@@ -95,6 +98,16 @@ const Screen1 = ({ navigation, route }) => (
       title="Go to Payment"
       onPress={() => {
         navigation.push("Payment");
+      <Button
+      title="Go to Cart"
+      onPress={() => {
+        navigation.push("Cart");
+      }}
+    />
+    <Button
+      title="Go to History"
+      onPress={() => {
+        navigation.push("History");
       }}
     />
   </View>
@@ -124,6 +137,7 @@ export default function App() {
           }}
           initialName="SplashScreen"
         >
+
           <Root.Screen
             name="Login"
             component={Login}
@@ -139,6 +153,7 @@ export default function App() {
             component={SplashScreen}
             options={{ title: "Hello Screen" }}
           />
+           <Root.Screen name="History" component={History}/>
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />
           <Root.Screen name="Screen2" component={Screen2} />
@@ -147,6 +162,7 @@ export default function App() {
           <Root.Screen name="Notification" component={Notification} />
           <Root.Screen name="ConfirmOrder" component={ConfirmOrder} options={{title:"Confirm Order"}}/>
           <Root.Screen name="Payment" component={Payment} />
+          <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
             name="SignUp"
             component={SignUp}
