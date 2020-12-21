@@ -14,11 +14,16 @@ import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
 import Require from "./app/screens/Require/Require";
 import Maps from "./app/screens/Map/Map";
-import colors from "./app/config/colors";
+import {colors} from "./app/config/colors";
+import MyProfile from "./app/screens/MyProfile/MyProfile";
+import Notification from "./app/screens/Notification/Notification";
+import ConfirmOrder from "./app/screens/ConfirmOrder/ConfirmOrder";
+import Payment from "./app/screens/Payment/Payment";
 
 import MapView from "react-native-maps";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import { Icon } from 'react-native-elements'
 
 const Root = createStackNavigator();
 
@@ -68,6 +73,30 @@ const Screen1 = ({ navigation, route }) => (
         navigation.push("Major");
       }}
     />
+    <Button
+      title="Go to MyProfile"
+      onPress={() => {
+        navigation.push("MyProfile");
+      }}
+    />
+    <Button
+      title="Go to Notification"
+      onPress={() => {
+        navigation.push("Notification");
+      }}
+    />
+     <Button
+      title="Go to ConfirmOrder"
+      onPress={() => {
+        navigation.push("ConfirmOrder");
+      }}
+    />
+    <Button
+      title="Go to Payment"
+      onPress={() => {
+        navigation.push("Payment");
+      }}
+    />
   </View>
 );
 
@@ -114,6 +143,10 @@ export default function App() {
           <Root.Screen name="Screen1" component={Screen1} />
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Require" component={Require} />
+          <Root.Screen name="MyProfile" component={MyProfile} options={{title:"My Profile"}}/>
+          <Root.Screen name="Notification" component={Notification} />
+          <Root.Screen name="ConfirmOrder" component={ConfirmOrder} options={{title:"Confirm Order"}}/>
+          <Root.Screen name="Payment" component={Payment} />
           <Root.Screen
             name="SignUp"
             component={SignUp}

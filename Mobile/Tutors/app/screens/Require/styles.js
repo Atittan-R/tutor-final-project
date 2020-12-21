@@ -30,40 +30,23 @@ export const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
+    alignItems: "stretch",
+    marginHorizontal: 20,
   },
   modalView: {
     margin: 0,
-    backgroundColor: "#acc",
+    backgroundColor: "#fff",
     borderRadius: 30,
     padding: 20,
     alignItems: "stretch",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 2,
-
-  },
-  openButton: {
-    backgroundColor: "#BAE367",
-    borderRadius: 30,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
     elevation: 2,
   },
   closeButton: {
-    backgroundColor: "#BAE367",
+    backgroundColor: colors.primary,
     borderRadius: 20,
     paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingVertical: 10,
     elevation: 2,
-    alignSelf: "flex-end",
-
   },
   textStyle: {
     color: "white",
@@ -73,15 +56,22 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   },
+  pressStyle: {
+    paddingVertical: 10,
+    borderBottomColor: colors.second,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    
+  },
   groupCheckBox: {
-    justifyContent:"flex-start",
-    backgroundColor: "#fdf",
+    justifyContent: "flex-start",
+    backgroundColor: "#fff",
     paddingBottom: 20,
   },
   alignCheckBox: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
+    justifyContent: "space-between",
+    // backgroundColor: "#fff",
   },
   Global: {
     paddingLeft: 20,
@@ -106,27 +96,17 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
     flex: 0.8,
     paddingVertical: 13,
-    // justifyContent: "space-between",
+    justifyContent: "space-between",
   },
   drop: {
-    height: 20, 
-    width: 200, 
-    justifyContent: "space-between", 
+    height: 20,
+    width: 200,
+    justifyContent: "space-between",
     fontSize: 20
   },
-  imageStyle: {
-    width: 20,
-    height: 20,
-  
-  },
-  mySelf: {
-    alignSelf: "flex-end",
-
-  },
-  wrapText:{
+  wrapText: {
     flexDirection: "row",
     flexWrap: "wrap",
- 
-  }
+  },
 
 });
