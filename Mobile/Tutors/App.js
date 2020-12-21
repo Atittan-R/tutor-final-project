@@ -19,18 +19,17 @@ import Notification from "./app/screens/Notification/Notification";
 import ConfirmOrder from "./app/screens/ConfirmOrder/ConfirmOrder";
 import Payment from "./app/screens/Payment/Payment";
 // eslint-disable-next-line no-unused-vars
-import {colors} from "./app/config/colors";
+import { colors } from "./app/config/colors";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
-import { Icon } from 'react-native-elements'
+import { Icon } from "react-native-elements";
 import Cart from "./app/screens/Cart/Cart";
 import History from "./app/screens/History/History";
 
 const Root = createStackNavigator();
 
 const Screen1 = ({ navigation }) => (
-
   <View style={styles.screen}>
     <Text style={styles.title}>Screen 1</Text>
     {/* <Text>Values passed from First page: {route.params.paramKey}</Text> */}
@@ -88,7 +87,7 @@ const Screen1 = ({ navigation }) => (
         navigation.push("Notification");
       }}
     />
-     <Button
+    <Button
       title="Go to ConfirmOrder"
       onPress={() => {
         navigation.push("ConfirmOrder");
@@ -98,7 +97,9 @@ const Screen1 = ({ navigation }) => (
       title="Go to Payment"
       onPress={() => {
         navigation.push("Payment");
-      <Button
+      }}
+    />
+    <Button
       title="Go to Cart"
       onPress={() => {
         navigation.push("Cart");
@@ -109,8 +110,9 @@ const Screen1 = ({ navigation }) => (
       onPress={() => {
         navigation.push("History");
       }}
-    />
+      />
   </View>
+    
 );
 
 const Screen2 = ({ navigation }) => (
@@ -137,7 +139,6 @@ export default function App() {
           }}
           initialName="SplashScreen"
         >
-
           <Root.Screen
             name="Login"
             component={Login}
@@ -153,14 +154,22 @@ export default function App() {
             component={SplashScreen}
             options={{ title: "Hello Screen" }}
           />
-           <Root.Screen name="History" component={History}/>
+          <Root.Screen name="History" component={History} />
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Require" component={Require} />
-          <Root.Screen name="MyProfile" component={MyProfile} options={{title:"My Profile"}}/>
+          <Root.Screen
+            name="MyProfile"
+            component={MyProfile}
+            options={{ title: "My Profile" }}
+          />
           <Root.Screen name="Notification" component={Notification} />
-          <Root.Screen name="ConfirmOrder" component={ConfirmOrder} options={{title:"Confirm Order"}}/>
+          <Root.Screen
+            name="ConfirmOrder"
+            component={ConfirmOrder}
+            options={{ title: "Confirm Order" }}
+          />
           <Root.Screen name="Payment" component={Payment} />
           <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
@@ -177,7 +186,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   screen: {

@@ -4,7 +4,7 @@ import { colors } from "../../config/colors";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   title: {
