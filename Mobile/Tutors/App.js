@@ -21,6 +21,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
 import Cart from "./app/screens/Cart/Cart";
 import History from "./app/screens/History/History";
+import Course from "./app/screens/Course/Course";
 
 const Root = createStackNavigator();
 
@@ -83,6 +84,12 @@ const Screen1 = ({ navigation }) => (
         navigation.push("History");
       }}
     />
+     <Button
+      title="Go to Course"
+      onPress={() => {
+        navigation.push("Course");
+      }}
+    />
   </View>
 );
 
@@ -124,8 +131,10 @@ export default function App() {
           <Root.Screen
             name="SplashScreen"
             component={SplashScreen}
-            options={{ title: "Hello Screen" }}
+            tions={{ title: "Hello Screen" }}
           />
+          
+           <Root.Screen name="Course" component={Course}/>>
            <Root.Screen name="History" component={History}/>
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />
