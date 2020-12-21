@@ -110,8 +110,9 @@ const Screen1 = ({ navigation }) => (
       onPress={() => {
         navigation.push("History");
       }}
-    />
+      />
   </View>
+    
 );
 
 const Screen2 = ({ navigation }) => (
