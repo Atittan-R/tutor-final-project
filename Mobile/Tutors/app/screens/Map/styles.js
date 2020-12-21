@@ -6,41 +6,51 @@ export const styles = StyleSheet.create({
         display: "flex",
         padding: 0,
         margin: 0,
-        flexGrow: 1
     },
     box: {
         display: "flex",
         flexDirection: "row",
         padding: 5,
+        flexGrow: 1,
+        marginBottom: 10,
 
     },
     box_Text: {
         width: 80,
-        marginRight: 10
+        marginHorizontal:10,
+        fontSize:20,
+        color:"#47524E",
+    },
+    box_Text_content: {
+        
+        width: 212,
+        paddingHorizontal:20,
+        paddingVertical:5,
+        fontSize:12,
+        height:30,
+        borderRadius: 50,
+        backgroundColor: "#BAE367",
+        color:"#47524E",
     },
     card: {
         padding: 10,
         margin: 0,
-        marginTop: 20
+        marginTop: 20,
+        flexGrow: 1
     },
     card_title: {
-        fontSize: 25,
+        fontSize: 20,
         textAlign: 'left'
     },
     map: {
         height: 200,
-        opacity:0.5,
-        borderRadius:50
+        borderRadius: 50
     },
-    map_btn: {
-        position: "absolute",
-        backgroundColor: "#BAE367",
-        top:100,
-        left:150, 
-    },
+ 
     button_container: {
         padding: 0,
         margin: 0,
+        height: 55,
         display: "flex",
         flexDirection: "row",
         flexGrow: 1,
@@ -48,16 +58,20 @@ export const styles = StyleSheet.create({
     },
     buttons: {
         justifyContent: "center",
-        flexGrow: 1
+        flexGrow: 1,
+        marginHorizontal:20,
     },
     buttons_Buy: {
         justifyContent: "center",
         flexGrow: 1,
+        marginHorizontal:20,
         backgroundColor: "#BAE367"
 
     },
     buttons_text: {
+        marginTop:10,
+        flexGrow: 1,
+        fontSize:20,
         textAlign: "center"
-    }
-
+    },
 })

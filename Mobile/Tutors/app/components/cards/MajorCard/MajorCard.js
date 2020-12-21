@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import { colors } from "../../../config/colors";
 
+
 export default function MajorCard(props) {
+  const [major,setmajor]=useState(undefined);
   const { majorName } = props;
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.box}>
+      <TouchableOpacity style={styles.box}
+      onPress={(majorName) => {
+        setmajor(majorName,console.log(major))
+      }}
+      >
         <Image
           style={styles.logo}
           source={require("../../../assets/Appicon.png")}

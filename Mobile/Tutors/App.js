@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Platform,
   StyleSheet,
@@ -14,15 +14,18 @@ import SignUp from "./app/screens/SignUp/SignUp";
 import Major from "./app/screens/Major/Major";
 import Require from "./app/screens/Require/Require";
 import Maps from "./app/screens/Map/Map";
+import Testdate from "./app/screens/Testdate/testdate";
 import colors from "./app/config/colors";
-
 import MapView from "react-native-maps";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import Cart from "./app/screens/Cart/Cart";
+import History from "./app/screens/History/History";
 
 const Root = createStackNavigator();
 
 const Screen1 = ({ navigation }) => (
+
   <View style={styles.screen}>
     <Text style={styles.title}>Screen 1</Text>
     {/* <Button
@@ -67,6 +70,18 @@ const Screen1 = ({ navigation }) => (
         navigation.push("Major");
       }}
     />
+      <Button
+      title="Go to Cart"
+      onPress={() => {
+        navigation.push("Cart");
+      }}
+    />
+    <Button
+      title="Go to History"
+      onPress={() => {
+        navigation.push("History");
+      }}
+    />
   </View>
 );
 
@@ -94,6 +109,7 @@ export default function App() {
           }}
           initialName="SplashScreen"
         >
+
           <Root.Screen
             name="Login"
             component={Login}
@@ -109,10 +125,12 @@ export default function App() {
             component={SplashScreen}
             options={{ title: "Hello Screen" }}
           />
+           <Root.Screen name="History" component={History}/>
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Screen1" component={Screen1} />
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Require" component={Require} />
+          <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
             name="SignUp"
             component={SignUp}
