@@ -50,17 +50,16 @@ export const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   pressStyle: {
     paddingVertical: 10,
-    borderBottomColor: colors.second,
+    borderBottomColor: colors.secondary,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    
   },
   groupCheckBox: {
     justifyContent: "flex-start",
@@ -79,7 +78,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   textInput: {
-    backgroundColor: colors.bg,
+    backgroundColor: colors.background,
     borderRadius: 15,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -88,7 +87,7 @@ export const styles = StyleSheet.create({
     flex: 0.8,
   },
   textDate: {
-    backgroundColor: colors.bg,
+    backgroundColor: colors.background,
     borderRadius: 15,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -102,11 +101,10 @@ export const styles = StyleSheet.create({
     height: 20,
     width: 200,
     justifyContent: "space-between",
-    fontSize: 20
+    fontSize: 20,
   },
   wrapText: {
     flexDirection: "row",
     flexWrap: "wrap",
   },
-
 });

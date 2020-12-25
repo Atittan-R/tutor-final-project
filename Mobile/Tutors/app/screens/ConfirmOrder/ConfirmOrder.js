@@ -15,7 +15,7 @@ import { Icon } from "react-native-elements";
 const ConfirmOrder = ({ navigation }) => {
   return (
     <>
-      <ScrollView style={{ backgroundColor: colors.bg }}>
+      <ScrollView style={{ backgroundColor: colors.background }}>
         <SafeAreaView style={styles.contrainer}>
           <View style={styles.coverArea}>
             <TouchableOpacity onPress={() => navigation.navigate("MyProfile")}>
@@ -53,14 +53,14 @@ const ConfirmOrder = ({ navigation }) => {
               <Icon
                 name={"dollar-sign"}
                 type={"feather"}
-                color={colors.second}
+                color={colors.secondary}
               />
               <Text style={styles.textProfile}>Payment</Text>
               <Text>Krung Thai</Text>
               <Icon
                 name={"chevron-right"}
                 type={"feather"}
-                color={colors.second}
+                color={colors.secondary}
               />
             </View>
             <View style={styles.viewItem}>
@@ -81,7 +81,7 @@ const ConfirmOrder = ({ navigation }) => {
       <View style={styles.menu}>
         <View style={styles.viewItem}>
           <View style={{ left: 100, flexDirection: "row" }}>
-            <Text style={colors.second}>Total Price:</Text>
+            <Text style={colors.secondary}>Total Price:</Text>
             <Text style={{ color: "red" }}> ฿400</Text>
           </View>
           <TouchableOpacity

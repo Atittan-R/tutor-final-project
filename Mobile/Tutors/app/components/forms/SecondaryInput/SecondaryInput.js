@@ -22,7 +22,7 @@ export const SecondaryInput = (props) => {
 export const styles = StyleSheet.create({
   container: {
     display: "flex",
-    backgroundColor: colors.bg,
+    backgroundColor: colors.background,
     borderRadius: 15,
     flexDirection: "row",
     alignItems: "center",

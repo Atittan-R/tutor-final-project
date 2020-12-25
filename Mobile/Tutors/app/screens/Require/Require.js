@@ -9,19 +9,16 @@ import {
   Image,
   Platform,
   Picker,
-  StyleSheet
-
+  StyleSheet,
 } from "react-native";
 import { styles } from "./styles";
 import CheckBox from "@react-native-community/checkbox";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { ButtonNoStyle } from "../../components/buttons/ButtonNoStyle";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Icon } from 'react-native-elements'
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Icon } from "react-native-elements";
 import { colors } from "../../config/colors";
 import { Pressable } from "react-native";
-
-
 
 const Require = (props) => {
   const { textValue } = props;
@@ -30,7 +27,7 @@ const Require = (props) => {
   const [show, setShow] = useState(false);
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
+    setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
   const showTimepickerStart = () => {
@@ -42,7 +39,7 @@ const Require = (props) => {
   const [showEnd, setShowEnd] = useState(false);
   const onChangeEnd = (event, selectedDateEnd) => {
     const currentDateEnd = selectedDateEnd || dateEnd;
-    setShowEnd(Platform.OS === 'ios');
+    setShowEnd(Platform.OS === "ios");
     setDateEnd(currentDateEnd);
   };
   const showTimepickerEnd = () => {
@@ -61,43 +58,47 @@ const Require = (props) => {
   const [isSelectedSunday, setSelectionSunday] = useState(false);
   const [isSelectedEveryday, setSelectionEveryday] = useState(false);
 
-
   const [modalVisible, setModalVisible] = useState(false);
 
-
   const selectEveryday = () => {
-    if (isSelectedEveryday === false) { //check false
+    if (isSelectedEveryday === false) {
+      //check false
       setSelectionEveryday(!isSelectedEveryday); //change to ture
       setModalVisible(!modalVisible);
-    } else { //check true
+    } else {
+      //check true
       setSelectionEveryday(!isSelectedEveryday); //change to false
       setModalVisible(!modalVisible);
     }
-  }
+  };
 
   const selectDate = () => {
-    if(isSelectedSunday == true && isSelectedMonday == true && isSelectedTuesday == true){
+    if (
+      isSelectedSunday == true &&
+      isSelectedMonday == true &&
+      isSelectedTuesday == true
+    ) {
       setSelectionEveryday(true);
       setSelectionSunday(false);
       setSelectionMonday(false);
       setSelectionTuesday(false);
-      setModalVisible(!modalVisible); 
-    }else if (isSelectedSunday == true ) {
+      setModalVisible(!modalVisible);
+    } else if (isSelectedSunday == true) {
       setSelectionSunday(true);
       setSelectionEveryday(false);
-      setModalVisible(!modalVisible); 
-    }else if(isSelectedMonday == true ){
+      setModalVisible(!modalVisible);
+    } else if (isSelectedMonday == true) {
       setSelectionMonday(true);
       setSelectionEveryday(false);
-      setModalVisible(!modalVisible); 
-    }else if(isSelectedTuesday == true ){
+      setModalVisible(!modalVisible);
+    } else if (isSelectedTuesday == true) {
       setSelectionTuesday(true);
       setSelectionEveryday(false);
-      setModalVisible(!modalVisible); 
-    }else {
-      setModalVisible(!modalVisible); 
+      setModalVisible(!modalVisible);
+    } else {
+      setModalVisible(!modalVisible);
     }
-  }
+  };
 
   // const checkEveryday = () => {
   //   const isMonday = isSelectedMonday;
@@ -124,14 +125,17 @@ const Require = (props) => {
   return (
     <SafeAreaView style={styles.contrainer}>
       <ScrollView style={styles.Global}>
-
         <View style={styles.inputItem}>
           <Text style={{ flex: 0.35 }}>Course</Text>
 
-          <TextInput value={textValue} placeholder={"Enter your course name"} style={styles.textInput} />
+          <TextInput
+            value={textValue}
+            placeholder={"Enter your course name"}
+            style={styles.textInput}
+          />
         </View>
 
-        <View style={styles.inputItem} >
+        <View style={styles.inputItem}>
           <Text style={{ flex: 0.35 }}>Date</Text>
 
           <View style={styles.textDate}>
@@ -155,10 +159,11 @@ const Require = (props) => {
                   <View
                     style={{
                       paddingVertical: 10,
-                      borderBottomColor: colors.second,
+                      borderBottomColor: colors.secondary,
                       borderBottomWidth: StyleSheet.hairlineWidth,
-                      alignItems: "center"
-                    }}>
+                      alignItems: "center",
+                    }}
+                  >
                     <Text style={{ fontWeight: "bold" }}>Select Date</Text>
                   </View>
                   {/* <Pressable
@@ -185,10 +190,11 @@ const Require = (props) => {
                       {
                         backgroundColor: pressed
                           ? colors.primary
-                          : colors.white
+                          : colors.white,
                       },
-                      styles.pressStyle
-                    ]}>
+                      styles.pressStyle,
+                    ]}
+                  >
                     <View style={styles.alignCheckBox}>
                       <Text>Sunday</Text>
                       <CheckBox
@@ -203,9 +209,9 @@ const Require = (props) => {
                       {
                         backgroundColor: pressed
                           ? colors.primary
-                          : colors.white
+                          : colors.white,
                       },
-                      styles.pressStyle
+                      styles.pressStyle,
                     ]}
                   >
                     <View style={styles.alignCheckBox}>
@@ -222,9 +228,9 @@ const Require = (props) => {
                       {
                         backgroundColor: pressed
                           ? colors.primary
-                          : colors.white
+                          : colors.white,
                       },
-                      styles.pressStyle
+                      styles.pressStyle,
                     ]}
                   >
                     <View style={styles.alignCheckBox}>
@@ -237,21 +243,27 @@ const Require = (props) => {
                     </View>
                   </Pressable>
 
-                  <View style={{ flexDirection: "row", justifyContent:"center" }}>
+                  <View
+                    style={{ flexDirection: "row", justifyContent: "center" }}
+                  >
                     <TouchableHighlight
-                      style={[styles.closeButton, { margin: 20, paddingHorizontal:25}]}
-                      onPress={selectDate}>
+                      style={[
+                        styles.closeButton,
+                        { margin: 20, paddingHorizontal: 25 },
+                      ]}
+                      onPress={selectDate}
+                    >
                       <Text style={styles.textStyle}>Save</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
                       style={[styles.closeButton, { margin: 20 }]}
                       onPress={() => {
                         setModalVisible(!modalVisible);
-                      }}>
+                      }}
+                    >
                       <Text style={styles.textStyle}>Cancel</Text>
                     </TouchableHighlight>
                   </View>
-
                 </View>
               </View>
             </Modal>
@@ -259,18 +271,25 @@ const Require = (props) => {
               style={{ justifyContent: "flex-end" }}
               onPress={() => {
                 setModalVisible(true);
-              }}>
-              <Icon name={'calendar'} type={'feather'} color={colors.second} />
+              }}
+            >
+              <Icon
+                name={"calendar"}
+                type={"feather"}
+                color={colors.secondary}
+              />
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.inputItem}>
           <Text style={{ flex: 0.35 }}> Time Start </Text>
-          <View style={styles.textDate} >
-            <Text>{date.getHours()}:{date.getMinutes()}</Text>
+          <View style={styles.textDate}>
+            <Text>
+              {date.getHours()}:{date.getMinutes()}
+            </Text>
             <TouchableOpacity onPress={showTimepickerStart}>
-              <Icon name={'clock'} type={'feather'} color={colors.second} />
+              <Icon name={"clock"} type={"feather"} color={colors.secondary} />
             </TouchableOpacity>
             {show && (
               <DateTimePicker
@@ -279,7 +298,6 @@ const Require = (props) => {
                 is24Hour={true}
                 display="default"
                 onChange={onChange}
-
               />
             )}
           </View>
@@ -287,10 +305,15 @@ const Require = (props) => {
 
         <View style={styles.inputItem}>
           <Text style={{ flex: 0.35 }}> Time End </Text>
-          <View style={styles.textDate} >
-            <Text>{dateEnd.getHours()}:{dateEnd.getMinutes()}</Text>
-            <TouchableOpacity onPress={showTimepickerEnd} style={{ alignSelf: "flex-end" }}>
-              <Icon name={'clock'} type={'feather'} color={colors.second} />
+          <View style={styles.textDate}>
+            <Text>
+              {dateEnd.getHours()}:{dateEnd.getMinutes()}
+            </Text>
+            <TouchableOpacity
+              onPress={showTimepickerEnd}
+              style={{ alignSelf: "flex-end" }}
+            >
+              <Icon name={"clock"} type={"feather"} color={colors.secondary} />
             </TouchableOpacity>
             {showEnd && (
               <DateTimePicker
@@ -306,18 +329,19 @@ const Require = (props) => {
 
         <View style={styles.inputItem}>
           <Text style={{ flex: 0.35 }}> Duration </Text>
-          <View style={styles.textDate} >
+          <View style={styles.textDate}>
             <Picker
               selectedValue={selectedValue}
               style={styles.drop}
-              onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedValue(itemValue)
+              }
             >
               <Picker.Item label="14 Days" value="1" />
               <Picker.Item label="1 Month" value="2" />
               <Picker.Item label="3 Month" value="3" />
               <Picker.Item label="6 Month" value="4" />
             </Picker>
-
           </View>
         </View>
 

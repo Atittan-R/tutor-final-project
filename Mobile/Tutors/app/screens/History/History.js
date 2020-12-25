@@ -1,6 +1,6 @@
 import QRCode from "react-native-qrcode-svg";
-import React, { useEffect, useState } from "react";
-import { Button, FlatList, Image, ScrollView, Text, View } from "react-native";
+import React from "react";
+import { FlatList, Image, ScrollView, Text, View } from "react-native";
 import { Card } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -16,10 +16,9 @@ const History = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => (
+        renderItem={({ item }) =>  (
           <Card containerStyle={styles.card} name="Profile">
             <Card.Title style={styles.card_title}>Nozel Silvar</Card.Title>
-
             <Card.Divider />
             {
               <View name="Cart" style={styles.box_Cart}>
