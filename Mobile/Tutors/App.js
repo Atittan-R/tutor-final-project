@@ -133,10 +133,6 @@ const Screen1 = ({ navigation }) => (
       }}
     />
   </View>
-<<<<<<< HEAD
-
-=======
->>>>>>> 5f73abcf88e4d80c6c50bbeaad85d62f99d321fb
 );
 
 const Screen2 = ({ navigation }) => (
@@ -178,13 +174,9 @@ export default function App() {
             component={SignUp}
             options={{ title: "" }}
           />
-<<<<<<< HEAD
 
           <Root.Screen name="Course" component={Course} />
           <Root.Screen name="History" component={History} />
-=======
-          <Root.Screen name="Course" component={Course} />
->>>>>>> 5f73abcf88e4d80c6c50bbeaad85d62f99d321fb
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Require" component={Require} />
           {/* <Root.Screen
@@ -192,21 +184,15 @@ export default function App() {
             component={SplashScreen}
             tions={{ title: "Hello Screen" }}
           /> */}
-          <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
             name="ConfirmOrder"
             component={ConfirmOrder}
             options={{ title: "Confirm Order" }}
           />
           <Root.Screen name="Payment" component={Payment} />
-<<<<<<< HEAD
           <Root.Screen name="Cart" component={Cart} />
           <Root.Screen name="TeachingList" component={TeachingList} />
           <Root.Screen name="TestProps" component={TestProps} />
-=======
-          <Root.Screen name="History" component={History} />
-          <Root.Screen name="Notification" component={Notification} />
->>>>>>> 5f73abcf88e4d80c6c50bbeaad85d62f99d321fb
           <Root.Screen
             name="MyProfile"
             component={MyProfile}
