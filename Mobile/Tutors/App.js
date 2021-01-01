@@ -18,6 +18,8 @@ import MyProfile from "./app/screens/MyProfile/MyProfile";
 import Notification from "./app/screens/Notification/Notification";
 import ConfirmOrder from "./app/screens/ConfirmOrder/ConfirmOrder";
 import Payment from "./app/screens/Payment/Payment";
+import TeachingList from "./app/screens/TeachingList/TeachingList";
+import TestProps from "./app/screens/TestProps/TestProps";
 // eslint-disable-next-line no-unused-vars
 import { colors } from "./app/config/colors";
 
@@ -118,6 +120,18 @@ const Screen1 = ({ navigation }) => (
         navigation.push("Course");
       }}
     />
+    <Button
+      title="Go to TeachingList"
+      onPress={() => {
+        navigation.push("TeachingList");
+      }}
+    />
+    <Button
+      title="Go to Props"
+      onPress={() => {
+        navigation.push("TestProps");
+      }}
+    />
   </View>
 );
 
@@ -160,7 +174,9 @@ export default function App() {
             component={SignUp}
             options={{ title: "" }}
           />
+
           <Root.Screen name="Course" component={Course} />
+          <Root.Screen name="History" component={History} />
           <Root.Screen name="Maps" component={Maps} />
           <Root.Screen name="Require" component={Require} />
           {/* <Root.Screen
@@ -168,15 +184,15 @@ export default function App() {
             component={SplashScreen}
             tions={{ title: "Hello Screen" }}
           /> */}
-          <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
             name="ConfirmOrder"
             component={ConfirmOrder}
             options={{ title: "Confirm Order" }}
           />
           <Root.Screen name="Payment" component={Payment} />
-          <Root.Screen name="History" component={History} />
-          <Root.Screen name="Notification" component={Notification} />
+          <Root.Screen name="Cart" component={Cart} />
+          <Root.Screen name="TeachingList" component={TeachingList} />
+          <Root.Screen name="TestProps" component={TestProps} />
           <Root.Screen
             name="MyProfile"
             component={MyProfile}
@@ -185,8 +201,8 @@ export default function App() {
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Screen1" component={Screen1} />
         </Root.Navigator>
-      </NavigationContainer>
-    </ThemeProvider>
+      </NavigationContainer >
+    </ThemeProvider >
   );
 }
 

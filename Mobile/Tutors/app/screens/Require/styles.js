@@ -21,58 +21,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flex: 1,
   },
-  itemWrapper: {
-    margin: 5,
-    flexDirection: "row",
-    flex: 0.6,
-    flexWrap: "wrap",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "stretch",
-    marginHorizontal: 20,
-  },
-  modalView: {
-    margin: 0,
-    backgroundColor: "#fff",
-    borderRadius: 30,
-    padding: 20,
-    alignItems: "stretch",
-    elevation: 2,
-  },
-  closeButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    elevation: 2,
-  },
-  textStyle: {
-    color: "white",
-    textAlign: "center"
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center"
-  },
-  pressStyle: {
-    paddingVertical: 10,
-    borderBottomColor: colors.second,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    
-  },
-  groupCheckBox: {
-    justifyContent: "flex-start",
-    backgroundColor: "#fff",
-    paddingBottom: 20,
-  },
-  alignCheckBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    // backgroundColor: "#fff",
-  },
   Global: {
     paddingLeft: 20,
     paddingRight: 20,
@@ -80,33 +28,11 @@ export const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: colors.bg,
-    borderRadius: 15,
+    borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 10,
     flexDirection: "row",
     flexWrap: "wrap",
     flex: 0.8,
   },
-  textDate: {
-    backgroundColor: colors.bg,
-    borderRadius: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    flex: 0.8,
-    paddingVertical: 13,
-    justifyContent: "space-between",
-  },
-  drop: {
-    height: 20,
-    width: 200,
-    justifyContent: "space-between",
-    fontSize: 20
-  },
-  wrapText: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-
 });

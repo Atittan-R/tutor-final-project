@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { View, StyleSheet, TextInput, Image } from "react-native";
 import { colors } from "../../../config/colors";
 
 export const PrimaryInput = (props) => {
@@ -19,7 +19,7 @@ export const PrimaryInput = (props) => {
 export const styles = StyleSheet.create({
   container: {
     display: "flex",
-    backgroundColor: colors.bg,
+    backgroundColor: colors.background,
     borderRadius: 15,
     flexDirection: "row",
     alignItems: "center",

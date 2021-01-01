@@ -1,6 +1,6 @@
-import React, { useState, version } from "react";
-import { View, TouchableOpacity, TextInput, Button, Image } from "react-native";
-import { AirbnbRating, Card, Rating, Text, Tile } from "react-native-elements";
+import React, { useState } from "react";
+import { View, TouchableOpacity, Image } from "react-native";
+import { AirbnbRating, Card, Text } from "react-native-elements";
 import MapView, { Marker } from "react-native-maps";
 import { styles } from "./styles";
 import { ScrollView } from "react-native";

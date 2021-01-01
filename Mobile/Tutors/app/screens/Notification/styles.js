@@ -1,15 +1,15 @@
-import { StyleSheet } from 'react-native';
-import { colors } from '../../config/colors';
+import { StyleSheet } from "react-native";
+import { colors } from "../../config/colors";
 
 export const styles = StyleSheet.create({
   contrainer: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.background,
   },
   viewItem: {
     margin: 0,
     flexDirection: "row",
-    alignContent: "center"
+    alignContent: "center",
   },
   coverArea: {
     padding: 20,
@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   textHeader: {
     fontWeight: "bold",
-    flex: 0.5
+    flex: 0.5,
   },
   textNormal: {
     flex: 0.75,
@@ -34,7 +34,6 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 2,
     backgroundColor: colors.primary,
-
   },
   label: {
     textAlign: "center",
@@ -46,18 +45,16 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     backgroundColor: colors.white,
-    elevation: 10
+    elevation: 10,
   },
   menuButton: {
     paddingVertical: 10,
     backgroundColor: colors.white,
-    alignItems:"center",
+    alignItems: "center",
   },
   menuText: {
     textAlign: "center",
     fontSize: 11,
-    color:colors.second,
+    color: colors.secondary,
   },
-
-
-})
+});

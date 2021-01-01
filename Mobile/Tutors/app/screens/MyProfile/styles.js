@@ -5,14 +5,14 @@ import { colors } from "../../config/colors";
 export const styles = StyleSheet.create({
   contrainer: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.background,
   },
   viewItem: {
     margin: 10,
     flexDirection: "row",
     flex: 1,
-    flexWrap:"wrap",
-    justifyContent:"space-between"
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
   coverArea: {
     padding: 20,
@@ -20,13 +20,12 @@ export const styles = StyleSheet.create({
   },
   textHeader: {
     fontWeight: "bold",
-    flex: 0.75,
-    // marginRight: 40,
-    color:colors.second,
+    flex: 0.5,
+    color: colors.secondary,
   },
   textNormal: {
     flex: 0.8,
-    color:colors.second,
+    color: colors.secondary,
   },
   imageProfile: {
     width: 80,
@@ -36,23 +35,23 @@ export const styles = StyleSheet.create({
   },
   wrapperCustom: {
     borderRadius: 8,
-    padding: 0
+    padding: 0,
   },
   menu: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     backgroundColor: colors.white,
-    elevation: 10
+    elevation: 10,
   },
   menuButton: {
     paddingVertical: 10,
     backgroundColor: colors.white,
-    alignItems:"center",
+    alignItems: "center",
   },
   menuText: {
     textAlign: "center",
     fontSize: 11,
-    color:colors.second,
+    color: colors.secondary,
   },
   centeredView: {
     flex: 1,
