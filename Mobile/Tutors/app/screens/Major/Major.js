@@ -3,7 +3,7 @@ import { ScrollView, View } from "react-native";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import MajorCard from "../../components/cards/MajorCard/MajorCard";
 import { styles } from "./styles";
-// 
+//
 const Major = () => {
   const [checked, setChecked] = useState(true);
   const [itemId, setItemId] = useState(-1);
@@ -71,7 +71,7 @@ const Major = () => {
       </ScrollView>
       <View style={styles.bg}>
         <View style={styles.btnWrap}>
-          <PrimaryButton label={"Next"} screenName={"Screen1"} />
+          <PrimaryButton label={"Next"} screenName={"Course"} />
         </View>
       </View>
     </>

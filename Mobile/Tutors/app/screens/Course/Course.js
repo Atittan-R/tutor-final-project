@@ -4,8 +4,8 @@ import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import ProductCard from "../../components/cards/ProductCard/ProductCard";
 
 import { styles } from "./styles";
-// 
-const Course = () => {
+//
+const Course = ({ navigation }) => {
   const [checked, setChecked] = useState(true);
   const [itemId, setItemId] = useState(-1);
   const [
@@ -26,6 +26,9 @@ const Course = () => {
     console.log(`\nChecked Values: ${checked}\nID: ${itemId}`);
     // setChecked(checked);
     ObjectSelection(itemId);
+    return () => {
+      navigation.navigate("Maps");
+    };
   }, [itemId]);
 
   //onPress Do this Function
@@ -70,11 +73,6 @@ const Course = () => {
       <ScrollView style={styles.bg}>
         <View style={styles.container}>{majors}</View>
       </ScrollView>
-      <View style={styles.bg}>
-        <View style={styles.btnWrap}>
-          <PrimaryButton label={"Next"} screenName={"Screen1"} />
-        </View>
-      </View>
     </>
   );
 };
