@@ -53,4 +53,49 @@ export const styles = StyleSheet.create({
     fontSize: 11,
     color: colors.secondary,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "stretch",
+    marginHorizontal: 20,
+  },
+  modalView: {
+    margin: 0,
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    padding: 20,
+    alignItems: "stretch",
+    elevation: 2,
+  },
+  closeButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: "white",
+    textAlign: "center"
+  },
+  modalViewText: {
+    padding:10,
+    margin: 10,
+    flexDirection: "row",
+    justifyContent:"flex-start",
+    flex: 1,
+    flexWrap:"wrap",
+    // alignItems:"stretch"
+  },
+  inputStyleHeard:{
+    fontWeight: "bold",
+    marginLeft:20,
+    flex: 0.25,
+    color:colors.second,
+  },
+  inputStyle:{
+    marginLeft:20,
+    flex: 1,
+    color:colors.second,
+  }
 });

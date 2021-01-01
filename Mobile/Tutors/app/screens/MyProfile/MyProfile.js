@@ -11,37 +11,49 @@ import { styles } from "./styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { colors } from "../../config/colors";
 import { Icon } from "react-native-elements";
+import { Editprofile } from "./Editprofile";
 
 const MyProfile = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [Profile, setProfile] = useState([
+    { name: "Yami Sukehiro", major: "Information of Technology", tel: "091246810", email: "yami00z@mail.com" }])
   return (
     <>
       <ScrollView style={{ backgroundColor: colors.background }}>
         <SafeAreaView style={styles.contrainer}>
-          <View style={styles.coverArea}>
-            <View style={styles.coverArea}>
-              <Image
-                source={require("../../assets/profile.jpg")}
-                style={styles.imageProfile}
-              />
-            </View>
-            <View style={styles.viewItem}>
-              <Text style={styles.textHeader}>Name</Text>
-              <Text style={styles.textNormal}>Yami Sukehiro</Text>
-            </View>
-            <View style={styles.viewItem}>
-              <Text style={styles.textHeader}>Major</Text>
-              <Text style={styles.textNormal}>Information of Technology</Text>
-            </View>
-            <View style={styles.viewItem}>
-              <Text style={styles.textHeader}>Tel.</Text>
-              <Text style={styles.textNormal}>091246810</Text>
-            </View>
-            <View style={styles.viewItem}>
-              <Text style={styles.textHeader}>Email</Text>
-              <Text style={styles.textNormal}>yami00z@mail.com</Text>
-            </View>
-          </View>
+          {Profile.map((i) => {
+            return (
+              <View style={styles.coverArea}>
+                <View style={styles.coverArea}>
+                  <Image
+                    source={require("../../assets/profile.jpg")}
+                    style={styles.imageProfile}
+                  />
+                </View>
 
+                <View style={styles.viewItem}>
+                  <Text style={styles.textHeader}>Name</Text>
+                  <Text style={styles.textNormal}>{i.name}</Text>
+                </View>
+                <View style={styles.viewItem}>
+                  <Text style={styles.textHeader}>Major</Text>
+                  <Text style={styles.textNormal}>{i.major}</Text>
+                </View>
+                <View style={styles.viewItem}>
+                  <Text style={styles.textHeader}>Tel.</Text>
+                  <Text style={styles.textNormal}>{i.tel}</Text>
+                </View>
+                <View style={styles.viewItem}>
+                  <Text style={styles.textHeader}>Email</Text>
+                  <Text style={styles.textNormal}>{i.email}</Text>
+                </View>
+                <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={i} ProfileUser={[Profile, setProfile]} />
+              </View>
+            )
+          })
+          }
+
+        
           <View style={{ padding: 5 }}></View>
 
           <View style={styles.coverArea}>
@@ -202,7 +214,9 @@ const MyProfile = ({ navigation }) => {
                 />
               </View>
             </Pressable>
+
             <Pressable
+            onPress={()=>{setModalVisible(true)}}
               // onPress={() => navigation.navigate("Require")}
               style={({ pressed }) => [
                 {

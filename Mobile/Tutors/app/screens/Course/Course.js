@@ -10,14 +10,14 @@ const Course = ({ navigation }) => {
   const [itemId, setItemId] = useState(-1);
   const [
     names = [
-      { id: 0, name: "Database", select: checked },
-      { id: 1, name: "Compro1", select: checked },
-      { id: 2, name: "Compro2", select: checked },
-      { id: 3, name: "Java", select: checked },
-      { id: 4, name: "Oop", select: checked },
-      { id: 5, name: "HCI", select: checked },
-      { id: 6, name: "UX", select: checked },
-      { id: 7, name: "Data com", select: checked },
+      { id: 0, name: "Database", select: checked ,price:650,shopname:"You1"},
+      { id: 1, name: "Compro1", select: checked ,price:500,shopname:"You2"},
+      { id: 2, name: "Compro2", select: checked ,price:450,shopname:"You3"},
+      { id: 3, name: "Java", select: checked ,price:300,shopname:"You4"},
+      { id: 4, name: "Oop", select: checked ,price:350,shopname:"You5"},
+      { id: 5, name: "HCI", select: checked ,price:600,shopname:"You6"},
+      { id: 6, name: "UX", select: checked ,price:650,shopname:"You7"},
+      { id: 7, name: "Data com", select: checked ,price:400,shopname:"You8"},
     ],
     setName,
   ] = useState();
