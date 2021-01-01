@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const cors = require("cors");
 
+const path = require("path");
+
 const corsOptions = {
   origin: "http://localhost:8081/",
 };
@@ -14,7 +16,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //default page API
-app.use("/static", express.static(path.join(__dirname, "public")));
+app.use("/", express.static(path.join(__dirname, "public")));
 // // simple route
 app.get("/message", (req, res) => {
   res.json({ message: "Welcome to SUT Tutors Application." });
@@ -34,9 +36,9 @@ db.sequelize.sync();
 // });
 
 // set port, listen for requests
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3986;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 function initial() {
