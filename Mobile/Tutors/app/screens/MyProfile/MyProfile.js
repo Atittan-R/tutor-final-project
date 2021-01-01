@@ -115,7 +115,7 @@ const MyProfile = ({ navigation }) => {
               </View>
             </Pressable>
             <Pressable
-              // onPress={() => navigation.navigate("Require")}
+              onPress={() => navigation.navigate("TeachingList")}
               style={({ pressed }) => [
                 {
                   backgroundColor: pressed ? colors.primary : colors.white,

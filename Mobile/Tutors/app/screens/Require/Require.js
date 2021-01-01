@@ -3,9 +3,7 @@ import {
   SafeAreaView,
   Text,
   View,
-  ScrollView,
-
-
+  ScrollView
 } from "react-native";
 import { styles } from "./styles";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";

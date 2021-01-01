@@ -184,14 +184,13 @@ export default function App() {
             component={SplashScreen}
             tions={{ title: "Hello Screen" }}
           /> */}
-          <Root.Screen name="Cart" component={Cart} />
           <Root.Screen
             name="ConfirmOrder"
             component={ConfirmOrder}
             options={{ title: "Confirm Order" }}
           />
           <Root.Screen name="Payment" component={Payment} />
-
+          <Root.Screen name="Cart" component={Cart} />
           <Root.Screen name="TeachingList" component={TeachingList} />
           <Root.Screen name="TestProps" component={TestProps} />
           <Root.Screen
