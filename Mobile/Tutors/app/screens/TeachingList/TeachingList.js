@@ -57,6 +57,7 @@ const TeachingList = (props) => {
       <Text style={styles.title}>{title}</Text>
     </View>
   );
+  
   useEffect(() => {
     console.log('====================================>');
     console.log(allValue);

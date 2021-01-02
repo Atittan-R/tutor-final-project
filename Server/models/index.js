@@ -4,10 +4,9 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
   dialect: config.dialect,
-  dialectOptions:{
+  dialectOptions: {
     charset: config.dialectOptions.charset,
     collate: config.dialectOptions.collate,
-
   },
   pool: {
     max: config.pool.max,
@@ -15,7 +14,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     acquire: config.pool.acquire,
     idle: config.pool.idle,
   },
-  logging:false
+  logging: false,
 });
 
 const db = {};
@@ -38,15 +37,10 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId",
 });
 
-db.course.belongsToMany(db.user, {
-  through: "tutor_course",
+db.user.hasMany(db.course, { as: "courses" });
+db.course.belongsTo(db.user, {
   foreignKey: "tutorId",
-  otherKey: "courseId",
-});
-db.user.belongsToMany(db.course, {
-  through: "tutor_course",
-  foreignKey: "courseId",
-  otherKey: "tutorId",
+  as: "user",
 });
 
 db.ROLES = ["user", "admin", "tutor"];

@@ -25,7 +25,7 @@ app.get("/message", (req, res) => {
 // routes
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
-
+require("./routes/course.routes")(app);
 //Connect to database by calling models
 const db = require("./models");
 const Role = db.role;
