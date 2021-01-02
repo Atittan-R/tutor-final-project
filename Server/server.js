@@ -28,20 +28,19 @@ require("./routes/user.routes")(app);
 require("./routes/course.routes")(app);
 //Connect to database by calling models
 const db = require("./models");
-const { ROLES, Category, category } = require("./models");
 const Role = db.role;
-const Categories = db.category;
+const Categories = db.categories;
 
-db.sequelize.sync();
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and Resync Db");
-//   initial();
-// });
+// db.sequelize.sync();
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and Resync Db");
+  initial();
+});
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3986;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}\n`);
 });
 
 function initial() {
@@ -77,6 +76,6 @@ function initial() {
 
   Categories.create({
     id: 4,
-    name: "Engineer",
-  })
+    name: "Engineering",
+  });
 }

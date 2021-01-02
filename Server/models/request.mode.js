@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Requrie = sequelize.define("requrie", {
+  const Request = sequelize.define("requests", {
     name: {
       type: Sequelize.STRING,
     },
@@ -17,5 +17,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   });
 
-  return Requrie;
+  return Request;
 };
