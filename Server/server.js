@@ -28,7 +28,10 @@ require("./routes/user.routes")(app);
 require("./routes/course.routes")(app);
 //Connect to database by calling models
 const db = require("./models");
+const { ROLES, Category, category } = require("./models");
 const Role = db.role;
+const Categories = db.category;
+
 db.sequelize.sync();
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and Resync Db");
@@ -56,4 +59,24 @@ function initial() {
     id: 3,
     name: "admin",
   });
+
+  Categories.create({
+    id: 1,
+    name: "General Education",
+  });
+
+  Categories.create({
+    id: 2,
+    name: "Information Technology",
+  });
+
+  Categories.create({
+    id: 3,
+    name: "Management Technology",
+  });
+
+  Categories.create({
+    id: 4,
+    name: "Engineer",
+  })
 }
