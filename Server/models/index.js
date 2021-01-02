@@ -22,13 +22,13 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require("../models/user.model")(sequelize, Sequelize);
-db.role = require("../models/role.model")(sequelize, Sequelize);
-db.course = require("../models/course.model")(sequelize, Sequelize);
-db.categories = require("../models/category.model")(sequelize, Sequelize);
-db.tag = require("../models/tag.model")(sequelize, Sequelize);
-db.cart = require("../models/cart.mode")(sequelize, Sequelize);
-db.request = require("../models/request.mode")(sequelize, Sequelize);
+db.user = require("./user.model")(sequelize, Sequelize);
+db.role = require("./role.model")(sequelize, Sequelize);
+db.course = require("./course.model")(sequelize, Sequelize);
+db.categories = require("./category.model")(sequelize, Sequelize);
+db.tag = require("./tag.model")(sequelize, Sequelize);
+db.cart = require("./cart.model")(sequelize, Sequelize);
+db.request = require("./request.model")(sequelize, Sequelize);
 
 //NOTE have Roles (many-to-many)
 db.role.belongsToMany(db.user, {
@@ -65,7 +65,7 @@ db.tag.belongsTo(db.categories, {
   as: "categories",
 });
 
-// //REVIEW Course have Tag (many-to-many)
+//REVIEW Course have Tag (many-to-many)
 db.course.belongsToMany(db.tag, {
   through: "tag_course",
   foreignKey: "courseId",
