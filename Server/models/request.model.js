@@ -14,7 +14,11 @@ module.exports = (sequelize, Sequelize) => {
     },
     duration: {
       type: Sequelize.STRING,
-    }
+    },
+    status: {
+      //Available || Taked
+      type: Sequelize.STRING,
+    },
   });
 
   return Request;

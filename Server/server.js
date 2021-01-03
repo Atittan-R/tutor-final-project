@@ -1,9 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const app = express();
 const cors = require("cors");
-
 const path = require("path");
+const app = express();
 
 const corsOptions = {
   origin: "http://localhost:8081/",
@@ -26,16 +25,19 @@ app.get("/message", (req, res) => {
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/course.routes")(app);
+require("./routes/request.routes")(app);
+require("./routes/join.routes")(app);
+
 //Connect to database by calling models
 const db = require("./models");
 const Role = db.role;
 const Categories = db.categories;
 
-// db.sequelize.sync();
-db.sequelize.sync({ force: true }).then(() => {
-  console.log("Drop and Resync Db");
-  initial();
-});
+db.sequelize.sync();
+// db.sequelize.sync({ force: true }).then(() => {
+//   console.log("Drop and Resync Db");
+//   initial();
+// });
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3986;

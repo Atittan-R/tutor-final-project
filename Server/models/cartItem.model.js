@@ -1,9 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-  const Category = sequelize.define("categories", {
-    name: {
+  const CartItem = sequelize.define("cart_items", {
+    amount: {
       type: Sequelize.STRING,
     },
   });
 
-  return Category;
+  return CartItem;
 };

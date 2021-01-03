@@ -14,7 +14,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     acquire: config.pool.acquire,
     idle: config.pool.idle,
   },
-  logging: false,
+  // logging: false,
 });
 
 const db = {};
@@ -29,7 +29,10 @@ db.categories = require("./category.model")(sequelize, Sequelize);
 db.tag = require("./tag.model")(sequelize, Sequelize);
 db.cart = require("./cart.model")(sequelize, Sequelize);
 db.request = require("./request.model")(sequelize, Sequelize);
+db.cartitem = require("./cartItem.model")(sequelize, Sequelize);
+db.take = require("./take.model")(sequelize, Sequelize);
 
+//SECTION USER ROLES
 //NOTE have Roles (many-to-many)
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -50,12 +53,19 @@ db.course.belongsTo(db.user, {
   as: "user",
 });
 
-//SECTION Tag and Categories and Tag
+//SECTION Tag and Categories
 //REVIEW Course has Categories (one-to-many)
 db.categories.hasMany(db.course, { as: "courses" });
 db.course.belongsTo(db.categories, {
   foreignKey: "categoryId",
   as: "categories",
+});
+
+//REVIEW user has many request (one-to-many)
+db.user.hasMany(db.request, { as: "request" });
+db.request.belongsTo(db.user, {
+  foreignKey: "userId",
+  as: "user",
 });
 
 //REVIEW Tag has Categories (one-to-many)
@@ -97,4 +107,55 @@ db.request.belongsTo(db.categories, {
   as: "categories",
 });
 
+//SECTION CART
+//REVIEW Cart have Cart_Item (one-to-many)
+db.cart.hasMany(db.cartitem, { as: "cart_items" });
+db.cartitem.belongsTo(db.cart, {
+  foreignKey: "cartId",
+  as: "cart",
+});
+
+//NOTE Course have Cart_item (one-to-many)
+db.course.hasMany(db.cartitem, { as: "cart_items" });
+db.cartitem.belongsTo(db.course, {
+  foreignKey: "courseId",
+  as: "course",
+});
+
+//REVIEW User have Cart(one-to-one)
+db.user.hasOne(db.cart, { as: "user" });
+
+//SECTION Take Request to creat a Course
+db.user.hasMany(db.take, { as: "take" });
+db.take.belongsTo(db.user, {
+  foreignKey: "userId",
+  otherKey: "takeId",
+  as: "user",
+});
+
+db.request.hasMany(db.take, { as: "take" });
+db.take.belongsTo(db.request, {
+  foreignKey: "requestId",
+  otherKey: "takeId",
+  as: "request",
+});
+
+db.course.hasMany(db.take, { as: "take" });
+db.take.belongsTo(db.course, {
+  foreignKey: "courseId",
+  otherKey: "takeId",
+  as: "course",
+});
+
+//SECTION User join Request
+db.user.belongsToMany(db.request, {
+  through: "join_request",
+  foreignKey: "userId",
+  as: "requests",
+});
+db.request.belongsToMany(db.user, {
+  through: "join_request",
+  foreignKey: "requestId",
+  as: "users",
+});
 module.exports = db;

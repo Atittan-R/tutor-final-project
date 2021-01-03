@@ -12,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
     time_end: {
       type: Sequelize.STRING,
     },
-    description:{
+    description: {
       type: Sequelize.STRING,
     },
     duration: {

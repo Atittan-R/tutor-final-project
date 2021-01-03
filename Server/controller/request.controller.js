@@ -1,34 +1,32 @@
 const db = require("../models");
-const Course = db.course;
+const config = require("../config/auth.config");
+const Request = db.request;
 const Tag = db.tag;
 
-exports.createCourse = (req, res) => {
-  //Save Course Data to Database
-  Course.create({
+exports.createRequest = (req, res) => {
+  //Save Request Data to Database
+  Request.create({
     name: req.body.name,
-    day: req.body.day,
+    date: req.body.date,
     time_start: req.body.time_start,
     time_end: req.body.time_end,
     duration: req.body.duration,
-    description: req.body.description,
-    price: req.body.price,
-    lat: req.body.lat,
-    long: req.body.long,
-    tutorId: req.body.userId,
     categoryId: req.body.categoryId,
+    userId: req.body.userId,
+    status:"Available"
   })
-    .then((course) => {
+    //Set Tag to tag table
+    .then((request) => {
       Tag.create({
         name: req.body.tagname,
-        courseId: course.id,
-        categoryId: course.categoryId,
+        requestId: request.id,
+        categoryId: request.categoryId,
       }).then((tag) => {
-        //Set Join table tag_course
-        course.setTags(tag).then(() => {
-          //Display Response
+        //Set Join table tag_request
+        request.setTags(tag).then(() => {
           res.status(201).send({
-            course: course,
-            message: "Course was registered successfully!",
+            request: request,
+            message: "Request was registered successfully!",
           });
         });
       });
@@ -38,52 +36,51 @@ exports.createCourse = (req, res) => {
     });
 };
 
-exports.findAllCourse = (req, res) => {
-  Course.findAll()
-    .then((course) => {
-      res.status(202).send({ course });
+exports.findAllRequest = (req, res) => {
+  Request.findAll()
+    .then((request) => {
+      res.status(202).send({ request });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
 };
 
-exports.findOneCourse = (req, res) => {
+exports.findOneRequest = (req, res) => {
   const id = req.params.id;
-  Course.findByPk(id)
-    .then((course) => {
-      res.status(202).send({ course });
+  Request.findByPk(id)
+    .then((request) => {
+      res.status(202).send({ request });
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
 };
 
-exports.updateCourse = (req, res) => {
+exports.updateRequest = (req, res) => {
   const id = req.params.id;
-  Course.findByPk(id)
-    .then((course) => {
-      Course.update(
+  Request.findByPk(id)
+    .then(() => {
+      Request.update(
         {
           name: req.body.name,
-          day: req.body.day,
+          date: req.body.date,
           time_start: req.body.time_start,
           time_end: req.body.time_end,
           duration: req.body.duration,
-          description: req.body.description,
-          price: req.body.price,
-          lat: req.body.lat,
-          long: req.body.long,
+          categoryId: req.body.categoryId,
+          userId: req.body.userId,
+         
         },
         { where: { id: id } }
       ).then((num) => {
         if (num == 1) {
           res.status(200).json({
-            message: "course was updated successfully.",
+            message: "request was updated successfully.",
           });
         } else {
           res.status(401).json({
-            message: `Cannot update course with id=${id}. Maybe course was not found or req.body is empty!`,
+            message: `Cannot update request with id=${id}. Maybe request was not found or req.body is empty!`,
           });
         }
       });
@@ -93,15 +90,15 @@ exports.updateCourse = (req, res) => {
     });
 };
 
-exports.deleteCourse = (req, res) => {
+exports.deleteRequest = (req, res) => {
   const id = req.params.id;
-  Course.destroy({
+  Request.destroy({
     where: { id: id },
   })
     .then((num) => {
       if (num == 1) {
         res.status(200).json({
-          message: "course was delete successfully.",
+          message: "request was delete successfully.",
         });
         Course.destroy({
           // ทำลายข้อมูล table url จาก id user
@@ -109,7 +106,7 @@ exports.deleteCourse = (req, res) => {
         });
       } else {
         res.status(401).json({
-          message: `Cannot delete course with id=${id}. Maybe course was not found or req.body is empty!`,
+          message: `Cannot delete request with id=${id}. Maybe request was not found or req.body is empty!`,
         });
       }
     })

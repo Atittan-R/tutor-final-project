@@ -1,7 +1,10 @@
 module.exports = (sequelize, Sequelize) => {
   const Cart = sequelize.define("carts", {
-    stetus:{
+    status: {
       type: Sequelize.STRING,
+    },
+    total: {
+      type: Sequelize.DECIMAL(10, 2),
     },
   });
 
