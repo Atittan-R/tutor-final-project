@@ -27,7 +27,7 @@ require("./routes/user.routes")(app);
 require("./routes/course.routes")(app);
 require("./routes/request.routes")(app);
 require("./routes/join.routes")(app);
-
+require("./routes/take.routes")(app);
 //Connect to database by calling models
 const db = require("./models");
 const Role = db.role;

@@ -7,10 +7,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
     },
     time_start: {
-      type: Sequelize.STRING,
+      type: Sequelize.TIME,
     },
     time_end: {
-      type: Sequelize.STRING,
+      type: Sequelize.TIME,
     },
     duration: {
       type: Sequelize.STRING,
@@ -19,6 +19,9 @@ module.exports = (sequelize, Sequelize) => {
       //Available || Taked
       type: Sequelize.STRING,
     },
+    description:{
+      type: Sequelize.STRING,
+    }
   });
 
   return Request;
