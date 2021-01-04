@@ -25,4 +25,28 @@ module.exports = function (app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+
+  app.get(
+    "/api/user/findAll",
+    // [authJwt.verifyToken],
+    controller.findAllUser
+  );
+
+  app.get(
+    "/api/user/findOne/:id",
+    // [authJwt.verifyToken],
+    controller.findOneUser
+  );
+
+  app.put(
+    "/api/edit/profile/:id",
+    // [authJwt.verifyToken],
+    controller.editProfile
+  );
+
+  app.get(
+    "/user/role/:id",
+    // [authJwt.verifyToken],
+    controller.userrole
+  );
 };

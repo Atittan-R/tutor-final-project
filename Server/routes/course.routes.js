@@ -11,31 +11,31 @@ module.exports = function (app) {
 
   app.get(
     "/api/course/findAll",
-    [authJwt.verifyToken],
+    // [authJwt.verifyToken],
     controller.findAllCourse
   );
 
   app.get(
     "/api/course/findOne/:id",
-    [authJwt.verifyToken],
+    // [authJwt.verifyToken],
     controller.findOneCourse
   );
 
   app.put(
     "/api/course/update/:id",
-    [authJwt.verifyToken, authJwt.isTutor],
+    // [authJwt.verifyToken, authJwt.isTutor],
     controller.updateCourse
   );
 
   app.post(
     "/api/course/create",
-    [authJwt.verifyToken, authJwt.isTutor],
+    // [authJwt.verifyToken, authJwt.isTutor],
     controller.createCourse
   );
 
   app.delete(
     "/api/course/delete/:id",
-    [authJwt.verifyToken, authJwt.isTutor],
+    // [authJwt.verifyToken, authJwt.isTutor],
     controller.deleteCourse
   );
 };
