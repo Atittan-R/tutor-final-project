@@ -13,23 +13,31 @@ exports.createRequest = (req, res) => {
     duration: req.body.duration,
     categoryId: req.body.categoryId,
     userId: req.body.userId,
-    status:"Available"
+    status: "Available",
   })
     //Set Tag to tag table
     .then((request) => {
-      Tag.create({
-        name: req.body.tagname,
-        requestId: request.id,
-        categoryId: request.categoryId,
-      }).then((tag) => {
-        //Set Join table tag_request
-        request.setTags(tag).then(() => {
-          res.status(201).send({
-            request: request,
-            message: "Request was registered successfully!",
+      if (req.body.tagname) {
+        for (i = 0; i < req.body.tagname.length; i++) {
+          Tag.create({
+            name: req.body.tagname,
+            requestId: request.id,
+            categoryId: request.categoryId,
+          }).then((tag) => {
+            //Set Join table tag_request
+            request.setTags(tag).then(() => {
+              res.status(201).send({
+                request: request,
+                message: "Request was registered successfully!",
+              });
+            });
           });
+        }
+      } else {
+        res.status(404).send({
+          message: "Not found Tagname !!!",
         });
-      });
+      }
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
@@ -70,7 +78,6 @@ exports.updateRequest = (req, res) => {
           duration: req.body.duration,
           categoryId: req.body.categoryId,
           userId: req.body.userId,
-         
         },
         { where: { id: id } }
       ).then((num) => {

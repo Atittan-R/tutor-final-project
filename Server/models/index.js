@@ -156,6 +156,6 @@ db.user.belongsToMany(db.request, {
 db.request.belongsToMany(db.user, {
   through: "join_request",
   foreignKey: "requestId",
-  as: "users",
+  as: "join_users",
 });
 module.exports = db;

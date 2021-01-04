@@ -18,20 +18,26 @@ exports.createCourse = (req, res) => {
     categoryId: req.body.categoryId,
   })
     .then((course) => {
-      Tag.create({
-        name: req.body.tagname,
-        courseId: course.id,
-        categoryId: course.categoryId,
-      }).then((tag) => {
-        //Set Join table tag_course
-        course.setTags(tag).then(() => {
-          //Display Response
-          res.status(201).send({
-            course: course,
-            message: "Course was registered successfully!",
+      if (req.body.tagname) {
+        Tag.create({
+          name: req.body.tagname,
+          courseId: course.id,
+          categoryId: course.categoryId,
+        }).then((tag) => {
+          //Set Join table tag_course
+          course.setTags(tag).then(() => {
+            //Display Response
+            res.status(201).send({
+              course: course,
+              message: "Course was registered successfully!",
+            });
           });
         });
-      });
+      } else {
+        res.status(404).send({
+          message: "Not found Tagname !!!",
+        });
+      }
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });

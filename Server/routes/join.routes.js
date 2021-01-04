@@ -17,9 +17,16 @@ module.exports = function (app) {
     controller.joinRequest
   );
 
+  //find user who join in a coursea
   app.get(
-    "/api/join/findOne/:id",
+    "/api/join/list/:requestid",
     // [authJwt.verifyToken],
-    controller.findJoinRequest
+    controller.joinUserList
+  );
+
+  app.post(
+    "/api/join/cancel/:userid",
+    // [authJwt.verifyToken],
+    controller.cancelJoin
   );
 };
