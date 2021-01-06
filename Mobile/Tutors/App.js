@@ -201,8 +201,8 @@ export default function App() {
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Screen1" component={Screen1} />
         </Root.Navigator>
-      </NavigationContainer >
-    </ThemeProvider >
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
@@ -221,3 +221,4 @@ const styles = StyleSheet.create({
     fontSize: 42,
   },
 });
+
