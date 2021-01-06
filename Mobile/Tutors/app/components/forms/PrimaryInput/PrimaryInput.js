@@ -3,10 +3,16 @@ import { View, StyleSheet, TextInput, Image } from "react-native";
 import { colors } from "../../../config/colors";
 
 export const PrimaryInput = (props) => {
-  const { placeHolder, isValid, value } = props;
+  const { placeHolder, isValid, value, onChangeText } = props;
+
   return (
     <View style={styles.container}>
-      <TextInput value={value} style={styles.input} placeholder={placeHolder} />
+      <TextInput
+        value={value}
+        style={styles.input}
+        placeholder={placeHolder}
+        onChangeText={onChangeText}
+      />
       <View style={styles.validityShowWrapper}>
         {isValid ? (
           <Image source={require("../../../assets/images/checked.png")} />
