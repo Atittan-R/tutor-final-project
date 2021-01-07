@@ -55,7 +55,6 @@ const TeachingList = (props) => {
     // ...or any prop you want
   });
 
-
   useEffect(() => {
     console.log('====================================>');
     console.log(allValue);

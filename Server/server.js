@@ -1,9 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const app = express();
 const cors = require("cors");
-
 const path = require("path");
+const app = express();
 
 const corsOptions = {
   origin: "http://localhost:8081/",
@@ -25,10 +24,15 @@ app.get("/message", (req, res) => {
 // routes
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
-
+require("./routes/course.routes")(app);
+require("./routes/request.routes")(app);
+require("./routes/join.routes")(app);
+require("./routes/take.routes")(app);
 //Connect to database by calling models
 const db = require("./models");
 const Role = db.role;
+const Categories = db.categories;
+
 db.sequelize.sync();
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and Resync Db");
@@ -38,7 +42,7 @@ db.sequelize.sync();
 // set port, listen for requests
 const PORT = process.env.PORT || 3986;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}\n`);
 });
 
 function initial() {
@@ -55,5 +59,25 @@ function initial() {
   Role.create({
     id: 3,
     name: "admin",
+  });
+
+  Categories.create({
+    id: 1,
+    name: "General Education",
+  });
+
+  Categories.create({
+    id: 2,
+    name: "Information Technology",
+  });
+
+  Categories.create({
+    id: 3,
+    name: "Management Technology",
+  });
+
+  Categories.create({
+    id: 4,
+    name: "Engineering",
   });
 }

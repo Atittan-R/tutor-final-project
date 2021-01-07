@@ -86,4 +86,5 @@ const authJwt = {
   isTutor: isTutor,
   isTutorOrAdmin: isTutorOrAdmin,
 };
+
 module.exports = authJwt;

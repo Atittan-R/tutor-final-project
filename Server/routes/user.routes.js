@@ -10,19 +10,43 @@ module.exports = function (app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
-
-  app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
-
   app.get(
-    "/api/test/tutor",
-    [authJwt.verifyToken, authJwt.isTutor],
-    controller.tutorBoard
+    "/api/user/findAll",
+    // [authJwt.verifyToken],
+    controller.findAllUser
   );
 
   app.get(
-    "/api/test/admin",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    controller.adminBoard
+    "/api/user/findOne/:id",
+    // [authJwt.verifyToken],
+    controller.findOneUser
+  );
+
+  app.put(
+    "/api/edit/profile/:id",
+    // [authJwt.verifyToken],
+    controller.editProfile
+  );
+
+  app.get(
+    "/user/role/:id",
+    // [authJwt.verifyToken],
+    controller.userrole
   );
 };
+
+// app.get("/api/test/all", controller.allAccess);
+
+// app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+
+// app.get(
+//   "/api/test/tutor",
+//   [authJwt.verifyToken, authJwt.isTutor],
+//   controller.tutorBoard
+// );
+
+// app.get(
+//   "/api/test/admin",
+//   [authJwt.verifyToken, authJwt.isAdmin],
+//   controller.adminBoard
+// );

@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "c169f7c0-d9a0-48c1-bc44-73b334d259bf",
+		"name": "Deeplink for Payment via SCB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. /partners/sandbox/v1/oauth/token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "resourceOwnerId",
+						"value": "<Your API Key>",
+						"type": "text"
+					},
+					{
+						"key": "requestUId",
+						"value": "{{$guid}}",
+						"type": "text"
+					},
+					{
+						"key": "accept-language",
+						"value": "EN",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"applicationKey\" : \"<Your API Key>\",\r\n\t\"applicationSecret\" : \"<Your API Secret>\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api-sandbox.partners.scb/partners/sandbox/v1/oauth/token",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"partners",
+						"scb"
+					],
+					"path": [
+						"partners",
+						"sandbox",
+						"v1",
+						"oauth",
+						"token"
+					]
+				},
+				"description": "POST /partners/v1/oauth/token"
+			},
+			"response": []
+		},
+		{
+			"name": "2. /partners/sandbox/v3/deeplink/transactions",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "Bearer <Your Access Token>"
+					},
+					{
+						"key": "resourceOwnerId",
+						"type": "text",
+						"value": "<Your API Key>"
+					},
+					{
+						"key": "requestUId",
+						"type": "text",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "channel",
+						"type": "text",
+						"value": "scbeasy"
+					},
+					{
+						"key": "accept-language",
+						"type": "text",
+						"value": "EN"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"transactionType\": \"PURCHASE\",\n\t\"transactionSubType\": [\"BP\", \"CCFA\", \"CCIPP\"],\n\t\"sessionValidityPeriod\": 60,\n\t\"sessionValidUntil\": \"\",\n\t\"billPayment\": {\n\t\t\"paymentAmount\": 100,\n\t\t\"accountTo\": \"123456789012345\",\n\t\t\"accountFrom\": \"123451234567890\",\n\t\t\"ref1\": \"ABCDEFGHIJ1234567890\",\n\t\t\"ref2\": \"ABCDEFGHIJ1234567890\",\n\t\t\"ref3\": \"ABCDEFGHIJ1234567890\"\n\t},\n\t\"creditCardFullAmount\": {\n\t\t\"merchantId\": \"1234567890ABCDEF\",\n\t\t\"terminalId\": \"1234ABCD\",\n\t\t\"orderReference\": \"12345678\",\n\t\t\"paymentAmount\": 100\n\t},\n\t\"installmentPaymentPlan\": {\n\t\t\"merchantId\": \"4218170000000160\",\n\t\t\"terminalId\": \"56200004\",\n\t\t\"orderReference\": \"AA100001\",\n\t\t\"paymentAmount\": 10000.00,\n\t\t\"tenor\": \"12\",\n\t\t\"ippType\": \"3\",\n\t\t\"prodCode\": \"1001\"\n\t},\n\t\"merchantMetaData\": {\n\t\t\"callbackUrl\": \"\",\n\t\t\"merchantInfo\": {\n\t\t\t\"name\": \"SANDBOX MERCHANT NAME\"\n\t\t},\n\t\t\"extraData\": {},\n\t\t\"paymentInfo\": [\n\t\t\t{\n\t\t\t\t\"type\": \"TEXT_WITH_IMAGE\",\n\t\t\t\t\"title\": \"\",\n\t\t\t\t\"header\": \"\",\n\t\t\t\t\"description\": \"\",\n\t\t\t\t\"imageUrl\": \"\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"type\": \"TEXT\",\n\t\t\t\t\"title\": \"\",\n\t\t\t\t\"header\": \"\",\n\t\t\t\t\"description\": \"\"\n\t\t\t}\n\t\t]\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://api-sandbox.partners.scb/partners/sandbox/v3/deeplink/transactions",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"partners",
+						"scb"
+					],
+					"path": [
+						"partners",
+						"sandbox",
+						"v3",
+						"deeplink",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. /partners/sandbox/v2/transactions/{transactionId}",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "Bearer <Your Access Token>"
+					},
+					{
+						"key": "resourceOwnerId",
+						"type": "text",
+						"value": "<Your API Key>"
+					},
+					{
+						"key": "requestUId",
+						"type": "text",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "accept-language",
+						"type": "text",
+						"value": "EN"
+					}
+				],
+				"url": {
+					"raw": "https://api-sandbox.partners.scb/partners/sandbox/v2/transactions/{transactionId}",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"partners",
+						"scb"
+					],
+					"path": [
+						"partners",
+						"sandbox",
+						"v2",
+						"transactions",
+						"{transactionId}"
+					]
+				},
+				"description": "Replace the {transactionId} with the transaction ID you want to retrieve the details of."
+			},
+			"response": []
+		}
+	]
+}
