@@ -2,19 +2,17 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 import { colors } from '../../config/colors'
 
-export const TextInputPrice = (props) => {
+export const TextInputButton = (props) => {
     const { value, label } = props;
-    const [price, setPrice] = props.price;
-    // const[valueText, setValueText] = props.valueText;
+    const [valueText, setValueText] = props.valueText;
     return (
         <View style={styles.inputItem}>
             <Text style={{ flex: 0.35 }}>{label}</Text>
             <TextInput
                 value={value}
-                placeholder={"Enter price for your course"}
+                placeholder={"Enter your course name"}
                 style={styles.textInput}
-                keyboardType={"numeric"}
-                onChangeText={(text) => setPrice(text)} />
+                onChangeText={(text) => setValueText(text)} />
         </View>
     )
 }

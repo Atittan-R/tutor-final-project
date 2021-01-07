@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
     textDate: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 5,
         paddingHorizontal: 20,
         paddingVertical: 10,

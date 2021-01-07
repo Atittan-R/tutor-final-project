@@ -6,8 +6,8 @@ import { colors } from '../../config/colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 export const Clock = (props) => {
     const { label } = props;
-    const [date, setDate] = useState(new Date());
-    const [show, setShow] = useState(false);
+    const [date, setDate] = props.time;
+    const [show, setShow] = props.show;
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
     textDate: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 5,
         paddingHorizontal: 20,
         paddingVertical: 10,
