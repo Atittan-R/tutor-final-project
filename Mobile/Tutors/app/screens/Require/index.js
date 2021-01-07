@@ -1,1 +1,1 @@
-export {ExampleScreen} from './Require'
+export { Require } from './Require'

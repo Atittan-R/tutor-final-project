@@ -6,17 +6,17 @@ import { colors } from '../../config/colors';
 import CheckBox from "@react-native-community/checkbox";
 import { Pressable } from 'react-native';
 
-export const ModalDate = () => {
+export const ModalDate = (props) => {
     //set checkbox
-    const [monday, setMonday] = useState(false);
-    const [tuesday, setTuesday] = useState(false);
-    const [wednesday, setWednesday] = useState(false);
-    const [thursday, setThursday] = useState(false);
-    const [friday, setFriday] = useState(false);
-    const [saturday, setSaturday] = useState(false);
-    const [sunday, setSunday] = useState(false);
-    const [everyday, setEveryday] = useState(false);
-    const [days, setDays] = useState(["Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "])
+    const [monday, setMonday] = props.monday;
+    const [tuesday, setTuesday] = props.tuesday;
+    const [wednesday, setWednesday] = props.wednesday;
+    const [thursday, setThursday] = props.thursday;
+    const [friday, setFriday] = props.friday;
+    const [saturday, setSaturday] = props.saturday;
+    const [sunday, setSunday] = props.sunday;
+    const [everyday, setEveryday] = props.everyday;
+    const [days, setDays] = props.day;
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -264,7 +264,7 @@ export const styles = StyleSheet.create({
         elevation: 2,
     },
     closeButton: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 20,
         paddingHorizontal: 40,
         paddingVertical: 10,
@@ -296,7 +296,7 @@ export const styles = StyleSheet.create({
         // backgroundColor: "#fff",
     },
     textDate: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 5,
         paddingHorizontal: 20,
         paddingVertical: 10,

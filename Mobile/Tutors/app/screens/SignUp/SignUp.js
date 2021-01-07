@@ -9,6 +9,10 @@ import { colors } from "../../config/colors";
 
 const SignUp = ({ navigation }) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <ScrollView style={{ margin: 0, backgroundColor: "white" }}>
@@ -24,17 +28,26 @@ const SignUp = ({ navigation }) => {
             fontColor={"white"}
           />
         </View>
-        <Text style={styles.textOr}>Or Sign up with E-mail</Text>
+        <Text style={styles.textOr}>Or Sign up with E-mail {email}</Text>
 
         <View style={styles.inputWrap}>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Email Address"} />
+            <PrimaryInput
+              placeHolder={"Email Address"}
+              onTextChange={(text) => setEmail(text)}
+            />
           </View>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Username"} />
+            <PrimaryInput
+              placeHolder={"Username"}
+              onTextChange={(text) => setUsername(text)}
+            />
           </View>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Password"} />
+            <PrimaryInput
+              placeHolder={"Password"}
+              onTextChange={(text) => setPassword(text)}
+            />
           </View>
           <View style={styles.policy}>
             <Text style={styles.policyText}>
@@ -58,7 +71,11 @@ const SignUp = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.btnWrapper}>
-          <PrimaryButton label={"Sign Up"} screenName={"Login"} />
+          <PrimaryButton
+            label={"Sign Up"}
+            screenName={"Login"}
+            // onPress={() => alert("hello")}
+          />
         </View>
       </View>
     </ScrollView>

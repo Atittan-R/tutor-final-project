@@ -5,34 +5,45 @@ import { colors } from "../../config/colors";
 export const styles = StyleSheet.create({
   contrainer: {
     flex: 1,
-    backgroundColor: colors.white,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    backgroundColor: colors.background,
   },
-  inputItem: {
+  viewButton: {
     margin: 5,
     flexDirection: "row",
+    flex: 1,
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
     alignItems: "center",
-    backgroundColor: "#fff",
-    flex: 1,
   },
-  inputItem2: {
+  coverArea: {
+    padding: 20,
+    backgroundColor: colors.white,
+  },
+  viewItem: {
     margin: 5,
-    alignItems: "flex-end",
-    backgroundColor: "#fff",
+    flexDirection: "row",
     flex: 1,
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  Global: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    backgroundColor: "#fff",
-  },
-  textInput: {
-    backgroundColor: colors.bg,
-    borderRadius: 5,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  viewTitle: {
+    margin: 5,
     flexDirection: "row",
     flexWrap: "wrap",
-    flex: 0.8,
+    alignItems: "center",
   },
+  buttonTake: {
+    backgroundColor: colors.primary,
+    borderRadius: 30,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    marginLeft: 250
+  },
+  profile: {
+    width: 30,
+    height: 30,
+    borderRadius: 20
+  }
 });
