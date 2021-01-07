@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Text, TouchableOpacity } from "react-native";
 import { ScrollView, View } from "react-native";
+import { Icon } from "react-native-elements";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import ProductCard from "../../components/cards/ProductCard/ProductCard";
+import { Footer } from "../../components/forms/Footer.js/Footer";
+import { colors } from "../../config/colors";
 
 import { styles } from "./styles";
 //
@@ -50,7 +54,7 @@ const Course = ({ navigation }) => {
     setName(newNames);
     console.log(
       "Major Selection Change: " +
-        JSON.stringify(newNames.find((n) => n.id === itemId))
+      JSON.stringify(newNames.find((n) => n.id === itemId))
     );
     console.log("New Array" + JSON.stringify(newNames));
     return newNames;
@@ -73,6 +77,42 @@ const Course = ({ navigation }) => {
       <ScrollView style={styles.bg}>
         <View style={styles.container}>{majors}</View>
       </ScrollView>
+      <View style={styles.menu}>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate("Course")}>
+          <Icon name={"home"} type={"feather"} color={colors.secondary} />
+          <Text style={styles.menuText}> Home </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate("Require")}>
+          <Icon name={"layers"} type={"feather"} color={colors.secondary} />
+          <Text style={styles.menuText}> Feed </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuButton}>
+          <Icon
+            name={"message-circle"}
+            type={"feather"}
+            color={colors.secondary}
+          />
+          <Text style={styles.menuText}> Chat </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate("Notification")}
+        >
+          <Icon name={"bell"} type={"feather"} color={colors.secondary} />
+          <Text style={styles.menuText}> Notify </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate("MyProfile")}
+        >
+          <Icon name={"user"} type={"feather"} color={colors.secondary} />
+          <Text style={styles.menuText}> Me </Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };

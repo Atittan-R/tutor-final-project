@@ -4,7 +4,7 @@ import { colors } from '../../config/colors'
 
 export const TextInputButton = (props) => {
     const { value, label } = props;
-    const [valueText, setValueText] = props.text;
+    const [valueText, setValueText] = props.valueText;
     // const[valueText, setValueText] = props.valueText;
     return (
         <View style={styles.inputItem}>
@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
     textInput: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 5,
         paddingHorizontal: 20,
         paddingVertical: 10,

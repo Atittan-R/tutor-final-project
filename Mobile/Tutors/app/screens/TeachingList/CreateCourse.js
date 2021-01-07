@@ -37,10 +37,11 @@ export const CreateCourse = (props) => {
 
   const [allValue, setAllValue] = props.allValue;
 
-  const arrData = {};
+  var count = 0;
   const createCourse = () => {
-    const arrData = {
 
+    const arrData = {
+      id: "",
       course: "",
       price: "",
       date: "",
@@ -48,7 +49,7 @@ export const CreateCourse = (props) => {
       timeEnd: "",
       duration: ""
     };
-
+    arrData.id = count + 1; //uncomplete
     arrData.course = valueText;
     arrData.price = price;
     arrData.date = days;
@@ -116,7 +117,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    backgroundColor: colors.bg,
+    backgroundColor: colors.background,
     borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 10,
