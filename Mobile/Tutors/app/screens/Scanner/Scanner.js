@@ -16,8 +16,8 @@ const Scanner = ({ navigation }) => {
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        navigation.navigate("CheckCourse");
-        // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        // navigation.navigate("CheckCourse");
+        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     };
 
     if (hasPermission === null) {

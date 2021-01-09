@@ -5,6 +5,7 @@ import {
   Home,
   CourseDetail,
   CourseSelect,
+  Search
 } from "../../../screens/UserScreen";
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ const HomeStack = () => {
       initialRouteName="Home"
     >
       <Stack.Screen name="Home" component={Home} />
+
       <Stack.Screen
         name="CourseDetail"
         component={CourseDetail}
@@ -37,6 +39,13 @@ const HomeStack = () => {
         component={CourseEnroll}
         options={{
           headerTitle: "Course Registration",
+        }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{
+          headerTitle: "Search",
         }}
       />
     </Stack.Navigator>

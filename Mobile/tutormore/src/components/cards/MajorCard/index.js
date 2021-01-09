@@ -1,0 +1,1 @@
+export { MajorCard } from "./MajorCard";
