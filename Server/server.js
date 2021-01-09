@@ -4,12 +4,12 @@ const cors = require("cors");
 const path = require("path");
 const app = express();
 
-const corsOptions = {
-  origin: "http://localhost:8081/",
-};
+// const corsOptions = {
+//   origin: "http://localhost:19001/",
+// };
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
-app.use(cors(corsOptions));
+// app.use(cors());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -1,10 +1,11 @@
 import React, { useState, createContext, useContext, useMemo } from "react";
 import { useReducer } from "react";
+import axios from "axios";
 
 const GlobalVarContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
-  // const [userinfo, setUserInfo] = useState();
+  const [current_user, setUserInfo] = useState();
 
   const [state, dispatch] = useReducer(
     (prevState, action) => {
@@ -32,28 +33,34 @@ export const GlobalProvider = ({ children }) => {
     },
     //initial State
     {
-      isLoading: false,
+      isLoading: true,
       isSignout: false,
       userToken: null,
     }
   );
 
+  const checkUser = async (username, password) => {};
+
   const auth = useMemo(
     () => ({
       signIn: async (data) => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-        console.log("data signin from Global state", data);
-        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
+        try {
+          const user_token = await axios.post(
+            "http://localhost:9002/api/auth/signin",
+            {
+              username: data.username,
+              password: data.password,
+            }
+          );
+
+          console.log("data signin from Global state", data);
+          dispatch({ type: "SIGN_IN", token: user_token.data.accessToken });
+        } catch (error) {
+          console.error(error);
+        }
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data) => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
         console.log("data signup from Global state", data);
         dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },

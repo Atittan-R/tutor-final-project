@@ -36,10 +36,11 @@ const renderingCheck = () => {
   // };
 
   // return curren_user ? ( role_router[curren_user.data.role] ) : ( <AuthenticationStack /> );
-
-  return state.isLoading ? (
+  state.isLoading && (
     SplashScreen(state.isLoading)
-  ) : state.userToken == null ? (
+  )
+     
+  return state.userToken === null ? (
     <AuthenticationStack />
   ) : (
     <PrivilegeUser />

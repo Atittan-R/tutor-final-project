@@ -13,7 +13,7 @@ export default function Login({ navigation }) {
   const [state, dispatch] = authentication;
 
   const [password, setPassword] = useState();
-  const [email, setEmail] = useState();
+  const [username, setEmail] = useState();
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -25,11 +25,6 @@ export default function Login({ navigation }) {
         // Restoring token failed
         console.log("Restoring token failed: ", error);
       }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
       dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
 
@@ -75,7 +70,7 @@ export default function Login({ navigation }) {
         <View style={styles.loginBtnWrapper}>
           <PrimaryButton
             label={"LOG IN"}
-            onPress={() => autho.signIn({ email, password })}
+            onPress={() => autho.signIn({ username, password })}
           />
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
