@@ -6,7 +6,7 @@ export default {
   primary: "#BAE367",
   secondary: "#47524E",
   white: "#ffffff",
-  gray: "#a1a4b2",
+  gray: "#EEEEEE",
   heading: "#3f414e",
   facebookBg: "#7583ca",
 
