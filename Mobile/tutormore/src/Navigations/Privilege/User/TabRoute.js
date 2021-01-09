@@ -2,6 +2,7 @@ import React from "react";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar";
 import HomeStack from "./HomeStack";
+import FeedStack from "./FeedStack";
 
 const Tabs = AnimatedTabBarNavigator();
 
@@ -14,7 +15,7 @@ export default function TapRoute() {
       }}
     >
       <Tabs.Screen name="Home" component={HomeStack} />
-      {/* <Tabs.Screen name="Feed" component={AuthenticationStack} /> */}
+      <Tabs.Screen name="Feed" component={FeedStack} />
       {/* <Tabs.Screen
         name="Chat"
         component={Home}

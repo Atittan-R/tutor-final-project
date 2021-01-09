@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { colors } from "../../../config/colors";
+import Colors from "../../../config/colors";
 
 export const SecondaryButton = (props) => {
   const { label, background, btnType, fontColor } = props;

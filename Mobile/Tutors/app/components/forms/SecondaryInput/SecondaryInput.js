@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TextInput, Image } from "react-native";
-import { colors } from "../../../config/colors";
+import Colors from "../../../config/colors";
 
 export const SecondaryInput = (props) => {
   const { placeHolder, value } = props;
@@ -13,7 +13,7 @@ export const SecondaryInput = (props) => {
         placeholder={placeHolder}
       />
       <View style={styles.eyeWrapper}>
-        <Image source={require("../../../../assets/images/eye.png")} />
+        <Image source={require("../../../assets/images/eye.png")} />
       </View>
     </View>
   );

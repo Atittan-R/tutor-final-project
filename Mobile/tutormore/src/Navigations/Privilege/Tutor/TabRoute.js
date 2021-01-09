@@ -6,13 +6,13 @@ import TutorHomeStack from "./TutorHomeStack";
 
 const Tabs = AnimatedTabBarNavigator();
 const Tab = () => {
-  return <Text>Home Hello User </Text>;
+  return <Text>Home Hello Tutor </Text>;
 };
 const TabTab = () => {
-  return <Text>Home Hello User </Text>;
+  return <Text>Home Hello Tutor </Text>;
 };
 const TabTabTab = () => {
-  return <Text>Home Hello User </Text>;
+  return <Text>Home Hello Tutor </Text>;
 };
 export default function TapRoute() {
   return (

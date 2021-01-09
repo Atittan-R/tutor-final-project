@@ -9,14 +9,20 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 import { Icon } from "react-native-elements";
 import { Editprofile } from "./Editprofile";
 
 const MyProfile = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [Profile, setProfile] = useState([
-    { name: "Yami Sukehiro", major: "Information of Technology", tel: "091246810", email: "yami00z@mail.com" }])
+    {
+      name: "Yami Sukehiro",
+      major: "Information of Technology",
+      tel: "091246810",
+      email: "yami00z@mail.com",
+    },
+  ]);
   return (
     <>
       <ScrollView style={{ backgroundColor: colors.background }}>
@@ -47,12 +53,14 @@ const MyProfile = ({ navigation }) => {
                   <Text style={styles.textHeader}>Email</Text>
                   <Text style={styles.textNormal}>{i.email}</Text>
                 </View>
-                <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={i} ProfileUser={[Profile, setProfile]} />
+                <Editprofile
+                  modalVisible={[modalVisible, setModalVisible]}
+                  profile={i}
+                  ProfileUser={[Profile, setProfile]}
+                />
               </View>
-            )
-          })
-          }
-
+            );
+          })}
 
           <View style={{ padding: 5 }}></View>
 
@@ -216,7 +224,9 @@ const MyProfile = ({ navigation }) => {
             </Pressable>
 
             <Pressable
-              onPress={() => { setModalVisible(true) }}
+              onPress={() => {
+                setModalVisible(true);
+              }}
               // onPress={() => navigation.navigate("Require")}
               style={({ pressed }) => [
                 {
@@ -269,13 +279,15 @@ const MyProfile = ({ navigation }) => {
       <View style={styles.menu}>
         <TouchableOpacity
           style={styles.menuButton}
-          onPress={() => navigation.navigate("Course")}>
+          onPress={() => navigation.navigate("Course")}
+        >
           <Icon name={"home"} type={"feather"} color={colors.secondary} />
           <Text style={styles.menuText}> Home </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuButton}
-          onPress={() => navigation.navigate("Require")}>
+          onPress={() => navigation.navigate("Require")}
+        >
           <Icon name={"layers"} type={"feather"} color={colors.secondary} />
           <Text style={styles.menuText}> Feed </Text>
         </TouchableOpacity>

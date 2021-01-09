@@ -39,24 +39,23 @@ export const GlobalProvider = ({ children }) => {
     }
   );
 
-  const checkUser = async (username, password) => {};
-
   const auth = useMemo(
     () => ({
       signIn: async (data) => {
         try {
           const user_token = await axios.post(
-            "http://localhost:9002/api/auth/signin",
+            "http://192.168.1.62:3986/api/auth/signin",
             {
-              username: data.username,
+              email: data.email,
               password: data.password,
             }
           );
-
           console.log("data signin from Global state", data);
+          setUserInfo(user_token.data);
           dispatch({ type: "SIGN_IN", token: user_token.data.accessToken });
         } catch (error) {
-          console.error(error);
+            //TODO Cath error to show on UI
+            console.error(error);
         }
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
@@ -70,7 +69,11 @@ export const GlobalProvider = ({ children }) => {
 
   return (
     <GlobalVarContext.Provider
-      value={{ authentication: [state, dispatch], autho: auth }}
+      value={{
+        authentication: [state, dispatch],
+        autho: auth,
+        current_user: [current_user, setUserInfo],
+      }}
     >
       {children}
     </GlobalVarContext.Provider>

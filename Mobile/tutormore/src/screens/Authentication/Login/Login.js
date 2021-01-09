@@ -13,7 +13,7 @@ export default function Login({ navigation }) {
   const [state, dispatch] = authentication;
 
   const [password, setPassword] = useState();
-  const [username, setEmail] = useState();
+  const [email, setEmail] = useState();
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -37,12 +37,7 @@ export default function Login({ navigation }) {
         style={styles.logo}
         source={require("../../../assets/Appicon.png")}
       />
-      <Text
-        style={styles.title}
-        // onPress={() => navigation.navigate("Screen1")}
-      >
-        Sign In
-      </Text>
+      <Text style={styles.title}>SIGN IN</Text>
       <View styles={styles.contentContainer}>
         <View style={styles.btnWrap}>
           <SecondaryButton
@@ -70,7 +65,7 @@ export default function Login({ navigation }) {
         <View style={styles.loginBtnWrapper}>
           <PrimaryButton
             label={"LOG IN"}
-            onPress={() => autho.signIn({ username, password })}
+            onPress={() => autho.signIn({ email, password })}
           />
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>

@@ -5,7 +5,7 @@ import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/buttons/SecondaryButton/SecondaryButton";
 import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";
 import { styles } from "./styles";
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 
 const SignUp = ({ navigation }) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);

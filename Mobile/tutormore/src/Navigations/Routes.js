@@ -1,11 +1,11 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
 import { PrivilegeUser, PrivilegeTutor } from "./Privilege";
 import { useGlobalVar } from "../context/GlobalContex";
 import { Text, View } from "react-native";
 
-function SplashScreen({ param }) {
+function SplashScreen() {
   return (
     <View>
       <Text>Loading...</Text>
@@ -15,35 +15,42 @@ function SplashScreen({ param }) {
       <Text>Loading...</Text>
       <Text>Loading...</Text>
       <Text>Loading...</Text>
-      <Text>{param}</Text>
       <Text>Loading..</Text>
     </View>
   );
 }
 
+function AskingRole() {
+  return (
+    <View>
+      <Text>AskingRole...</Text>
+      <Text>AskingRole...</Text>
+      <Text>AskingRole...</Text>
+      <Text>AskingRole...</Text>
+      <Text>AskingRole...</Text>
+      <Text>AskingRole...</Text>
+      <Text>AskingRole...</Text>
+    </View>
+  );
+}
 const renderingCheck = () => {
-  const { authentication } = useGlobalVar();
+  const { authentication, current_user } = useGlobalVar();
+  const [currentuser, setUserInfo] = current_user;
   const [state, dispatch] = authentication;
-  // Context API To get Current User
-  // const curren_user = null;
+  
+  const role_router = {
+    ROLE_TUTOR: <PrivilegeTutor />,
+    ROLE_USER: <PrivilegeUser />,
+  };
 
-  // const curren_user = {
-  //   data: { username: "hongbao", email: "g@g.com", role: ["TUTOR"] },
-  // };
-  // const role_router = {
-  //   TUTOR: <PrivilegeTutor />,
-  //   USER: <PrivilegeUser />,
-  // };
+  state.isLoading && SplashScreen();
 
-  // return curren_user ? ( role_router[curren_user.data.role] ) : ( <AuthenticationStack /> );
-  state.isLoading && (
-    SplashScreen(state.isLoading)
-  )
-     
   return state.userToken === null ? (
     <AuthenticationStack />
+  ) : currentuser.roles.length !== 1 ? (
+    AskingRole()
   ) : (
-    <PrivilegeUser />
+    role_router[currentuser.roles]
   );
 };
 

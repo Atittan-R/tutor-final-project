@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { styles } from "./styles";
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 import { StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 

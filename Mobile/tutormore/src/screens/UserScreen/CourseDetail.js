@@ -1,9 +1,16 @@
-import React from "react";
-import { Button, Image, SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import {
+  Image,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Colors from "../../configs/Colors";
 
 export default function CourseDetail({ navigation }) {
-  const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"]
+  const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
   const [date, setDateNow] = useState(new Date());
   const [duration, setDuration] = useState(3);
   const [price, setPrice] = useState(300);
@@ -12,7 +19,10 @@ export default function CourseDetail({ navigation }) {
     <>
       <SafeAreaView style={styles.container} />
       <View style={styles.view}>
-        <Image source={require("../../assets/Appicon.png")} style={styles.image} />
+        <Image
+          source={require("../../assets/Appicon.png")}
+          style={styles.image}
+        />
       </View>
       <View style={styles.barTitle}>
         <Text style={{ marginLeft: 20 }}>Details</Text>
@@ -37,7 +47,6 @@ export default function CourseDetail({ navigation }) {
         <Text>Amount</Text>
         <Text>Course</Text>
       </View>
-
     </>
   );
 }
@@ -54,7 +63,7 @@ const styles = StyleSheet.create({
   },
   view: {
     justifyContent: "center",
-    flexDirection: "row"
+    flexDirection: "row",
   },
   barTitle: {
     justifyContent: "flex-start",
@@ -71,6 +80,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginHorizontal: 30
+    marginHorizontal: 30,
   },
 });

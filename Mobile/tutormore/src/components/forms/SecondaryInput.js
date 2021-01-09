@@ -2,8 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 import Colors from "../../../config/Colors";
 
-export default SecondaryInput = (props) => {
-  const { placeHolder, value } = props;
+export default SecondaryInput = ({ placeHolder, value }) => {
   return (
     <View style={styles.container}>
       <TextInput
@@ -13,13 +12,13 @@ export default SecondaryInput = (props) => {
         placeholder={placeHolder}
       />
       <View style={styles.eyeWrapper}>
-        <Image source={require("../../../../assets/images/eye.png")} />
+        {/*<Image source={require("../../../assets/images/eye.png")} />*/}
       </View>
     </View>
   );
 };
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     display: "flex",
     backgroundColor: Colors.background,

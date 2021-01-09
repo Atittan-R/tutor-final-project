@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, StatusBar } from "react-native";
 
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 
 export const styles = StyleSheet.create({
   contrainer: {
@@ -76,26 +76,26 @@ export const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalViewText: {
-    padding:10,
+    padding: 10,
     margin: 10,
     flexDirection: "row",
-    justifyContent:"flex-start",
+    justifyContent: "flex-start",
     flex: 1,
-    flexWrap:"wrap",
+    flexWrap: "wrap",
     // alignItems:"stretch"
   },
-  inputStyleHeard:{
+  inputStyleHeard: {
     fontWeight: "bold",
-    marginLeft:20,
+    marginLeft: 20,
     flex: 0.25,
-    color:colors.second,
+    color: colors.second,
   },
-  inputStyle:{
-    marginLeft:20,
+  inputStyle: {
+    marginLeft: 20,
     flex: 1,
-    color:colors.second,
-  }
+    color: colors.second,
+  },
 });

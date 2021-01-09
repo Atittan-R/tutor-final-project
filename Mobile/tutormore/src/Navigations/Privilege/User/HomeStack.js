@@ -5,7 +5,7 @@ import {
   Home,
   CourseDetail,
   CourseSelect,
-  Search
+  Search,
 } from "../../../screens/UserScreen";
 
 const Stack = createStackNavigator();

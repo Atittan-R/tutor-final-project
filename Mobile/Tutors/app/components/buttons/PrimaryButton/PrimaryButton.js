@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { colors } from "../../../config/colors";
+import Colors from "../../../config/colors";
 import { useNavigation } from "@react-navigation/native";
 
 export const PrimaryButton = (props) => {
