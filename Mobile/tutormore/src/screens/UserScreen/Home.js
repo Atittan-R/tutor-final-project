@@ -1,24 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View, ScrollView, SafeAreaView, StatusBar, TouchableOpacity } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 import { useGlobalVar } from "../../context/GlobalContex";
 import Colors from "../../configs/Colors";
 import ProductCard from "../../components/cards/ProductCard/ProductCard";
-import { Icon } from 'react-native-elements';
+import { Icon } from "react-native-elements";
 
 export default function Home({ navigation }) {
-  const { autho } = useGlobalVar();
+  const { auth } = useGlobalVar();
   const [checked, setChecked] = useState(true);
   const [itemId, setItemId] = useState(-1);
   const [
     names = [
-      { id: 0, name: "Database", select: checked, price: 650, shopname: "You1" },
+      {
+        id: 0,
+        name: "Database",
+        select: checked,
+        price: 650,
+        shopname: "You1",
+      },
       { id: 1, name: "Compro1", select: checked, price: 500, shopname: "You2" },
       { id: 2, name: "Compro2", select: checked, price: 450, shopname: "You3" },
       { id: 3, name: "Java", select: checked, price: 300, shopname: "You4" },
       { id: 4, name: "Oop", select: checked, price: 350, shopname: "You5" },
       { id: 5, name: "HCI", select: checked, price: 600, shopname: "You6" },
       { id: 6, name: "UX", select: checked, price: 650, shopname: "You7" },
-      { id: 7, name: "Data com", select: checked, price: 400, shopname: "You8" },
+      {
+        id: 7,
+        name: "Data com",
+        select: checked,
+        price: 400,
+        shopname: "You8",
+      },
     ],
     setName,
   ] = useState();
@@ -51,7 +72,7 @@ export default function Home({ navigation }) {
     setName(newNames);
     console.log(
       "Major Selection Change: " +
-      JSON.stringify(newNames.find((n) => n.id === itemId))
+        JSON.stringify(newNames.find((n) => n.id === itemId))
     );
     console.log("New Array" + JSON.stringify(newNames));
     return newNames;
@@ -70,7 +91,6 @@ export default function Home({ navigation }) {
     />
   ));
 
-
   return (
     <>
       <SafeAreaView style={styles.container} />
@@ -78,15 +98,19 @@ export default function Home({ navigation }) {
         <Text style={styles.titleHome}>Tutor More</Text>
         <TouchableOpacity
           style={styles.search}
-          onPress={() => navigation.push("Search")}>
+          onPress={() => navigation.push("Search")}
+        >
           <Text style={{ color: Colors.secondary }}>search</Text>
-          <Icon name="search-outline" type="ionicon" style={{ color: Colors.secondary }} />
-
+          <Icon
+            name="search-outline"
+            type="ionicon"
+            style={{ color: Colors.secondary }}
+          />
         </TouchableOpacity>
       </View>
       <View>
         <Text>Signed in!</Text>
-        <Button title="Sign out" onPress={autho.signOut} />
+        <Button title="Sign out" onPress={auth.signOut} />
       </View>
       <Button
         title={"Course Detail"}
@@ -121,7 +145,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.primary,
   },
   search: {
     flex: 1,
@@ -132,12 +156,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginLeft: 20,
     borderRadius: 30,
-    backgroundColor: Colors.gray
+    backgroundColor: Colors.gray,
   },
   titleHome: {
     fontWeight: "bold",
     fontSize: 30,
-    color: Colors.secondary
-  }
-
+    color: Colors.secondary,
+  },
 });

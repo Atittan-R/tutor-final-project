@@ -22,7 +22,7 @@ export default function Home() {
       </View>
       <View>
         <Text>Signed in!</Text>
-        <Button title="Sign out" onPress={autho.signOut} />
+        <Button title="Sign out" onPress={auth.signOut} />
       </View>
       <Button
         title={"Course Detail"}

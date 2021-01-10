@@ -54,12 +54,13 @@ export const GlobalProvider = ({ children }) => {
           setUserInfo(user_token.data);
           dispatch({ type: "SIGN_IN", token: user_token.data.accessToken });
         } catch (error) {
-            //TODO Cath error to show on UI
-            console.error(error);
+          //TODO Cath error to show on UI
+          console.error(error);
         }
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data) => {
+        //TODO Sign Up API
         console.log("data signup from Global state", data);
         dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
@@ -71,7 +72,7 @@ export const GlobalProvider = ({ children }) => {
     <GlobalVarContext.Provider
       value={{
         authentication: [state, dispatch],
-        autho: auth,
+        auth: auth,
         current_user: [current_user, setUserInfo],
       }}
     >

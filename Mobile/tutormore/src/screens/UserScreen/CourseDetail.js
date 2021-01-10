@@ -20,7 +20,7 @@ export default function CourseDetail({ navigation }) {
       <SafeAreaView style={styles.container} />
       <View style={styles.view}>
         <Image
-          source={require("../../assets/Appicon.png")}
+          source={require(`../../assets/Appicon.png`)}
           style={styles.image}
         />
       </View>
