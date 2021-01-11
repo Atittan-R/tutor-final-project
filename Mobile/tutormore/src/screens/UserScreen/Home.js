@@ -87,6 +87,8 @@ export default function Home({ navigation }) {
       onPress={() => {
         setChecked(checked);
         setItemId(items.id);
+        // navigation.navigate("CourseDetail")
+
       }}
     />
   ));
@@ -101,11 +103,16 @@ export default function Home({ navigation }) {
           onPress={() => navigation.push("Search")}
         >
           <Text style={{ color: Colors.secondary }}>search</Text>
+<<<<<<< Updated upstream
           <Icon
             name="search-outline"
             type="ionicon"
             style={{ color: Colors.secondary }}
           />
+=======
+          <Icon name="search-outline" type="ionicon" color={Colors.secondary} />
+
+>>>>>>> Stashed changes
         </TouchableOpacity>
       </View>
       <View>
