@@ -4,8 +4,13 @@ import {
   CourseEnroll,
   Home,
   CourseDetail,
+<<<<<<< Updated upstream
   CourseSelect,
   Search,
+=======
+  MyCourse,
+  Search
+>>>>>>> Stashed changes
 } from "../../../screens/UserScreen";
 
 const Stack = createStackNavigator();
@@ -28,10 +33,10 @@ const HomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="CourseSelect"
-        component={CourseSelect}
+        name="MyCourse"
+        component={MyCourse}
         options={{
-          headerTitle: "Course Selection",
+          headerTitle: "MyCourse",
         }}
       />
       <Stack.Screen
