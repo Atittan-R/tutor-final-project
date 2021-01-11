@@ -1,6 +1,7 @@
 import React, {useState, createContext, useContext, useMemo} from "react";
 import {useReducer} from "react";
 import API from "../services/API"
+import {isLoading} from "expo-font";
 
 const GlobalVarContext = createContext();
 
@@ -22,6 +23,7 @@ export const GlobalProvider = ({children}) => {
                     return {
                         ...prevState,
                         isSignout: false,
+                        isLoading: true,
                         userToken: action.token,
                     };
                 case "SIGN_OUT":
@@ -60,12 +62,13 @@ export const GlobalProvider = ({children}) => {
                             password: data.password,
                         }
                     );
-                    console.log("data signin from Global state", data);
-                    setUserInfo(user_token.data);
-                    dispatch({type: "SIGN_IN", token: user_token.data.accessToken});
+                    console.log("Log: ", user_token.data);
+                    setUserInfo(user_token.data)
+                    dispatch({type: "SIGN_IN", token: user_token.data.accessToken, isLoading: false});
                 } catch (error) {
                     //TODO Cath error to show on UI
-                    console.error(error);
+                    // console.error("Hello Error",error);
+                    alert(error.message);
                 }
             },
             signOut: () => dispatch({type: "SIGN_OUT"}),

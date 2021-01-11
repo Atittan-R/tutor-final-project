@@ -8,11 +8,10 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import { styles } from "./styles";
 
 export default function Login({ navigation }) {
-  const { auth, authentication } = useGlobalVar();
+  const { auth, authentication, messages } = useGlobalVar();
   const [state, dispatch] = authentication;
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
-  const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -31,12 +30,14 @@ export default function Login({ navigation }) {
   }, []);
 
   return (
+
     <ScrollView style={styles.container}>
       <Image
         style={styles.logo}
         source={require("../../../assets/Appicon.png")}
       />
       <Text style={styles.title}>SIGN IN</Text>
+
       <View styles={styles.contentContainer}>
         <View style={styles.btnWrap}>
           <SecondaryButton
