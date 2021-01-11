@@ -72,7 +72,7 @@ export default function Home({ navigation }) {
     setName(newNames);
     console.log(
       "Major Selection Change: " +
-      JSON.stringify(newNames.find((n) => n.id === itemId))
+        JSON.stringify(newNames.find((n) => n.id === itemId))
     );
     console.log("New Array" + JSON.stringify(newNames));
     return newNames;
@@ -88,7 +88,6 @@ export default function Home({ navigation }) {
         setChecked(checked);
         setItemId(items.id);
         // navigation.navigate("CourseDetail")
-
       }}
     />
   ));
@@ -104,17 +103,8 @@ export default function Home({ navigation }) {
         >
           <Text style={{ color: Colors.secondary }}>search</Text>
           <Icon name="search-outline" type="ionicon" color={Colors.secondary} />
-
         </TouchableOpacity>
       </View>
-      <View>
-        <Text>Signed in!</Text>
-        <Button title="Sign out" onPress={auth.signOut} />
-      </View>
-      <Button
-        title={"Course Detail"}
-        onPress={() => navigation.push("CourseDetail")}
-      ></Button>
       <ScrollView style={styles.bg}>
         <View style={styles.view}>{majors}</View>
       </ScrollView>
