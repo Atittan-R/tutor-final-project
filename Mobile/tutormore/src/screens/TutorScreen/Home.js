@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     StyleSheet,
@@ -9,13 +9,13 @@ import {
     StatusBar,
     TouchableOpacity,
 } from "react-native";
-import { useGlobalVar } from "../../context/GlobalContex";
+import {useGlobalVar} from "../../context/GlobalContex";
 import Colors from "../../configs/Colors";
 import ProductCard from "../../components/cards/ProductCard/ProductCard";
-import { Icon } from "react-native-elements";
+import {Icon} from "react-native-elements";
 
-export default function Home({ navigation }) {
-    const { auth } = useGlobalVar();
+export default function Home({navigation}) {
+    const {auth} = useGlobalVar();
     const [checked, setChecked] = useState(true);
     const [itemId, setItemId] = useState(-1);
     const [
@@ -27,12 +27,12 @@ export default function Home({ navigation }) {
                 price: 650,
                 shopname: "You1",
             },
-            { id: 1, name: "Compro1", select: checked, price: 500, shopname: "You2" },
-            { id: 2, name: "Compro2", select: checked, price: 450, shopname: "You3" },
-            { id: 3, name: "Java", select: checked, price: 300, shopname: "You4" },
-            { id: 4, name: "Oop", select: checked, price: 350, shopname: "You5" },
-            { id: 5, name: "HCI", select: checked, price: 600, shopname: "You6" },
-            { id: 6, name: "UX", select: checked, price: 650, shopname: "You7" },
+            {id: 1, name: "Compro1", select: checked, price: 500, shopname: "You2"},
+            {id: 2, name: "Compro2", select: checked, price: 450, shopname: "You3"},
+            {id: 3, name: "Java", select: checked, price: 300, shopname: "You4"},
+            {id: 4, name: "Oop", select: checked, price: 350, shopname: "You5"},
+            {id: 5, name: "HCI", select: checked, price: 600, shopname: "You6"},
+            {id: 6, name: "UX", select: checked, price: 650, shopname: "You7"},
             {
                 id: 7,
                 name: "Data com",
@@ -64,7 +64,7 @@ export default function Home({ navigation }) {
             } else {
                 setChecked(true);
                 console.log(`Major selected: ${JSON.stringify(newMajor)}`);
-                return { ...newMajor, select: checked };
+                return {...newMajor, select: checked};
             }
         });
         //Default Object
@@ -93,24 +93,24 @@ export default function Home({ navigation }) {
 
     return (
         <>
-            <SafeAreaView style={styles.container} />
+            <SafeAreaView style={styles.container}/>
             <View style={styles.viewItem}>
                 <Text style={styles.titleHome}>Tutor More</Text>
                 <TouchableOpacity
                     style={styles.search}
                     onPress={() => navigation.push("Search")}
                 >
-                    <Text style={{ color: Colors.secondary }}>search</Text>
+                    <Text style={{color: Colors.secondary}}>TUTORSSSSSss</Text>
                     <Icon
                         name="search-outline"
                         type="ionicon"
-                        style={{ color: Colors.secondary }}
+                        style={{color: Colors.secondary}}
                     />
                 </TouchableOpacity>
             </View>
             <View>
                 <Text>Signed in!</Text>
-                <Button title="Sign out" onPress={auth.signOut} />
+                <Button title="Sign out" onPress={auth.signOut}/>
             </View>
             <Button
                 title={"Course Detail"}

@@ -10,9 +10,9 @@ import { styles } from "./styles";
 export default function Login({ navigation }) {
   const { auth, authentication } = useGlobalVar();
   const [state, dispatch] = authentication;
-
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
+  const [isLoading, setIsLoading] = useState();
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place

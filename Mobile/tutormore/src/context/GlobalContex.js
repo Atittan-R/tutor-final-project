@@ -1,6 +1,6 @@
 import React, {useState, createContext, useContext, useMemo} from "react";
 import {useReducer} from "react";
-import axios from "axios";
+import API from "../services/API"
 
 const GlobalVarContext = createContext();
 
@@ -53,8 +53,8 @@ export const GlobalProvider = ({children}) => {
         () => ({
             signIn: async (data) => {
                 try {
-                    const user_token = await axios.post(
-                        "http://192.168.1.62:3986/api/auth/signin",
+                    const user_token = await API.post(
+                        "/auth/signin",
                         {
                             email: data.email,
                             password: data.password,
