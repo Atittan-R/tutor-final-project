@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import {
     Image,
     Pressable,
@@ -7,8 +7,6 @@ import {
     StatusBar,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View
 } from 'react-native'
 import { Icon } from 'react-native-elements';
@@ -18,10 +16,12 @@ import { useGlobalVar } from "../../context/GlobalContex";
 
 
 export default function Me({ navigation }) {
-    const { auth } = useGlobalVar();
+    const { auth, current_user } = useGlobalVar();
+    const [currentuser, setUser] = current_user;
     const [modalVisible, setModalVisible] = useState(false);
     const [Profile, setProfile] = useState([
         { name: "Yami Sukehiro", major: "Information of Technology", tel: "091246810", email: "yami00z@mail.com" }])
+
     return (
         <>
             <ScrollView style={{ backgroundColor: Colors.background }}>
@@ -38,19 +38,19 @@ export default function Me({ navigation }) {
 
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Name</Text>
-                                    <Text style={styles.textNormal}>{i.name}</Text>
+                                    <Text style={styles.textNormal}>{currentuser.username}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Major</Text>
-                                    <Text style={styles.textNormal}>{i.major}</Text>
+                                    <Text style={styles.textNormal}>{currentuser.major}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Tel.</Text>
-                                    <Text style={styles.textNormal}>{i.tel}</Text>
+                                    <Text style={styles.textNormal}>{currentuser.phonenumber}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Email</Text>
-                                    <Text style={styles.textNormal}>{i.email}</Text>
+                                    <Text style={styles.textNormal}>{currentuser.email}</Text>
                                 </View>
                                 <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={i} ProfileUser={[Profile, setProfile]} />
                             </View>
@@ -62,7 +62,8 @@ export default function Me({ navigation }) {
 
                     <View style={styles.coverArea}>
                         <Pressable
-                            onPress={() => navigation.navigate("Request")}
+                            onPress={() => navigation.navigate("Feed",{name:"Request"})}
+                            // onPress={() => _retrieveData}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
@@ -78,7 +79,7 @@ export default function Me({ navigation }) {
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => navigation.navigate("MyCourse")}
+                            onPress={() => navigation.navigate("Home",{name:"MyCourse"})}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
@@ -135,7 +136,6 @@ export default function Me({ navigation }) {
                     </View>
                 </SafeAreaView>
             </ScrollView>
-
         </>
     )
 }

@@ -4,7 +4,7 @@ import Colors from "../../configs/Colors";
 
 
 export default PrimaryInput = (props) => {
-  const { placeHolder, isValid, value, onChangeText, secureTextEntry } = props;
+  const { placeHolder, isValid, value, onChangeText, secureTextEntry, autoCapitalize } = props;
 
   return (
       <View style={styles.textWrap}>
@@ -14,6 +14,7 @@ export default PrimaryInput = (props) => {
             placeholder={placeHolder}
             onChangeText={onChangeText}
             secureTextEntry={secureTextEntry}
+            autoCapitalize={autoCapitalize}
         />
 
         <View style={styles.container}>

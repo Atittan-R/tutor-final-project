@@ -1,21 +1,57 @@
 import CheckBox from "@react-native-community/checkbox";
-import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useReducer, useState } from "react";
+import {AsyncStorage, ScrollView, StyleSheet, Text, View} from "react-native";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
 import SecondaryButton from "../../../components/buttons/SecondaryButton";
 import PrimaryInput from "../../../components/forms/PrimaryInput";
 import Colors from "../../../configs/Colors";
 import { useGlobalVar } from "../../../context/GlobalContex";
+import API from "../../../services/API";
+
+function Confrimation(state, action) {
+  switch (action.type) {
+    case "CONFIRM":
+      return { ...state, confirm: action.value };
+  }
+}
+
 
 const Register = ({ navigation }) => {
   const { auth } = useGlobalVar();
-
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [cfpassword, setCfPassword] = useState("");
-  const [phonenumber, setPhoneNumber] = useState("");
+  const [confirmMassage, setConfirmMassage] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [state, dispatch] = useReducer(Confrimation, { confirm: "" });
+
+  useEffect(() => {
+    setConfirmMassage(checkConfirm(password, state.confirm));
+  });
+
+  const callAPI = async (data) => {
+    try{
+      const signup = await API.post("/auth/signup",{
+        email: data.email,
+        password: data.password,
+        username: data.username,
+        phonenumber: data.phoneNumber,
+      });
+      console.log(signup.data);
+      auth.signUp(data)
+    }catch (error){
+      console.log(error.response.data.message);
+    }
+  }
+
+  const checkConfirm = (password, confirm) => {
+    let cf = null;
+    if (confirm) {
+      password === confirm ? (cf = true) : (cf = false);
+    }
+    return cf;
+  };
   return (
     <ScrollView style={{ margin: 0, backgroundColor: Colors.white }}>
       <View style={styles.container}>
@@ -30,39 +66,48 @@ const Register = ({ navigation }) => {
             fontColor={"white"}
           />
         </View>
-        <Text style={styles.textOr}>Or Sign up with E-mail {email}</Text>
+        <Text style={styles.textOr}>Or Sign up with E-mail</Text>
 
         <View style={styles.inputWrap}>
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Email Address"}
-              onTextChange={(text) => setEmail(text)}
+              onChangeText={(text) => setEmail(text)}
             />
           </View>
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Username"}
-              onTextChange={(text) => setUsername(text)}
+              onChangeText={(text) => setUsername(text)}
             />
           </View>
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Password"}
-              onTextChange={(text) => setPassword(text)}
+              onChangeText={(text) => setPassword(text)}
               secureTextEntry
             />
           </View>
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Confirm Password"}
-              onTextChange={(text) => setCfPassword(text)}
+              onChangeText={(text) =>
+                dispatch({ type: "CONFIRM", value: text })
+              }
               secureTextEntry
             />
+            {confirmMassage !== true && confirmMassage !== null && (
+              <Text style={[styles.policyText, { color: "red" }]}>
+                Password dosen't match{" "}
+              </Text>
+            )}
+            {/*<Text>CFPassword is { state.confirm} </Text>*/}
           </View>
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Phone Number"}
-              onTextChange={(text) => setPhoneNumber(text)}
+              autoCapitalize={""}
+              onChangeText={(text) => setPhoneNumber(text)}
             />
           </View>
           <View style={styles.policy}>
@@ -89,9 +134,9 @@ const Register = ({ navigation }) => {
         <View style={styles.btnWrapper}>
           <PrimaryButton
             label={"Sign Up"}
-            onPress={() =>
+            disable={confirmMassage}
+            onPress={() => callAPI({ email, password, phoneNumber, username })
               //TODO Add Context to use
-              auth.signUp({ email, password, phonenumber, username })
             }
           />
         </View>

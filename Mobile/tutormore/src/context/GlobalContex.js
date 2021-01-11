@@ -2,6 +2,7 @@ import React, {useState, createContext, useContext, useMemo} from "react";
 import {useReducer} from "react";
 import API from "../services/API"
 import {isLoading} from "expo-font";
+import {AsyncStorage} from "react-native";
 
 const GlobalVarContext = createContext();
 
@@ -51,31 +52,46 @@ export const GlobalProvider = ({children}) => {
         }
     );
 
+    const useLogin = async (data) => {
+        try {
+            const user = await API.post(
+                "/auth/signin",
+                {
+                    email: data.email,
+                    password: data.password,
+                }
+            );
+            // console.log("User From Login: ", user.data);
+            return user;
+        } catch (error) {
+            //TODO Cath error to show on UI
+            // console.error("Hello Error", error.response.data.message);
+            alert(error.response.data.message);
+        }
+    }
+
     const auth = useMemo(
         () => ({
-            signIn: async (data) => {
-                try {
-                    const user_token = await API.post(
-                        "/auth/signin",
-                        {
-                            email: data.email,
-                            password: data.password,
-                        }
-                    );
-                    console.log("Log: ", user_token.data);
-                    setUserInfo(user_token.data)
-                    dispatch({type: "SIGN_IN", token: user_token.data.accessToken, isLoading: false});
-                } catch (error) {
-                    //TODO Cath error to show on UI
-                    // console.error("Hello Error",error);
-                    alert(error.message);
-                }
+            signIn: async (data) =>  {
+                // console.log(data)
+                const user = await useLogin(data)
+                // await console.log("sign in to get data: ", user.data);
+                await setUserInfo(user.data)
+                await AsyncStorage.setItem("user", JSON.stringify(user.data));
+                await AsyncStorage.setItem("userToken",user.data.accessToken)
+                await dispatch({type: "SIGN_IN", token: user.data.accessToken});
             },
-            signOut: () => dispatch({type: "SIGN_OUT"}),
+            signOut: () => {
+                dispatch({type: "SIGN_OUT"})
+                AsyncStorage.removeItem("user");
+                AsyncStorage.removeItem("userToken")
+            },
             signUp: async (data) => {
                 //TODO Sign Up API
-                console.log("data signup from Global state", data);
-                dispatch({type: "SIGN_IN", token: "dummy-auth-token"});
+                // console.log("signup:",data)
+                const user = await useLogin(data)
+                await dispatch({type: "SIGN_IN", token: user.data.accessToken});
+                // await console.log("data signup from Global state", data);
             },
             roleEntry: async (data) => {
                 setRoleSection(data);
@@ -92,8 +108,7 @@ export const GlobalProvider = ({children}) => {
                 auth: auth,
                 current_user: [current_user, setUserInfo],
                 roleglobal: [roleselection, setRoleSection],
-            }}
-        >
+            }}>
             {children}
         </GlobalVarContext.Provider>
     );

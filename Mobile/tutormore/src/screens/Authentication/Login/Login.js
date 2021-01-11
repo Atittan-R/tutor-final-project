@@ -8,7 +8,7 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import { styles } from "./styles";
 
 export default function Login({ navigation }) {
-  const { auth, authentication, messages } = useGlobalVar();
+  const { auth, authentication } = useGlobalVar();
   const [state, dispatch] = authentication;
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
@@ -29,15 +29,27 @@ export default function Login({ navigation }) {
     bootstrapAsync();
   }, []);
 
-  return (
+  const checkTextInput = () => {
+    //Check for the Emial TextInput
+    if (!email.trim()) {
+      alert("Please Enter Email");
+    }
+    //Check for the Email TextInput
+    if (!password.trim()) {
+      alert("Please Enter Password");
+    }
+    //Checked Successfully
+    //Do whatever you want
+    auth.signIn({ email, password });
+  };
 
+  return (
     <ScrollView style={styles.container}>
       <Image
         style={styles.logo}
         source={require("../../../assets/Appicon.png")}
       />
       <Text style={styles.title}>SIGN IN</Text>
-
       <View styles={styles.contentContainer}>
         <View style={styles.btnWrap}>
           <SecondaryButton
@@ -63,10 +75,7 @@ export default function Login({ navigation }) {
         </View>
 
         <View style={styles.loginBtnWrapper}>
-          <PrimaryButton
-            label={"LOG IN"}
-            onPress={() => auth.signIn({ email, password })}
-          />
+          <PrimaryButton label={"LOG IN"} onPress={() => auth.signIn({ email, password })} disable={true}/>
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
       </View>
