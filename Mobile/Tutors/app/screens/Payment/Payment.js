@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 import { StyleSheet } from "react-native";
 
 const Payment = (props) => {

@@ -22,7 +22,7 @@ import TeachingList from "./app/screens/TeachingList/TeachingList";
 import Scanner from "./app/screens/Scanner/Scanner";
 import CheckCourse from "./app/screens/CheckCourse/CheckCourse";
 // eslint-disable-next-line no-unused-vars
-import { colors } from "./app/config/colors";
+import Colors from "./app/config/colors";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
@@ -139,7 +139,6 @@ const Screen1 = ({ navigation }) => (
         navigation.push("CheckCourse");
       }}
     />
-
   </View>
 );
 
@@ -231,4 +230,3 @@ const styles = StyleSheet.create({
     fontSize: 42,
   },
 });
-

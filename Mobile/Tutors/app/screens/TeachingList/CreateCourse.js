@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
-import {
-  SafeAreaView,
-  Text,
-  View,
-  ScrollView,
-  StyleSheet
-
-} from "react-native";
+import { SafeAreaView, Text, View, ScrollView, StyleSheet } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { ButtonNoStyle } from "../../components/buttons/ButtonNoStyle";
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 import { Clock } from "./Clock";
 import { ModalDate } from "./ModalDate";
 import { TermCourse } from "./TermCourse";
 import { TextInputButton } from "./TextInputButton";
 import { TextInputPrice } from "./TextInputPrice";
-
 
 export const CreateCourse = (props) => {
   const [dateStart, setDateStart] = useState(new Date());
@@ -25,7 +17,16 @@ export const CreateCourse = (props) => {
   const [term, setTerm] = useState();
   const [valueText, setValueText] = useState();
   const [price, setPrice] = useState();
-  const [days, setDays] = useState(["Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat ", "Everyday"]);
+  const [days, setDays] = useState([
+    "Sun ",
+    "Mon ",
+    "Tue ",
+    "Wed ",
+    "Thu ",
+    "Fri ",
+    "Sat ",
+    "Everyday",
+  ]);
   const [everyday, setEveryday] = useState(false);
   const [monday, setMonday] = useState(false);
   const [tuesday, setTuesday] = useState(false);
@@ -39,7 +40,6 @@ export const CreateCourse = (props) => {
 
   var count = 0;
   const createCourse = () => {
-
     const arrData = {
       id: "",
       course: "",
@@ -47,7 +47,7 @@ export const CreateCourse = (props) => {
       date: "",
       timeStart: "",
       timeEnd: "",
-      duration: ""
+      duration: "",
     };
     arrData.id = count + 1; //uncomplete
     arrData.course = valueText;
@@ -57,12 +57,20 @@ export const CreateCourse = (props) => {
     arrData.timeEnd = dateEnd.getHours() + ":" + dateEnd.getMinutes();
     arrData.duration = "term";
     setAllValue([...allValue, arrData]);
-  }
+  };
 
   return (
     <View style={styles.contrainer}>
       <ScrollView style={styles.Global}>
-        <Text style={{ alignSelf: "center", fontWeight: "bold", fontSize: 18, marginBottom: 20, color: colors.second }}>
+        <Text
+          style={{
+            alignSelf: "center",
+            fontWeight: "bold",
+            fontSize: 18,
+            marginBottom: 20,
+            color: colors.second,
+          }}
+        >
           Create my course
         </Text>
         <TextInputButton text={[valueText, setValueText]} label={"Course"} />
@@ -76,9 +84,18 @@ export const CreateCourse = (props) => {
           wednesday={[wednesday, setWednesday]}
           thursday={[thursday, setThursday]}
           friday={[friday, setFriday]}
-          saturday={[saturday, setSaturday]} />
-        <Clock label={"Time Start"} time={[dateStart, setDateStart]} show={[show, setShow]} />
-        <Clock label={"Time End"} time={[dateEnd, setDateEnd]} show={[show, setShow]} />
+          saturday={[saturday, setSaturday]}
+        />
+        <Clock
+          label={"Time Start"}
+          time={[dateStart, setDateStart]}
+          show={[show, setShow]}
+        />
+        <Clock
+          label={"Time End"}
+          time={[dateEnd, setDateEnd]}
+          show={[show, setShow]}
+        />
         <TermCourse term={[term, setTerm]} />
 
         <View style={styles.inputItem2}>
@@ -86,7 +103,9 @@ export const CreateCourse = (props) => {
             style={styles.buttonStyle}
             onPress={() => createCourse()}
           >
-            <Text style={{ alignSelf: "center", color: colors.second }}>Create</Text>
+            <Text style={{ alignSelf: "center", color: colors.second }}>
+              Create
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -129,7 +148,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 30,
     paddingVertical: 10,
-    elevation: 2
-  }
-
+    elevation: 2,
+  },
 });

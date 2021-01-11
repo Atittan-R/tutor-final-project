@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AsyncStorage, Image, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
@@ -8,8 +8,7 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import { styles } from "./styles";
 
 export default function Login({ navigation }) {
-  const { autho } = useGlobalVar();
-  const { authentication } = useGlobalVar();
+  const { auth, authentication } = useGlobalVar();
   const [state, dispatch] = authentication;
 
   const [password, setPassword] = useState();
@@ -25,11 +24,6 @@ export default function Login({ navigation }) {
         // Restoring token failed
         console.log("Restoring token failed: ", error);
       }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
       dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
 
@@ -42,12 +36,7 @@ export default function Login({ navigation }) {
         style={styles.logo}
         source={require("../../../assets/Appicon.png")}
       />
-      <Text
-        style={styles.title}
-        // onPress={() => navigation.navigate("Screen1")}
-      >
-        Sign In
-      </Text>
+      <Text style={styles.title}>SIGN IN</Text>
       <View styles={styles.contentContainer}>
         <View style={styles.btnWrap}>
           <SecondaryButton
@@ -75,7 +64,7 @@ export default function Login({ navigation }) {
         <View style={styles.loginBtnWrapper}>
           <PrimaryButton
             label={"LOG IN"}
-            onPress={() => autho.signIn({ email, password })}
+            onPress={() => auth.signIn({ email, password })}
           />
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
@@ -83,7 +72,7 @@ export default function Login({ navigation }) {
 
       <View style={styles.footerWrapper}>
         <Text style={styles.footerText}>
-          <Text style={styles.footerText1}>ALREADY HAVE AN ACCOUNT? </Text>
+          <Text style={styles.footerText}>ALREADY HAVE AN ACCOUNT? </Text>
           <Text
             style={styles.footerText2}
             onPress={() => navigation.push("Register")}

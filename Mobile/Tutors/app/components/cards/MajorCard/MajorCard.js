@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
-import { colors } from "../../../config/colors";
-
+import Colors from "../../../config/colors";
 
 export default function MajorCard(props) {
   const { majorName, selected, onPress } = props;

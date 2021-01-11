@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import { AirbnbRating } from "react-native-elements";
-import { colors } from "../../../config/colors";
-
+import Colors from "../../../config/colors";
 
 export default function ProductCard(props) {
   const { majorName, selected, onPress } = props;
@@ -17,12 +16,13 @@ export default function ProductCard(props) {
           source={require("../../../assets/Appicon.png")}
         />
         <Text style={styles.title}>{majorName}</Text>
-        <AirbnbRating starContainerStyle={styles.rating}
-                  size={10}
-                  defaultRating={5}
-                  isDisabled={true}
-                  showRating={false}
-                />
+        <AirbnbRating
+          starContainerStyle={styles.rating}
+          size={10}
+          defaultRating={5}
+          isDisabled={true}
+          showRating={false}
+        />
       </TouchableOpacity>
     </View>
   );

@@ -1,51 +1,62 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, {useEffect, useState} from "react";
+import {NavigationContainer, useNavigation} from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
-import { PrivilegeUser, PrivilegeTutor } from "./Privilege";
-import { useGlobalVar } from "../context/GlobalContex";
-import { Text, View } from "react-native";
+import {PrivilegeUser, PrivilegeTutor} from "./Privilege";
+import {useGlobalVar} from "../context/GlobalContex";
+import {Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+// import RoleSelection, {styles} from "./RoleSelection";
+import Colors from "../configs/Colors";
+import CharacterMrTeacherFullBody from "../assets/characters/CharacterMrTeacherFullBody";
+import CharacterStudentFullBody from "../assets/characters/CharacterStudentFullBody";
+import RoleSelection from "../screens/Authentication/RoleSelection";
 
-function SplashScreen({ param }) {
-  return (
-    <View>
-      <Text>Loading...</Text>
-      <Text>Loading...</Text>
-      <Text>Loading...</Text>
-      <Text>Loading...</Text>
-      <Text>Loading...</Text>
-      <Text>Loading...</Text>
-      <Text>Loading...</Text>
-      <Text>{param}</Text>
-      <Text>Loading..</Text>
-    </View>
-  );
+function SplashScreen() {
+    return (
+        <View>
+            <Text>Loading...</Text>
+            <Text>Loading...</Text>
+            <Text>Loading...</Text>
+            <Text>Loading...</Text>
+            <Text>Loading...</Text>
+            <Text>Loading...</Text>
+            <Text>Loading...</Text>
+            <Text>Loading..</Text>
+        </View>
+    );
 }
 
-const renderingCheck = () => {
-  const { authentication } = useGlobalVar();
-  const [state, dispatch] = authentication;
-  // Context API To get Current User
-  // const curren_user = null;
-
-  // const curren_user = {
-  //   data: { username: "hongbao", email: "g@g.com", role: ["TUTOR"] },
-  // };
-  // const role_router = {
-  //   TUTOR: <PrivilegeTutor />,
-  //   USER: <PrivilegeUser />,
-  // };
-
-  // return curren_user ? ( role_router[curren_user.data.role] ) : ( <AuthenticationStack /> );
-
-  return state.isLoading ? (
-    SplashScreen(state.isLoading)
-  ) : state.userToken == null ? (
-    <AuthenticationStack />
-  ) : (
-    <PrivilegeUser />
-  );
+export const role_router = {
+    ROLE_TUTOR: <PrivilegeTutor/>,
+    ROLE_USER: <PrivilegeUser/>,
 };
 
+export const renderingCheck = () => {
+    const {authentication, current_user, roleglobal} = useGlobalVar();
+    const [roleselection] = roleglobal
+    const [currentuser] = current_user;
+    const [state] = authentication;
+
+    //IF isLoading is true will be show Load Screen
+    state.isLoading && SplashScreen();
+
+    //Prepare variable for role that will be select in RoleSelection.js
+    let {role} = "";
+    roleselection !== undefined ? {role} = roleselection : "";
+
+    // Use on product
+    // return state.userToken === null
+    //     ? <AuthenticationStack />
+    //     : currentuser.roles.length !== 1
+    //         ? (state.userRole === null || state.userRole === undefined)
+    //         ? <RoleSelection/>
+    //         : role_router[role]
+    //     : role_router[currentuser.roles]
+
+    //Test UI with out login
+    return (state.userRole === null || state.userRole === undefined)
+        ? <RoleSelection/>
+        : role_router[role]
+};
 export default function Routes() {
-  return <NavigationContainer>{renderingCheck()}</NavigationContainer>;
+    return <NavigationContainer>{renderingCheck()}</NavigationContainer>;
 }

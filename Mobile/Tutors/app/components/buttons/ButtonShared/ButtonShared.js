@@ -1,14 +1,21 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Share ,Button} from "react-native";
-import { colors } from "../../../config/colors";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Share,
+  Button,
+} from "react-native";
+import Colors from "../../../config/colors";
 
 export const ButtonShared = (props) => {
-  const {label} = props;
+  const { label } = props;
   const onShare = async () => {
     try {
       const result = await Share.share({
         message:
-          'https://www.youtube.com/watch?v=cEeUFE6tRmQ&list=RDMMRWoW4TyecS4&index=27',
+          "https://www.youtube.com/watch?v=cEeUFE6tRmQ&list=RDMMRWoW4TyecS4&index=27",
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -25,10 +32,9 @@ export const ButtonShared = (props) => {
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onShare} title = {label}style={styles.btn}>
+      <TouchableOpacity onPress={onShare} title={label} style={styles.btn}>
         <Text style={styles.label}>{label}</Text>
       </TouchableOpacity>
-     
     </View>
   );
 };
