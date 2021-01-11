@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
-import MapView, { Marker } from 'react-native-maps';
 import Amount from '../../components/forms/Amount';
 import Catagory from '../../components/forms/Catagory';
 import Clock from '../../components/forms/Clock';
@@ -17,31 +16,16 @@ import Colors from '../../configs/Colors'
 
 export default function CreateCourse({ navigation }) {
     const [valueText, setValueText] = useState();
-    const alert = () => {
-        Alert.alert(
-            "Create",
-            "Are you sure to create your course?",
-            [
-                { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-                { text: "OK", onPress: () => navigation.navigate("Home") }
-            ],
-            { cancelable: false }
-        )
-    }
+
     return (
         <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.pop()}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
-                <Text style={styles.textHeader}>Create My ourse</Text>
+                <Text style={styles.textHeader}>Create Course</Text>
                 <TouchableOpacity
                     style={styles.add}
-                    onPress={alert}>
+                    onPress={() => navigation.push("CourseDetail")}>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
             </View>
@@ -71,7 +55,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "row",
-        justifyContent: "flex-start",
+        justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 10,
@@ -106,11 +90,6 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         paddingHorizontal: 10,
-    },
-    add: {
-        padding: 10,
-        borderRadius: 30,
-        left: 120
     },
     title: {
         fontWeight: "bold",
