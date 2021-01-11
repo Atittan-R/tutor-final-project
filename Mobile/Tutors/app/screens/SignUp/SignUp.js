@@ -14,37 +14,10 @@ const SignUp = ({ navigation }) => {
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const sign = async () => {
-    console.log('==================email==================');
-    console.log(email);
-    console.log('====================================');
-    console.log('==================password==================');
-    console.log(password);
-    console.log('====================================');
-    console.log('==================username==================');
-    console.log(username);
-    console.log('====================================');
- 
-    // axios.post("localhost:3986/api/auth/signup", { email: email, password: password, username: username })
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  }
-  // useEffect(() => {
-  //   if(email&&username&&password!=null)
-  //   axios.post("localhost:3986/api/auth/signup",{email:email,password:password,username:username})
-  // }, [email,username,password])
-  // useEffect(() => {
-
-  // const x=axios.get('localhost:3986/api/user/findAll')
-  // console.log('====================================');
-  // console.log(x);
-  // console.log('====================================');
-  // })
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <ScrollView style={{ margin: 0, backgroundColor: "white" }}>
@@ -60,17 +33,26 @@ const SignUp = ({ navigation }) => {
             fontColor={"white"}
           />
         </View>
-        <Text style={styles.textOr}>Or Sign up with E-mail</Text>
+        <Text style={styles.textOr}>Or Sign up with E-mail {email}</Text>
 
         <View style={styles.inputWrap}>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Email Address"} value={email} setValue={setEmail} />
+            <PrimaryInput
+              placeHolder={"Email Address"}
+              onTextChange={(text) => setEmail(text)}
+            />
           </View>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Username"} value={username} setValue={setUsername} />
+            <PrimaryInput
+              placeHolder={"Username"}
+              onTextChange={(text) => setUsername(text)}
+            />
           </View>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Password"} value={password} setValue={setPassword} />
+            <PrimaryInput
+              placeHolder={"Password"}
+              onTextChange={(text) => setPassword(text)}
+            />
           </View>
           <View style={styles.policy}>
             <Text style={styles.policyText}>
@@ -94,8 +76,11 @@ const SignUp = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.btnWrapper}>
-          <Button onPress={sign} title="signup"></Button>
-          {/* <PrimaryButton label={"Sign Up"} screenName={"Login"} /> */}
+          <PrimaryButton
+            label={"Sign Up"}
+            screenName={"Login"}
+            // onPress={() => alert("hello")}
+          />
         </View>
       </View>
     </ScrollView>

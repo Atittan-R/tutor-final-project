@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, ScrollView, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Image, ScrollView, Text, View } from "react-native";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/buttons/SecondaryButton/SecondaryButton";
 import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";

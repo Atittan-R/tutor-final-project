@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
     textInput: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 5,
         paddingHorizontal: 20,
         paddingVertical: 10,

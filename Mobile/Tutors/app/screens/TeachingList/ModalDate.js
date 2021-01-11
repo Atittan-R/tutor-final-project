@@ -264,7 +264,7 @@ export const styles = StyleSheet.create({
         elevation: 2,
     },
     closeButton: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 20,
         paddingHorizontal: 40,
         paddingVertical: 10,
@@ -296,7 +296,7 @@ export const styles = StyleSheet.create({
         // backgroundColor: "#fff",
     },
     textDate: {
-        backgroundColor: colors.bg,
+        backgroundColor: colors.background,
         borderRadius: 5,
         paddingHorizontal: 20,
         paddingVertical: 10,

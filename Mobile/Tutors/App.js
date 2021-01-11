@@ -19,7 +19,8 @@ import Notification from "./app/screens/Notification/Notification";
 import ConfirmOrder from "./app/screens/ConfirmOrder/ConfirmOrder";
 import Payment from "./app/screens/Payment/Payment";
 import TeachingList from "./app/screens/TeachingList/TeachingList";
-import TestProps from "./app/screens/TestProps/TestProps";
+import Scanner from "./app/screens/Scanner/Scanner";
+import CheckCourse from "./app/screens/CheckCourse/CheckCourse";
 // eslint-disable-next-line no-unused-vars
 import { colors } from "./app/config/colors";
 
@@ -127,11 +128,18 @@ const Screen1 = ({ navigation }) => (
       }}
     />
     <Button
-      title="Go to Props"
+      title="Go to Scanner"
       onPress={() => {
-        navigation.push("TestProps");
+        navigation.push("Scanner");
       }}
     />
+    <Button
+      title="Go to CheckCourse"
+      onPress={() => {
+        navigation.push("CheckCourse");
+      }}
+    />
+
   </View>
 );
 
@@ -192,7 +200,9 @@ export default function App() {
           <Root.Screen name="Payment" component={Payment} />
           <Root.Screen name="Cart" component={Cart} />
           <Root.Screen name="TeachingList" component={TeachingList} />
-          <Root.Screen name="TestProps" component={TestProps} />
+          <Root.Screen name="Scanner" component={Scanner} />
+          <Root.Screen name="CheckCourse" component={CheckCourse} />
+
           <Root.Screen
             name="MyProfile"
             component={MyProfile}
@@ -201,8 +211,8 @@ export default function App() {
           <Root.Screen name="Screen2" component={Screen2} />
           <Root.Screen name="Screen1" component={Screen1} />
         </Root.Navigator>
-      </NavigationContainer >
-    </ThemeProvider >
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
@@ -221,3 +231,4 @@ const styles = StyleSheet.create({
     fontSize: 42,
   },
 });
+

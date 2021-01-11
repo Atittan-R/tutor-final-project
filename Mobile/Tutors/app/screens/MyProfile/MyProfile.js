@@ -1,4 +1,4 @@
-import React ,{useState}from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -53,7 +53,7 @@ const MyProfile = ({ navigation }) => {
           })
           }
 
-        
+
           <View style={{ padding: 5 }}></View>
 
           <View style={styles.coverArea}>
@@ -192,7 +192,7 @@ const MyProfile = ({ navigation }) => {
               </View>
             </Pressable>
             <Pressable
-              // onPress={() => navigation.navigate("Require")}
+              onPress={() => navigation.navigate("Scanner")}
               style={({ pressed }) => [
                 {
                   backgroundColor: pressed ? colors.primary : colors.white,
@@ -206,7 +206,7 @@ const MyProfile = ({ navigation }) => {
                   type={"feather"}
                   color={colors.secondary}
                 />
-                <Text style={styles.textNormal}>My Ticket</Text>
+                <Text style={styles.textNormal}>Scan QR Code</Text>
                 <Icon
                   name={"chevron-right"}
                   type={"feather"}
@@ -216,7 +216,7 @@ const MyProfile = ({ navigation }) => {
             </Pressable>
 
             <Pressable
-            onPress={()=>{setModalVisible(true)}}
+              onPress={() => { setModalVisible(true) }}
               // onPress={() => navigation.navigate("Require")}
               style={({ pressed }) => [
                 {
@@ -267,11 +267,15 @@ const MyProfile = ({ navigation }) => {
         </SafeAreaView>
       </ScrollView>
       <View style={styles.menu}>
-        <TouchableOpacity style={styles.menuButton}>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate("Course")}>
           <Icon name={"home"} type={"feather"} color={colors.secondary} />
           <Text style={styles.menuText}> Home </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuButton}>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate("Require")}>
           <Icon name={"layers"} type={"feather"} color={colors.secondary} />
           <Text style={styles.menuText}> Feed </Text>
         </TouchableOpacity>

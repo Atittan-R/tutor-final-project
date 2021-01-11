@@ -1,1 +1,0 @@
-export { TestProps } from './TestProps'
