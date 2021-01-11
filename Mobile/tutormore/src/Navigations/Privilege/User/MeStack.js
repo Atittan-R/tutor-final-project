@@ -15,7 +15,6 @@ const MeStack = () => {
         >
             <Stack.Screen name="Me" component={Me} />
         </Stack.Navigator>
-
     )
 }
 export default MeStack;
