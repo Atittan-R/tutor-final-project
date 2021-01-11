@@ -1,8 +1,13 @@
 //TODO
+const express = require("express");
+const app = express();
 const db = require("../models");
 const Take = db.take;
 const Request = db.request;
 const Course = db.course;
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 
 exports.takend = async (req, res) => {
   //create Take
@@ -57,4 +62,7 @@ exports.takend = async (req, res) => {
   } else {
     res.status(401).send("kuy");
   }
+
+
+
 };

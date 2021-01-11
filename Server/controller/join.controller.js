@@ -22,7 +22,7 @@ exports.joinRequest = async (req, res) => {
 };
 
 exports.joinUserList = async (req, res) => {
-  const reqes = req.params.id;
+  const reqes = req.params.requestid;
 
   const result = await Request.findByPk(reqes, {
     attributes: [
@@ -45,8 +45,10 @@ exports.joinUserList = async (req, res) => {
       },
     ],
   });
-
-  await res.status(201).send(result);
+console.log('====================================');
+console.log(result);
+console.log('====================================');
+  await res.status(201).send(result.join_users);
 };
 
 exports.cancelJoin = (req, res) => {

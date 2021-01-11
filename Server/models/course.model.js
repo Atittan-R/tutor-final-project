@@ -18,8 +18,8 @@ module.exports = (sequelize, Sequelize) => {
     duration: {
       type: Sequelize.STRING,
     },
-    price: {
-      type: Sequelize.STRING,
+    amount: {
+      type: Sequelize.INTEGER,
     },
     lat: {
       type: Sequelize.STRING,

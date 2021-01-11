@@ -1,6 +1,9 @@
 const db = require("../models");
 const config = require("../config/auth.config");
-
+const express = require("express");
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 const User = db.user;
 
 exports.findAllUser = (req, res) => {
@@ -11,6 +14,7 @@ exports.findAllUser = (req, res) => {
   .catch((err) => {
     res.status(500).send({ message: err.message });
   });
+
 };
 exports.findOneUser = (req, res) => {
   const id = req.params.id;

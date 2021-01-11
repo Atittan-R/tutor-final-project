@@ -20,7 +20,7 @@ exports.createRequest = (req, res) => {
       if (req.body.tagname) {
         for (i = 0; i < req.body.tagname.length; i++) {
           Tag.create({
-            name: req.body.tagname,
+            name: req.body.tagname[i],
             requestId: request.id,
             categoryId: request.categoryId,
           }).then((tag) => {

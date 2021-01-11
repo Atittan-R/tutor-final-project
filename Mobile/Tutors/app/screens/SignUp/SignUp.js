@@ -1,14 +1,50 @@
 import CheckBox from "@react-native-community/checkbox";
-import React, { useState } from "react";
-import { Text, View, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, ScrollView, Button } from "react-native";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/buttons/SecondaryButton/SecondaryButton";
 import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";
 import { styles } from "./styles";
 import { colors } from "../../config/colors";
+import  axios from 'axios';
+
 
 const SignUp = ({ navigation }) => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const sign = async () => {
+    console.log('==================email==================');
+    console.log(email);
+    console.log('====================================');
+    console.log('==================password==================');
+    console.log(password);
+    console.log('====================================');
+    console.log('==================username==================');
+    console.log(username);
+    console.log('====================================');
+ 
+    // axios.post("localhost:3986/api/auth/signup", { email: email, password: password, username: username })
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
+
+  }
+  // useEffect(() => {
+  //   if(email&&username&&password!=null)
+  //   axios.post("localhost:3986/api/auth/signup",{email:email,password:password,username:username})
+  // }, [email,username,password])
+  // useEffect(() => {
+
+  // const x=axios.get('localhost:3986/api/user/findAll')
+  // console.log('====================================');
+  // console.log(x);
+  // console.log('====================================');
+  // })
   return (
     // eslint-disable-next-line react-native/no-inline-styles
     <ScrollView style={{ margin: 0, backgroundColor: "white" }}>
@@ -28,13 +64,13 @@ const SignUp = ({ navigation }) => {
 
         <View style={styles.inputWrap}>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Email Address"} />
+            <PrimaryInput placeHolder={"Email Address"} value={email} setValue={setEmail} />
           </View>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Username"} />
+            <PrimaryInput placeHolder={"Username"} value={username} setValue={setUsername} />
           </View>
           <View style={styles.inputItem}>
-            <PrimaryInput placeHolder={"Password"} />
+            <PrimaryInput placeHolder={"Password"} value={password} setValue={setPassword} />
           </View>
           <View style={styles.policy}>
             <Text style={styles.policyText}>
@@ -58,7 +94,8 @@ const SignUp = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.btnWrapper}>
-          <PrimaryButton label={"Sign Up"} screenName={"Login"} />
+          <Button onPress={sign} title="signup"></Button>
+          {/* <PrimaryButton label={"Sign Up"} screenName={"Login"} /> */}
         </View>
       </View>
     </ScrollView>

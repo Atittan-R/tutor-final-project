@@ -158,4 +158,29 @@ db.request.belongsToMany(db.user, {
   foreignKey: "requestId",
   as: "join_users",
 });
+
+// courseenroll 
+db.user.belongsToMany(db.course, {
+  through: "course_enroll",
+  foreignKey: "userId",
+  as: "courseEnroll", })
+
+db.course.belongsToMany(db.user, {
+  through: "course_enroll",
+  foreignKey: "courseId",
+  as: "courseEnroll",
+})
+
+// attendance 
+db.user.belongsToMany(db.course, {
+  through: "attendance",
+  foreignKey: "userId",
+  as: "attenDance", })
+
+db.course.belongsToMany(db.user, {
+  through: "attendance",
+  foreignKey: "courseId",
+  as: "attenDance",
+})
+
 module.exports = db;

@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/buttons/SecondaryButton/SecondaryButton";
 import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";
 import { styles } from "./styles";
-
+import axios from "axios";
 const Login = ({ navigation }) => {
+  useEffect(() => {
+    axios.get('http://localhost:3986/api/user/findAll')
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  })
   return (
     <ScrollView style={styles.container}>
       <Image style={styles.logo} source={require("../../assets/Appicon.png")} />
