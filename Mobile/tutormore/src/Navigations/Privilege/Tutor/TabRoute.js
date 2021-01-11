@@ -6,6 +6,7 @@ import { Icon } from "react-native-elements";
 import Colors from "../../../configs/Colors";
 import CreateCourseStack from "./CreateCourseStack";
 import FeedStack from "./FeedStack";
+import MeStack from "./MeStack";
 import TutorHomeStack from "./TutorHomeStack";
 
 const Tabs = AnimatedTabBarNavigator();
@@ -49,7 +50,7 @@ export default function TapRoute() {
             <Icon name="notifications" type="material" color={Colors.secondary} />
           )
         }} />
-      <Tabs.Screen name="Me" component={TabTabTab}
+      <Tabs.Screen name="Me" component={MeStack}
         options={{
           tabBarIcon: () => (
             <Icon name="person" type="material" color={Colors.secondary} />

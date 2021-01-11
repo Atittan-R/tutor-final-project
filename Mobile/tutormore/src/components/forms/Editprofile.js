@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         flex: 1,
         flexWrap: "wrap",
-        // alignItems:"stretch"
+        // alignItems: "center"
     },
     inputStyleHeard: {
         fontWeight: "bold",
