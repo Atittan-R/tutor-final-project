@@ -89,7 +89,7 @@ export default function Feed({ navigation }) {
                                 </View>
                             </View>
                             <TouchableOpacity style={styles.button}
-                            // onPress={()=>navigation.navigate("CreateCourse")}
+                                onPress={() => navigation.navigate("CreateCourse")}
                             >
                                 <Text style={styles.text}>Take</Text>
                             </TouchableOpacity>

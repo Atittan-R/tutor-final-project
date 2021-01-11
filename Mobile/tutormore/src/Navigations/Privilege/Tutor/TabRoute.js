@@ -4,6 +4,7 @@ import { Text } from "react-native";
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar";
 import { Icon } from "react-native-elements";
 import Colors from "../../../configs/Colors";
+import CreateCourseStack from "./CreateCourseStack";
 import FeedStack from "./FeedStack";
 import TutorHomeStack from "./TutorHomeStack";
 
@@ -36,7 +37,7 @@ export default function TapRoute() {
           <Icon name="dynamic-feed" type="material" color={Colors.secondary} />
         )
       }} />
-      <Tabs.Screen name="Create Course" component={Tab}
+      <Tabs.Screen name="Create Course" component={CreateCourseStack}
         options={{
           tabBarIcon: () => (
             <Icon name="add-circle" type="material" color={Colors.secondary} />

@@ -18,7 +18,7 @@ export default function Clock(props) {
     };
     return (
         <View style={styles.inputItem}>
-            <Text style={{ flex: 0.35, color: Colors.secondary }}> {label} </Text>
+            <Text style={{ flex: 0.35, color: Colors.secondary }}>{label}</Text>
             <View style={styles.textDate} >
                 <Text style={styles.text}>{date.getHours()}:{date.getMinutes()}</Text>
                 <TouchableOpacity onPress={showTimepickerStart}>
