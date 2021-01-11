@@ -53,6 +53,19 @@ export default function Home({ navigation }) {
     };
   }, [itemId]);
 
+  const majors = names.map((items) => (
+    <ProductCard
+      key={items.id}
+      index={items.id}
+      majorName={items.name}
+      selected={items.select}
+      onPress={() => {
+        setChecked(checked);
+        setItemId(items.id);
+      }}
+    />
+  ));
+
   //onPress Do this Function
   const ObjectSelection = (itemId) => {
     //set false to all object
@@ -72,7 +85,7 @@ export default function Home({ navigation }) {
     setName(newNames);
     console.log(
       "Major Selection Change: " +
-        JSON.stringify(newNames.find((n) => n.id === itemId))
+      JSON.stringify(newNames.find((n) => n.id === itemId))
     );
     console.log("New Array" + JSON.stringify(newNames));
     return newNames;
@@ -98,9 +111,9 @@ export default function Home({ navigation }) {
         <Text style={styles.titleHome}>Tutor More</Text>
         <TouchableOpacity
           style={styles.search}
-          onPress={() => navigation.push("Search")}
+          onPress={() => navigation.push("SearchCourse")}
         >
-          <Text style={{ color: Colors.secondary }}>TUTORSSSSSss</Text>
+          <Text style={{ color: Colors.secondary }}>search</Text>
           <Icon
             name="search-outline"
             type="ionicon"
@@ -108,18 +121,12 @@ export default function Home({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-      <View>
-        <Text>Signed in!</Text>
-        <Button title="Sign out" onPress={auth.signOut} />
-      </View>
-      <Button
-        title={"Course Detail"}
-        onPress={() => navigation.push("CourseDetail")}
-      ></Button>
       <ScrollView style={styles.bg}>
         <View style={styles.view}>{majors}</View>
       </ScrollView>
     </>
+
+
   );
 }
 

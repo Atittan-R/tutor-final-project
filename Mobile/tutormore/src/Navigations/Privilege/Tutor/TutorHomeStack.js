@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { HomeTutor } from "../../../screens/TutorScreen";
+import { HomeTutor, SearchCourse } from "../../../screens/TutorScreen";
 
 const Stack = createStackNavigator();
 
@@ -13,6 +13,7 @@ const HomeStack = () => {
       initialRouteName="Home"
     >
       <Stack.Screen name="Home" component={HomeTutor} />
+      <Stack.Screen name="SearchCourse" component={SearchCourse} />
     </Stack.Navigator>
   );
 };
