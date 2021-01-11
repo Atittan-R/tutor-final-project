@@ -98,7 +98,7 @@ export default function Home({ navigation }) {
                 <Text style={styles.titleHome}>Tutor More</Text>
                 <TouchableOpacity
                     style={styles.search}
-                    onPress={() => navigation.push("Search")}
+                    onPress={() => navigation.push("SearchCourse")}
                 >
                     <Text style={{ color: Colors.secondary }}>search</Text>
                     <Icon
@@ -108,14 +108,6 @@ export default function Home({ navigation }) {
                     />
                 </TouchableOpacity>
             </View>
-            <View>
-                <Text>Signed in!</Text>
-                <Button title="Sign out" onPress={auth.signOut} />
-            </View>
-            <Button
-                title={"Course Detail"}
-                onPress={() => navigation.push("CourseDetail")}
-            ></Button>
             <ScrollView style={styles.bg}>
                 <View style={styles.view}>{majors}</View>
             </ScrollView>
