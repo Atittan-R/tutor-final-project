@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, StatusBar } from "react-native";
 
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 
 export const styles = StyleSheet.create({
   contrainer: {
@@ -39,11 +39,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 5,
-    marginLeft: 250
+    marginLeft: 250,
   },
   profile: {
     width: 30,
     height: 30,
-    borderRadius: 20
-  }
+    borderRadius: 20,
+  },
 });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, TextInput, Image } from "react-native";
-import { colors } from "../../../config/colors";
+import Colors from "../../../config/colors";
 
 export const PrimaryInput = (props) => {
   const { placeHolder, isValid, value, onChangeText } = props;

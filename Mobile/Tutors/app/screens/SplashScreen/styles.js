@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 
 export const styles = StyleSheet.create({
   container: {
@@ -27,7 +27,6 @@ export const styles = StyleSheet.create({
   bottom: {
     flex: 1,
     justifyContent: "flex-end",
-    
   },
   heading: {
     // fontFamily: "HelveticaNeue",

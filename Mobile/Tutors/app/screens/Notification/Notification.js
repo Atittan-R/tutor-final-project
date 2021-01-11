@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, SafeAreaView, Image } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { colors } from "../../config/colors";
+import Colors from "../../config/colors";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { ButtonShared } from "../../components/buttons/ButtonShared";
