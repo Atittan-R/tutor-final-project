@@ -7,6 +7,7 @@ export { default as SearchRequest } from "./SearchRequest";
 export { default as CreateCourse } from "./CreateCourse";
 export { default as CourseDetail } from "./CourseDetail";
 export { default as TeachingList } from "./TeachingList";
+export { default as CheckList } from "./CheckList";
 
 export { default as Me } from "./Me";
 export { default as Scanner } from "./Scanner";

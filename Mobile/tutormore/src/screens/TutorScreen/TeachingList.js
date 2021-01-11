@@ -13,7 +13,6 @@ import {
   Modal
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { QRCode } from "react-native-qrcode-svg";
 import Colors from "../../configs/Colors";
 
 export default function TeachingList({ navigation }) {
@@ -24,6 +23,7 @@ export default function TeachingList({ navigation }) {
     { id: 4, course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
     { id: 5, course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
   ];
+
   return (
     <>
       {/* header */}
@@ -42,30 +42,51 @@ export default function TeachingList({ navigation }) {
         data={data}
         keyExtractor={(i) => i}
         renderItem={({ item }) => (
-          <View style={styles.viewItem}>
-            <Image source={require("../../assets/Appicon.png")} style={styles.image} />
-            <View>
-              <Text style={styles.title}>{item.course}</Text>
-              <Text style={styles.text}>{item.date}</Text>
-              <Text style={styles.text}>{item.time}</Text>
-              <Text style={styles.text}>{item.duration}</Text>
-              <View style={styles.icon}>
-                <TouchableOpacity
-                  onPress={() => navigation.push("CourseDetail")}
-                  style={styles.button}>
-                  <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} />
-                  <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                // onPress={() => setModalVisible(true)}
-                >
-                  <Icon name="edit" type="material" color={Colors.secondary} />
-                  <Text style={{ color: Colors.secondary, fontSize: 10 }}>Edit</Text>
-                </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.push("CheckList")}
+          >
+            <View style={styles.viewItem}>
+              <Image source={require("../../assets/Appicon.png")} style={styles.image} />
+              <View>
+                <Text style={styles.title}>{item.course}</Text>
+                <Text style={styles.text}>{item.date}</Text>
+                <Text style={styles.text}>{item.time}</Text>
+                <Text style={styles.text}>{item.duration}</Text>
+                <View style={styles.icon}>
+                  <TouchableOpacity
+                    onPress={() => navigation.push("CourseDetail")}
+                    style={styles.button}>
+                    <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} />
+                    <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button}
+                  // onPress={() => setModalVisible(true)}
+                  >
+                    <Icon name="edit" type="material" color={Colors.secondary} />
+                    <Text style={{ color: Colors.secondary, fontSize: 10 }}>Edit</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                      Alert.alert(
+                        "Delete",
+                        item.course + ", are you sure to delete?",
+                        [
+                          { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
+                          { text: "OK", onPress: () => console.log("Cancel Pressed"), style: "cancel" }
+                        ],
+                        { cancelable: false }
+                      )
+                    }}
+                  >
+                    <Icon name="delete-outline" type="material" color={Colors.secondary} />
+                    <Text style={{ color: Colors.secondary, fontSize: 10 }}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )} />
     </>
   );
@@ -121,11 +142,10 @@ const styles = StyleSheet.create({
     color: Colors.secondary
   },
   button: {
-    // backgroundColor: Colors.primary,
     borderRadius: 30,
     marginRight: 5,
     marginTop: 5,
-    // paddingHorizontal: 10,
+    paddingRight: 10,
     alignItems: "center"
   },
 
