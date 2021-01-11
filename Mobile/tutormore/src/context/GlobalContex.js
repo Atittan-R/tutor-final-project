@@ -1,6 +1,7 @@
 import React, {useState, createContext, useContext, useMemo} from "react";
 import {useReducer} from "react";
-import axios from "axios";
+import API from "../services/API"
+import {isLoading} from "expo-font";
 
 const GlobalVarContext = createContext();
 
@@ -22,6 +23,7 @@ export const GlobalProvider = ({children}) => {
                     return {
                         ...prevState,
                         isSignout: false,
+                        isLoading: true,
                         userToken: action.token,
                     };
                 case "SIGN_OUT":
@@ -53,19 +55,20 @@ export const GlobalProvider = ({children}) => {
         () => ({
             signIn: async (data) => {
                 try {
-                    const user_token = await axios.post(
-                        "http://192.168.1.62:3986/api/auth/signin",
+                    const user_token = await API.post(
+                        "/auth/signin",
                         {
                             email: data.email,
                             password: data.password,
                         }
                     );
-                    console.log("data signin from Global state", data);
-                    setUserInfo(user_token.data);
-                    dispatch({type: "SIGN_IN", token: user_token.data.accessToken});
+                    console.log("Log: ", user_token.data);
+                    setUserInfo(user_token.data)
+                    dispatch({type: "SIGN_IN", token: user_token.data.accessToken, isLoading: false});
                 } catch (error) {
                     //TODO Cath error to show on UI
-                    console.error(error);
+                    // console.error("Hello Error",error);
+                    alert(error.message);
                 }
             },
             signOut: () => dispatch({type: "SIGN_OUT"}),
