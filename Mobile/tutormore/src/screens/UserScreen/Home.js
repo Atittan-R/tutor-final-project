@@ -72,7 +72,7 @@ export default function Home({ navigation }) {
     setName(newNames);
     console.log(
       "Major Selection Change: " +
-        JSON.stringify(newNames.find((n) => n.id === itemId))
+      JSON.stringify(newNames.find((n) => n.id === itemId))
     );
     console.log("New Array" + JSON.stringify(newNames));
     return newNames;
@@ -103,16 +103,8 @@ export default function Home({ navigation }) {
           onPress={() => navigation.push("Search")}
         >
           <Text style={{ color: Colors.secondary }}>search</Text>
-<<<<<<< Updated upstream
-          <Icon
-            name="search-outline"
-            type="ionicon"
-            style={{ color: Colors.secondary }}
-          />
-=======
           <Icon name="search-outline" type="ionicon" color={Colors.secondary} />
 
->>>>>>> Stashed changes
         </TouchableOpacity>
       </View>
       <View>

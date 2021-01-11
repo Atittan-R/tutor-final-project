@@ -4,13 +4,8 @@ import {
   CourseEnroll,
   Home,
   CourseDetail,
-<<<<<<< Updated upstream
-  CourseSelect,
-  Search,
-=======
   MyCourse,
   Search
->>>>>>> Stashed changes
 } from "../../../screens/UserScreen";
 
 const Stack = createStackNavigator();
