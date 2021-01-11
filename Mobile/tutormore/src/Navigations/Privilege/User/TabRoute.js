@@ -13,8 +13,10 @@ export default function TapRoute() {
   return (
     <Tabs.Navigator
       tabBarOptions={{
-        color: "#f55",
+        tabBarBackground: "#faa",
+        activeTabBackgrounds: "#faa",
         activeTintColor: Colors.secondary,
+        inactiveTintColor: "#faa",
       }}
     >
       <Tabs.Screen name="Home" component={HomeStack}

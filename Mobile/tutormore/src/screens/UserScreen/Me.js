@@ -18,7 +18,7 @@ import { useGlobalVar } from "../../context/GlobalContex";
 
 
 export default function Me({ navigation }) {
-    const { autho } = useGlobalVar();
+    const { auth } = useGlobalVar();
     const [modalVisible, setModalVisible] = useState(false);
     const [Profile, setProfile] = useState([
         { name: "Yami Sukehiro", major: "Information of Technology", tel: "091246810", email: "yami00z@mail.com" }])
@@ -114,7 +114,7 @@ export default function Me({ navigation }) {
 
                     <View style={styles.coverArea}>
                         <Pressable
-                            onPress={autho.signOut}
+                            onPress={auth.signOut}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,

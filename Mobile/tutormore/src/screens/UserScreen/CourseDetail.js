@@ -1,14 +1,5 @@
 import React, { useState } from "react";
 import {
-<<<<<<< Updated upstream
-  Image,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-=======
   Button,
   Image,
   Alert,
@@ -21,17 +12,10 @@ import {
   View
 } from "react-native";
 import { Icon } from "react-native-elements";
->>>>>>> Stashed changes
 import Colors from "../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
 
 export default function CourseDetail({ navigation }) {
-<<<<<<< Updated upstream
-  const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
-  const [date, setDateNow] = useState(new Date());
-  const [duration, setDuration] = useState(3);
-  const [price, setPrice] = useState(300);
-=======
   const [region, setRegion] = useState({
     latitude: 51.5079145,
     longitude: -0.0899163,
@@ -57,7 +41,6 @@ export default function CourseDetail({ navigation }) {
       longitude: longitude,
     });
   }
->>>>>>> Stashed changes
 
   //course details
   const details = {
@@ -89,37 +72,6 @@ export default function CourseDetail({ navigation }) {
     <>
       {/* header */}
       <SafeAreaView style={styles.container} />
-<<<<<<< Updated upstream
-      <View style={styles.view}>
-        <Image
-          source={require(`../../assets/Appicon.png`)}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.barTitle}>
-        <Text style={{ marginLeft: 20 }}>Details</Text>
-      </View>
-      <View style={styles.viewItem}>
-        <Text>Course</Text>
-        <Text>Course</Text>
-      </View>
-      <View style={styles.viewItem}>
-        <Text>Date</Text>
-        <Text>Course</Text>
-      </View>
-      <View style={styles.viewItem}>
-        <Text>Time</Text>
-        <Text>Course</Text>
-      </View>
-      <View style={styles.viewItem}>
-        <Text>Duraton</Text>
-        <Text>Course</Text>
-      </View>
-      <View style={styles.viewItem}>
-        <Text>Amount</Text>
-        <Text>Course</Text>
-      </View>
-=======
       <View style={styles.headerBar}>
         <TouchableOpacity
           style={{ color: Colors.secondary, marginRight: 10 }}
@@ -227,7 +179,6 @@ export default function CourseDetail({ navigation }) {
           <Text style={styles.title}>Enroll</Text>
         </TouchableOpacity>
       </ScrollView>
->>>>>>> Stashed changes
     </>
   );
 }
@@ -281,9 +232,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-<<<<<<< Updated upstream
-    marginHorizontal: 30,
-=======
     marginLeft: 10,
     marginTop: 10,
     flex: 1
@@ -332,6 +280,5 @@ const styles = StyleSheet.create({
     // alignItems: "stretch",
     elevation: 2,
 
->>>>>>> Stashed changes
   },
 });
