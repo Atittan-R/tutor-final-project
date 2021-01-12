@@ -53,19 +53,6 @@ export default function Home({ navigation }) {
     };
   }, [itemId]);
 
-  const majors = names.map((items) => (
-    <ProductCard
-      key={items.id}
-      index={items.id}
-      majorName={items.name}
-      selected={items.select}
-      onPress={() => {
-        setChecked(checked);
-        setItemId(items.id);
-      }}
-    />
-  ));
-
   //onPress Do this Function
   const ObjectSelection = (itemId) => {
     //set false to all object

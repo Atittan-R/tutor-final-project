@@ -18,6 +18,8 @@ export const GlobalProvider = ({children}) => {
                     return {
                         ...prevState,
                         userToken: action.token,
+                        userData: action.user,
+                        userRoles: action.r,
                         isLoading: false,
                     };
                 case "SIGN_IN":
@@ -26,13 +28,17 @@ export const GlobalProvider = ({children}) => {
                         isSignout: false,
                         isLoading: true,
                         userToken: action.token,
+                        userData: action.user,
+                        userRoles: action.r,
                     };
                 case "SIGN_OUT":
                     return {
                         ...prevState,
                         isSignout: true,
                         userToken: null,
-                        userRole: null,
+                        userData: null,
+                        userRoles: null,
+                        userRole: null
                     };
                 case "ROLE_ENTRY":
                     return {
@@ -48,11 +54,14 @@ export const GlobalProvider = ({children}) => {
             isLoading: true,
             isSignout: false,
             userToken: null,
+            userRoles: null,
+            userData: null,
             userRole: null,
         }
     );
 
     const useLogin = async (data) => {
+        // console.log("Use Login",data)
         try {
             const user = await API.post(
                 "/auth/signin",
@@ -72,19 +81,33 @@ export const GlobalProvider = ({children}) => {
 
     const auth = useMemo(
         () => ({
-            signIn: async (data) =>  {
+            signIn: async (data) => {
                 // console.log(data)
-                const user = await useLogin(data)
-                // await console.log("sign in to get data: ", user.data);
-                await setUserInfo(user.data)
-                await AsyncStorage.setItem("user", JSON.stringify(user.data));
-                await AsyncStorage.setItem("userToken",user.data.accessToken)
-                await dispatch({type: "SIGN_IN", token: user.data.accessToken});
+                try {
+                    const user = await useLogin(data);
+                    let r = await user.data.roles;
+                    // await setUserInfo(user.data)
+                    if(user != null){
+                        await AsyncStorage.setItem("userData", JSON.stringify(user.data));
+                        await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
+                        await AsyncStorage.setItem("userRoles", JSON.stringify(r));
+                    }
+
+                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: r});
+                } catch (e) {
+                    console.log(e)
+                }
             },
-            signOut: () => {
+            signOut: async () => {
+                try{
+                    await AsyncStorage.removeItem("userData");
+                    await AsyncStorage.removeItem("userToken");
+                    await AsyncStorage.removeItem("userRoles");
+                    await AsyncStorage.removeItem("userRole");
+                }catch (e){
+                    alert(e)
+                }
                 dispatch({type: "SIGN_OUT"})
-                AsyncStorage.removeItem("user");
-                AsyncStorage.removeItem("userToken")
             },
             signUp: async (data) => {
                 //TODO Sign Up API
@@ -95,7 +118,8 @@ export const GlobalProvider = ({children}) => {
             },
             roleEntry: async (data) => {
                 setRoleSection(data);
-                dispatch({type: "ROLE_ENTRY", role: data})
+                // await AsyncStorage.setItem("entryRole", JSON.stringify(data.role));
+                dispatch({type: "ROLE_ENTRY", role: data.role})
             },
         }),
         []

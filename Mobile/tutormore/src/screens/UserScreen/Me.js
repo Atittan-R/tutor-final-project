@@ -16,8 +16,7 @@ import { useGlobalVar } from "../../context/GlobalContex";
 
 
 export default function Me({ navigation }) {
-    const { auth, current_user } = useGlobalVar();
-    const [currentuser, setUser] = current_user;
+    const { auth } = useGlobalVar();
     const [modalVisible, setModalVisible] = useState(false);
     const [Profile, setProfile] = useState([
         { name: "Yami Sukehiro", major: "Information of Technology", tel: "091246810", email: "yami00z@mail.com" }])
@@ -38,19 +37,19 @@ export default function Me({ navigation }) {
 
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Name</Text>
-                                    <Text style={styles.textNormal}>{currentuser.username}</Text>
+                                    <Text style={styles.textNormal}>{i.name}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Major</Text>
-                                    <Text style={styles.textNormal}>{currentuser.major}</Text>
+                                    <Text style={styles.textNormal}>{i.major}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Tel.</Text>
-                                    <Text style={styles.textNormal}>{currentuser.phonenumber}</Text>
+                                    <Text style={styles.textNormal}>{i.tel}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Email</Text>
-                                    <Text style={styles.textNormal}>{currentuser.email}</Text>
+                                    <Text style={styles.textNormal}>{i.email}</Text>
                                 </View>
                                 <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={i} ProfileUser={[Profile, setProfile]} />
                             </View>
@@ -155,11 +154,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         backgroundColor: Colors.primary
     },
-    textHeader: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color: Colors.secondary,
-    },
     viewItem: {
         margin: 10,
         flexDirection: "row",
@@ -172,6 +166,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     textHeader: {
+        fontSize: 20,
         fontWeight: "bold",
         flex: 0.5,
         color: Colors.secondary,

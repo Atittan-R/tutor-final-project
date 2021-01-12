@@ -17,31 +17,22 @@ export default function Login({ navigation }) {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
+      let userData;
+      let userRoles;
       try {
         userToken = await AsyncStorage.getItem("userToken");
+        userData = await AsyncStorage.getItem("userData");
+        userRoles = await AsyncStorage.getItem("userRoles");
       } catch (error) {
         // Restoring token failed
         console.log("Restoring token failed: ", error);
       }
-      dispatch({ type: "RESTORE_TOKEN", token: userToken });
+
+      dispatch({ type: "RESTORE_TOKEN", token: userToken , user: userData , r: userRoles});
     };
 
     bootstrapAsync();
   }, []);
-
-  const checkTextInput = () => {
-    //Check for the Emial TextInput
-    if (!email.trim()) {
-      alert("Please Enter Email");
-    }
-    //Check for the Email TextInput
-    if (!password.trim()) {
-      alert("Please Enter Password");
-    }
-    //Checked Successfully
-    //Do whatever you want
-    auth.signIn({ email, password });
-  };
 
   return (
     <ScrollView style={styles.container}>

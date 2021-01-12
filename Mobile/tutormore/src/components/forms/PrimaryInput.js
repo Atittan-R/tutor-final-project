@@ -4,7 +4,7 @@ import Colors from "../../configs/Colors";
 
 
 export default PrimaryInput = (props) => {
-  const { placeHolder, isValid, value, onChangeText, secureTextEntry, autoCapitalize } = props;
+  const { placeHolder, isValid, value, onChangeText, secureTextEntry, keyboardType, textContentType, autoCompleteType } = props;
 
   return (
       <View style={styles.textWrap}>
@@ -14,7 +14,9 @@ export default PrimaryInput = (props) => {
             placeholder={placeHolder}
             onChangeText={onChangeText}
             secureTextEntry={secureTextEntry}
-            autoCapitalize={autoCapitalize}
+            keyboardType={keyboardType}
+            textContentType={textContentType}
+            autoCompleteType={autoCompleteType}
         />
 
         <View style={styles.container}>

@@ -194,11 +194,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         backgroundColor: Colors.primary
     },
-    textHeader: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color: Colors.secondary,
-    },
     viewItem: {
         margin: 10,
         flexDirection: "row",
@@ -211,6 +206,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     textHeader: {
+        fontSize: 20,
         fontWeight: "bold",
         flex: 0.5,
         color: Colors.secondary,

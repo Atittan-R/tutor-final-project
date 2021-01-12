@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {NavigationContainer} from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
 import {PrivilegeUser, PrivilegeTutor} from "./Privilege";
@@ -26,28 +26,49 @@ export const role_router = {
     ROLE_USER: <PrivilegeUser/>,
 };
 
-export const renderingCheck =  () => {
-    const {authentication, current_user, roleglobal} = useGlobalVar();
-    const [roleselection] = roleglobal;
-    const [currentuser, setUser] = current_user;
+export const renderingCheck = (effect, deps) => {
+    const {authentication, current_user, roleglobal, auth} = useGlobalVar();
+    const [roleselection, setRoleSection] = roleglobal;
     const [state, dispatch] = authentication;
+
     //IF isLoading is true will be show Load Screen
     state.isLoading && SplashScreen();
+    useEffect( () =>  {
+        const entryRoling = async () =>{
+            let entry
+            try{
+                entry = await AsyncStorage.getItem("entryRole");
+            }catch (e) {
+                entry = await AsyncStorage.setItem("entryRole", JSON.stringify("NoValue"));
+            }
+            dispatch({type: "ROLE_ENTRY", role:entry})
+        }
+        entryRoling();
+    }, []);
 
-    //access Object[roleselection]
     let {role} = "";
     roleselection !== undefined ? ({role} = roleselection) : "";
 
-    // Use on product TODO
-    return (state.userToken === null)
-        ? <AuthenticationStack/>
-        : currentuser.roles.length !== 1 ? (state.userRole === null || state.userRole === undefined)
-                ? <RoleSelection/>
-                : role_router[role]
-        : role_router[currentuser.roles]
+    //after select role from <RoleSelection/>
+    console.log("state.userToken: ",  state.userToken)
+    console.log("state.userRoles: ",  state.userRoles)
+    console.log("select role: ",  state.userRole)
+    console.log("state.userData: ",  state.userData,"\n");
+
+    if(state.userToken === undefined || state.userToken === null){
+        return <AuthenticationStack/>
+    }else if(state.userRoles.length !== undefined && state.userRoles.length == 2){
+        return <RoleSelection />
+    }else if(state.userRoles !== undefined && state.userRoles.length === 1){
+        return role_router[state.userRoles];
+    }else{
+        // console.log(JSON.parse(state.userRole));
+        return  role_router[JSON.parse(state.userRole)];
     }
+};
 
     //Test UI with out login
+
 //     return state.userRole === null || state.userRole === undefined ? (
 //         <RoleSelection/>
 //     ) : (
@@ -57,4 +78,5 @@ export const renderingCheck =  () => {
 
 export default function Routes() {
     return <NavigationContainer>{renderingCheck()}</NavigationContainer>;
+    // return <NavigationContainer><AuthenticationStack/></NavigationContainer>;
 }

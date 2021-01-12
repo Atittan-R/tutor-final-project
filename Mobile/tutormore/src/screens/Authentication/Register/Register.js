@@ -72,12 +72,15 @@ const Register = ({ navigation }) => {
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Email Address"}
+              keyboardType={"email-address"}
+              autoCompleteType={'off'}
               onChangeText={(text) => setEmail(text)}
             />
           </View>
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Username"}
+              autoCompleteType={'off'}
               onChangeText={(text) => setUsername(text)}
             />
           </View>
@@ -86,6 +89,7 @@ const Register = ({ navigation }) => {
               placeHolder={"Password"}
               onChangeText={(text) => setPassword(text)}
               secureTextEntry
+              autoCompleteType={'off'}
             />
           </View>
           <View style={styles.inputItem}>
@@ -94,6 +98,7 @@ const Register = ({ navigation }) => {
               onChangeText={(text) =>
                 dispatch({ type: "CONFIRM", value: text })
               }
+              autoCompleteType={'off'}
               secureTextEntry
             />
             {confirmMassage !== true && confirmMassage !== null && (
@@ -106,8 +111,10 @@ const Register = ({ navigation }) => {
           <View style={styles.inputItem}>
             <PrimaryInput
               placeHolder={"Phone Number"}
-              autoCapitalize={""}
+              keyboardType={"phone-pad"}
+              textContentType={'none'}
               onChangeText={(text) => setPhoneNumber(text)}
+              autoCompleteType={'off'}
             />
           </View>
           <View style={styles.policy}>

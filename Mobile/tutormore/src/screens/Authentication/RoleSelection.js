@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  AsyncStorage,
   Platform,
   StatusBar,
   StyleSheet,
@@ -10,7 +11,6 @@ import {
 import Colors from "../../configs/Colors";
 import CharacterMrTeacherFullBody from "../../assets/characters/CharacterMrTeacherFullBody";
 import CharacterStudentFullBody from "../../assets/characters/CharacterStudentFullBody";
-import { PrivilegeTutor, PrivilegeUser } from "../../Navigations/Privilege";
 import {useGlobalVar} from "../../context/GlobalContex";
 const RoleSelection = () => {
   const { auth } = useGlobalVar();
@@ -25,9 +25,9 @@ const RoleSelection = () => {
     setSelected(selected);
   }, [selected]);
 
-  const onSubmitHandler = (role) => {
+  const onSubmitHandler = async (role) => {
+    await AsyncStorage.setItem("entryRole", JSON.stringify(role));
     auth.roleEntry({role});
-    // callback(role);
   };
   return (
     <View style={styles.container}>
@@ -111,15 +111,16 @@ const RoleSelection = () => {
                 style={{
                   marginTop: 60,
                   borderRadius: 30,
-                  backgroundColor: Colors.facebookBg,
+                  backgroundColor: Colors.gray,
                 }}
+                disabled={selected.role_select===""&& true}
                 onPress={() => onSubmitHandler(selected.role_select)}
               >
                 <View
                   style={{
                     paddingVertical: 10,
                     borderRadius: 30,
-                    backgroundColor: Colors.primary,
+                    backgroundColor: selected.role_select===""? Colors.gray: Colors.primary,
                     alignItems: "center",
                   }}
                 >
