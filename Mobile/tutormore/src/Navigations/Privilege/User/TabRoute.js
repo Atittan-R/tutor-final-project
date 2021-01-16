@@ -6,6 +6,7 @@ import FeedStack from "./FeedStack";
 import Colors from "../../../configs/Colors";
 import MeStack from "./MeStack";
 import { Icon } from "react-native-elements";
+import RequestStack from "./RequestStack";
 
 const Tabs = AnimatedTabBarNavigator();
 
@@ -14,9 +15,10 @@ export default function TapRoute() {
     <Tabs.Navigator
       tabBarOptions={{
         tabBarBackground: "#faa",
-        activeTabBackgrounds: "#faa",
+        activeBackgroundColor: Colors.primary,
+        activeTabBackgrounds: Colors.secondary,
         activeTintColor: Colors.secondary,
-        inactiveTintColor: "#faa",
+        inactiveTintColor: Colors.secondary,
       }}
     >
       <Tabs.Screen name="Home" component={HomeStack}
@@ -27,8 +29,15 @@ export default function TapRoute() {
         }} />
       <Tabs.Screen name="Feed" component={FeedStack}
         options={{
+            dotCornerRadius: 10,
           tabBarIcon: () => (
             <Icon name="dynamic-feed" type="material" color={Colors.secondary} />
+          )
+        }} />
+      <Tabs.Screen name="Request" component={RequestStack}
+        options={{
+          tabBarIcon: () => (
+            <Icon name="add-circle" type="material" color={Colors.secondary} />
           )
         }} />
       {/* <Tabs.Screen name="Notice" component={FeedStack} /> */}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AsyncStorage, Image, Text, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {  Image, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
 import SecondaryButton from "../../../components/buttons/SecondaryButton";
@@ -8,7 +9,7 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import { styles } from "./styles";
 
 export default function Login({ navigation }) {
-  const { auth, authentication, messages } = useGlobalVar();
+  const { auth, authentication } = useGlobalVar();
   const [state, dispatch] = authentication;
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
@@ -17,27 +18,30 @@ export default function Login({ navigation }) {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
+      let userData;
+      let userRoles;
       try {
         userToken = await AsyncStorage.getItem("userToken");
+        userData = await AsyncStorage.getItem("userData");
+        userRoles = await AsyncStorage.getItem("userRoles");
       } catch (error) {
         // Restoring token failed
         console.log("Restoring token failed: ", error);
       }
-      dispatch({ type: "RESTORE_TOKEN", token: userToken });
+      dispatch({ type: "RESTORE_TOKEN", token: userToken , user: userData , r: userRoles});
+      dispatch({type: "SET_LOADING", loading: false});
     };
 
     bootstrapAsync();
   }, []);
 
   return (
-
     <ScrollView style={styles.container}>
       <Image
         style={styles.logo}
         source={require("../../../assets/Appicon.png")}
       />
       <Text style={styles.title}>SIGN IN</Text>
-
       <View styles={styles.contentContainer}>
         <View style={styles.btnWrap}>
           <SecondaryButton
@@ -63,13 +67,7 @@ export default function Login({ navigation }) {
         </View>
 
         <View style={styles.loginBtnWrapper}>
-          <PrimaryButton
-            label={"LOG IN"}
-            onPress={() => 
-              // navigation.navigate("RoleSelection")
-              auth.signIn({ email, password })
-            }
-          />
+          <PrimaryButton label={"LOG IN"} onPress={() => auth.signIn({ email, password })} disable={true}/>
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
       </View>

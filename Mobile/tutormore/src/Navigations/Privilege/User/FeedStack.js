@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { Feed, Request } from "../../../screens/UserScreen"
+import { Feed, SearchRequest } from "../../../screens/UserScreen"
 
 
 const Stack = createStackNavigator();
@@ -14,7 +14,8 @@ const FeedStack = () => {
             initialRouteName="Feed"
         >
             <Stack.Screen name="Feed" component={Feed} />
-            <Stack.Screen name="Request" component={Request} />
+            <Stack.Screen name="SearchRequest" component={SearchRequest} />
+
         </Stack.Navigator>
 
     )

@@ -4,7 +4,7 @@ import {
   Login,
   TutorRegister,
   Register,
-  Major,
+  Major, RoleSelection,
 } from "../screens/Authentication";
 
 const Stack = createStackNavigator();
@@ -42,6 +42,13 @@ const AuthenticationStack = () => {
           headerTitle: "Tutor Registration",
         }}
       />
+        <Stack.Screen
+            name="RoleSelect"
+            component={RoleSelection}
+            options={{
+                headerTitle: "RoleSelect",
+            }}
+        />
     </Stack.Navigator>
   );
 };

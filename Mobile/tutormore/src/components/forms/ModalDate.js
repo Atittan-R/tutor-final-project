@@ -56,7 +56,7 @@ export default function ModalDate(props) {
 
             <View style={styles.textDate}>
                 <View style={styles.wrapText}>
-                    <Text style={styles.text}>{everyday ? "Everyday" : null}</Text>
+                    <Text style={styles.text}>{everyday ? days[7] : null}</Text>
                     <Text style={styles.text}>{sunday ? days[0] : null}</Text>
                     <Text style={styles.text}>{monday ? days[1] : null}</Text>
                     <Text style={styles.text}>{tuesday ? days[2] : null}</Text>

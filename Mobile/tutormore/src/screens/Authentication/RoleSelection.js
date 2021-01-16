@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Platform,
   StatusBar,
@@ -10,10 +11,11 @@ import {
 import Colors from "../../configs/Colors";
 import CharacterMrTeacherFullBody from "../../assets/characters/CharacterMrTeacherFullBody";
 import CharacterStudentFullBody from "../../assets/characters/CharacterStudentFullBody";
-import { PrivilegeTutor, PrivilegeUser } from "../../Navigations/Privilege";
 import {useGlobalVar} from "../../context/GlobalContex";
-const RoleSelection = () => {
-  const { auth } = useGlobalVar();
+
+export default function RoleSelection({navigation})  {
+  const { auth, authentication } = useGlobalVar();
+  const [state, dispatch] = authentication;
   const [selected, setSelected] = useState({
     role_select: "",
     tutorColor: Colors.white,
@@ -25,9 +27,10 @@ const RoleSelection = () => {
     setSelected(selected);
   }, [selected]);
 
-  const onSubmitHandler = (role) => {
+  const onSubmitHandler = async (role) => {
+    // dispatch({type: "SET_LOADING", loading: true});
+    await AsyncStorage.setItem("entryRole", JSON.stringify(role.toString()));
     auth.roleEntry({role});
-    // callback(role);
   };
   return (
     <View style={styles.container}>
@@ -111,15 +114,16 @@ const RoleSelection = () => {
                 style={{
                   marginTop: 60,
                   borderRadius: 30,
-                  backgroundColor: Colors.facebookBg,
+                  backgroundColor: Colors.gray,
                 }}
+                disabled={selected.role_select===""&& true}
                 onPress={() => onSubmitHandler(selected.role_select)}
               >
                 <View
                   style={{
                     paddingVertical: 10,
                     borderRadius: 30,
-                    backgroundColor: Colors.primary,
+                    backgroundColor: selected.role_select===""? Colors.gray: Colors.primary,
                     alignItems: "center",
                   }}
                 >
@@ -160,4 +164,4 @@ export const styles = StyleSheet.create({
   },
 });
 
-export default RoleSelection;
+

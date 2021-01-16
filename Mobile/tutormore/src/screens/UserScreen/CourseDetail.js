@@ -14,6 +14,7 @@ import {
 import {Icon} from "react-native-elements";
 import Colors from "../../configs/Colors";
 import MapView, {Marker} from "react-native-maps";
+import LoadingScreen from "../../components/Loading";
 
 export default function CourseDetail({navigation}) {
     const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
@@ -27,6 +28,7 @@ export default function CourseDetail({navigation}) {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     });
+
     const [draggable, setDraggable] = useState({
         latitude: 51.5078788,
         longitude: -0.0877321,
@@ -79,7 +81,7 @@ export default function CourseDetail({navigation}) {
             {cancelable: false}
         );
     };
-    return (
+    return  (
         <>
             {/* header */}
             <SafeAreaView style={styles.container}>
@@ -163,7 +165,7 @@ export default function CourseDetail({navigation}) {
                             <Marker
                                 draggable
                                 coordinate={draggable}
-                                onDragStart
+                                // onDragStart={true}
                                 // onDragStart={console.log('onDragStart', arguments)}
                             onDragEnd={(e) => movementMarker(e.nativeEvent)}
                             />

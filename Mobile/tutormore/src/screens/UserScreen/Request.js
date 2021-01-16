@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "row",
-        justifyContent: "flex-start",
+        justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 10,
@@ -142,9 +142,4 @@ const styles = StyleSheet.create({
         flex: 0.4,
         paddingHorizontal: 10,
     },
-    add: {
-        padding: 10,
-        borderRadius: 30,
-        left: 120
-    }
 })
