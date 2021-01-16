@@ -2,18 +2,19 @@ import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 import Colors from "../../configs/Colors"
 
-export default function TextInputButton(props) {
-    const { label, placeholder } = props
-    const [valueText, setValueText] = useState();
+export default TextInputButton = (props) => {
+    const { label, placeholder, keyboardType, onChangeText, value } = props
+    // const [valueText, setValueText] = useState();
     return (
         <View style={styles.inputItem}>
             <Text style={{ flex: 0.35, color: Colors.secondary }}>{label}</Text>
             <TextInput
-                value={valueText}
+                value={value}
                 placeholder={placeholder}
+                keyboardType={keyboardType}
                 color={Colors.secondary}
                 style={styles.textInput}
-                onChangeText={setValueText} />
+                onChangeText={onChangeText} />
         </View>
     )
 }

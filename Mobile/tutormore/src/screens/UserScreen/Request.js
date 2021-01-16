@@ -7,27 +7,24 @@ import TextInputButton from '../../components/forms/TextInputButton';
 import Colors from '../../configs/Colors'
 
 export default function Request({ navigation }) {
-    const [valueText, setValueText] = useState();
+    const [coureName, setCourseName] = useState("");
     return (
         <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.push("Feed")}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
                 <Text style={styles.textHeader}>Create Request</Text>
                 <TouchableOpacity
-                    style={styles.add}
-                    onPress={() => navigation.push("Feed")}>
+                    onPress={() => navigation.navigate("Feed")}>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
             </View>
             <View style={styles.area}>
                 <View style={styles.content}>
-                    <TextInputButton label="Course" placeholder="Enter your course name" />
+                    <TextInputButton
+                        label="Course"
+                        placeholder="Enter your course name"
+                        onChangeText={setCourseName} />
                     <ModalDate />
                     <Clock label="Time Start" />
                     <Clock label="Time End" />
@@ -46,7 +43,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "row",
-        justifyContent: "flex-start",
+        justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 10,
@@ -82,9 +79,4 @@ const styles = StyleSheet.create({
         flex: 0.4,
         paddingHorizontal: 10,
     },
-    add: {
-        padding: 10,
-        borderRadius: 30,
-        left: 120
-    }
 })

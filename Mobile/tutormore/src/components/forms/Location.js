@@ -42,7 +42,7 @@ export default function Location() {
           <Marker
             draggable
             coordinate={draggable}
-            onDragStart
+            onDragStart={true}
             onDragEnd={(e) => movementMarker(e.nativeEvent)}
           />
         </MapView>

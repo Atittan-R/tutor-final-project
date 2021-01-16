@@ -3,8 +3,9 @@ import { View, Text, StyleSheet } from "react-native";
 import Colors from "../../configs/Colors";
 import { Picker } from "@react-native-community/picker";
 
-export default function Catagory() {
-  const [selectedValue, setSelectedValue] = useState("");
+export default function Catagory(props) {
+  // const [selectedValue, setSelectedValue] = useState("");
+  const { selectedValue, onValueChange } = props;
   return (
     <View style={styles.inputItem}>
       <Text style={{ flex: 0.35, color: Colors.secondary }} >Catagory </Text>
@@ -12,14 +13,21 @@ export default function Catagory() {
         <Picker
           selectedValue={selectedValue}
           style={styles.drop}
-          onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+          onValueChange={onValueChange}
         >
           <Picker.Item label="select" value="select" />
           <Picker.Item label="Agricultural Technology" value="Agricultural Technology" />
+          <Picker.Item label="Density" value="Density" />
           <Picker.Item label="Engineering" value="Engineering" />
+          <Picker.Item label="Foreign Language" value="Foreign Language" />
+          <Picker.Item label="General Education" value="General Education" />
+          <Picker.Item label="Information Technology" value="Information Technology" />
+          <Picker.Item label="Management Technology" value="Management Technology" />
           <Picker.Item label="Medicine" value="Medicine" />
+          <Picker.Item label="Nurse" value="Nurse" />
+          <Picker.Item label="Public Health" value="Public Health" />
           <Picker.Item label="Science" value="Science" />
-          <Picker.Item label="Social Technology" value="Social Technology" />
+
         </Picker>
       </View>
     </View>

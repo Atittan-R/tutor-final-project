@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {NavigationContainer} from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
 import {PrivilegeUser, PrivilegeTutor} from "./Privilege";
 import {useGlobalVar} from "../context/GlobalContex";
