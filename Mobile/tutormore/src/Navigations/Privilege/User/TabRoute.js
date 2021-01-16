@@ -14,9 +14,10 @@ export default function TapRoute() {
     <Tabs.Navigator
       tabBarOptions={{
         tabBarBackground: "#faa",
-        activeTabBackgrounds: "#faa",
+        activeBackgroundColor: Colors.primary,
+        activeTabBackgrounds: Colors.secondary,
         activeTintColor: Colors.secondary,
-        inactiveTintColor: "#faa",
+        inactiveTintColor: Colors.secondary,
       }}
     >
       <Tabs.Screen name="Home" component={HomeStack}
@@ -27,6 +28,7 @@ export default function TapRoute() {
         }} />
       <Tabs.Screen name="Feed" component={FeedStack}
         options={{
+            dotCornerRadius: 10,
           tabBarIcon: () => (
             <Icon name="dynamic-feed" type="material" color={Colors.secondary} />
           )

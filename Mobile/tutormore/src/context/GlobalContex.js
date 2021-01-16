@@ -2,14 +2,11 @@ import React, {useState, createContext, useContext, useMemo} from "react";
 import {useReducer} from "react";
 import API from "../services/API"
 import {isLoading} from "expo-font";
-import {AsyncStorage} from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GlobalVarContext = createContext();
 
 export const GlobalProvider = ({children}) => {
-    const [current_user, setUserInfo] = useState();
-    const [roleselection, setRoleSection] = useState();
-
     const [state, dispatch] = useReducer(
         (prevState, action) => {
             //reducer
@@ -20,13 +17,12 @@ export const GlobalProvider = ({children}) => {
                         userToken: action.token,
                         userData: action.user,
                         userRoles: action.r,
-                        isLoading: false,
+                        isLoading: true,
                     };
                 case "SIGN_IN":
                     return {
                         ...prevState,
                         isSignout: false,
-                        isLoading: true,
                         userToken: action.token,
                         userData: action.user,
                         userRoles: action.r,
@@ -43,9 +39,15 @@ export const GlobalProvider = ({children}) => {
                 case "ROLE_ENTRY":
                     return {
                         ...prevState,
+                        isLoading: true,
                         isSignout: false,
                         userToken: action.token,
                         userRole: action.role,
+                    };
+                case "SET_LOADING":
+                    return {
+                        ...prevState,
+                        isLoading: action.loading,
                     };
             }
         },
@@ -71,6 +73,12 @@ export const GlobalProvider = ({children}) => {
                 }
             );
             // console.log("User From Login: ", user.data);
+            if(user != null){
+                await AsyncStorage.setItem("userData", JSON.stringify(user.data));
+                await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
+                await AsyncStorage.setItem("userRoles", JSON.stringify(user.data.roles));
+
+            }
             return user;
         } catch (error) {
             //TODO Cath error to show on UI
@@ -85,15 +93,9 @@ export const GlobalProvider = ({children}) => {
                 // console.log(data)
                 try {
                     const user = await useLogin(data);
-                    let r = await user.data.roles;
-                    // await setUserInfo(user.data)
-                    if(user != null){
-                        await AsyncStorage.setItem("userData", JSON.stringify(user.data));
-                        await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
-                        await AsyncStorage.setItem("userRoles", JSON.stringify(r));
-                    }
+                    dispatch({type: "SET_LOADING", loading: false});
+                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
 
-                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: r});
                 } catch (e) {
                     console.log(e)
                 }
@@ -108,17 +110,15 @@ export const GlobalProvider = ({children}) => {
                     alert(e)
                 }
                 dispatch({type: "SIGN_OUT"})
+                dispatch({type: "SET_LOADING", loading: false});
             },
             signUp: async (data) => {
-                //TODO Sign Up API
-                // console.log("signup:",data)
-                const user = await useLogin(data)
-                await dispatch({type: "SIGN_IN", token: user.data.accessToken});
+                const user = await useLogin(data);
+                dispatch({type: "SET_LOADING", loading: false});
+                dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
                 // await console.log("data signup from Global state", data);
             },
             roleEntry: async (data) => {
-                setRoleSection(data);
-                // await AsyncStorage.setItem("entryRole", JSON.stringify(data.role));
                 dispatch({type: "ROLE_ENTRY", role: data.role})
             },
         }),
@@ -130,8 +130,6 @@ export const GlobalProvider = ({children}) => {
             value={{
                 authentication: [state, dispatch],
                 auth: auth,
-                current_user: [current_user, setUserInfo],
-                roleglobal: [roleselection, setRoleSection],
             }}>
             {children}
         </GlobalVarContext.Provider>

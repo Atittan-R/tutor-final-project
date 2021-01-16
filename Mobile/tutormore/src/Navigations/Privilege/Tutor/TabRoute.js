@@ -10,21 +10,14 @@ import MeStack from "./MeStack";
 import TutorHomeStack from "./TutorHomeStack";
 
 const Tabs = AnimatedTabBarNavigator();
-const Tab = () => {
-  return <Text>Home Hello Tutor </Text>;
-};
-const TabTab = () => {
-  return <Text>Home Hello Tutor </Text>;
-};
-const TabTabTab = () => {
-  return <Text>Home Hello Tutor </Text>;
-};
+
 export default function TapRoute() {
   return (
     <Tabs.Navigator
       tabBarOptions={{
         activeTintColor: Colors.secondary,
         inactiveTintColor: "#fff",
+
       }}
     >
       <Tabs.Screen name="Home" component={TutorHomeStack}

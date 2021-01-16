@@ -45,7 +45,7 @@ export default function Feed({navigation}) {
             }
         }
         findRequest();
-    });
+    }, []);
 
     console.log("data from outside:", dataList.map((i) => i.name));
 
@@ -105,7 +105,7 @@ export default function Feed({navigation}) {
                         <Text style={{fontSize: 12, color: Colors.secondary}}>+{count}</Text>
                     </TouchableOpacity>
                 </View>
-            </View>)}/>
+            </View>)} />
     </SafeAreaView>
 )
 }

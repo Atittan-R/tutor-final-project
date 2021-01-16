@@ -60,7 +60,6 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.background,
         borderRadius: 5,
         paddingHorizontal: 20,
-        paddingVertical: 10,
         flex: 0.8,
         paddingVertical: 13,
     },

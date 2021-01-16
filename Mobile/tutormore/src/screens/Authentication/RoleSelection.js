@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  AsyncStorage,
   Platform,
   StatusBar,
   StyleSheet,
@@ -12,8 +12,10 @@ import Colors from "../../configs/Colors";
 import CharacterMrTeacherFullBody from "../../assets/characters/CharacterMrTeacherFullBody";
 import CharacterStudentFullBody from "../../assets/characters/CharacterStudentFullBody";
 import {useGlobalVar} from "../../context/GlobalContex";
-const RoleSelection = () => {
-  const { auth } = useGlobalVar();
+
+export default function RoleSelection({navigation})  {
+  const { auth, authentication } = useGlobalVar();
+  const [state, dispatch] = authentication;
   const [selected, setSelected] = useState({
     role_select: "",
     tutorColor: Colors.white,
@@ -26,7 +28,8 @@ const RoleSelection = () => {
   }, [selected]);
 
   const onSubmitHandler = async (role) => {
-    await AsyncStorage.setItem("entryRole", JSON.stringify(role));
+    // dispatch({type: "SET_LOADING", loading: true});
+    await AsyncStorage.setItem("entryRole", JSON.stringify(role.toString()));
     auth.roleEntry({role});
   };
   return (
@@ -161,4 +164,4 @@ export const styles = StyleSheet.create({
   },
 });
 
-export default RoleSelection;
+

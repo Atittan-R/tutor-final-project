@@ -1,6 +1,7 @@
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useReducer, useState } from "react";
-import {AsyncStorage, ScrollView, StyleSheet, Text, View} from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView, StyleSheet, Text, View} from "react-native";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
 import SecondaryButton from "../../../components/buttons/SecondaryButton";
 import PrimaryInput from "../../../components/forms/PrimaryInput";
