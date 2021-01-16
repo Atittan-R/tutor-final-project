@@ -15,7 +15,9 @@ import Colors from '../../configs/Colors'
 
 
 export default function CreateCourse({ navigation }) {
-    const [valueText, setValueText] = useState();
+    const [coureName, setCourseName] = useState("");
+    const [amount, setAmount] = useState("");
+    const [catagory, setCatagory] = useState("");
 
     return (
         <>
@@ -24,7 +26,6 @@ export default function CreateCourse({ navigation }) {
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Course</Text>
                 <TouchableOpacity
-                    style={styles.add}
                     onPress={() => navigation.push("CourseDetail")}>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
@@ -32,13 +33,24 @@ export default function CreateCourse({ navigation }) {
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
                     <UploadImage />
-                    <TextInputButton label="Course" placeholder="Enter your course name" />
+                    <TextInputButton
+                        label={"Course"}
+                        placeholder={"Enter your course name"}
+                        onChangeText={setCourseName} />
                     <ModalDate />
-                    <Clock label="Time Start" />
-                    <Clock label="Time End" />
+                    <Clock
+                        label={"Time Start"} />
+                    <Clock
+                        label={"Time End"} />
                     <TermCourse />
-                    <Amount label="Amount" placeholder="Enter the number of seats" />
-                    <Catagory />
+                    <TextInputButton
+                        label={"Amount"}
+                        placeholder={"Enter the number of seats"}
+                        onChangeText={setAmount}
+                        keyboardType={"phone-pad"} />
+                    <Catagory
+                        selectedValue={catagory}
+                        onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
                     <Tag />
                     <Location />
                 </View>

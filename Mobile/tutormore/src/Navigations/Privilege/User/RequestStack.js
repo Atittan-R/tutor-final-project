@@ -1,11 +1,11 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { Feed, SearchRequest } from "../../../screens/UserScreen"
+import { Request } from "../../../screens/UserScreen"
 
 
 const Stack = createStackNavigator();
 
-const FeedStack = () => {
+const RequestStack = () => {
     return (
         <Stack.Navigator
             screenOptions={{
@@ -13,11 +13,10 @@ const FeedStack = () => {
             }}
             initialRouteName="Feed"
         >
-            <Stack.Screen name="Feed" component={Feed} />
-            <Stack.Screen name="SearchRequest" component={SearchRequest} />
+            <Stack.Screen name="Request" component={Request} />
 
         </Stack.Navigator>
 
     )
 }
-export default FeedStack;
+export default RequestStack;
