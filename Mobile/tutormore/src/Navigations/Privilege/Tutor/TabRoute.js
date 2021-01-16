@@ -17,38 +17,61 @@ export default function TapRoute() {
       tabBarOptions={{
         activeTintColor: Colors.secondary,
         inactiveTintColor: "#fff",
-
       }}
     >
-      <Tabs.Screen name="Home" component={TutorHomeStack}
+      <Tabs.Screen
+        name="Home"
+        component={TutorHomeStack}
         options={{
           tabBarIcon: () => (
             <Icon name="home" type="material" color={Colors.secondary} />
-          )
-        }} />
-      <Tabs.Screen name="Feed Request" component={FeedStack} options={{
-        tabBarIcon: () => (
-          <Icon name="dynamic-feed" type="material" color={Colors.secondary} />
-        )
-      }} />
-      <Tabs.Screen name="Create Course" component={CreateCourseStack}
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Feed Request"
+        component={FeedStack}
+        options={{
+          tabBarIcon: () => (
+            <Icon
+              name="dynamic-feed"
+              type="material"
+              color={Colors.secondary}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Create Course"
+        component={CreateCourseStack}
         options={{
           tabBarIcon: () => (
             <Icon name="add-circle" type="material" color={Colors.secondary} />
-          )
-        }} />
-      <Tabs.Screen name="Notification" component={TabTab}
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Notification"
+        component={TabTab}
         options={{
           tabBarIcon: () => (
-            <Icon name="notifications" type="material" color={Colors.secondary} />
-          )
-        }} />
-      <Tabs.Screen name="Me" component={MeStack}
+            <Icon
+              name="notifications"
+              type="material"
+              color={Colors.secondary}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Me"
+        component={MeStack}
         options={{
           tabBarIcon: () => (
             <Icon name="person" type="material" color={Colors.secondary} />
-          )
-        }} />
+          ),
+        }}
+      />
     </Tabs.Navigator>
   );
 }
