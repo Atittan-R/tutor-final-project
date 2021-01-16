@@ -1,33 +1,96 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Clock from '../../components/forms/Clock';
 import ModalDate from '../../components/forms/ModalDate';
 import TextInputButton from '../../components/forms/TextInputButton';
 import Colors from '../../configs/Colors'
+import API from "../../services/API"
 
 export default function Request({ navigation }) {
-    const [coureName, setCourseName] = useState("");
+    const [valueText, setValueText] = useState();
+    const [CourseName,setCourseName]=useState("");
+    const [day,setDay]=useState("");
+    const [TimeStart, setTimeStart] = useState(new Date());
+    const [TimeEnd, setTimeEnd] = useState(new Date())
+
+
+    const getTimeStart=(result)=>{
+        setTimeStart(result);
+    }
+    const getTimeEnd=(result)=>{
+        setTimeEnd(result);
+    }
+
+    const creteRequst=async()=>{
+       
+        try {
+            var d = new Date()
+            const requst =  await API.post("request/create", {
+                name: CourseName,
+                date: day.toString(),
+                time_start: TimeStart.getHours()+":"+TimeStart.getMinutes(),
+                time_end: TimeEnd.getHours()+":"+TimeEnd.getMinutes(),
+                description:"xxxxxxx",
+                categoryId:1,
+                userId:2
+            });
+            console.log('====================================');
+            console.log(requst);
+            console.log('====================================');
+      
+        } catch (error) {
+            error.response.status=404 ?  navigation.push("Feed")
+            : 
+            console.log('====================================');
+            console.log("ERR: ",error.response.status);
+            console.log('====================================');
+                
+        }
+       
+     
+        
+    }
+
+// useEffect(() => {
+//  console.log("CourseName :",CourseName);
+//  console.log("day :",day);
+// }, [CourseName])
+// useEffect(() => {
+//     console.log('=================TimeStart===================');
+//     console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
+//     console.log('====================================');
+// }, [TimeStart])
+// useEffect(() => {
+//     console.log('=================TimeEnd===================');
+//     console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
+//     console.log('====================================');
+// }, [TimeEnd])
     return (
         <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
+                <TouchableOpacity
+                    style={{ color: Colors.secondary, marginRight: 10 }}
+                    onPress={() =>   navigation.push("Feed")}>
+                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
+                </TouchableOpacity>
                 <Text style={styles.textHeader}>Create Request</Text>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("Feed")}>
+                    style={styles.add}
+                    onPress={() => creteRequst()
+                  }>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
             </View>
             <View style={styles.area}>
                 <View style={styles.content}>
-                    <TextInputButton
-                        label="Course"
-                        placeholder="Enter your course name"
-                        onChangeText={setCourseName} />
-                    <ModalDate />
-                    <Clock label="Time Start" />
-                    <Clock label="Time End" />
+                    <TextInputButton label="Course" placeholder="Enter your course name" 
+                      onTextChange={(text) => setCourseName(text)}/>
+                    <ModalDate dayValue={[day,setDay]}/>
+                    <Clock label="Time Start" name="Time Start" callback={getTimeStart}/>
+                    <Clock label="Time End"  name="Time End" callback={getTimeEnd}/>
                 </View>
             </View>
 

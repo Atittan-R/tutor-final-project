@@ -1,13 +1,18 @@
 import CheckBox from "@react-native-community/checkbox";
-import React, { useState } from "react";
-import { Text, View, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, ScrollView, Button } from "react-native";
 import { PrimaryButton } from "../../components/buttons/PrimaryButton";
 import { SecondaryButton } from "../../components/buttons/SecondaryButton/SecondaryButton";
 import { PrimaryInput } from "../../components/forms/PrimaryInput/PrimaryInput";
 import { styles } from "./styles";
-import Colors from "../../config/colors";
+import { colors } from "../../config/colors";
+import  axios from 'axios';
+
 
 const SignUp = ({ navigation }) => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");

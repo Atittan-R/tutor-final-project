@@ -10,16 +10,18 @@ export default function ModalDate(props) {
     const [monday, setMonday] = useState();
     const [tuesday, setTuesday] = useState();
     const [wednesday, setWednesday] = useState();
-    const [thursday, setThursday] = useState();;
-    const [friday, setFriday] = useState();;
-    const [saturday, setSaturday] = useState();;
-    const [sunday, setSunday] = useState();;
-    const [everyday, setEveryday] = useState();;
+    const [thursday, setThursday] = useState();
+    const [friday, setFriday] = useState();
+    const [saturday, setSaturday] = useState();
+    const [sunday, setSunday] = useState();
+    const [everyday, setEveryday] = useState();
     const [days, setDays] = useState();
-
+    const [day,setDay]=props.dayValue;
     const [modalVisible, setModalVisible] = useState(false);
+    const x=[];
 
     const selectDate = () => {
+        checkday();
         if (sunday && monday && tuesday && wednesday && thursday && friday && saturday == true) {
             setEveryday(true);
             setModalVisible(!modalVisible);
@@ -29,13 +31,23 @@ export default function ModalDate(props) {
             setModalVisible(!modalVisible);
         }
     }
+    const checkday = ()=>{
+        monday? x.push("Mon"):x
+        thursday? x.push("Thu"):x
+        friday? x.push("Fri"):x
+        wednesday? x.push("Wed"):x
+        tuesday? x.push("Tue"):x
+        sunday? x.push("Sun"):x
+        saturday? x.push("Sat"):x
+        setDay(x)
+    }
     useEffect(() => {
         if (everyday == true) {
-            setDays(['', '', '', '', '', '', '', 'Everyday'])
+            setDays(['', '', '', '', '', '', ''])
+            setDay(["Everyday"])
 
         } else {
-            setDays(["Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat ", ""])
-
+            setDays(["Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "])
         }
     }, [everyday])
     return (
