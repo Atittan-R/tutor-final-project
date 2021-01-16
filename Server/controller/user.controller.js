@@ -81,6 +81,31 @@ exports.editProfile = (req, res) => {
       });
     };
     
+
+    exports.Userjoin = async (req, res) => {
+      const userId = req.body.userId
+      const userJoin = await User.findByPk(userId,{
+        attributes: [
+          "id",
+          "username",
+        ],
+        include: [
+          {
+            model: db.request,
+            attributes: ["id", "name"],
+            as: "requests",
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+      });
+    console.log('====================================');
+    console.log(userJoin);
+    console.log('====================================');
+      await res.status(201).send(userJoin.requests);
+    };
+    
     // exports.allAccess = (req, res) => {
     //   res.status(200).send("Public Content.");
     // };

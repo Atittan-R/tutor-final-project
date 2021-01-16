@@ -51,20 +51,20 @@ export const renderingCheck = () => {
     roleselection !== undefined ? ({role} = roleselection) : "";
 
     // Use on product TODO
-    return state.userToken === null
-        ? <AuthenticationStack />
-        : currentuser.roles.length !== 1
-            ? (state.userRole === null || state.userRole === undefined)
-            ? <RoleSelection/>
-            : role_router[role]
-        : role_router[currentuser.roles]
+    // return state.userToken === null
+    //     ? <AuthenticationStack />
+    //     : currentuser.roles.length !== 1
+    //         ? (state.userRole === null || state.userRole === undefined)
+    //         ? <RoleSelection/>
+    //         : role_router[role]
+    //     : role_router[currentuser.roles]
 
     //Test UI with out login
-    // return state.userRole === null || state.userRole === undefined ? (
-    //     <RoleSelection/>
-    // ) : (
-    //     role_router[role]
-    // );
+    return state.userRole === null || state.userRole === undefined ? (
+        <RoleSelection/>
+    ) : (
+        role_router[role]
+    );
 };
 export default function Routes() {
     return <NavigationContainer>{renderingCheck()}</NavigationContainer>;

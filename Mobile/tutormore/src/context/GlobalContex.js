@@ -68,6 +68,9 @@ export const GlobalProvider = ({children}) => {
                 } catch (error) {
                     //TODO Cath error to show on UI
                     // console.error("Hello Error",error);
+                    console.log('====================================');
+                    console.log(error);
+                    console.log('====================================');
                     alert(error.message);
                 }
             },

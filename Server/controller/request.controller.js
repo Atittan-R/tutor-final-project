@@ -1,7 +1,9 @@
 const db = require("../models");
 const config = require("../config/auth.config");
+const { user } = require("../models");
 const Request = db.request;
 const Tag = db.tag;
+const User=db.user;
 
 exports.createRequest = (req, res) => {
   //Save Request Data to Database
@@ -45,7 +47,22 @@ exports.createRequest = (req, res) => {
 };
 
 exports.findAllRequest = (req, res) => {
-  Request.findAll()
+  Request.findAll({
+    attributes: ["id", "name","date","time_start","time_end"],
+    
+    include: [
+      {
+          model: User,
+     
+          as:"user",
+          attributes: ["username"],
+          // through: {
+          //     attributes: ["name"],
+          // },
+
+      },
+    ]
+  })
     .then((request) => {
       res.status(202).send({ request });
     })

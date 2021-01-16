@@ -1,26 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 export default function Clock(props) {
-    const { label } = props;
+    const { label,callback} = props;
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState();
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
-        setDate(currentDate);
+        setDate(currentDate);  
     };
+    
     const showTimepickerStart = () => {
         setShow(true);
     };
+    useEffect(() => {
+             callback(date)
+    }, [date])
     return (
         <View style={styles.inputItem}>
             <Text style={{ flex: 0.35, color: Colors.secondary }}> {label} </Text>
             <View style={styles.textDate} >
-                <Text style={styles.text}>{date.getHours()}:{date.getMinutes()}</Text>
+                <Text style={styles.text}>{date.getHours()}:{(date.getMinutes()<10?'0':'') + date.getMinutes()}</Text>
                 <TouchableOpacity onPress={showTimepickerStart}>
                     <Icon name={'clock'} type={'feather'} color={Colors.secondary} />
                 </TouchableOpacity>

@@ -26,9 +26,6 @@ app.get("/message", (req, res) => {
 
 
 
-
-
-
   //socket
   io.on('connection', (socket) => {
     socket.on("Notification",msg =>{
@@ -67,7 +64,6 @@ db.sequelize.sync();
 // set port, listen for requests
 const PORT = process.env.PORT || 3986;
 http.listen(PORT, () => {
-  
   console.log(`Server is running on port ${PORT}\n`);
 });
 

@@ -65,7 +65,10 @@ export default function Login({ navigation }) {
         <View style={styles.loginBtnWrapper}>
           <PrimaryButton
             label={"LOG IN"}
-            onPress={() => auth.signIn({ email, password })}
+            onPress={() => 
+              // navigation.navigate("RoleSelection")
+              auth.signIn({ email, password })
+            }
           />
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>

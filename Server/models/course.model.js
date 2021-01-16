@@ -27,6 +27,9 @@ module.exports = (sequelize, Sequelize) => {
     long: {
       type: Sequelize.STRING,
     },
+    distance : {
+      type: Sequelize.STRING,
+    },
   });
 
   return Course;
