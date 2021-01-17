@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AsyncStorage, Image, Text, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {  Image, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
 import SecondaryButton from "../../../components/buttons/SecondaryButton";
@@ -27,8 +28,8 @@ export default function Login({ navigation }) {
         // Restoring token failed
         console.log("Restoring token failed: ", error);
       }
-
       dispatch({ type: "RESTORE_TOKEN", token: userToken , user: userData , r: userRoles});
+      dispatch({type: "SET_LOADING", loading: false});
     };
 
     bootstrapAsync();

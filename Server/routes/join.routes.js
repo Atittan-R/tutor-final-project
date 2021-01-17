@@ -24,8 +24,14 @@ module.exports = function (app) {
     controller.joinUserList
   );
 
+  app.get(
+    "/api/join/findAll",
+    // [authJwt.verifyToken],
+    controller.joinfindAll
+  );
+
   app.post(
-    "/api/join/cancel/:userid",
+    "/api/join/cancel",
     // [authJwt.verifyToken],
     controller.cancelJoin
   );

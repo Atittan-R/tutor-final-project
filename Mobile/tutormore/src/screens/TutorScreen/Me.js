@@ -18,19 +18,18 @@ import Colors from '../../configs/Colors';
 import { useGlobalVar } from "../../context/GlobalContex";
 
 
-export default function Me({ navigation }) {
+export default function Me({ navigation, route }) {
     const { auth } = useGlobalVar();
     const [modalVisible, setModalVisible] = useState(false);
     const [Profile, setProfile] = useState([
-        { name: "Pixels", major: "Information of Technology", tel: "091246810", email: "pixels00z@mail.com" }])
-    const alertSignout = () => {
+        { username: "Pixels", major: "Information of Technology", phonenumber: "091246810", email: "pixels00z@mail.com" }])
+    const alertSignOut = () => {
         Alert.alert(
             "Sign out",
             "Are you sure you want to sign out?",
             [
                 { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-                { text: "OK", onPress: () => auth.signOut }
-            ],
+                { text: "OK", onPress: () => auth.signOut()}],
             { cancelable: false }
         )
     }
@@ -50,7 +49,7 @@ export default function Me({ navigation }) {
 
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Name</Text>
-                                    <Text style={styles.textNormal}>{i.name}</Text>
+                                    <Text style={styles.textNormal}>{i.username}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Major</Text>
@@ -58,7 +57,7 @@ export default function Me({ navigation }) {
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Tel.</Text>
-                                    <Text style={styles.textNormal}>{i.tel}</Text>
+                                    <Text style={styles.textNormal}>{i.phonenumber}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Text style={styles.textHeader}>Email</Text>
@@ -151,13 +150,28 @@ export default function Me({ navigation }) {
                                 <Icon name="navigate-next" type="material" color={Colors.secondary} />
                             </View>
                         </Pressable>
+                        <Pressable
+                            onPress={() => navigation.navigate("RoleSelect")}
+                            style={({ pressed }) => [
+                                {
+                                    backgroundColor: pressed ? Colors.primary : Colors.white,
+                                },
+                                styles.wrapperCustom,
+                            ]}
+                        >
+                            <View style={styles.viewItem}>
+                                <Icon name="face" type="material-icons" color={Colors.secondary} />
+                                <Text style={styles.textNormal}>Select Role</Text>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
+                            </View>
+                        </Pressable>
                     </View>
 
                     <View style={{ padding: 5 }}></View>
 
                     <View style={styles.coverArea}>
                         <Pressable
-                            onPress={alertSignout}
+                            onPress={alertSignOut}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,

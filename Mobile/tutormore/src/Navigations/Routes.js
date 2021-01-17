@@ -1,82 +1,94 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
-import { PrivilegeUser, PrivilegeTutor } from "./Privilege";
-import { useGlobalVar } from "../context/GlobalContex";
-import { AsyncStorage, Text, View } from "react-native";
+import {PrivilegeUser, PrivilegeTutor} from "./Privilege";
+import {useGlobalVar} from "../context/GlobalContex";
 import RoleSelection from "../screens/Authentication/RoleSelection";
-
-function SplashScreen() {
-    return (
-        <View>
-            <Text>Loading...</Text>
-            <Text>Loading...</Text>
-            <Text>Loading...</Text>
-            <Text>Loading...</Text>
-            <Text>Loading...</Text>
-            <Text>Loading...</Text>
-            <Text>Loading...</Text>
-            <Text>Loading..</Text>
-        </View>
-    );
-}
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingScreen from "../components/Loading";
 
 export const role_router = {
-    ROLE_TUTOR: <PrivilegeTutor />,
-    ROLE_USER: <PrivilegeUser />,
+    ROLE_USER: <PrivilegeUser/>,
+    ROLE_TUTOR: <PrivilegeTutor/>,
 };
 
-export const renderingCheck = (effect, deps) => {
-    const { authentication, current_user, roleglobal, auth } = useGlobalVar();
-    const [roleselection, setRoleSection] = roleglobal;
+export const renderingCheck = () => {
+    const {authentication} = useGlobalVar();
     const [state, dispatch] = authentication;
-
-    //IF isLoading is true will be show Load Screen
-    state.isLoading && SplashScreen();
-    // useEffect(() => {
-    //     const entryRoling = async () => {
-    //         let entry
-    //         try {
-    //             entry = await AsyncStorage.getItem("entryRole");
-    //         } catch (e) {
-    //             entry = await AsyncStorage.setItem("entryRole", JSON.stringify("NoValue"));
-    //         }
-    //         dispatch({ type: "ROLE_ENTRY", role: entry })
-    //     }
-    //     entryRoling();
-    // }, []);
-
-    let { role } = "";
-    roleselection !== undefined ? ({ role } = roleselection) : "";
+    const [newRole, setNewRole] = useState(null);
+    const {isLoading} = state;
+    useEffect(() => {
+        const entryRoling = async () => {
+            let entry
+            // let entryData
+            try {
+                entry = await AsyncStorage.getItem("entryRole");
+                // entryData = await AsyncStorage.getItem("userData");
+                setNewRole(entry)
+            } catch (e) {
+                entry = await AsyncStorage.setItem("entryRole", JSON.stringify("NoValue"));
+            }
+            dispatch({type: "ROLE_ENTRY", role: JSON.parse(entry)})
+        }
+        entryRoling();
+    }, [state.userRole]);
 
     //after select role from <RoleSelection/>
-    console.log("state.userToken: ", state.userToken)
     console.log("state.userRoles: ", state.userRoles)
     console.log("select role: ", state.userRole)
+    console.log("state newRole: ", newRole)
     console.log("state.userData: ", state.userData, "\n");
 
-    // if (state.userToken === undefined || state.userToken === null) {
-    //     return <AuthenticationStack />
-    // } else if (state.userRoles.length !== undefined && state.userRoles.length == 2) {
-    //     return <RoleSelection />
-    // } else if (state.userRoles !== undefined && state.userRoles.length === 1) {
-    //     return role_router[state.userRoles];
-    // } else {
-    //     // console.log(JSON.parse(state.userRole));
-    //     return role_router[JSON.parse(state.userRole)];
+    // if(isLoading===true){
+    //     if(state.userData !== null){
+    //         dispatch({type: "SET_LOADING", loading: false});
+    //     }else{
+    //     return <LoadingScreen />
+    //     }
+    // }else{
+        if (state.userData === null) {
+            return <AuthenticationStack/>
+        } else if (JSON.parse(state.userRoles).length === 1) {
+            return role_router[JSON.parse(state.userRoles)];
+        } else if (JSON.parse(state.userRoles).length === 2 && newRole !== null) {
+            // console.log(roleselection)
+            return <RoleSelection/>
+        } else {
+            //TODO
+            return role_router[state.userRole]
+        }
     // }
-    // };
+
+    // Use on product TODO
+    return state.userToken === null
+        // ? <AuthenticationStack />
+        // : currentuser.roles.length !== 1
+        //     ? (state.userRole === null || state.userRole === undefined)
+        //     ? <RoleSelection/>
+        //     : role_router[role]
+        // : role_router[currentuser.roles]
 
     //Test UI with out login
-
-    return state.userRole === null || state.userRole === undefined ? (
-        <RoleSelection />
-    ) : (
-            role_router[role]
-        );
+    // return state.userRole === null || state.userRole === undefined ? (
+    //     <RoleSelection/>
+    // ) : (
+    //     role_router[role]
+    // );
 };
 
+//Test UI with out login
+
+//     return state.userRole === null || state.userRole === undefined ? (
+//         <RoleSelection/>
+//     ) : (
+//         role_router[state.userRole]
+//     );
+// };
+
 export default function Routes() {
-    return <NavigationContainer>{renderingCheck()}</NavigationContainer>;
-    // return <NavigationContainer><AuthenticationStack /></NavigationContainer>;
+    return (
+        <NavigationContainer>
+            {renderingCheck()}
+        </NavigationContainer>);
+    // return <NavigationContainer><AuthenticationStack/></NavigationContainer>;
 }

@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native'
 import Colors from "../../configs/Colors"
 
 export default TextInputButton = (props) => {
-    const { label, placeholder, keyboardType, onChangeText, value } = props
+    const { label, placeholder, keyboardType, onTextChange, value } = props
     // const [valueText, setValueText] = useState();
     return (
         <View style={styles.inputItem}>
@@ -14,7 +14,7 @@ export default TextInputButton = (props) => {
                 keyboardType={keyboardType}
                 color={Colors.secondary}
                 style={styles.textInput}
-                onChangeText={onChangeText} />
+                onChangeText={onTextChange} />
         </View>
     )
 }
