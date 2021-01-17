@@ -77,7 +77,6 @@ export const GlobalProvider = ({children}) => {
                 await AsyncStorage.setItem("userData", JSON.stringify(user.data));
                 await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
                 await AsyncStorage.setItem("userRoles", JSON.stringify(user.data.roles));
-
             }
             return user;
         } catch (error) {
@@ -104,8 +103,9 @@ export const GlobalProvider = ({children}) => {
                 try{
                     await AsyncStorage.removeItem("userData");
                     await AsyncStorage.removeItem("userToken");
-                    await AsyncStorage.removeItem("userRoles");
                     await AsyncStorage.removeItem("userRole");
+                    await AsyncStorage.removeItem("userRoles");
+
                 }catch (e){
                     alert(e)
                 }
@@ -119,7 +119,7 @@ export const GlobalProvider = ({children}) => {
                 // await console.log("data signup from Global state", data);
             },
             roleEntry: async (data) => {
-                dispatch({type: "ROLE_ENTRY", role: data.role})
+                // dispatch({type: "ROLE_ENTRY", role: data.role})
             },
         }),
         []

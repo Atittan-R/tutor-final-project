@@ -51,19 +51,6 @@ export default function TapRoute() {
         }}
       />
       <Tabs.Screen
-        name="Notification"
-        component={TabTab}
-        options={{
-          tabBarIcon: () => (
-            <Icon
-              name="notifications"
-              type="material"
-              color={Colors.secondary}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="Me"
         component={MeStack}
         options={{

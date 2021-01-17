@@ -67,7 +67,7 @@ export default function Login({ navigation }) {
         </View>
 
         <View style={styles.loginBtnWrapper}>
-          <PrimaryButton label={"LOG IN"} onPress={() => auth.signIn({ email, password })} disable={true}/>
+          <PrimaryButton label={"LOG IN"} onPress={() => auth.signIn({email, password})} disable={true}/>
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
       </View>

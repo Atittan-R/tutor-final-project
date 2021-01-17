@@ -52,7 +52,6 @@ export default function Request({ navigation }) {
                 tagname: tags
                 ///To Do tag
             });
-            console.log('====================================');
             console.log(requst.data);
             console.log('====================================');
             clear()

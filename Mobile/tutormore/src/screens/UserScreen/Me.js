@@ -1,29 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-    Alert,
-    Image,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View
-} from 'react-native'
+import {Alert, Image, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native'
 import {Icon} from 'react-native-elements';
 import Editprofile from '../../components/forms/Editprofile';
 import Colors from '../../configs/Colors';
 import {useGlobalVar} from "../../context/GlobalContex";
 import API from "../../services/API";
 
+
 export default function Me({navigation}) {
     const {auth, authentication} = useGlobalVar();
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
-    const [Profile, setProfile] = useState([
-        { username: "Pixels", major: "Information of Technology", phonenumber: "091246810", email: "pixels00z@mail.com" }])
 
+    const [Profile, setProfile] = useState({});
     const alertSignOut = () => {
         Alert.alert(
             "Sign out",
@@ -34,43 +23,63 @@ export default function Me({navigation}) {
             {cancelable: false}
         )
     }
-    console.log("state",state.userData)
+
+    const user = JSON.parse(state.userData);
+    console.log(user)
+    useEffect(() => {
+        const findRequest = async (id) => {
+            try {
+                // let url = "/user/findOne/"+id;
+                const response = await API.get("/user/findOne/" + id);
+                console.log("Log:",response.data);
+                setProfile(response.data.user);
+            } catch (error) {
+                Alert.alert(
+                    "Sign out",
+                    error.response.data.message,
+                    [
+                        {text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel"},
+                        {text: "OK", onPress: () => auth.signOut()}],
+                    {cancelable: false}
+                );
+            }
+        };
+        findRequest(user.id);
+    }, []);
+    // setProfile(JSON.parse(state.userData))
+    console.log("Profile:", Profile);
     return (
         <>
             <ScrollView style={{backgroundColor: Colors.background}}>
                 <SafeAreaView style={styles.contrainer}>
-                    {Profile.map((i) => {
-                        return (
-                            <View style={styles.coverArea}>
-                                <View style={styles.coverArea}>
-                                    <Image
-                                        source={require("../../assets/profile.jpg")}
-                                        style={styles.imageProfile}
-                                    />
-                                </View>
+                    <View style={styles.coverArea}>
+                        <View style={styles.coverArea}>
+                            <Image
+                                source={require("../../assets/profile.jpg")}
+                                style={styles.imageProfile}
+                            />
+                        </View>
 
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Name</Text>
-                                    <Text style={styles.textNormal}>{i.username}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Major</Text>
-                                    <Text style={styles.textNormal}>{i.major}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Tel.</Text>
-                                    <Text style={styles.textNormal}>{i.phonenumber}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Email</Text>
-                                    <Text style={styles.textNormal}>{i.email}</Text>
-                                </View>
-                                <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={i}
-                                             ProfileUser={[Profile, setProfile]}/>
-                            </View>
-                        )
-                    })
-                    }
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Name</Text>
+                            <Text style={styles.textNormal}>{Profile.username}</Text>
+                        </View>
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Major</Text>
+                            <Text style={styles.textNormal}>{Profile.major}</Text>
+                        </View>
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Tel.</Text>
+                            <Text
+                                style={styles.textNormal}>{Profile.phonenumber}</Text>
+                        </View>
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Email</Text>
+                            <Text style={styles.textNormal}>{Profile.email}</Text>
+                        </View>
+                        <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={Profile}
+                                     ProfileUser={[Profile, setProfile]}/>
+                    </View>
 
                     <View style={{padding: 5}}></View>
 

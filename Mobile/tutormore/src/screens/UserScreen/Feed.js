@@ -44,7 +44,6 @@ export default function Feed({ navigation }) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
-
         }
     }
 
@@ -61,7 +60,6 @@ export default function Feed({ navigation }) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
-            error
         }
     }
     const fetchApi = async () => {
@@ -112,15 +110,9 @@ export default function Feed({ navigation }) {
                     </TouchableOpacity>
                     <Text style={styles.textHeader}>Feed Request</Text>
                     <TouchableOpacity
-                        style={styles.search}
-                        onPress={() => navigation.push("SearchRequest")}
-                    >
-                        <Text style={{ color: Colors.secondary }}>search</Text>
-                        <Icon
-                            name="search-outline"
-                            type="ionicon"
-                            style={{ color: Colors.secondary }}
-                        />
+                        style={styles.add}
+                        onPress={() => navigation.push("Request")}>
+                        <Icon name="add-circle-outline" type="material" color={Colors.secondary} />
                     </TouchableOpacity>
                 </View>
 
@@ -168,9 +160,7 @@ export default function Feed({ navigation }) {
 
                                     isjoin.map((i)=>i.id).includes(item.id) ?
                                         <TouchableOpacity style={styles.button_cancel}
-                                        onPress={() =>
-                                            cancel(item.id, 2)
-                                        }>
+                                        onPress={() => cancel(item.id, 2)}>
                                             <Text style={styles.text}>cancel</Text>
                                         </TouchableOpacity>
                                         : <TouchableOpacity style={styles.button} onPress={() =>
@@ -251,19 +241,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
-    search: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: 5,
-        paddingHorizontal: 20,
-        marginLeft: 20,
-        borderRadius: 30,
-        backgroundColor: Colors.gray,
-    },
     button_cancel: {
-        backgroundColor: Colors.gray,
+        backgroundColor: "red",
         paddingVertical: 5,
         paddingHorizontal: 5,
         borderRadius: 5,
