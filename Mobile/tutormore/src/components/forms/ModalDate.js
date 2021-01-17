@@ -196,9 +196,7 @@ export default function ModalDate(props) {
                                 >
                                     <Text style={styles.textStyle}>Save</Text>
                                 </TouchableOpacity>
-
                             </View>
-
                         </View>
                     </View>
                 </Modal>

@@ -25,7 +25,7 @@ export default function Clock(props) {
         }
     }, [claerdate])
     useEffect(() => {
-             callback(date)
+        callback(date)
     }, [date])
     return (
         <View style={styles.inputItem}>
