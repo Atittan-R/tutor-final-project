@@ -12,15 +12,7 @@ export default function Me({navigation}) {
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [Profile, setProfile] = useState();
-    // const [Profile, setProfile] = useState([
-    //     {
-    //         username: "Pixels",
-    //         major: "Information of Technology",
-    //         phonenumber: "091246810",
-    //         email: "pixels00z@mail.com"
-    //     }])
-
+    const [Profile, setProfile] = useState({});
     const alertSignOut = () => {
         Alert.alert(
             "Sign out",
@@ -32,14 +24,14 @@ export default function Me({navigation}) {
         )
     }
 
-    var user = JSON.parse(state.userData);
-
+    const user = JSON.parse(state.userData);
+    console.log(user)
     useEffect(() => {
         const findRequest = async (id) => {
             try {
                 // let url = "/user/findOne/"+id;
                 const response = await API.get("/user/findOne/" + id);
-                console.log(response.data);
+                console.log("Log:",response.data);
                 setProfile(response.data.user);
             } catch (error) {
                 Alert.alert(
@@ -54,7 +46,8 @@ export default function Me({navigation}) {
         };
         findRequest(user.id);
     }, []);
-
+    // setProfile(JSON.parse(state.userData))
+    console.log("Profile:", Profile);
     return (
         <>
             <ScrollView style={{backgroundColor: Colors.background}}>
@@ -69,20 +62,20 @@ export default function Me({navigation}) {
 
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Name</Text>
-                            <Text style={styles.textNormal}>{Profile.username == null ? "-" : Profile.username}</Text>
+                            <Text style={styles.textNormal}>{Profile.username}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
-                            <Text style={styles.textNormal}>{Profile.major == null ? "-" : Profile.major}</Text>
+                            <Text style={styles.textNormal}>{Profile.major}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>
                             <Text
-                                style={styles.textNormal}>{Profile.phonenumber == null ? "-" : Profile.phonenumber}</Text>
+                                style={styles.textNormal}>{Profile.phonenumber}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Email</Text>
-                            <Text style={styles.textNormal}>{Profile.email == null ? "-" : Profile.email}</Text>
+                            <Text style={styles.textNormal}>{Profile.email}</Text>
                         </View>
                         <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={Profile}
                                      ProfileUser={[Profile, setProfile]}/>

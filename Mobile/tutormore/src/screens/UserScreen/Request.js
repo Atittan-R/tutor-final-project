@@ -40,27 +40,7 @@ export default function Request({ navigation }) {
             console.log("ERR: ",error.response.status);
         }
     }
-                ///To Do tag
-            });
-            console.log('====================================');
-            console.log(requst.data);
-            console.log('====================================');
-            navigation.navigate("Feed", {name: "Feed"}) 
-            clear()
-        } catch (error) {
-            if(error.response.status=404){
-                clear();
-                navigation.navigate("Feed", {name: "Feed"}) 
-            }
-           else{
-            console.log('====================================');
-            console.log("ERR: ",error.response.status);
-            console.log('====================================');
-                
-           }
-         
-        }  
-    }
+
     const clear =()=>{
         setCourseName("")
         setDay(null)
