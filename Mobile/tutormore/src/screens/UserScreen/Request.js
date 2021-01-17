@@ -12,12 +12,11 @@ import Tag from '../../components/forms/Tag';
 import API from "../../services/API"
 
 export default function Request({ navigation }) {
-    const [valueText, setValueText] = useState();
-    const [CourseName, setCourseName] = useState("");
-    const [day, setDay] = useState("");
-    const [TimeStart, setTimeStart] = useState(new Date());
-    const [TimeEnd, setTimeEnd] = useState(new Date())
-
+    const [CourseName,setCourseName]=useState("");
+    const [day, setDay] = useState(null)
+    const [claerdate,setClaerDate]=useState(false);
+    const [TimeStart, setTimeStart] = useState(new Date(0,0,0,0));
+    const [TimeEnd, setTimeEnd] = useState(new Date(0,0,0,0))
 
     const getTimeStart = (result) => {
         setTimeStart(result);
@@ -44,8 +43,7 @@ export default function Request({ navigation }) {
             console.log('====================================');
         } catch (error) {
             error.response.status = 404 ? navigation.navigate("Feed")
-                :
-                console.log('====================================');
+                : console.log('====================================');
             console.log("ERR: ", error.response.status);
             console.log('====================================');
 
