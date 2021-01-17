@@ -3,9 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const user =require('../Server/controller/user.controller')
+const http = require("http").Server(app);
+const user = require("../Server/controller/user.controller");
 const corsOptions = {
   origin: "http://localhost:8081/",
 };
@@ -22,23 +21,6 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.get("/message", (req, res) => {
   res.json({ message: "Welcome to SUT Tutors Application." });
 });
-
-
-
-
-  //socket
-  io.on('connection', (socket) => {
-    socket.on("Notification",msg =>{
-     console.log('====================================');
-     console.log(msg);
-     console.log('====================================');
-    })
-    socket.emit("Notification","kuy")
-    
-  });
-
-
-
 
 // routes
 require("./routes/auth.routes")(app);

@@ -12,16 +12,13 @@ module.exports = (sequelize, Sequelize) => {
     time_end: {
       type: Sequelize.TIME,
     },
-    duration: {
-      type: Sequelize.STRING,
-    },
     status: {
       //Available || Taked
       type: Sequelize.STRING,
     },
-    description:{
+    description: {
       type: Sequelize.STRING,
-    }
+    },
   });
 
   return Request;

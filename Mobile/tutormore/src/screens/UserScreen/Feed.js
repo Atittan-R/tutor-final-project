@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
     FlatList,
     Image,
+    RefreshControl,
     SafeAreaView,
     StatusBar,
     StyleSheet,
@@ -13,19 +14,21 @@ import {
 import { Icon, SearchBar } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
-
+import { useGlobalVar } from "../../context/GlobalContex";
+const wait = (timeout) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
+}
 export default function Feed({ navigation }) {
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
     const [request, setRequest] = useState([]);
     const [isjoin, setisJoin] = useState([]);
+    const [refreshing, setRefreshing] = React.useState(false);
 
-    // ปรับApi request/findAll ให้กับ ui
-    // const fetchApi= async()=>{
-
-    //         const fetch_req = await API.get("/request/findAll");
-    //         // console.log("Log: ", fetch_req.data);
-    //         setRequest(fetch_req.data)
-    //         console.log("Log: ", request);
-
+    const userid = JSON.parse(state.userData);
+    console.log("user_id", userid.id)
     const join = async (resId, userId) => {
         try {
             const join_req = await API.post("join", {
@@ -39,7 +42,6 @@ export default function Feed({ navigation }) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
-
         }
     }
 
@@ -56,37 +58,40 @@ export default function Feed({ navigation }) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
+        }
+    }
+    const fetchApi = async () => {
+        try {
+            const fetch_req = await API.get("/request/findAll");
+            const fetch_join = await API.post("/user/join", {
+                userId: userid.id,
+            });
+            console.log('====================================');
+            console.log((fetch_join));
+            console.log('====================================');
+            setRequest(fetch_req.data.request)
+            setisJoin(fetch_join.data)
+
+        } catch (error) {
+            console.log('====================================');
+            console.log(error);
+            console.log('====================================');
             error
         }
     }
-    useEffect(async () => {
-        const fetchApi = async () => {
-            try {
-                const fetch_req = await API.get("/request/findAll");
-                const fetch_join = await API.post("/user/join", {
-                    userId: 2,
 
-                });
-                console.log('====================================');
-                console.log((fetch_join));
-                console.log('====================================');
-                setRequest(fetch_req.data.request)
-                setisJoin(fetch_join.data)
-
-            } catch (error) {
-                console.log('====================================');
-                console.log(error);
-                console.log('====================================');
-                error
-            }
-        }
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
         fetchApi();
-        console.log("data: ", request)
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
 
+    useEffect(() => {
+        fetchApi();
     }, [])
-    console.log('====================================');
+
     console.log(isjoin);
-    console.log('====================================');
+
     const [count, setCount] = useState(0);
 
     // search bar
@@ -114,10 +119,12 @@ export default function Feed({ navigation }) {
             </View>
 
             <FlatList
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
+                }
                 data={filterItem ? filterItem : request}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) =>
-                (
                     <View style={styles.cardView} key={item.id}>
                         <View style={styles.viewItem}>
                             <Image source={require("../../assets/profile.jpg")} style={styles.image} />
@@ -150,32 +157,36 @@ export default function Feed({ navigation }) {
                                     <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
                                 </View>
                             </View>
-                            {
-
-                                isjoin.map((i) => i.id).includes(item.id) ?
-                                    <TouchableOpacity style={styles.button_cancel}
-                                        onPress={() =>
-                                            cancel(item.id, 2)
-                                        }>
-                                        <Text style={styles.text}>cancel</Text>
-                                    </TouchableOpacity>
-                                    : <TouchableOpacity style={styles.button} onPress={() =>
-                                        join(item.id, 2)
-                                        // setCount((cnt) => cnt + 1)
-                                    }>
-                                        <Text style={styles.text}>Join</Text>
-                                        <Text style={{ fontSize: 12, color: Colors.secondary }}>+{count}</Text>
-                                    </TouchableOpacity>
-
-
-                            }
-
+                            <View style={styles.viewItem}>
+                                <Icon name="event" type="material" color={Colors.secondary}
+                                    style={styles.icon} />
+                                <Text style={styles.text}>{item.date}</Text>
+                            </View>
+                            <View style={styles.viewItem}>
+                                <Icon name="schedule" type="material" color={Colors.secondary}
+                                    style={styles.icon} />
+                                {/* <Text style={styles.text}>{item.time}</Text> */}
+                                <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
+                            </View>
                         </View>
-                    </View>)} />
-            {/* <Text>{request}</Text> */}
-
+                        {
+                            isjoin.map((i) => i.id).includes(item.id) ?
+                                <TouchableOpacity style={styles.button_cancel}
+                                    onPress={() => cancel(item.id, 2)}>
+                                    <Text style={styles.text}>cancel</Text>
+                                </TouchableOpacity>
+                                : <TouchableOpacity style={styles.button} onPress={() =>
+                                    join(item.id, userid.id)
+                                    // setCount((cnt) => cnt + 1)
+                                }>
+                                    <Text style={styles.text}>Join</Text>
+                                    <Text style={{ fontSize: 12, color: Colors.secondary }}>+{count}</Text>
+                                </TouchableOpacity>
+                        }
+                    </View>
+                } />
         </>
-    )
+    );
 }
 const styles = StyleSheet.create({
     container: {
@@ -237,17 +248,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: "center",
         justifyContent: "center"
-    },
-    search: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: 5,
-        paddingHorizontal: 20,
-        marginLeft: 20,
-        borderRadius: 30,
-        backgroundColor: Colors.gray,
     },
     button_cancel: {
         backgroundColor: Colors.gray,

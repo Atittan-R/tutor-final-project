@@ -232,166 +232,176 @@ export default function Home({ navigation }) {
                   style={{ width: 50, height: 50, resizeMode: "contain" }}
                   source={require("../../assets/images/categories/more.png")}
                 />
+                <View>
+                <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
+                  {item.name}
+                </Text>
+                <Text numberOfLines={2} style={{ fontSize: 12, }}>{item.description}</Text>
               </View>
-              <Text style={{ marginVertical: 2, textAlign: "center" }}>
+              </View>
+            <Text style={{ marginVertical: 2, textAlign: "center" }}>
                 More..
             </Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
-        {/* recommend */}
-        <View style={styles.bg}>
-          <View style={styles.line} />
-          <View style={{ marginVertical: 10 }}>
-            <View style={[styles.topic, styles.row]}>
-              <View style={[styles.column, styles.box]} />
-              <Text style={[styles.column, styles.textRec]}>Recommend</Text>
-            </View>
-          </View>
-
-          <FlatList
-            horizontal={true}
-            data={dataRecommend}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={{
-                  padding: 5,
-                  marginVertical: 2,
-                  marginHorizontal: 10,
-                  flex: 1,
-                  alignItems: "center",
-                  backgroundColor: Colors.gray,
-                  borderRadius: 20,
-                  width: 250,
-                  height: 200,
-                  flexWrap: "wrap",
-                  flexShrink: 1,
-                }}
-              >
-                <View
-                  style={{
-                    padding: 15,
-                  }}
-                >
-                  <Image
-                    style={{
-                      width: 100,
-                      height: 100,
-                      resizeMode: "contain",
-                      alignSelf: "center",
-                    }}
-                    source={require("../../assets/images/categories/digital.png")}
-                  />
-                  <View>
-                    <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
-                      {item.name}
-                    </Text>
-                    <Text style={{ fontSize: 12 }}>{item.description}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-
-        <View style={styles.bg}>
-          <View style={styles.line} />
+      {/* recommend */}
+      <View style={styles.bg}>
+        <View style={styles.line} />
+        <View style={{ marginVertical: 10 }}>
           <View style={[styles.topic, styles.row]}>
             <View style={[styles.column, styles.box]} />
-            <Text style={[styles.column, styles.textRec]}>All Course</Text>
+            <Text style={[styles.column, styles.textRec]}>Recommend</Text>
           </View>
+        </View>
 
-          <FlatList
-            data={filterItem ? filterItem : dataList}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <Pressable
-                style={styles.card}
-                // TODO Set PARAM to CourseDetail
-                onPress={() => {
-                  navigation.navigate("CourseDetail");
+        <FlatList
+          horizontal={true}
+          data={dataRecommend}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={{
+                padding: 5,
+                marginVertical: 2,
+                marginHorizontal: 10,
+                flex: 1,
+                alignItems: "center",
+                backgroundColor: Colors.gray,
+                borderRadius: 20,
+                width: 250,
+                height: 200,
+                flexWrap: "wrap",
+                flexShrink: 1,
+              }}
+            >
+              <View
+                style={{
+                  padding: 15,
                 }}
               >
+                <Image
+                  style={{
+                    width: 100,
+                    height: 100,
+                    resizeMode: "contain",
+                    alignSelf: "center",
+                  }}
+                  source={require("../../assets/images/categories/digital.png")}
+                />
+                <View>
+                  <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
+                    {item.name}
+                  </Text>
+                  <Text style={{ fontSize: 12 }}>{item.description}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+
+      <View style={styles.row}>
+        <Text
+          numberOfLines={2}
+          style={[
+            styles.courseDescription,
+            { flex: 1, flexWrap: "wrap" },
+          ]}>
+          {item.description}
+        </Text>
+      </View>
+
+      <FlatList
+        data={filterItem ? filterItem : dataList}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Pressable
+            style={styles.card}
+            // TODO Set PARAM to CourseDetail
+            onPress={() => {
+              navigation.navigate("CourseDetail");
+            }}
+          >
+            <View style={styles.row}>
+              <View style={[styles.column, { paddingLeft: 120 }]}>
+                <View
+                  style={[
+                    styles.priceBox,
+                    {
+                      zIndex: 1,
+                      position: "absolute",
+                      left: -10,
+                    },
+                  ]}
+                >
+                  <Text style={styles.priceTitle}>฿{item.price}</Text>
+                </View>
+                <View style={{ position: "absolute", top: -36, left: 3 }}>
+                  <Image
+                    style={[
+                      styles.column,
+                      {
+                        width: 100,
+                        height: 160,
+                        marginRight: 10,
+                        borderRadius: 20,
+                      },
+                    ]}
+                    overflow={"hidden"}
+                    resizeMode={"stretch"}
+                    source={{
+                      uri:
+                        "https://images.template.net/715/Free-Children-Book-Cover-Template-2.jpg",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View style={[styles.column, { flex: 1 }]}>
+                <View style={[styles.row, { flex: 2 }]}>
+                  <Text style={styles.courseTitle}>{item.name}</Text>
+                </View>
+
                 <View style={styles.row}>
-                  <View style={[styles.column, { paddingLeft: 120 }]}>
-                    <View
-                      style={[
-                        styles.priceBox,
-                        {
-                          zIndex: 1,
-                          position: "absolute",
-                          left: -10,
-                        },
-                      ]}
-                    >
-                      <Text style={styles.priceTitle}>฿{item.price}</Text>
-                    </View>
-                    <View style={{ position: "absolute", top: -36, left: 3 }}>
-                      <Image
-                        style={[
-                          styles.column,
-                          {
-                            width: 100,
-                            height: 160,
-                            marginRight: 10,
-                            borderRadius: 20,
-                          },
-                        ]}
-                        overflow={"hidden"}
-                        resizeMode={"stretch"}
-                        source={{
-                          uri:
-                            "https://images.template.net/715/Free-Children-Book-Cover-Template-2.jpg",
-                        }}
-                      />
-                    </View>
+                  <Text
+                    style={[
+                      styles.courseDescription,
+                      { flex: 1, flexWrap: "wrap" },
+                    ]}
+                  >
+                    {item.description}
+                  </Text>
+                </View>
+
+                <View style={styles.row}>
+                  <View style={styles.column}>
+                    <Text style={styles.row}>{item.tutors}</Text>
                   </View>
 
-                  <View style={[styles.column, { flex: 1 }]}>
-                    <View style={[styles.row, { flex: 2 }]}>
-                      <Text style={styles.courseTitle}>{item.name}</Text>
-                    </View>
-
-                    <View style={styles.row}>
-                      <Text
-                        style={[
-                          styles.courseDescription,
-                          { flex: 1, flexWrap: "wrap" },
-                        ]}
-                      >
-                        {item.description}
-                      </Text>
-                    </View>
-
-                    <View style={styles.row}>
-                      <View style={styles.column}>
-                        <Text style={styles.row}>{item.tutors}</Text>
-                      </View>
-
-                      <View
-                        style={[
-                          styles.column,
-                          {
-                            flex: 1,
-                            alignItems: "flex-end",
-                          },
-                        ]}
-                      >
-                        <Rating imageSize={20} readonly startingValue={item.rate} />
-                      </View>
-                    </View>
+                  <View
+                    style={[
+                      styles.column,
+                      {
+                        flex: 1,
+                        alignItems: "flex-end",
+                      },
+                    ]}
+                  >
+                    <Rating imageSize={20} readonly startingValue={item.rate} />
                   </View>
                 </View>
-                {/*Course Title*/}
-              </Pressable>
-            )}
-          />
-        </View>
-      </ScrollView>
-      <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-        <PanelCategory />
-      </SwipeablePanel>
+              </View>
+            </View>
+            {/*Course Title*/}
+          </Pressable>
+        )}
+      />
+    </View>
+      </ScrollView >
+    <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+      <PanelCategory />
+    </SwipeablePanel>
     </>
   );
 }

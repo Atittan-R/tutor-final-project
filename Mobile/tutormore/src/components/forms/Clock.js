@@ -6,7 +6,8 @@ import Colors from '../../configs/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 export default function Clock(props) {
     const { label,callback} = props;
-    const [date, setDate] = useState(new Date());
+    const [claerdate,setClaerDate]=props.claerdate;
+    const [date, setDate] = useState(new Date(0,0,0,0));
     const [show, setShow] = useState();
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -18,7 +19,13 @@ export default function Clock(props) {
         setShow(true);
     };
     useEffect(() => {
-             callback(date)
+        if(claerdate){
+            setDate(new Date(0,0,0,0))
+            setClaerDate(false)
+        }
+    }, [claerdate])
+    useEffect(() => {
+        callback(date)
     }, [date])
     return (
         <View style={styles.inputItem}>

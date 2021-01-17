@@ -1,29 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-    Alert,
-    Image,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View
-} from 'react-native'
+import {Alert, Image, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native'
 import {Icon} from 'react-native-elements';
 import Editprofile from '../../components/forms/Editprofile';
 import Colors from '../../configs/Colors';
 import {useGlobalVar} from "../../context/GlobalContex";
 import API from "../../services/API";
 
+
 export default function Me({navigation}) {
     const {auth, authentication} = useGlobalVar();
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
-    const [Profile, setProfile] = useState([
-        { username: "Pixels", major: "Information of Technology", phonenumber: "091246810", email: "pixels00z@mail.com" }])
 
+    const [Profile, setProfile] = useState({});
     const alertSignOut = () => {
         Alert.alert(
             "Sign out",
@@ -34,43 +23,42 @@ export default function Me({navigation}) {
             {cancelable: false}
         )
     }
-    console.log("state",state.userData)
+
+    const user = JSON.parse(state.userData);
+    // console.log(state.userData)
+    // setProfile(JSON.parse(state.userData))
     return (
         <>
             <ScrollView style={{backgroundColor: Colors.background}}>
                 <SafeAreaView style={styles.contrainer}>
-                    {Profile.map((i) => {
-                        return (
-                            <View style={styles.coverArea}>
-                                <View style={styles.coverArea}>
-                                    <Image
-                                        source={require("../../assets/profile.jpg")}
-                                        style={styles.imageProfile}
-                                    />
-                                </View>
+                    <View style={styles.coverArea}>
+                        <View style={styles.coverArea}>
+                            <Image
+                                source={require("../../assets/profile.jpg")}
+                                style={styles.imageProfile}
+                            />
+                        </View>
 
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Name</Text>
-                                    <Text style={styles.textNormal}>{i.username}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Major</Text>
-                                    <Text style={styles.textNormal}>{i.major}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Tel.</Text>
-                                    <Text style={styles.textNormal}>{i.phonenumber}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Text style={styles.textHeader}>Email</Text>
-                                    <Text style={styles.textNormal}>{i.email}</Text>
-                                </View>
-                                <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={i}
-                                             ProfileUser={[Profile, setProfile]}/>
-                            </View>
-                        )
-                    })
-                    }
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Name</Text>
+                            <Text style={styles.textNormal}>{user.username == null? "-" : user.username}</Text>
+                        </View>
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Major</Text>
+                            <Text style={styles.textNormal}>{user.major == null? "-" : user.major}</Text>
+                        </View>
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Tel.</Text>
+                            <Text
+                                style={styles.textNormal}>{user.phonenumber == null? "-" : user.phonenumber}</Text>
+                        </View>
+                        <View style={styles.viewItem}>
+                            <Text style={styles.textHeader}>Email</Text>
+                            <Text style={styles.textNormal}>{user.email == null? "-" : user.email}</Text>
+                        </View>
+                        <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={Profile}
+                                     ProfileUser={[Profile, setProfile]}/>
+                    </View>
 
                     <View style={{padding: 5}}></View>
 
@@ -126,6 +114,23 @@ export default function Me({navigation}) {
                                 <Icon name="navigate-next" type="material" color={Colors.secondary}/>
                             </View>
                         </Pressable>
+                        { user.roles.length === 2 &&
+                        <Pressable
+                            onPress={() => navigation.navigate("Root",{name:"RoleSelect"})}
+                            style={({ pressed }) => [
+                                {
+                                    backgroundColor: pressed ? Colors.primary : Colors.white,
+                                },
+                                styles.wrapperCustom,
+                            ]}
+                        >
+                            <View style={styles.viewItem}>
+                                <Icon name="face" type="material-icons" color={Colors.secondary} />
+                                <Text style={styles.textNormal}>Select Role</Text>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
+                            </View>
+                        </Pressable>
+                        }
                     </View>
 
                     <View style={{padding: 5}}></View>

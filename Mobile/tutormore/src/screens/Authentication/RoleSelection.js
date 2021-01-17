@@ -1,13 +1,20 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View,} from "react-native";
+import {
+    Platform,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Colors from "../../configs/Colors";
 import CharacterMrTeacherFullBody from "../../assets/characters/CharacterMrTeacherFullBody";
 import CharacterStudentFullBody from "../../assets/characters/CharacterStudentFullBody";
 import {useGlobalVar} from "../../context/GlobalContex";
 
-export default function RoleSelection({navigation}) {
-    const {auth, authentication} = useGlobalVar();
+export default function RoleSelection({navigation})  {
+    const { auth, authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [selected, setSelected] = useState({
         role_select: "",
@@ -21,23 +28,22 @@ export default function RoleSelection({navigation}) {
     }, [selected]);
 
     const onSubmitHandler = async (role) => {
-        // dispatch({type: "SET_LOADING", loading: true});
-        await AsyncStorage.setItem("entryRole", JSON.stringify(role.toString()));
-        auth.roleEntry({role});
+        console.log("Set new Role to")
+        dispatch({type: "ROLE_ENTRY", role: role})
     };
     return (
         <View style={styles.container}>
-            <View style={{marginHorizontal: 30}}>
-                <View style={{marginTop: 64}}>
-                    <Text style={{fontSize: 36}}>One</Text>
-                    <Text style={{fontSize: 36}}>More thing!</Text>
-                    <Text style={{fontSize: 12}}>
+            <View style={{ marginHorizontal: 30 }}>
+                <View style={{ marginTop: 64 }}>
+                    <Text style={{ fontSize: 36 }}>One</Text>
+                    <Text style={{ fontSize: 36 }}>More thing!</Text>
+                    <Text style={{ fontSize: 12 }}>
                         We would like to know you what role you will play ..
                     </Text>
                 </View>
 
-                <View style={{marginTop: 30}}>
-                    <Text style={{fontSize: 12, marginBottom: 10}}>
+                <View style={{ marginTop: 30 }}>
+                    <Text style={{ fontSize: 12, marginBottom: 10 }}>
                         {" "}
                         Who you would like to be?{" "}
                     </Text>
@@ -50,16 +56,22 @@ export default function RoleSelection({navigation}) {
                                         role_select: "ROLE_TUTOR",
                                         tutorColor: Colors.primary,
                                         studentColor: Colors.white,
-                                    })}>
-                                <View style={[
+                                    })
+                                }
+                            >
+                                <View
+                                    style={[
                                         styles.card,
                                         styles.column,
-                                        {backgroundColor: selected.tutorColor},
-                                    ]}>
-                                    <CharacterMrTeacherFullBody/>
+                                        { backgroundColor: selected.tutorColor },
+                                    ]}
+                                >
+                                    <CharacterMrTeacherFullBody />
                                 </View>
                             </TouchableOpacity>
-                            <Text style={{fontSize: 16, marginTop: 15, textAlign: "center"}}>
+                            <Text
+                                style={{ fontSize: 16, marginTop: 15, textAlign: "center" }}
+                            >
                                 Tutor
                             </Text>
                         </View>
@@ -80,14 +92,14 @@ export default function RoleSelection({navigation}) {
                                         style={[
                                             styles.card,
                                             styles.column,
-                                            {backgroundColor: selected.studentColor},
+                                            { backgroundColor: selected.studentColor },
                                         ]}
                                     >
-                                        <CharacterStudentFullBody/>
+                                        <CharacterStudentFullBody />
                                     </View>
                                 </TouchableOpacity>
                                 <Text
-                                    style={{fontSize: 16, marginTop: 15, textAlign: "center"}}
+                                    style={{ fontSize: 16, marginTop: 15, textAlign: "center" }}
                                 >
                                     Student
                                 </Text>
@@ -95,7 +107,7 @@ export default function RoleSelection({navigation}) {
                         </View>
                     </View>
                     <View style={styles.row}>
-                        <View style={{flex: 1, justifyContent: "center"}}>
+                        <View style={{ flex: 1, justifyContent: "center" }}>
                             <TouchableOpacity
                                 activeOpacity={0.5}
                                 style={{
@@ -103,18 +115,18 @@ export default function RoleSelection({navigation}) {
                                     borderRadius: 30,
                                     backgroundColor: Colors.gray,
                                 }}
-                                disabled={selected.role_select === "" && true}
+                                disabled={selected.role_select===""&& true}
                                 onPress={() => onSubmitHandler(selected.role_select)}
                             >
                                 <View
                                     style={{
                                         paddingVertical: 10,
                                         borderRadius: 30,
-                                        backgroundColor: selected.role_select === "" ? Colors.gray : Colors.primary,
+                                        backgroundColor: selected.role_select===""? Colors.gray: Colors.primary,
                                         alignItems: "center",
                                     }}
                                 >
-                                    <Text style={{fontSize: 18, textAlignVertical: "center"}}>
+                                    <Text style={{ fontSize: 18, textAlignVertical: "center" }}>
                                         Let's go!
                                     </Text>
                                 </View>
@@ -150,5 +162,3 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
 });
-
-

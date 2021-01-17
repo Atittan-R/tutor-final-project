@@ -3,7 +3,7 @@ const config = require("../config/auth.config");
 const { user } = require("../models");
 const Request = db.request;
 const Tag = db.tag;
-const User=db.user;
+const User = db.user;
 
 exports.createRequest = (req, res) => {
   //Save Request Data to Database
@@ -12,7 +12,7 @@ exports.createRequest = (req, res) => {
     date: req.body.date,
     time_start: req.body.time_start,
     time_end: req.body.time_end,
-    duration: req.body.duration,
+    description: req.body.description,
     categoryId: req.body.categoryId,
     userId: req.body.userId,
     status: "Available",
@@ -27,14 +27,13 @@ exports.createRequest = (req, res) => {
             categoryId: request.categoryId,
           }).then((tag) => {
             //Set Join table tag_request
-            request.setTags(tag).then(() => {
-              res.status(201).send({
-                request: request,
-                message: "Request was registered successfully!",
-              });
-            });
+            request.setTags(tag).then(() => {});
           });
         }
+        res.status(201).send({
+          request: request,
+          message: "Request was registered successfully!",
+        });
       } else {
         res.status(404).send({
           message: "Not found Tagname !!!",
@@ -48,20 +47,19 @@ exports.createRequest = (req, res) => {
 
 exports.findAllRequest = (req, res) => {
   Request.findAll({
-    attributes: ["id", "name","date","time_start","time_end"],
-    
+    attributes: ["id", "name", "date", "time_start", "time_end"],
+
     include: [
       {
-          model: User,
-     
-          as:"user",
-          attributes: ["username"],
-          // through: {
-          //     attributes: ["name"],
-          // },
+        model: User,
 
+        as: "user",
+        attributes: ["username"],
+        // through: {
+        //     attributes: ["name"],
+        // },
       },
-    ]
+    ],
   })
     .then((request) => {
       res.status(202).send({ request });

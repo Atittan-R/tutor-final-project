@@ -77,7 +77,6 @@ export const GlobalProvider = ({children}) => {
                 await AsyncStorage.setItem("userData", JSON.stringify(user.data));
                 await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
                 await AsyncStorage.setItem("userRoles", JSON.stringify(user.data.roles));
-
             }
             return user;
         } catch (error) {
@@ -93,8 +92,7 @@ export const GlobalProvider = ({children}) => {
                 // console.log(data)
                 try {
                     const user = await useLogin(data);
-                    dispatch({type: "SET_LOADING", loading: false});
-                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
+                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: JSON.stringify(user.data), r: JSON.stringify(user.data.roles)});
 
                 } catch (e) {
                     console.log(e)
@@ -104,22 +102,21 @@ export const GlobalProvider = ({children}) => {
                 try{
                     await AsyncStorage.removeItem("userData");
                     await AsyncStorage.removeItem("userToken");
-                    await AsyncStorage.removeItem("userRoles");
                     await AsyncStorage.removeItem("userRole");
+                    await AsyncStorage.removeItem("userRoles");
+
                 }catch (e){
                     alert(e)
                 }
                 dispatch({type: "SIGN_OUT"})
-                dispatch({type: "SET_LOADING", loading: false});
             },
             signUp: async (data) => {
                 const user = await useLogin(data);
-                dispatch({type: "SET_LOADING", loading: false});
                 dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
                 // await console.log("data signup from Global state", data);
             },
             roleEntry: async (data) => {
-                dispatch({type: "ROLE_ENTRY", role: data.role})
+                // dispatch({type: "ROLE_ENTRY", role: data.role})
             },
         }),
         []
