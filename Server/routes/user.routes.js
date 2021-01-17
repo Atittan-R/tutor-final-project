@@ -33,6 +33,11 @@ module.exports = function (app) {
     // [authJwt.verifyToken],
     controller.userrole
   );
+  app.post(
+    "/api/user/join",
+    // [authJwt.verifyToken],
+    controller.Userjoin
+  );
 };
 
 // app.get("/api/test/all", controller.allAccess);

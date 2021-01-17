@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Clock from '../../components/forms/Clock';
 import ModalDate from '../../components/forms/ModalDate';
@@ -9,9 +9,10 @@ import API from "../../services/API"
 
 export default function Request({ navigation }) {
     const [CourseName,setCourseName]=useState("");
-    const [day,setDay]=useState("");
-    const [TimeStart, setTimeStart] = useState(new Date());
-    const [TimeEnd, setTimeEnd] = useState(new Date())
+    const [day, setDay] = useState(null)
+    const [claerdate,setClaerDate]=useState(false);
+    const [TimeStart, setTimeStart] = useState(new Date(0,0,0,0));
+    const [TimeEnd, setTimeEnd] = useState(new Date(0,0,0,0))
 
     const getTimeStart=(result)=>{
         setTimeStart(result);
@@ -37,10 +38,51 @@ export default function Request({ navigation }) {
             error.response.status=404 ?  navigation.navigate("Feed")
             :
             console.log("ERR: ",error.response.status);
-
         }
     }
+                ///To Do tag
+            });
+            console.log('====================================');
+            console.log(requst.data);
+            console.log('====================================');
+            navigation.navigate("Feed", {name: "Feed"}) 
+            clear()
+        } catch (error) {
+            if(error.response.status=404){
+                clear();
+                navigation.navigate("Feed", {name: "Feed"}) 
+            }
+           else{
+            console.log('====================================');
+            console.log("ERR: ",error.response.status);
+            console.log('====================================');
+                
+           }
+         
+        }  
+    }
+    const clear =()=>{
+        setCourseName("")
+        setDay(null)
+        setTimeEnd(new Date(0,0,0,0))
+        setTimeStart(new Date(0,0,0,0))
+        setClaerDate(true)
+    }
 
+useEffect(() => {
+ console.log("CourseName :",CourseName);
+ console.log("day :",day);
+}, [day])
+useEffect(() => {
+    console.log('=================TimeStart===================');
+    console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
+    console.log('====================================');
+}, [TimeStart])
+useEffect(() => {
+    console.log('=================TimeEnd===================');
+    console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
+    console.log('====================================');
+}, [TimeEnd])
     return (
         <>
             {/* header */}
@@ -61,11 +103,11 @@ export default function Request({ navigation }) {
             </View>
             <View style={styles.area}>
                 <View style={styles.content}>
-                    <TextInputButton label="Course" placeholder="Enter your course name"
+                    <TextInputButton label="Course" placeholder="Enter your course name" value={CourseName}
                       onTextChange={(text) => setCourseName(text)}/>
                     <ModalDate dayValue={[day,setDay]}/>
-                    <Clock label="Time Start" name="Time Start" callback={getTimeStart}/>
-                    <Clock label="Time End"  name="Time End" callback={getTimeEnd}/>
+                    <Clock label="Time Start" name="Time Start" callback={getTimeStart} claerdate={[claerdate,setClaerDate]}/>
+                    <Clock label="Time End"  name="Time End" callback={getTimeEnd} claerdate={[claerdate,setClaerDate]}/>
                 </View>
             </View>
 
