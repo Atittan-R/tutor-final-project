@@ -1,13 +1,25 @@
-import React, { useState } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Clock from '../../components/forms/Clock';
 import ModalDate from '../../components/forms/ModalDate';
 import TextInputButton from '../../components/forms/TextInputButton';
 import Colors from '../../configs/Colors'
+import Catagory from '../../components/forms/Catagory';
+import Tag from '../../components/forms/Tag';
 
 export default function Request({ navigation }) {
     const [coureName, setCourseName] = useState("");
+    const [description, setDescription] = useState("");
+    const [catagory, setCatagory] = useState("");
+    const [tag, setTags] = useState([]);
+    useEffect(() => {
+        console.log('====================================');
+        console.log("des " + description);
+        console.log("cat " + catagory);
+        console.log("tag " + tag);
+        console.log('====================================');
+    }, [description, catagory, tag])
     return (
         <>
             {/* header */}
@@ -19,17 +31,24 @@ export default function Request({ navigation }) {
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
             </View>
-            <View style={styles.area}>
-                <View style={styles.content}>
-                    <TextInputButton
-                        label="Course"
-                        placeholder="Enter your course name"
-                        onChangeText={setCourseName} />
-                    <ModalDate />
-                    <Clock label="Time Start" />
-                    <Clock label="Time End" />
-                </View>
-            </View>
+            <ScrollView style={styles.area}>
+                <TextInputButton
+                    label="Course"
+                    placeholder="Enter your course name"
+                    onChangeText={setCourseName} />
+                <ModalDate />
+                <Clock label="Time Start" />
+                <Clock label="Time End" />
+                <TextInputButton
+                    label="Description"
+                    placeholder="Enter your description"
+                    onChangeText={(text) => setDescription(text)} />
+                <Catagory
+                    selectedValue={catagory}
+                    onValueChange={(text) => setCatagory(text)} />
+                <Tag
+                    onChangeTags={(tags) => setTags(tags)} />
+            </ScrollView>
 
         </>
     )
@@ -56,7 +75,7 @@ const styles = StyleSheet.create({
     },
     area: {
         backgroundColor: Colors.white,
-        flex: 1,
+        paddingHorizontal: 10,
     },
     viewItem: {
         margin: 10,
@@ -75,8 +94,5 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flex: 0.8,
     },
-    content: {
-        flex: 0.4,
-        paddingHorizontal: 10,
-    },
+
 })
