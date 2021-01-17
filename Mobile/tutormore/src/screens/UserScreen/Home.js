@@ -263,8 +263,8 @@ export default function Home({ navigation }) {
                   alignItems: "center",
                   backgroundColor: Colors.gray,
                   borderRadius: 20,
-                  width: 250,
-                  height: 200,
+                  width: 150,
+                  height: 150,
                   flexWrap: "wrap",
                   flexShrink: 1,
                 }}
@@ -276,8 +276,8 @@ export default function Home({ navigation }) {
                 >
                   <Image
                     style={{
-                      width: 100,
-                      height: 100,
+                      width: 60,
+                      height: 60,
                       resizeMode: "contain",
                       alignSelf: "center",
                     }}
@@ -287,7 +287,7 @@ export default function Home({ navigation }) {
                     <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
                       {item.name}
                     </Text>
-                    <Text style={{ fontSize: 12 }}>{item.description}</Text>
+                    <Text numberOfLines={1} style={{ fontSize: 12 }}>{item.description}</Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -354,7 +354,7 @@ export default function Home({ navigation }) {
                     </View>
 
                     <View style={styles.row}>
-                      <Text
+                      <Text numberOfLines={2}
                         style={[
                           styles.courseDescription,
                           { flex: 1, flexWrap: "wrap" },
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
   },
   topic: {
     flex: 1,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   line: {
     marginVertical: 10,
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
   box: {
     marginTop: -10,
     marginLeft: 8,
-    paddingVertical: 10,
+    paddingVertical: 1,
     paddingHorizontal: 2.5,
     borderRadius: 30,
     backgroundColor: Colors.primary,

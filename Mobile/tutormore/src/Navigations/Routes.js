@@ -1,5 +1,5 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {NavigationContainer} from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
 import { PrivilegeUser, PrivilegeTutor } from "./Privilege";
 import { useGlobalVar } from "../context/GlobalContex";
@@ -49,9 +49,8 @@ export default function Routes() {
                     headerShown: false,
                 }}
                 initialRouteName="Root">
-                <RootStack.Screen name={"ROLE"} component={renderingCheck} />
-                <RootStack.Screen name={"RoleSelect"} component={RoleSelection} />
-                <RootStack.Screen name={"ROLES"} component={renderingCheck} />
+                <RootStack.Screen name={"ROLE"} component={renderingCheck}/>
+                <RootStack.Screen name={"RoleSelect"} component={RoleSelection}/>
             </RootStack.Navigator>
         </NavigationContainer>);
 }
