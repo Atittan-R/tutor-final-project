@@ -116,7 +116,7 @@ export default function Me({navigation}) {
                         </Pressable>
                         { user.roles.length === 2 &&
                         <Pressable
-                            onPress={() => navigation.navigate("Root",{name:"RoleSelect"})}
+                            onPress={() => navigation.navigate("RoleSelect")}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,

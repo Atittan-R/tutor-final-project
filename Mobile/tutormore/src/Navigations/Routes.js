@@ -1,14 +1,14 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, {useEffect} from "react";
+import {NavigationContainer} from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
-import {PrivilegeUser, PrivilegeTutor} from "./Privilege";
+import {PrivilegeTutor, PrivilegeUser} from "./Privilege";
 import {useGlobalVar} from "../context/GlobalContex";
 import RoleSelection from "../screens/Authentication/RoleSelection";
 import {createStackNavigator} from "@react-navigation/stack";
 
 export const role_router = {
-    ROLE_USER: <PrivilegeUser/>,
     ROLE_TUTOR: <PrivilegeTutor/>,
+    ROLE_USER: <PrivilegeUser/>,
 };
 
 export const renderingCheck = () => {
@@ -22,8 +22,7 @@ export const renderingCheck = () => {
 
     if (state.userData === null) {
         return <AuthenticationStack/>
-    } else if (state.userRole) {
-        console.log("Hello ",state.userRole)
+    } else if (state.userRole !== null) {
         return role_router[state.userRole]
     } else if (JSON.parse(state.userRoles).length === 1) {
         return role_router[JSON.parse(state.userRoles)];
@@ -42,9 +41,8 @@ export default function Routes() {
                     headerShown: false,
                 }}
                 initialRouteName="Root">
-                <RootStack.Screen name={"ROLE"} component={renderingCheck} />
-                <RootStack.Screen name={"RoleSelect"} component={RoleSelection} />
-                <RootStack.Screen name={"ROLES"} component={renderingCheck} />
+                <RootStack.Screen name={"ROLE"} component={renderingCheck}/>
+                <RootStack.Screen name={"RoleSelect"} component={RoleSelection}/>
             </RootStack.Navigator>
         </NavigationContainer>);
 }
