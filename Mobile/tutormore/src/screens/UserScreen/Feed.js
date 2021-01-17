@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
     FlatList,
     Image,
+    RefreshControl,
     SafeAreaView,
     StatusBar,
     StyleSheet,
@@ -12,11 +13,24 @@ import {
 import { Icon } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
-
+const wait = (timeout) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
+}
 export default function Feed({ navigation }) {
     const [request, setRequest] = useState([]);
     const [isjoin, setisJoin] = useState([]);
-  
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    // ปรับApi request/findAll ให้กับ ui
+    // const fetchApi= async()=>{
+
+    //         const fetch_req = await API.get("/request/findAll");
+    //         // console.log("Log: ", fetch_req.data);
+    //         setRequest(fetch_req.data)
+    //         console.log("Log: ", request);
+
     const join = async (resId, userId) => {
         try {
             const join_req = await API.post("join", {
@@ -48,26 +62,34 @@ export default function Feed({ navigation }) {
             console.log('====================================');
         }
     }
-    useEffect(async () => {
-        const fetchApi = async () => {
-            try {
-                const fetch_req = await API.get("/request/findAll");
-                const fetch_join = await API.post("/user/join", {
-                    userId: 2,
-                });
-                console.log('====================================');
-                console.log((fetch_join));
-                console.log('====================================');
-                setRequest(fetch_req.data.request)
-                setisJoin(fetch_join.data)
+    const fetchApi = async () => {
+        try {
+            const fetch_req = await API.get("/request/findAll");
+            const fetch_join = await API.post("/user/join", {
+                userId: 2,
 
-            } catch (error) {
-                console.log('====================================');
-                console.log(error);
-                console.log('====================================');
-                error
-            }
+            });
+            console.log('====================================');
+            console.log((fetch_join));
+            console.log('====================================');
+            setRequest(fetch_req.data.request)
+            setisJoin(fetch_join.data)
+
+        } catch (error) {
+            console.log('====================================');
+            console.log(error);
+            console.log('====================================');
+            error
         }
+    }
+    
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchApi();
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
+    useEffect(async () => {
+        
         fetchApi();
         console.log("data: ", request)
 
@@ -77,8 +99,8 @@ export default function Feed({ navigation }) {
     console.log('====================================');
     const [count, setCount] = useState(0);
     return (
-        <>
-            {/* header */}
+    
+           
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerBar}>
                     <TouchableOpacity
@@ -95,6 +117,9 @@ export default function Feed({ navigation }) {
                 </View>
 
                 <FlatList
+                 refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
+                  }
                     data={request}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) =>
@@ -153,7 +178,7 @@ export default function Feed({ navigation }) {
                         </View>)} />
                 {/* <Text>{request}</Text> */}
             </SafeAreaView>
-        </>
+       
     )
 }
 const styles = StyleSheet.create({

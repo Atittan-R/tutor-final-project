@@ -14,18 +14,18 @@ export default function Catagory(props) {
           style={styles.drop}
           onValueChange={onValueChange}
         >
-          <Picker.Item label="select" value="select" />
-          <Picker.Item label="Agricultural Technology" value="Agricultural Technology" />
-          <Picker.Item label="Density" value="Density" />
-          <Picker.Item label="Engineering" value="Engineering" />
-          <Picker.Item label="Foreign Language" value="Foreign Language" />
-          <Picker.Item label="General Education" value="General Education" />
-          <Picker.Item label="Information Technology" value="Information Technology" />
-          <Picker.Item label="Management Technology" value="Management Technology" />
-          <Picker.Item label="Medicine" value="Medicine" />
-          <Picker.Item label="Nurse" value="Nurse" />
-          <Picker.Item label="Public Health" value="Public Health" />
-          <Picker.Item label="Science" value="Science" />
+          <Picker.Item label="select" value={null} />
+          <Picker.Item label="Agricultural Technology" value={1} />
+          <Picker.Item label="Density" value={2} />
+          <Picker.Item label="Engineering" value={3} />
+          <Picker.Item label="Foreign Language" value={4}/>
+          <Picker.Item label="General Education" value={5} />
+          <Picker.Item label="Information Technology" value={6} />
+          <Picker.Item label="Management Technology" value={7} />
+          <Picker.Item label="Medicine" value={8}/>
+          <Picker.Item label="Nurse" value={9} />
+          <Picker.Item label="Public Health" value={10} />
+          <Picker.Item label="Science" value={11} />
 
         </Picker>
       </View>

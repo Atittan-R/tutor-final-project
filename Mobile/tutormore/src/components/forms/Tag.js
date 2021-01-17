@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, RefreshControl } from "react-native";
 import Tags from "react-native-tags";
 import Colors from "../../configs/Colors";
 
 export default function Tag(props) {
-  const { onChangeTags } = props;
-
+  const { onChangeTags,value } = props;
+  const [claerTag,setClaerTag] =props.claerTag
+  const [tags, setTags]=value
+//  console.log('=================claerTag===================');
+//  console.log(claerTag);
+//  console.log(tags);
+//  console.log('====================================');
   return (
     <View style={styles.inputItem}>
+      
       <Text style={{ flex: 0.35, color: Colors.secondary }} >Tags</Text>
       <View style={styles.textDate}>
         <Tags
@@ -15,14 +21,11 @@ export default function Tag(props) {
           textInputProps={{
             placeholder: "Enter your tags"
           }}
-          initialTags={[]}
+          initialTags={tags}
           onChangeTags={onChangeTags}
-          onTagPress={(index, tagLabel, event, deleted) =>
-            console.log(index, tagLabel, event, deleted ? "deleted" : "not deleted")
-          }
           containerStyle={{ justifyContent: "center" }}
           inputStyle={{ backgroundColor: "white" }}
-          renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+          renderTag={({ tag, index, onPress,deleteTagOnPress, readonly }) => (
             <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
               <Text style={styles.text}>{tag}</Text>
             </TouchableOpacity>

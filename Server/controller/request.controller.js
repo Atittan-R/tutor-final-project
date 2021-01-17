@@ -28,13 +28,14 @@ exports.createRequest = (req, res) => {
           }).then((tag) => {
             //Set Join table tag_request
             request.setTags(tag).then(() => {
-              res.status(201).send({
-                request: request,
-                message: "Request was registered successfully!",
-              });
+              
             });
           });
         }
+        res.status(201).send({
+          request: request,
+          message: "Request was registered successfully!",
+        });
       } else {
         res.status(404).send({
           message: "Not found Tagname !!!",
