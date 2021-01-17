@@ -282,7 +282,7 @@ export default function Home({ navigation }) {
                   <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
                     {item.name}
                   </Text>
-                  <Text style={{ fontSize: 12 }}>{item.description}</Text>
+                  <Text numberOfLines={2} style={{ fontSize: 12,  }}>{item.description}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -350,11 +350,11 @@ export default function Home({ navigation }) {
 
                 <View style={styles.row}>
                   <Text
+                    numberOfLines={2}
                     style={[
                       styles.courseDescription,
                       { flex: 1, flexWrap: "wrap" },
-                    ]}
-                  >
+                    ]}>
                     {item.description}
                   </Text>
                 </View>

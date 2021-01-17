@@ -28,9 +28,8 @@ export default function RoleSelection({navigation})  {
   }, [selected]);
 
   const onSubmitHandler = async (role) => {
-    // dispatch({type: "SET_LOADING", loading: true});
-    await AsyncStorage.setItem("entryRole", JSON.stringify(role.toString()));
-    auth.roleEntry({role});
+    console.log("Set new Role to")
+    dispatch({type: "ROLE_ENTRY", role: role})
   };
   return (
     <View style={styles.container}>

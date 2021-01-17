@@ -129,7 +129,6 @@ export default function Feed({ navigation }) {
       try {
         const data = await API.get("/request/findAll");
         setDataList(data.data.request);
-        console.log("Hello From findRequest", data.data.request);
       } catch (error) {
         console.log(error.response.data.message);
       }
