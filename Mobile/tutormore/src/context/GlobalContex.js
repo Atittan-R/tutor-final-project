@@ -92,8 +92,7 @@ export const GlobalProvider = ({children}) => {
                 // console.log(data)
                 try {
                     const user = await useLogin(data);
-                    dispatch({type: "SET_LOADING", loading: false});
-                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
+                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: JSON.stringify(user.data), r: JSON.stringify(user.data.roles)});
 
                 } catch (e) {
                     console.log(e)
@@ -110,11 +109,9 @@ export const GlobalProvider = ({children}) => {
                     alert(e)
                 }
                 dispatch({type: "SIGN_OUT"})
-                dispatch({type: "SET_LOADING", loading: false});
             },
             signUp: async (data) => {
                 const user = await useLogin(data);
-                dispatch({type: "SET_LOADING", loading: false});
                 dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
                 // await console.log("data signup from Global state", data);
             },

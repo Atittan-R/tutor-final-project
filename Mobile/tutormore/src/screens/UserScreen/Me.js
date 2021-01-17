@@ -25,29 +25,8 @@ export default function Me({navigation}) {
     }
 
     const user = JSON.parse(state.userData);
-    console.log(user)
-    useEffect(() => {
-        const findRequest = async (id) => {
-            try {
-                // let url = "/user/findOne/"+id;
-                const response = await API.get("/user/findOne/" + id);
-                console.log("Log:",response.data);
-                setProfile(response.data.user);
-            } catch (error) {
-                Alert.alert(
-                    "Sign out",
-                    error.response.data.message,
-                    [
-                        {text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel"},
-                        {text: "OK", onPress: () => auth.signOut()}],
-                    {cancelable: false}
-                );
-            }
-        };
-        findRequest(user.id);
-    }, []);
+    // console.log(state.userData)
     // setProfile(JSON.parse(state.userData))
-    console.log("Profile:", Profile);
     return (
         <>
             <ScrollView style={{backgroundColor: Colors.background}}>
@@ -62,20 +41,20 @@ export default function Me({navigation}) {
 
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Name</Text>
-                            <Text style={styles.textNormal}>{Profile.username}</Text>
+                            <Text style={styles.textNormal}>{user.username == null? "-" : user.username}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
-                            <Text style={styles.textNormal}>{Profile.major}</Text>
+                            <Text style={styles.textNormal}>{user.major == null? "-" : user.major}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>
                             <Text
-                                style={styles.textNormal}>{Profile.phonenumber}</Text>
+                                style={styles.textNormal}>{user.phonenumber == null? "-" : user.phonenumber}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Email</Text>
-                            <Text style={styles.textNormal}>{Profile.email}</Text>
+                            <Text style={styles.textNormal}>{user.email == null? "-" : user.email}</Text>
                         </View>
                         <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={Profile}
                                      ProfileUser={[Profile, setProfile]}/>
@@ -135,6 +114,23 @@ export default function Me({navigation}) {
                                 <Icon name="navigate-next" type="material" color={Colors.secondary}/>
                             </View>
                         </Pressable>
+                        { user.roles.length === 2 &&
+                        <Pressable
+                            onPress={() => navigation.navigate("Root",{name:"RoleSelect"})}
+                            style={({ pressed }) => [
+                                {
+                                    backgroundColor: pressed ? Colors.primary : Colors.white,
+                                },
+                                styles.wrapperCustom,
+                            ]}
+                        >
+                            <View style={styles.viewItem}>
+                                <Icon name="face" type="material-icons" color={Colors.secondary} />
+                                <Text style={styles.textNormal}>Select Role</Text>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
+                            </View>
+                        </Pressable>
+                        }
                     </View>
 
                     <View style={{padding: 5}}></View>
