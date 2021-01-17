@@ -49,6 +49,7 @@ export default function ModalDate(props) {
         setWednesday(false)
         setTuesday(false)
         setFriday(false)
+        setEveryday(false)
     }
     useEffect(() => {
         if (everyday == true) {
@@ -70,7 +71,7 @@ export default function ModalDate(props) {
 
             <View style={styles.textDate}>
                 <View style={styles.wrapText}>
-                    <Text style={styles.text}>{everyday ? days[7] : null}</Text>
+                    <Text style={styles.text}>{everyday ? "Everyday" : null}</Text>
                     <Text style={styles.text}>{sunday ? days[0] : null}</Text>
                     <Text style={styles.text}>{monday ? days[1] : null}</Text>
                     <Text style={styles.text}>{tuesday ? days[2] : null}</Text>
@@ -184,8 +185,8 @@ export default function ModalDate(props) {
                                 <TouchableOpacity
                                     style={styles.closeButton}
                                     onPress={() => {
-                                        setModalVisible(!modalVisible),
-                                        cancalDay()
+                                        setModalVisible(!modalVisible)
+                                        
                                     }}>
                                     <Text style={styles.textStyle}>Cancel</Text>
                                 </TouchableOpacity>

@@ -37,9 +37,10 @@ export default function Request({ navigation }) {
                 ///To Do tag
             });
             console.log('====================================');
-            console.log(requst);
+            console.log(requst.data);
             console.log('====================================');
-        
+            navigation.navigate("Feed", {name: "Feed"}) 
+            clear()
         } catch (error) {
             if(error.response.status=404){
                 clear();
@@ -60,25 +61,25 @@ export default function Request({ navigation }) {
     const clear =()=>{
         setCourseName("")
         setDay(null)
-        setTimeEnd(null)
-        setTimeStart(null)
+        setTimeEnd(new Date(0,0,0,0))
+        setTimeStart(new Date(0,0,0,0))
         setClaerDate(true)
     }
 
 useEffect(() => {
  console.log("CourseName :",CourseName);
  console.log("day :",day);
-}, [CourseName])
-// useEffect(() => {
-//     console.log('=================TimeStart===================');
-//     console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
-//     console.log('====================================');
-// }, [TimeStart])
-// useEffect(() => {
-//     console.log('=================TimeEnd===================');
-//     console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
-//     console.log('====================================');
-// }, [TimeEnd])
+}, [day])
+useEffect(() => {
+    console.log('=================TimeStart===================');
+    console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
+    console.log('====================================');
+}, [TimeStart])
+useEffect(() => {
+    console.log('=================TimeEnd===================');
+    console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
+    console.log('====================================');
+}, [TimeEnd])
     return (
         <>
             {/* header */}
@@ -92,7 +93,8 @@ useEffect(() => {
                 <Text style={styles.textHeader}>Create Request</Text>
                 <TouchableOpacity
                     style={styles.add}
-                    onPress={() => clear()
+                    onPress={() =>
+                        creteRequst()
                   }>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
