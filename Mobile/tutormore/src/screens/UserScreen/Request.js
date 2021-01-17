@@ -13,7 +13,6 @@ export default function Request({ navigation }) {
     const [claerdate,setClaerDate]=useState(false);
     const [TimeStart, setTimeStart] = useState(new Date(0,0,0,0));
     const [TimeEnd, setTimeEnd] = useState(new Date(0,0,0,0))
-    
 
     const getTimeStart=(result)=>{
         setTimeStart(result);
@@ -23,7 +22,6 @@ export default function Request({ navigation }) {
     }
 
     const creteRequst=async()=>{
-       
         try {
             var d = new Date()
             const requst =  await API.post("request/create", {
@@ -34,6 +32,14 @@ export default function Request({ navigation }) {
                 description:"xxxxxxx",
                 categoryId:1,
                 userId:2
+            });
+            console.log(requst.data);
+        } catch (error) {
+            error.response.status=404 ?  navigation.navigate("Feed")
+            :
+            console.log("ERR: ",error.response.status);
+        }
+    }
                 ///To Do tag
             });
             console.log('====================================');
@@ -53,10 +59,7 @@ export default function Request({ navigation }) {
                 
            }
          
-        }
-       
-     
-        
+        }  
     }
     const clear =()=>{
         setCourseName("")
@@ -93,8 +96,7 @@ useEffect(() => {
                 <Text style={styles.textHeader}>Create Request</Text>
                 <TouchableOpacity
                     style={styles.add}
-                    onPress={() =>
-                        creteRequst()
+                    onPress={() => creteRequst()
                   }>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
@@ -113,48 +115,48 @@ useEffect(() => {
     )
 }
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: Colors.primary,
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    },
-    headerBar: {
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        backgroundColor: Colors.primary
-    },
-    textHeader: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color: Colors.secondary,
-    },
-    area: {
-        backgroundColor: Colors.white,
-        flex: 1,
-    },
-    viewItem: {
-        margin: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        backgroundColor: Colors.white,
-        flex: 1,
-    },
-    textInput: {
-        backgroundColor: Colors.background,
-        borderRadius: 5,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        flexDirection: "row",
-        flexWrap: "wrap",
-        flex: 0.8,
-    },
-    content: {
-        flex: 0.4,
-        paddingHorizontal: 10,
-    },
-})
+  container: {
+    backgroundColor: Colors.primary,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  headerBar: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: Colors.primary,
+  },
+  textHeader: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: Colors.secondary,
+  },
+  area: {
+    backgroundColor: Colors.white,
+    flex: 1,
+  },
+  viewItem: {
+    margin: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: Colors.white,
+    flex: 1,
+  },
+  textInput: {
+    backgroundColor: Colors.background,
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    flex: 0.8,
+  },
+  content: {
+    flex: 0.4,
+    paddingHorizontal: 10,
+  },
+});

@@ -47,21 +47,6 @@ export default function TapRoute() {
             <Icon name="person" type="material" color={Colors.secondary} />
           )
         }} />
-      {/* <Tabs.Screen
-        name="Chat"
-        component={Home}
-        options={{ tabBarIcon: () => <IconAssignments color="#56BBB4" /> }}
-      />
-      <Tabs.Screen
-        name="Notification"
-        component={Home}
-        options={{ tabBarIcon: () => <IconAssignments color="#56BBB4" /> }}
-      />
-      <Tabs.Screen
-        name="Me"
-        component={Home}
-        options={{ tabBarIcon: () => <IconGames color="#9DCC39" /> }}
-      /> */}
     </Tabs.Navigator>
   );
 }
