@@ -16,23 +16,7 @@ import API from "../../services/API"
 export default function Feed({ navigation }) {
     const [request, setRequest] = useState([]);
     const [isjoin, setisJoin] = useState([]);
-    const data = [
-        { id: 1, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 2, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 3, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 4, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 5, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 6, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 7, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 8, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 9, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 10, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 11, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 12, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 13, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 14, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 15, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-    ];
+
     // ปรับApi request/findAll ให้กับ ui
     // const fetchApi= async()=>{
 
@@ -54,7 +38,7 @@ export default function Feed({ navigation }) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
-       
+
         }
     }
 
@@ -114,27 +98,28 @@ export default function Feed({ navigation }) {
                         <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                     </TouchableOpacity>
                     <Text style={styles.textHeader}>Feed Request</Text>
-
                     <TouchableOpacity
-                        style={styles.add}
-                        onPress={() => navigation.push("Request")}>
-                        <Icon name="add-circle-outline" type="material" color={Colors.secondary} />
+                        style={styles.search}
+                        onPress={() => navigation.push("SearchRequest")}
+                    >
+                        <Text style={{ color: Colors.secondary }}>search</Text>
+                        <Icon
+                            name="search-outline"
+                            type="ionicon"
+                            style={{ color: Colors.secondary }}
+                        />
                     </TouchableOpacity>
                 </View>
 
                 <FlatList
                     data={request}
-
                     keyExtractor={(item) => item.id}
-
                     renderItem={({ item }) =>
-
                     (
                         <View style={styles.cardView}>
                             <View style={styles.viewItem}>
                                 <Image source={require("../../assets/profile.jpg")} style={styles.image} />
                                 <Text style={styles.title}>{item.user.username}</Text>
-
                             </View>
                             <View
                                 style={{
@@ -169,13 +154,9 @@ export default function Feed({ navigation }) {
                                         <TouchableOpacity style={styles.button_cancel}
                                         onPress={() =>
                                             cancel(item.id, 2)
-                                        }
-                                        >
+                                        }>
                                             <Text style={styles.text}>cancel</Text>
-                        
                                         </TouchableOpacity>
-
-
                                         : <TouchableOpacity style={styles.button} onPress={() =>
                                             join(item.id, 2)
                                             // setCount((cnt) => cnt + 1)
@@ -254,9 +235,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
-
+    search: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingVertical: 5,
+        paddingHorizontal: 20,
+        marginLeft: 20,
+        borderRadius: 30,
+        backgroundColor: Colors.gray,
+    },
     button_cancel: {
-        backgroundColor: "red",
+        backgroundColor: Colors.gray,
         paddingVertical: 5,
         paddingHorizontal: 5,
         borderRadius: 5,

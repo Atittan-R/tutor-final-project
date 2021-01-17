@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Clock from '../../components/forms/Clock';
 import ModalDate from '../../components/forms/ModalDate';
@@ -36,20 +36,16 @@ export default function Request({ navigation }) {
                 userId:2
             });
             console.log('====================================');
-            console.log(requst);
+            console.log(requst.data);
             console.log('====================================');
-
         } catch (error) {
-            error.response.status=404 ?  navigation.push("Feed")
+            error.response.status=404 ?  navigation.navigate("Feed")
             :
             console.log('====================================');
             console.log("ERR: ",error.response.status);
             console.log('====================================');
 
         }
-
-
-
     }
 
 // useEffect(() => {
