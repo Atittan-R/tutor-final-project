@@ -41,6 +41,16 @@ export default function ModalDate(props) {
         saturday? x.push("Sat"):x
         setDay(x)
     }
+    const cancalDay=()=>{
+        setMonday(false)
+        setSunday(false)
+        setSaturday(false)
+        setThursday(false)
+        setWednesday(false)
+        setTuesday(false)
+        setFriday(false)
+        setEveryday(false)
+    }
     useEffect(() => {
         if (everyday == true) {
             setDays(['', '', '', '', '', '', ''])
@@ -50,13 +60,18 @@ export default function ModalDate(props) {
             setDays(["Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "])
         }
     }, [everyday])
+    useEffect(() => {
+        if(day==null){
+            cancalDay()
+        }
+    }, [day])
     return (
         <View style={styles.inputItem} >
             <Text style={{ flex: 0.35, color: Colors.secondary }}>Date</Text>
 
             <View style={styles.textDate}>
                 <View style={styles.wrapText}>
-                    <Text style={styles.text}>{everyday ? days[7] : null}</Text>
+                    <Text style={styles.text}>{everyday ? "Everyday" : null}</Text>
                     <Text style={styles.text}>{sunday ? days[0] : null}</Text>
                     <Text style={styles.text}>{monday ? days[1] : null}</Text>
                     <Text style={styles.text}>{tuesday ? days[2] : null}</Text>
@@ -170,7 +185,8 @@ export default function ModalDate(props) {
                                 <TouchableOpacity
                                     style={styles.closeButton}
                                     onPress={() => {
-                                        setModalVisible(!modalVisible);
+                                        setModalVisible(!modalVisible)
+                                        
                                     }}>
                                     <Text style={styles.textStyle}>Cancel</Text>
                                 </TouchableOpacity>

@@ -12,12 +12,12 @@ import Tag from '../../components/forms/Tag';
 import API from "../../services/API"
 
 export default function Request({ navigation }) {
-    const [valueText, setValueText] = useState();
-    const [CourseName, setCourseName] = useState("");
-    const [day, setDay] = useState("");
-    const [TimeStart, setTimeStart] = useState(new Date());
-    const [TimeEnd, setTimeEnd] = useState(new Date())
-
+    const [CourseName,setCourseName]=useState("");
+    const [day, setDay] = useState(null)
+    const [claerdate,setClaerDate]=useState(false);
+    const [TimeStart, setTimeStart] = useState(new Date(0,0,0,0));
+    const [TimeEnd, setTimeEnd] = useState(new Date(0,0,0,0))
+    
 
     const getTimeStart = (result) => {
         setTimeStart(result);
@@ -33,49 +33,54 @@ export default function Request({ navigation }) {
             const requst = await API.post("request/create", {
                 name: CourseName,
                 date: day.toString(),
-                time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(),
-                time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
-                description: "xxxxxxx",
-                categoryId: 1,
-                userId: 2
+                time_start: TimeStart.getHours()+":"+TimeStart.getMinutes(),
+                time_end: TimeEnd.getHours()+":"+TimeEnd.getMinutes(),
+                description:"xxxxxxx",
+                categoryId:1,
+                userId:2
+                ///To Do tag
             });
             console.log('====================================');
             console.log(requst.data);
             console.log('====================================');
+            navigation.navigate("Feed", {name: "Feed"}) 
+            clear()
         } catch (error) {
-            error.response.status = 404 ? navigation.navigate("Feed")
-                :
-                console.log('====================================');
-            console.log("ERR: ", error.response.status);
+            if(error.response.status=404){
+                clear();
+                navigation.navigate("Feed", {name: "Feed"}) 
+            }
+           else{
             console.log('====================================');
-
+            console.log("ERR: ",error.response.status);
+            console.log('====================================');
+                
+           }
+         
         }
     }
-    const [description, setDescription] = useState("");
-    const [catagory, setCatagory] = useState("");
-    const [tag, setTags] = useState([]);
-    useEffect(() => {
-        console.log('====================================');
-        console.log("des " + description);
-        console.log("cat " + catagory);
-        console.log("tag " + tag);
-        console.log('====================================');
-    }, [description, catagory, tag])
+    const clear =()=>{
+        setCourseName("")
+        setDay(null)
+        setTimeEnd(new Date(0,0,0,0))
+        setTimeStart(new Date(0,0,0,0))
+        setClaerDate(true)
+    }
 
-    // useEffect(() => {
-    //  console.log("CourseName :",CourseName);
-    //  console.log("day :",day);
-    // }, [CourseName])
-    // useEffect(() => {
-    //     console.log('=================TimeStart===================');
-    //     console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
-    //     console.log('====================================');
-    // }, [TimeStart])
-    // useEffect(() => {
-    //     console.log('=================TimeEnd===================');
-    //     console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
-    //     console.log('====================================');
-    // }, [TimeEnd])
+useEffect(() => {
+ console.log("CourseName :",CourseName);
+ console.log("day :",day);
+}, [day])
+useEffect(() => {
+    console.log('=================TimeStart===================');
+    console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
+    console.log('====================================');
+}, [TimeStart])
+useEffect(() => {
+    console.log('=================TimeEnd===================');
+    console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
+    console.log('====================================');
+}, [TimeEnd])
     return (
         <>
             {/* header */}
@@ -95,11 +100,13 @@ export default function Request({ navigation }) {
                 </TouchableOpacity>
             </View>
             <ScrollView style={styles.area}>
-                <TextInputButton label="Course" placeholder="Enter your course name"
-                    onTextChange={(text) => setCourseName(text)} />
-                <ModalDate dayValue={[day, setDay]} />
-                <Clock label="Time Start" name="Time Start" callback={getTimeStart} />
-                <Clock label="Time End" name="Time End" callback={getTimeEnd} />
+            <View style={styles.content}>
+                    <TextInputButton label="Course" placeholder="Enter your course name" value={CourseName}
+                      onTextChange={(text) => setCourseName(text)}/>
+                    <ModalDate dayValue={[day,setDay]}/>
+                    <Clock label="Time Start" name="Time Start" callback={getTimeStart} claerdate={[claerdate,setClaerDate]}/>
+                    <Clock label="Time End"  name="Time End" callback={getTimeEnd} claerdate={[claerdate,setClaerDate]}/>
+                </View>
                 <TextInputButton
                     label="Description"
                     placeholder="Enter your description"
@@ -110,6 +117,8 @@ export default function Request({ navigation }) {
                 <Tag
                     onChangeTags={(tags) => setTags(tags)} />
             </ScrollView>
+         
+
         </>
     )
 }
