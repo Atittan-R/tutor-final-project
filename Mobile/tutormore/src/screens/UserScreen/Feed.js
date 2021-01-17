@@ -106,24 +106,11 @@ export default function Feed({ navigation }) {
                     <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Feed Request</Text>
-                {/* <TouchableOpacity
-                        style={styles.search}
-                        onPress={() => navigation.push("SearchRequest")}
-                    >
-                        <Text style={{ color: Colors.secondary }}>search</Text>
-                        <Icon
-                            name="search-outline"
-                            type="ionicon"
-                            style={{ color: Colors.secondary }}
-                        />
-                    </TouchableOpacity> */}
-            </View>
-            {/* search */}
-            <View style={styles.searchBar}>
                 <TextInput
+                    style={styles.search}
                     placeholder="Search"
                     onChangeText={(text) => searchAction(text)}
-                    style={styles.search} />
+                />
             </View>
 
             <FlatList
@@ -252,13 +239,13 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     search: {
-        flex: 0,
+        flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         paddingVertical: 5,
         paddingHorizontal: 20,
-        marginHorizontal: 10,
+        marginLeft: 20,
         borderRadius: 30,
         backgroundColor: Colors.gray,
     },
