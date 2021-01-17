@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
-import {PrivilegeUser, PrivilegeTutor} from "./Privilege";
-import {useGlobalVar} from "../context/GlobalContex";
+import { PrivilegeUser, PrivilegeTutor } from "./Privilege";
+import { useGlobalVar } from "../context/GlobalContex";
 import RoleSelection from "../screens/Authentication/RoleSelection";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from "../components/Loading";
 
 export const role_router = {
-    ROLE_USER: <PrivilegeUser/>,
-    ROLE_TUTOR: <PrivilegeTutor/>,
+    ROLE_USER: <PrivilegeUser />,
+    ROLE_TUTOR: <PrivilegeTutor />,
 };
 
 export const renderingCheck = () => {
-    const {authentication} = useGlobalVar();
+    const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [newRole, setNewRole] = useState(null);
-    const {isLoading} = state;
+    const { isLoading } = state;
     useEffect(() => {
         const entryRoling = async () => {
             let entry
@@ -28,7 +28,7 @@ export const renderingCheck = () => {
             } catch (e) {
                 entry = await AsyncStorage.setItem("entryRole", JSON.stringify("NoValue"));
             }
-            dispatch({type: "ROLE_ENTRY", role: JSON.parse(entry)})
+            dispatch({ type: "ROLE_ENTRY", role: JSON.parse(entry) })
         }
         entryRoling();
     }, [state.userRole]);
@@ -46,27 +46,27 @@ export const renderingCheck = () => {
     //     return <LoadingScreen />
     //     }
     // }else{
-        if (state.userData === null) {
-            return <AuthenticationStack/>
-        } else if (JSON.parse(state.userRoles).length === 1) {
-            return role_router[JSON.parse(state.userRoles)];
-        } else if (JSON.parse(state.userRoles).length === 2 && newRole !== null) {
-            // console.log(roleselection)
-            return <RoleSelection/>
-        } else {
-            //TODO
-            return role_router[state.userRole]
-        }
+    // if (state.userData === null) {
+    //     return <AuthenticationStack/>
+    // } else if (JSON.parse(state.userRoles).length === 1) {
+    //     return role_router[JSON.parse(state.userRoles)];
+    // } else if (JSON.parse(state.userRoles).length === 2 && newRole !== null) {
+    //     // console.log(roleselection)
+    //     return <RoleSelection/>
+    // } else {
+    //     //TODO
+    //     return role_router[state.userRole]
+    // }
     // }
 
     // Use on product TODO
-    return state.userToken === null
-        // ? <AuthenticationStack />
-        // : currentuser.roles.length !== 1
-        //     ? (state.userRole === null || state.userRole === undefined)
-        //     ? <RoleSelection/>
-        //     : role_router[role]
-        // : role_router[currentuser.roles]
+    // return state.userToken === null
+    // ? <AuthenticationStack />
+    // : currentuser.roles.length !== 1
+    //     ? (state.userRole === null || state.userRole === undefined)
+    //     ? <RoleSelection/>
+    //     : role_router[role]
+    // : role_router[currentuser.roles]
 
     //Test UI with out login
     // return state.userRole === null || state.userRole === undefined ? (
@@ -74,16 +74,16 @@ export const renderingCheck = () => {
     // ) : (
     //     role_router[role]
     // );
+    // };
+
+    // Test UI with out login
+
+    return state.userRole === null || state.userRole === undefined ? (
+        <RoleSelection />
+    ) : (
+            role_router[state.userRole]
+        );
 };
-
-//Test UI with out login
-
-//     return state.userRole === null || state.userRole === undefined ? (
-//         <RoleSelection/>
-//     ) : (
-//         role_router[state.userRole]
-//     );
-// };
 
 export default function Routes() {
     return (

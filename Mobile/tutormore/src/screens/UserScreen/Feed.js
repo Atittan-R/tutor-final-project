@@ -6,10 +6,11 @@ import {
     StatusBar,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View
 } from 'react-native'
-import { Icon } from 'react-native-elements';
+import { Icon, SearchBar } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
 
@@ -31,8 +32,8 @@ export default function Feed({ navigation }) {
                 userId: userId, requestId: resId
             });
             console.log(join_req.data.status);
-            isjoin.push({id:resId})
-            setisJoin([...isjoin,{id:resId}])
+            isjoin.push({ id: resId })
+            setisJoin([...isjoin, { id: resId }])
             console.log(isjoin);
         } catch (error) {
             console.log('====================================');
@@ -87,18 +88,25 @@ export default function Feed({ navigation }) {
     console.log(isjoin);
     console.log('====================================');
     const [count, setCount] = useState(0);
+
+    // search bar
+    const [filterItem, setFilterItem] = useState(null)
+    const searchAction = (text) => {
+        setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
+    }
+
     return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container}>
-                <View style={styles.headerBar}>
-                    <TouchableOpacity
-                        style={{ color: Colors.secondary, marginRight: 10 }}
-                        onPress={() => navigation.navigate("Home")}>
-                        <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                    </TouchableOpacity>
-                    <Text style={styles.textHeader}>Feed Request</Text>
-                    <TouchableOpacity
+            <SafeAreaView style={styles.container} />
+            <View style={styles.headerBar}>
+                <TouchableOpacity
+                    style={{ color: Colors.secondary, marginRight: 10 }}
+                    onPress={() => navigation.navigate("Home")}>
+                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
+                </TouchableOpacity>
+                <Text style={styles.textHeader}>Feed Request</Text>
+                {/* <TouchableOpacity
                         style={styles.search}
                         onPress={() => navigation.push("SearchRequest")}
                     >
@@ -108,70 +116,77 @@ export default function Feed({ navigation }) {
                             type="ionicon"
                             style={{ color: Colors.secondary }}
                         />
-                    </TouchableOpacity>
-                </View>
+                    </TouchableOpacity> */}
+            </View>
+            {/* search */}
+            <View style={styles.searchBar}>
+                <TextInput
+                    placeholder="Search"
+                    onChangeText={(text) => searchAction(text)}
+                    style={styles.search} />
+            </View>
 
-                <FlatList
-                    data={request}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) =>
-                    (
-                        <View style={styles.cardView}>
-                            <View style={styles.viewItem}>
-                                <Image source={require("../../assets/profile.jpg")} style={styles.image} />
-                                <Text style={styles.title}>{item.user.username}</Text>
-                            </View>
-                            <View
-                                style={{
-                                    marginTop: 5,
-                                    borderTopColor: Colors.gray,
-                                    borderTopWidth: 1,
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    flexDirection: "row",
-                                    justifyContent: "space-between",
-                                }}>
-                                <View>
-                                    <View style={styles.viewItem}>
-                                        <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
-                                        <Text style={styles.title}>{item.name}</Text>
-                                    </View>
-                                    <View style={styles.viewItem}>
-                                        <Icon name="event" type="material" color={Colors.secondary}
-                                            style={styles.icon} />
-                                        <Text style={styles.text}>{item.date}</Text>
-                                    </View>
-                                    <View style={styles.viewItem}>
-                                        <Icon name="schedule" type="material" color={Colors.secondary}
-                                            style={styles.icon} />
-                                        {/* <Text style={styles.text}>{item.time}</Text> */}
-                                        <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
-                                    </View>
+            <FlatList
+                data={filterItem ? filterItem : request}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) =>
+                (
+                    <View style={styles.cardView} key={item.id}>
+                        <View style={styles.viewItem}>
+                            <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                            <Text style={styles.title}>{item.user.username}</Text>
+                        </View>
+                        <View
+                            style={{
+                                marginTop: 5,
+                                borderTopColor: Colors.gray,
+                                borderTopWidth: 1,
+                                display: "flex",
+                                flexWrap: "wrap",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                            }}>
+                            <View>
+                                <View style={styles.viewItem}>
+                                    <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
+                                    <Text style={styles.title}>{item.name}</Text>
                                 </View>
-                                {
+                                <View style={styles.viewItem}>
+                                    <Icon name="event" type="material" color={Colors.secondary}
+                                        style={styles.icon} />
+                                    <Text style={styles.text}>{item.date}</Text>
+                                </View>
+                                <View style={styles.viewItem}>
+                                    <Icon name="schedule" type="material" color={Colors.secondary}
+                                        style={styles.icon} />
+                                    {/* <Text style={styles.text}>{item.time}</Text> */}
+                                    <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
+                                </View>
+                            </View>
+                            {
 
-                                    isjoin.map((i)=>i.id).includes(item.id) ?
-                                        <TouchableOpacity style={styles.button_cancel}
+                                isjoin.map((i) => i.id).includes(item.id) ?
+                                    <TouchableOpacity style={styles.button_cancel}
                                         onPress={() =>
                                             cancel(item.id, 2)
                                         }>
-                                            <Text style={styles.text}>cancel</Text>
-                                        </TouchableOpacity>
-                                        : <TouchableOpacity style={styles.button} onPress={() =>
-                                            join(item.id, 2)
-                                            // setCount((cnt) => cnt + 1)
-                                        }>
-                                            <Text style={styles.text}>Join</Text>
-                                            <Text style={{ fontSize: 12, color: Colors.secondary }}>+{count}</Text>
-                                        </TouchableOpacity>
+                                        <Text style={styles.text}>cancel</Text>
+                                    </TouchableOpacity>
+                                    : <TouchableOpacity style={styles.button} onPress={() =>
+                                        join(item.id, 2)
+                                        // setCount((cnt) => cnt + 1)
+                                    }>
+                                        <Text style={styles.text}>Join</Text>
+                                        <Text style={{ fontSize: 12, color: Colors.secondary }}>+{count}</Text>
+                                    </TouchableOpacity>
 
 
-                                }
+                            }
 
-                            </View>
-                        </View>)} />
-                {/* <Text>{request}</Text> */}
-            </SafeAreaView>
+                        </View>
+                    </View>)} />
+            {/* <Text>{request}</Text> */}
+
         </>
     )
 }
@@ -188,7 +203,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 10,
-        backgroundColor: Colors.primary
+        backgroundColor: Colors.primary,
+
     },
     textHeader: {
         fontSize: 20,
@@ -236,13 +252,13 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     search: {
-        flex: 1,
+        flex: 0,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         paddingVertical: 5,
         paddingHorizontal: 20,
-        marginLeft: 20,
+        marginHorizontal: 10,
         borderRadius: 30,
         backgroundColor: Colors.gray,
     },
@@ -258,5 +274,9 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 30,
         left: 120
+    },
+    searchBar: {
+        backgroundColor: Colors.primary,
+        paddingBottom: 10,
     }
 })
