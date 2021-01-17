@@ -23,8 +23,6 @@ export default function Request({ navigation }) {
     const [tags, setTags] = useState([])
     const [claerTag, setClaerTag] = useState(false)
 
-
-    
     const getTimeStart = (result) => {
         setTimeStart(result);
     }
@@ -84,11 +82,11 @@ export default function Request({ navigation }) {
         setClaerDate(true)
     }
 
-    // useEffect(() => {
-    //  console.log("CourseName :",CourseName);
-    //  console.log("day :",day);
-    //  console.log("Tags :",tags);
-    // }, [tags])
+    useEffect(() => {
+     console.log("CourseName :",CourseName);
+     console.log("day :",day);
+     console.log("Tags :",tags);
+    }, [CourseName])
     // useEffect(() => {
     //     console.log('=================TimeStart===================');
     //     console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());

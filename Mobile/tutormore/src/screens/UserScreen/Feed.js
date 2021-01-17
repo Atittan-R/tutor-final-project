@@ -13,24 +13,21 @@ import {
 import { Icon } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
+import {useGlobalVar} from "../../context/GlobalContex";
 const wait = (timeout) => {
     return new Promise(resolve => {
         setTimeout(resolve, timeout);
     });
 }
 export default function Feed({ navigation }) {
+    const {authentication} = useGlobalVar();
+    const [state, dispatch] = authentication;
     const [request, setRequest] = useState([]);
     const [isjoin, setisJoin] = useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
 
-    // ปรับApi request/findAll ให้กับ ui
-    // const fetchApi= async()=>{
-
-    //         const fetch_req = await API.get("/request/findAll");
-    //         // console.log("Log: ", fetch_req.data);
-    //         setRequest(fetch_req.data)
-    //         console.log("Log: ", request);
-
+    const userid = JSON.parse(state.userData);
+    console.log("user_id",userid.id)
     const join = async (resId, userId) => {
         try {
             const join_req = await API.post("join", {
@@ -66,8 +63,7 @@ export default function Feed({ navigation }) {
         try {
             const fetch_req = await API.get("/request/findAll");
             const fetch_join = await API.post("/user/join", {
-                userId: 2,
-
+                userId: userid.id,
             });
             console.log('====================================');
             console.log((fetch_join));
@@ -88,15 +84,13 @@ export default function Feed({ navigation }) {
         fetchApi();
         wait(2000).then(() => setRefreshing(false));
     }, []);
-    useEffect(async () => {
-        
-        fetchApi();
-        console.log("data: ", request)
 
+    useEffect(() => {
+        fetchApi();
     }, [])
-    console.log('====================================');
+
     console.log(isjoin);
-    console.log('====================================');
+
     const [count, setCount] = useState(0);
     return (
     
@@ -164,7 +158,7 @@ export default function Feed({ navigation }) {
                                             <Text style={styles.text}>cancel</Text>
                                         </TouchableOpacity>
                                         : <TouchableOpacity style={styles.button} onPress={() =>
-                                            join(item.id, 2)
+                                            join(item.id, userid.id)
                                             // setCount((cnt) => cnt + 1)
                                         }>
                                             <Text style={styles.text}>Join</Text>
@@ -242,7 +236,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     button_cancel: {
-        backgroundColor: "red",
+        backgroundColor: Colors.gray,
         paddingVertical: 5,
         paddingHorizontal: 5,
         borderRadius: 5,
