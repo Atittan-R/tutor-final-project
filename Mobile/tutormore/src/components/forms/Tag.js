@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Tags from "react-native-tags";
 import Colors from "../../configs/Colors";
 
-export default function Tag() {
-  const [selectedValue, setSelectedValue] = useState("");
+export default function Tag(props) {
+  const { onChangeTags } = props;
+
   return (
     <View style={styles.inputItem}>
       <Text style={{ flex: 0.35, color: Colors.secondary }} >Tags</Text>
@@ -15,7 +16,7 @@ export default function Tag() {
             placeholder: "Enter your tags"
           }}
           initialTags={[]}
-          onChangeTags={tags => console.log(tags)}
+          onChangeTags={onChangeTags}
           onTagPress={(index, tagLabel, event, deleted) =>
             console.log(index, tagLabel, event, deleted ? "deleted" : "not deleted")
           }

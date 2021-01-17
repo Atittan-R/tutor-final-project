@@ -4,7 +4,6 @@ import Colors from "../../configs/Colors";
 import { Picker } from "@react-native-community/picker";
 
 export default function Catagory(props) {
-  // const [selectedValue, setSelectedValue] = useState("");
   const { selectedValue, onValueChange } = props;
   return (
     <View style={styles.inputItem}>
