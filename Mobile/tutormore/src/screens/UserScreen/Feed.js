@@ -97,7 +97,7 @@ export default function Feed({ navigation }) {
     // search bar
     const [filterItem, setFilterItem] = useState(null)
     const searchAction = (text) => {
-        setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
+        setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
 
     return (
@@ -157,41 +157,37 @@ export default function Feed({ navigation }) {
                                     <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
                                 </View>
                             </View>
-                            <View style={styles.viewItem}>
-                                <Icon name="event" type="material" color={Colors.secondary}
-                                    style={styles.icon} />
-                                <Text style={styles.text}>{item.date}</Text>
-                            </View>
-                            <View style={styles.viewItem}>
-                                <Icon name="schedule" type="material" color={Colors.secondary}
-                                    style={styles.icon} />
-                                {/* <Text style={styles.text}>{item.time}</Text> */}
-                                <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
+                            <View style={styles.positionBTN}>
+                                {
+                                    isjoin.map((i) => i.id).includes(item.id) ?
+                                        <TouchableOpacity style={styles.button_cancel}
+                                                          onPress={() => cancel(item.id, 2)}>
+                                            <Text style={styles.text}>cancel</Text>
+                                        </TouchableOpacity>
+                                        : <TouchableOpacity style={styles.button} onPress={() =>
+                                            join(item.id, userid.id)
+                                            // setCount((cnt) => cnt + 1)
+                                        }>
+                                            <Text style={styles.text}>Join</Text>
+                                        </TouchableOpacity>
+                                }
                             </View>
                         </View>
-                        {
-                            isjoin.map((i) => i.id).includes(item.id) ?
-                                <TouchableOpacity style={styles.button_cancel}
-                                    onPress={() => cancel(item.id, 2)}>
-                                    <Text style={styles.text}>cancel</Text>
-                                </TouchableOpacity>
-                                : <TouchableOpacity style={styles.button} onPress={() =>
-                                    join(item.id, userid.id)
-                                    // setCount((cnt) => cnt + 1)
-                                }>
-                                    <Text style={styles.text}>Join</Text>
-                                    <Text style={{ fontSize: 12, color: Colors.secondary }}>+{count}</Text>
-                                </TouchableOpacity>
-                        }
                     </View>
                 } />
         </>
     );
 }
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    },
+    positionBTN:{
+       flex:1,
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
     },
     headerBar: {
         display: "flex",
@@ -247,7 +243,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 5,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        width: 55,
     },
     button_cancel: {
         backgroundColor: Colors.gray,
@@ -255,12 +252,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 5,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        width: 55,
+
     },
     add: {
         padding: 10,
         borderRadius: 30,
         left: 120
+    },
+    search: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingVertical: 5,
+        paddingHorizontal: 20,
+        marginLeft: 20,
+        borderRadius: 30,
+        backgroundColor: Colors.gray,
     },
     searchBar: {
         backgroundColor: Colors.primary,

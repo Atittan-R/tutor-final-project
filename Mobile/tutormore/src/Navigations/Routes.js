@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {NavigationContainer} from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
 import { PrivilegeUser, PrivilegeTutor } from "./Privilege";
@@ -14,23 +14,6 @@ export const role_router = {
 export const renderingCheck = () => {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const [newRole, setNewRole] = useState(null);
-    const { isLoading } = state;
-    useEffect(() => {
-        const entryRoling = async () => {
-            let entry
-            // let entryData
-            try {
-                entry = await AsyncStorage.getItem("entryRole");
-                // entryData = await AsyncStorage.getItem("userData");
-                setNewRole(entry)
-            } catch (e) {
-                entry = await AsyncStorage.setItem("entryRole", JSON.stringify("NoValue"));
-            }
-            dispatch({ type: "ROLE_ENTRY", role: JSON.parse(entry) })
-        }
-        entryRoling();
-    }, [state.userRole]);
 
     //after select role from <RoleSelection/>
     console.log("state.userRoles: ", state.userRoles)
