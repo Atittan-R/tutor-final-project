@@ -46,17 +46,17 @@ export const renderingCheck = () => {
     //     return <LoadingScreen />
     //     }
     // }else{
-        // if (state.userData === null) {
-        //     return <AuthenticationStack/>
-        // } else if (JSON.parse(state.userRoles).length === 1) {
-        //     return role_router[JSON.parse(state.userRoles)];
-        // } else if (JSON.parse(state.userRoles).length === 2 && newRole !== null) {
-        //     // console.log(roleselection)
-        //     return <RoleSelection/>
-        // } else {
-        //     //TODO
-        //     return role_router[state.userRole]
-        // }
+        if (state.userData === null) {
+            return <AuthenticationStack/>
+        } else if (JSON.parse(state.userRoles).length === 1) {
+            return role_router[JSON.parse(state.userRoles)];
+        } else if (JSON.parse(state.userRoles).length === 2 && newRole !== null) {
+            // console.log(roleselection)
+            return <RoleSelection/>
+        } else {
+            //TODO
+            return role_router[state.userRole]
+        }
     // }
 
     // Use on product TODO
@@ -69,11 +69,11 @@ export const renderingCheck = () => {
     //     : role_router[currentuser.roles]
 
     //Test UI with out login
-    return state.userRole === null || state.userRole === undefined ? (
-        <RoleSelection/>
-    ) : (
-        role_router[role]
-    );
+    // return state.userRole === null || state.userRole === undefined ? (
+    //     <RoleSelection/>
+    // ) : (
+    //     role_router[role]
+    // );
 };
 
 //Test UI with out login

@@ -8,12 +8,12 @@ import Colors from '../../configs/Colors'
 import API from "../../services/API"
 
 export default function Request({ navigation }) {
-    const [valueText, setValueText] = useState();
     const [CourseName,setCourseName]=useState("");
-    const [day,setDay]=useState("");
-    const [TimeStart, setTimeStart] = useState(new Date());
-    const [TimeEnd, setTimeEnd] = useState(new Date())
-
+    const [day, setDay] = useState(null)
+    const [claerdate,setClaerDate]=useState(false);
+    const [TimeStart, setTimeStart] = useState(new Date(0,0,0,0));
+    const [TimeEnd, setTimeEnd] = useState(new Date(0,0,0,0))
+    
 
     const getTimeStart=(result)=>{
         setTimeStart(result);
@@ -34,28 +34,41 @@ export default function Request({ navigation }) {
                 description:"xxxxxxx",
                 categoryId:1,
                 userId:2
+                ///To Do tag
             });
             console.log('====================================');
             console.log(requst);
             console.log('====================================');
-      
+        
         } catch (error) {
-            error.response.status=404 ?  navigation.push("Feed")
-            : 
+            if(error.response.status=404){
+                clear();
+                navigation.navigate("Feed", {name: "Feed"}) 
+            }
+           else{
             console.log('====================================');
             console.log("ERR: ",error.response.status);
             console.log('====================================');
                 
+           }
+         
         }
        
      
         
     }
+    const clear =()=>{
+        setCourseName("")
+        setDay(null)
+        setTimeEnd(null)
+        setTimeStart(null)
+        setClaerDate(true)
+    }
 
-// useEffect(() => {
-//  console.log("CourseName :",CourseName);
-//  console.log("day :",day);
-// }, [CourseName])
+useEffect(() => {
+ console.log("CourseName :",CourseName);
+ console.log("day :",day);
+}, [CourseName])
 // useEffect(() => {
 //     console.log('=================TimeStart===================');
 //     console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
@@ -79,18 +92,18 @@ export default function Request({ navigation }) {
                 <Text style={styles.textHeader}>Create Request</Text>
                 <TouchableOpacity
                     style={styles.add}
-                    onPress={() => creteRequst()
+                    onPress={() => clear()
                   }>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
             </View>
             <View style={styles.area}>
                 <View style={styles.content}>
-                    <TextInputButton label="Course" placeholder="Enter your course name" 
+                    <TextInputButton label="Course" placeholder="Enter your course name" value={CourseName}
                       onTextChange={(text) => setCourseName(text)}/>
                     <ModalDate dayValue={[day,setDay]}/>
-                    <Clock label="Time Start" name="Time Start" callback={getTimeStart}/>
-                    <Clock label="Time End"  name="Time End" callback={getTimeEnd}/>
+                    <Clock label="Time Start" name="Time Start" callback={getTimeStart} claerdate={[claerdate,setClaerDate]}/>
+                    <Clock label="Time End"  name="Time End" callback={getTimeEnd} claerdate={[claerdate,setClaerDate]}/>
                 </View>
             </View>
 
