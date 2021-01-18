@@ -1,11 +1,11 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
-  CourseEnroll,
-  Home,
-  CourseDetail,
-  MyCourse,
-  Search,
+    CourseEnroll,
+    Home,
+    CourseDetail,
+    MyCourse,
+    Search, test,
 } from "../../../screens/UserScreen";
 import LoadingScreen from "../../../components/Loading";
 import {useGlobalVar} from "../../../context/GlobalContex";
@@ -13,7 +13,6 @@ import {useGlobalVar} from "../../../context/GlobalContex";
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
-
   return (
     <Stack.Navigator
       screenOptions={{
@@ -22,6 +21,7 @@ const HomeStack = () => {
       initialRouteName="Home"
     >
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="test" component={test} />
       <Stack.Screen
         name="CourseDetail"
         component={CourseDetail}

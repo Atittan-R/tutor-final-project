@@ -13,9 +13,9 @@ import {
   TextInput,
 } from "react-native";
 import { SwipeablePanel } from "rn-swipeable-panel";
-import Colors from "../../configs/Colors";
+import Colors from "../../../configs/Colors";
 import { Icon, Rating } from "react-native-elements";
-import PanelCategory from "../../components/swipers/PanelCategory";
+import PanelCategory from "../../../components/swipers/PanelCategory";
 
 export default function Home({ navigation }) {
   const [panelProps, setPanelProps] = useState({
@@ -109,7 +109,7 @@ export default function Home({ navigation }) {
   // search bar
   const [filterItem, setFilterItem] = useState(null)
   const searchAction = (text) => {
-    setFilterItem(dataList.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
+    setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
   }
   return (
     <>
@@ -122,7 +122,6 @@ export default function Home({ navigation }) {
           style={styles.search}
           onChangeText={(text) => searchAction(text)}
           placeholder="Search"
-
         />
       </View>
       <ScrollView>
@@ -155,7 +154,7 @@ export default function Home({ navigation }) {
               >
                 <Image
                   style={{ width: 50, height: 50, resizeMode: "contain" }}
-                  source={require("../../assets/images/categories/digital.png")}
+                  source={require("../../../assets/images/categories/digital.png")}
                 />
               </View>
               <Text style={{ marginVertical: 2, textAlign: "center" }}>
@@ -180,7 +179,7 @@ export default function Home({ navigation }) {
               >
                 <Image
                   style={{ width: 50, height: 50, resizeMode: "contain" }}
-                  source={require("../../assets/images/categories/doctor.png")}
+                  source={require("../../../assets/images/categories/doctor.png")}
                 />
               </View>
               <Text style={{ marginVertical: 2, textAlign: "center" }}>
@@ -206,7 +205,7 @@ export default function Home({ navigation }) {
               >
                 <Image
                   style={{ width: 50, height: 50, resizeMode: "contain" }}
-                  source={require("../../assets/images/categories/engineering.png")}
+                  source={require("../../../assets/images/categories/engineering.png")}
                 />
               </View>
               <Text style={{ marginVertical: 2, textAlign: "center" }}>
@@ -220,7 +219,7 @@ export default function Home({ navigation }) {
                 flex: 1,
                 alignItems: "center",
               }}
-              onPress={() => openPanel()}
+              onPress={() => navigation.navigate("test")}
             >
               <View
                 style={{
@@ -231,11 +230,11 @@ export default function Home({ navigation }) {
               >
                 <Image
                   style={{ width: 50, height: 50, resizeMode: "contain" }}
-                  source={require("../../assets/images/categories/more.png")}
+                  source={require("../../../assets/images/categories/more.png")}
                 />
               </View>
               <Text style={{ marginVertical: 2, textAlign: "center" }}>
-                More..
+                More..(Test)
             </Text>
             </TouchableOpacity>
           </ScrollView>
@@ -282,7 +281,7 @@ export default function Home({ navigation }) {
                       resizeMode: "contain",
                       alignSelf: "center",
                     }}
-                    source={require("../../assets/images/categories/digital.png")}
+                    source={require("../../../assets/images/categories/digital.png")}
                   />
                   <View>
                     <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
