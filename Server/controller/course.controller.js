@@ -1,6 +1,8 @@
 const db = require("../models");
 const Course = db.course;
 const Tag = db.tag;
+const User = db.user;
+const Categories = db.user;
 
 exports.createCourse = (req, res) => {
   //Save Course Data to Database
@@ -10,7 +12,7 @@ exports.createCourse = (req, res) => {
     time_start: req.body.time_start,
     time_end: req.body.time_end,
     duration: req.body.duration,
-    // description: req.body.description,
+    description: req.body.description,
     amount: req.body.amount,
     lat: req.body.lat,
     long: req.body.long,
@@ -47,14 +49,40 @@ exports.createCourse = (req, res) => {
     });
 };
 
-exports.findAllCourse = (req, res) => {
-  Course.findAll()
-    .then((course) => {
-      res.status(202).send({ course });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
+exports.findAllCourse = async (req, res) => {
+  try {
+    const result = await Course.findAll({
+      attributes: [
+        "id",
+        "name",
+        "day",
+        "time_start",
+        "time_end",
+        "duration",
+        "amount",
+        "lat",
+        "long",
+        "distance",
+        "createdAt",
+        "description",
+        "rate",
+      ],
+      include: [
+        {
+          model: User,
+          as: "tutors",
+        },
+        // {
+        //   // model: Categories,
+        //   // as: "categories",
+        //   // attributes: ["name"],
+        // },
+      ],
     });
+    await res.status(201).send(result);
+  } catch (err) {
+    await res.status(500).send({ message: err.message });
+  }
 };
 
 exports.findOneCourse = (req, res) => {

@@ -1,14 +1,16 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
-    CourseEnroll,
-    Home,
-    CourseDetail,
-    MyCourse,
-    Search, test,
+  CourseEnroll,
+  Home,
+  CourseDetail,
+  MyCourse,
+  Search, test,
+  RegisterTutor,
+  NearMe
 } from "../../../screens/UserScreen";
 import LoadingScreen from "../../../components/Loading";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
 
 const Stack = createStackNavigator();
 
@@ -30,13 +32,6 @@ const HomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="MyCourse"
-        component={MyCourse}
-        options={{
-          headerTitle: "MyCourse",
-        }}
-      />
-      <Stack.Screen
         name="CourseEnroll"
         component={CourseEnroll}
         options={{
@@ -48,6 +43,20 @@ const HomeStack = () => {
         component={Search}
         options={{
           headerTitle: "Search",
+        }}
+      />
+      <Stack.Screen
+        name="RegisterTutor"
+        component={RegisterTutor}
+        options={{
+          headerTitle: "RegisterTutor",
+        }}
+      />
+      <Stack.Screen
+        name="NearMe"
+        component={NearMe}
+        options={{
+          headerTitle: "NearMe",
         }}
       />
     </Stack.Navigator>

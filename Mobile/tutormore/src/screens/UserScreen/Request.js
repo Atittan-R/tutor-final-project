@@ -47,13 +47,13 @@ export default function Request({ navigation }) {
             console.log(requst.data);
             console.log('====================================');
             clear()
-            navigation.navigate("Feed", { name: "Feed" ,onGoBack: () => onRefreshh()})
+            navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
 
         } catch (error) {
          
             if (error.response.status==404) {
                 clear();
-                navigation.navigate("Feed", { name: "Feed" ,onGoBack: () => onRefreshh()})
+                navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
             }
             else {
                 console.log('====================================');
@@ -77,9 +77,9 @@ export default function Request({ navigation }) {
     }
 
     useEffect(() => {
-     console.log("CourseName :",CourseName);
-     console.log("day :",day);
-     console.log("Tags :",tags);
+        console.log("CourseName :", CourseName);
+        console.log("day :", day);
+        console.log("Tags :", tags);
     }, [CourseName])
  d
     return (
@@ -87,11 +87,6 @@ export default function Request({ navigation }) {
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.push("Feed")}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
                 <Text style={styles.textHeader}>Create Request</Text>
                 <TouchableOpacity
                     style={styles.add}

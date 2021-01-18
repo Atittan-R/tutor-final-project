@@ -1,7 +1,19 @@
 import React, {useCallback, useEffect, useReducer, useState} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
-import { actionCreators, initialState, reducer } from './courses'
+import {
+    ActivityIndicator,
+    Button,
+    FlatList,
+    RefreshControl,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
+import { actionCreators, initialState, reducer } from './CourseReducer'
 import API from "../../../services/API";
+import Modal from 'react-native-modal';
+import LoadingScreen from "../../../components/Loading";
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -15,28 +27,35 @@ const MyComponent = () => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        wait(2000).then(() => setRefreshing(false));
+        fetchData().then(() => setRefreshing(false));
     }, []);
 
-    useEffect(() => {
-        async function fetchCourse() {
-            dispatch(actionCreators.loading())
-
-            try {
-                const response = await API.get(
-                    '/course/findAll'
-                )
-                const course = await response.json()
-                console.log("course:",course)
-                dispatch(actionCreators.success(course))
-            } catch (e) {
-                dispatch(actionCreators.failure())
-            }
+    async function fetchData() {
+        dispatch(actionCreators.loading())
+        try {
+            const response = await API.get(
+                '/course/findAll'
+            )
+            const course = await response.data.course
+            console.log("course:",course)
+            dispatch(actionCreators.success(course))
+        } catch (e) {
+            dispatch(actionCreators.failure())
+            console.log(e)
         }
-        fetchCourse()
+    }
+
+    useEffect(() => {
+        fetchData()
     }, [])
 
     const { course, loading, error } = state
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
 
     if (loading) {
         return (
@@ -56,20 +75,21 @@ const MyComponent = () => {
 
     return (
         <>
-            <FlatList
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                style={styles.container}
-                keyExtractor={(course) => course.id}
-                data={course}
-                renderItem={({ item: { id, title, body }, index }) => (
-                    <View key={id} style={styles.post}>
-                        <Text style={styles.title}>
-                            {index}. {title}
-                        </Text>
-                        <Text style={styles.body}>{body}</Text>
+            <View style={{flex: 1,justifyContent: "center",alignItems: "center"}}>
+                <View>
+                    <ActivityIndicator />
+                </View>
+                <Button title="Show modal" onPress={toggleModal} />
+                <Modal style={{flex:1,alignItems:"center",}}
+                       isVisible={isModalVisible}
+                       onSwipeComplete={() => setModalVisible(false)}
+                       swipeDirection="left">
+                    <View style={styles.scrollView}>
+                        <LoadingScreen />
+                        <Button title="Hide modal" onPress={toggleModal} />
                     </View>
-                )}
-            />
+                </Modal>
+            </View>
         </>
     );
 };
@@ -81,7 +101,9 @@ export const styles = StyleSheet.create({
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
     scrollView: {
-        flex: 1,
+        width: 100,
+        height: 100,
+        borderRadius: 10,
         backgroundColor: 'pink',
         alignItems: 'center',
         justifyContent: 'center',

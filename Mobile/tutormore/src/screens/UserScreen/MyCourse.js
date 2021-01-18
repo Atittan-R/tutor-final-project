@@ -13,16 +13,16 @@ import {
   Modal
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { QRCode } from "react-native-qrcode-svg";
+import QRCode from "react-native-qrcode-svg";
 import Colors from "../../configs/Colors";
 
 export default function MyCourse({ navigation }) {
   const data = [
-    { id: 1, course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 2, course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month" },
-    { id: 3, course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month" },
-    { id: 4, course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 5, course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
+    { id: 1, name: "Pixels", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
+    { id: 2, name: "Pao", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month" },
+    { id: 3, name: "Yumyum", course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month" },
+    { id: 4, name: "Qbix", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
+    { id: 5, name: "Bankza", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
   ];
   const [modalVisible, setModalVisible] = useState(false);
   return (
@@ -32,7 +32,7 @@ export default function MyCourse({ navigation }) {
       <View style={styles.headerBar}>
         <TouchableOpacity
           style={{ color: Colors.secondary, marginRight: 10 }}
-          onPress={() => navigation.push("Home")}>
+          onPress={() => navigation.pop()}>
           <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
         </TouchableOpacity>
         <Text style={styles.textHeader}>My Course</Text>
@@ -41,45 +41,31 @@ export default function MyCourse({ navigation }) {
       {/* body */}
       <FlatList
         data={data}
-        keyExtractor={(i) => i}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <View style={styles.viewItem}>
-            <Image source={require("../../assets/Appicon.png")} style={styles.image} />
-            <View>
-              <Text style={styles.title}>{item.course}</Text>
-              <Text style={styles.text}>{item.date}</Text>
-              <Text style={styles.text}>{item.time}</Text>
-              <Text style={styles.text}>{item.duration}</Text>
-              <View style={styles.icon}>
-                <TouchableOpacity
-                  onPress={() => navigation.push("CourseDetail")}
-                  style={styles.button}>
-                  <Icon name="reader-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                // onPress={() => setModalVisible(true)}
-                >
-                  <Icon name="qr-code-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
-                {/* <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalVisible}
-                  keyExtractor={item.id}>
+          <TouchableOpacity
+            onPress={() => navigation.push("CourseDetail")}
+            style={styles.button}
+            key={item.id}>
+            <View style={styles.card}>
+              <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
+              <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
+                <Text numberOfLines={1} style={styles.title}>{item.course}</Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Icon name="calendar-today" type="material" color="gray" size={15} />
+                  <Text style={styles.textGray}>{item.time}</Text>
+                  <Icon name="schedule" type="material" color="gray" size={15} />
+                  <Text style={styles.textGray}>{item.date}</Text>
+                </View>
+                <View style={styles.qrcode}>
                   <TouchableOpacity
-                    // style={styles.closeButton}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}>
-                    <Text style={styles.textStyle}>Cancel</Text>
+                    onPress={() => navigation.push("QrCode", { id: item.id, name: item.name })}>
+                    <QRCode value={item.name} size={20} color={Colors.secondary} />
                   </TouchableOpacity>
-                </Modal> */}
+                </View>
               </View>
-
-
             </View>
-          </View>
+          </TouchableOpacity>
         )} />
     </>
   );
@@ -104,53 +90,38 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: Colors.secondary,
-
   },
-  viewItem: {
-    flex: 1,
+  card: {
+    padding: 5,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginHorizontal: 10,
-    marginTop: 10,
-    borderRadius: 5,
-    padding: 10,
+    marginHorizontal: 2,
+    flexWrap: "wrap",
     backgroundColor: Colors.white
   },
-  icon: {
+  qrcode: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   image: {
     width: 100,
     height: 100,
-    marginRight: 10
+    borderRadius: 5
   },
-  text: {
-    color: Colors.secondary
+  textBlack: {
+    color: Colors.secondary,
+    fontSize: 12,
+    marginHorizontal: 5
+  },
+  textGray: {
+    color: "gray",
+    fontSize: 12,
+    marginHorizontal: 5
   },
   title: {
     fontWeight: "bold",
     color: Colors.secondary
   },
-  button: {
-    backgroundColor: Colors.primary,
-    borderRadius: 30,
-    marginRight: 5,
-    paddingHorizontal: 2,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "stretch",
-    marginHorizontal: 20,
-  },
-  modalView: {
-    margin: 0,
-    backgroundColor: Colors.white,
-    borderRadius: 5,
-    padding: 20,
-    elevation: 2,
-  },
+
 });

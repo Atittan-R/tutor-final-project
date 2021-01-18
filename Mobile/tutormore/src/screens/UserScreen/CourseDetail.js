@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
     Button,
     Image,
@@ -9,62 +9,70 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
+    View, ToastAndroid,
 } from "react-native";
-import {Icon} from "react-native-elements";
+import { Icon } from "react-native-elements";
 import Colors from "../../configs/Colors";
 import MapView, {Marker} from "react-native-maps";
-import LoadingScreen from "../../components/Loading";
+import API from "../../services/API";
+import {useGlobalVar} from "../../context/GlobalContex";
 
-export default function CourseDetail({navigation}) {
-    const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
-    const [date, setDateNow] = useState(new Date());
-    const [duration, setDuration] = useState(3);
-    const [price, setPrice] = useState(300);
+export default function CourseDetail({navigation,  route}) {
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
 
+    const {course} = route.params;
+    const currentUser = JSON.parse(state.userData);
     const [region, setRegion] = useState({
-        latitude: 51.5079145,
-        longitude: -0.0899163,
+        latitude: course.lat.valueOf(),
+        longitude: course.long.valueOf(),
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     });
 
     const [draggable, setDraggable] = useState({
-        latitude: 51.5078788,
-        longitude: -0.0877321,
+        latitude: course.lat.valueOf(),
+        longitude: course.long.valueOf(),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
     });
 
     function movementMarker(e) {
         // get coordinate from mapviews
-        const {latitude, longitude} = e.coordinate;
+        const { latitude, longitude } = e.coordinate;
         // update coordinate
         setDraggable({
-            draggable: {latitude, longitude},
+            draggable: { latitude, longitude },
         });
     }
 
     function onClickMap(e) {
-        const {latitude, longitude} = e.coordinate;
+        const { latitude, longitude } = e.coordinate;
         setDraggable({
             latitude: latitude,
             longitude: longitude,
         });
     }
 
-    //course details
-    const details = {
-        course: "Database",
-        date: "Mon Wed Fri",
-        time: "17.0-21.0",
-        duration: "1 month",
-        amount: "21/30",
-    };
-    //tutor profile
-    const profile = {
-        name: "Yami Sukehiro",
-        major: "Information of Technology(ES)",
-        line: "@yami.y",
-    };
+    const [loading, setLoading] = useState(true);
+
+    // console.log(currentUser.id)
+    // console.log(course.id)
+    const enrollData = async () =>{
+        setLoading(true);
+        try {
+            const response = await API.post("/enroll/course",
+                {
+                    userId: currentUser.id,
+                    courseId: course.id,
+                })
+
+            // console.log(response.data.status)
+            ToastAndroid.show("Enroll "+response.data.status, ToastAndroid.LONG);
+        }catch (e) {
+            alert(error.response.data);
+        }
+    }
 
     const alertEnroll = () => {
         Alert.alert(
@@ -76,145 +84,143 @@ export default function CourseDetail({navigation}) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                {text: "OK", onPress: () => navigation.push("MyCourse")},
+                { text: "OK", onPress: () => navigation.navigate("Me", { screen: "MyCourse" }) },
             ],
-            {cancelable: false}
+            { cancelable: false }
         );
     };
-    return  (
+    return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container}>
-                <View style={styles.headerBar}>
-                    <TouchableOpacity
-                        style={{color: Colors.secondary, marginRight: 10}}
-                        onPress={() => navigation.push("Home")}
+            <SafeAreaView style={styles.container} />
+            <View style={styles.headerBar}>
+                <TouchableOpacity
+                    style={{ color: Colors.secondary, marginRight: 10 }}
+                    onPress={() => navigation.push("Home")}
+                >
+                    <Icon
+                        name="arrow-back-outline"
+                        type="ionicon"
+                        color={Colors.secondary}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.textHeader}>Course Name</Text>
+            </View>
+
+            {/* body */}
+            <ScrollView style={{ backgroundColor: Colors.white }}>
+                <View style={styles.barTitle}>
+                    <Text style={{ marginLeft: 20, fontWeight: "bold", color: Colors.secondary }}>
+                        Details
+                        </Text>
+                </View>
+                <View style={styles.viewImage}>
+                    <Image
+                        source={require("../../assets/Appicon.png")}
+                        style={styles.image}
+                    />
+                </View>
+                <View style={styles.view}>
+                    <Icon name="book" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Course</Text>
+                        <Text style={styles.text}>{course.name}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="event" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Date</Text>
+                        <Text style={styles.text}>{course.day}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="schedule" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Time</Text>
+                        <Text style={styles.text}>{course.time_start + " - " + course.time_end}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="timer" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Duraton</Text>
+                        <Text style={styles.text}>{course.duration}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="person" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Amount</Text>
+                        <Text style={styles.text}>{course.amount}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="place" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Place</Text>
+                        <Text style={styles.text}>Suranari, Mueang Nakhon Rat...</Text>
+                    </View>
+                </View>
+                <View style={styles.viewMap}>
+                    <MapView
+                        style={styles.map}
+                        region={draggable}
+                        onRegionChangeComplete={(region) => setRegion(draggable)}
+                        onPress={(e) => onClickMap(e.nativeEvent)}
                     >
-                        <Icon
-                            name="arrow-back-outline"
-                            type="ionicon"
-                            color={Colors.secondary}
-                        />
-                    </TouchableOpacity>
-                    <Text style={styles.textHeader}>Course Name</Text>
+                        {/*<Marker*/}
+                        {/*    // draggable*/}
+                        {/*    coordinate={draggable}*/}
+                        {/*    // onDragStart={true}*/}
+                        {/*    // onDragStart={console.log('onDragStart', arguments)}*/}
+                        {/*onDragEnd={(e) => movementMarker(e.nativeEvent)}*/}
+                        {/*/>*/}
+                    </MapView>
                 </View>
 
-                {/* body */}
-                <ScrollView style={{backgroundColor: Colors.white}}>
-                    <View style={styles.barTitle}>
-                        <Text style={{ marginLeft: 20, fontWeight: "bold", color: Colors.secondary}}>
-                            Details
+                <View style={styles.barTitle}>
+                    <Text
+                        style={{
+                            marginLeft: 20,
+                            fontWeight: "bold",
+                            color: Colors.secondary,
+                        }}
+                    >
+                        Tutor Profile
                         </Text>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="person" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Name</Text>
+                        <Text style={styles.text}>{course.tutors.username}</Text>
                     </View>
-                    <View style={styles.viewImage}>
-                        <Image
-                            source={require("../../assets/Appicon.png")}
-                            style={styles.image}
-                        />
+                </View>
+                <View style={styles.view}>
+                    <Icon name="school" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Major</Text>
+                        <Text style={styles.text}>{course.tutors.major}</Text>
                     </View>
-                    <View style={styles.view}>
-                        <Icon name="book" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Course</Text>
-                            <Text style={styles.text}>{details.course}</Text>
-                        </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon
+                        name="line"
+                        type="fontisto"
+                        color={Colors.secondary}
+                        size={20}
+                    />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Line ID</Text>
+                        <Text style={styles.text}>{course.tutors.phonenumber}</Text>
                     </View>
-                    <View style={styles.view}>
-                        <Icon name="event" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Date</Text>
-                            <Text style={styles.text}>{details.date}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="schedule" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Time</Text>
-                            <Text style={styles.text}>{details.time}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="timer" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Duraton</Text>
-                            <Text style={styles.text}>{details.duration}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="person" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Amount</Text>
-                            <Text style={styles.text}>{details.amount}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="place" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Place</Text>
-                            <Text style={styles.text}>Suranari, Mueang Nakhon Rat...</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.viewMap}>
-                        <MapView
-                            style={styles.map}
-                            region={region}
-                            onRegionChangeComplete={(region) => setRegion(region)}
-                            onPress={(e) => onClickMap(e.nativeEvent)}
-                        >
-                            <Marker
-                                draggable
-                                coordinate={draggable}
-                                // onDragStart={true}
-                                // onDragStart={console.log('onDragStart', arguments)}
-                            onDragEnd={(e) => movementMarker(e.nativeEvent)}
-                            />
-                        </MapView>
-                    </View>
-
-                    <View style={styles.barTitle}>
-                        <Text
-                            style={{
-                                marginLeft: 20,
-                                fontWeight: "bold",
-                                color: Colors.secondary,
-                            }}
-                        >
-                            Tutor Profile
-                        </Text>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="person" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Name</Text>
-                            <Text style={styles.text}>{profile.name}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="school" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Major</Text>
-                            <Text style={styles.text}>{profile.major}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon
-                            name="line"
-                            type="fontisto"
-                            color={Colors.secondary}
-                            size={20}
-                        />
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Line ID</Text>
-                            <Text style={styles.text}>{profile.line}</Text>
-                        </View>
-                    </View>
-
-                    <TouchableOpacity style={styles.button} onPress={alertEnroll}>
-                        <Text style={styles.title}>Enroll</Text>
-                    </TouchableOpacity>
-                </ScrollView>
-            </SafeAreaView>
+                </View>
+                <TouchableOpacity style={styles.button} onPress={alertEnroll}>
+                    <Text style={styles.title}>Enroll</Text>
+                </TouchableOpacity>
+                <View style={{ marginVertical: 10 }} />
+            </ScrollView>
         </>
     );
 }
@@ -223,6 +229,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    },
+    bottom:{
+        paddingBottom: 50,
     },
     headerBar: {
         display: "flex",
