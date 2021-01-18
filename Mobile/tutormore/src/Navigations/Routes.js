@@ -23,7 +23,6 @@ export const renderingCheck = () => {
     if (state.userData === null) {
         return <AuthenticationStack />
     } else if (state.userRole) {
-        console.log("Hello ", state.userRole)
         return role_router[state.userRole]
     } else if (JSON.parse(state.userRoles).length === 1) {
         return role_router[JSON.parse(state.userRoles)];

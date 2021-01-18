@@ -35,8 +35,6 @@ exports.enRoll = async (req, res) => {
             res.status(401).send({ status: "No Success" })
         }
        
-
-
     } catch (err) {
         res.status(500).send({ message: err.message });
     }

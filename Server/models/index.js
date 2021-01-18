@@ -160,11 +160,11 @@ db.request.belongsToMany(db.user, {
 });
 
 // courseenroll
-db.user.belongsToMany(db.course, {
-  through: "course_enroll",
-  foreignKey: "userId",
-  as: "courseEnroll",
-});
+// db.user.belongsToMany(db.course, {
+//   through: "course_enroll",
+//   foreignKey: "userId",
+//   as: "courseEnroll",
+// });
 
 db.course.belongsToMany(db.user, {
   through: "course_enroll",

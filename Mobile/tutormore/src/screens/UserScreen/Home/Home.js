@@ -56,7 +56,6 @@ export default function Home({navigation}) {
     //Data
     async function fetchData() {
         dispatch(actionCreators.loading())
-
         try {
             const response = await API.get(
                 '/course/findAll'
@@ -345,7 +344,7 @@ export default function Home({navigation}) {
                                                     },
                                                 ]}
                                             >
-                                                <Rating imageSize={20} readonly startingValue={item.rate}/>
+                                                <Rating imageSize={20} readonly startingValue={ item.rate.valueOf() }/>
                                             </View>
                                         </View>
                                     </View>

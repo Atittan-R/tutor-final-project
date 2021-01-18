@@ -9,19 +9,20 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
+    View, ToastAndroid,
 } from "react-native";
 import {Icon} from "react-native-elements";
 import Colors from "../../configs/Colors";
 import MapView, {Marker} from "react-native-maps";
-import LoadingScreen from "../../components/Loading";
+import API from "../../services/API";
+import {useGlobalVar} from "../../context/GlobalContex";
 
 export default function CourseDetail({navigation,  route}) {
-    const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
-    const [date, setDateNow] = useState(new Date());
-    const [duration, setDuration] = useState(3);
-    const [price, setPrice] = useState(300);
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+
     const {course} = route.params;
+    const currentUser = JSON.parse(state.userData);
     const [region, setRegion] = useState({
         latitude: course.lat.valueOf(),
         longitude: course.long.valueOf(),
@@ -53,20 +54,25 @@ export default function CourseDetail({navigation,  route}) {
         });
     }
 
-    //course details
-    const details = {
-        course: "Database",
-        date: "Mon Wed Fri",
-        time: "17.0-21.0",
-        duration: "1 month",
-        amount: "21/30",
-    };
-    //tutor profile
-    const profile = {
-        name: "Yami Sukehiro",
-        major: "Information of Technology(ES)",
-        line: "@yami.y",
-    };
+    const [loading, setLoading] = useState(true);
+
+    // console.log(currentUser.id)
+    // console.log(course.id)
+    const enrollData = async () =>{
+        setLoading(true);
+        try {
+            const response = await API.post("/enroll/course",
+                {
+                    userId: currentUser.id,
+                    courseId: course.id,
+                })
+
+            // console.log(response.data.status)
+            ToastAndroid.show("Enroll "+response.data.status, ToastAndroid.LONG);
+        }catch (e) {
+            alert(error.response.data);
+        }
+    }
 
     const alertEnroll = () => {
         Alert.alert(
@@ -78,7 +84,11 @@ export default function CourseDetail({navigation,  route}) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                {text: "OK", onPress: () => navigation.push("MyCourse")},
+                {text: "OK", onPress: () => {
+                    enrollData()
+                    navigation.push("MyCourse")
+                    }
+                },
             ],
             {cancelable: false}
         );
@@ -86,7 +96,7 @@ export default function CourseDetail({navigation,  route}) {
     return  (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.headerBar}>
                     <TouchableOpacity
                         style={{color: Colors.secondary, marginRight: 10}}
@@ -215,8 +225,9 @@ export default function CourseDetail({navigation,  route}) {
                     <TouchableOpacity style={styles.button} onPress={alertEnroll}>
                         <Text style={styles.title}>Enroll</Text>
                     </TouchableOpacity>
+                    <View style={styles.bottom}/>
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         </>
     );
 }
@@ -225,6 +236,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    },
+    bottom:{
+        paddingBottom: 50,
     },
     headerBar: {
         display: "flex",

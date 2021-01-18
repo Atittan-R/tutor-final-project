@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     View
 } from 'react-native'
-import { Icon, SearchBar } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
 import { useGlobalVar } from "../../context/GlobalContex";
@@ -34,14 +34,12 @@ export default function Feed({ navigation }) {
             const join_req = await API.post("join", {
                 userId: userid.id, requestId: resId
             });
-            console.log(join_req.data.status);
+            // console.log(join_req.data.status);
             isjoin.push({ id: resId })
             setisJoin([...isjoin, { id: resId }])
             // console.log(isjoin);
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
 
@@ -50,32 +48,27 @@ export default function Feed({ navigation }) {
             const cancel_join = await API.post("join/cancel", {
                 userId: userid.id, requestId: resId
             });
-            console.log(cancel_join.data);
-            // isjoin.push({id:resId})
+            // console.log(cancel_join.data);
+            isjoin.push({id:resId})
             setisJoin(isjoin.filter(x => x.id !== resId))
-            console.log(isjoin);
+            // console.log(isjoin);
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
     const fetchApi = async () => {
+
         try {
             const fetch_req = await API.get("/request/findAll");
             const fetch_join = await API.post("/user/join", {
                 userId: userid.id,
             });
-            console.log('====================================');
-            console.log((fetch_join));
-            console.log('====================================');
+            // console.log((fetch_join));
             setRequest(fetch_req.data.request)
             setisJoin(fetch_join.data)
 
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
 
@@ -90,8 +83,6 @@ export default function Feed({ navigation }) {
     }, [])
 
     console.log(isjoin);
-
-    const [count, setCount] = useState(0);
 
     // search bar
     const [filterItem, setFilterItem] = useState(null)
