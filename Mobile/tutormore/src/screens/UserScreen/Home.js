@@ -132,6 +132,9 @@ export default function Home({ navigation }) {
             <View style={[styles.topic, styles.row]}>
               <View style={[styles.column, styles.box]} />
               <Text style={[styles.column, styles.textRec]}>Category</Text>
+              <TouchableOpacity onPress={() => navigation.push("RegisterTutor")}>
+                <Text style={[styles.column, styles.textRec]}>Registor</Text>
+              </TouchableOpacity>
             </View>
           </View>
 

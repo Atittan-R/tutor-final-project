@@ -130,6 +130,7 @@ export default function Me({ navigation }) {
                                     <Icon name="navigate-next" type="material" color={Colors.secondary} />
                                 </View>
                             </Pressable>
+                        }
                         {user.roles.length === 2 &&
                             <Pressable
                                 onPress={() => navigation.navigate("Root", { name: "RoleSelect" })}

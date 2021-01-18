@@ -6,9 +6,10 @@ import {
   CourseDetail,
   MyCourse,
   Search,
+  RegisterTutor
 } from "../../../screens/UserScreen";
 import LoadingScreen from "../../../components/Loading";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,13 @@ const HomeStack = () => {
         component={Search}
         options={{
           headerTitle: "Search",
+        }}
+      />
+      <Stack.Screen
+        name="RegisterTutor"
+        component={RegisterTutor}
+        options={{
+          headerTitle: "RegisterTutor",
         }}
       />
     </Stack.Navigator>
