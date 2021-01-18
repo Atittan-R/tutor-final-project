@@ -30,7 +30,7 @@ export default function Me({navigation}) {
     return (
         <>
             <ScrollView style={{backgroundColor: Colors.background}}>
-                <SafeAreaView style={styles.contrainer}>
+                <SafeAreaView style={styles.container}>
                     <View style={styles.coverArea}>
                         <View style={styles.coverArea}>
                             <Image

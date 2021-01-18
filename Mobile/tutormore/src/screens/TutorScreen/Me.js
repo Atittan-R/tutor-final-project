@@ -73,7 +73,7 @@ export default function Me({ navigation, route }) {
 
                     <View style={styles.coverArea}>
                         <Pressable
-                            onPress={() => navigation.navigate("CreateCourse")}
+                            onPress={() => navigation.navigate("Course",{name:'CreateCourse'})}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,

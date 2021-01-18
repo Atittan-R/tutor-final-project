@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Colors from "../../configs/Colors";
 import { Picker } from "@react-native-community/picker";
@@ -7,7 +7,7 @@ export default function Catagory(props) {
   const { selectedValue, onValueChange } = props;
   return (
     <View style={styles.inputItem}>
-      <Text style={{ flex: 0.35, color: Colors.secondary }} >Catagory </Text>
+      <Text style={{ flex: 0.35, color: Colors.secondary }}>Catagory</Text>
       <View style={styles.textDate}>
         <Picker
           selectedValue={selectedValue}
@@ -48,7 +48,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     flex: 0.8,
-    paddingVertical: 13,
     justifyContent: "space-between",
     color: Colors.secondary
   },

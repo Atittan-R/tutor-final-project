@@ -1,4 +1,5 @@
-export { default as Home } from "./Home";
+export { default as Home } from "./Home/Home";
+export { default as test } from "./Home/test";
 export { default as CourseDetail } from "./CourseDetail";
 export { default as MyCourse } from "./MyCourse";
 export { default as CourseEnroll } from "./CourseEnroll";

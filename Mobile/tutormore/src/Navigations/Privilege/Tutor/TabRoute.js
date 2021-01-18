@@ -42,7 +42,7 @@ export default function TapRoute() {
         }}
       />
       <Tabs.Screen
-        name="Create Course"
+        name="Course"
         component={CreateCourseStack}
         options={{
           tabBarIcon: () => (
