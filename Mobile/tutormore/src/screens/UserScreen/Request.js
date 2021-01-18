@@ -81,7 +81,7 @@ export default function Request({ navigation }) {
         console.log("day :", day);
         console.log("Tags :", tags);
     }, [CourseName])
- d
+ 
     return (
         <>
             {/* header */}
