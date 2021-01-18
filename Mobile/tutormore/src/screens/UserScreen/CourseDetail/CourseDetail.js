@@ -12,12 +12,12 @@ import {
     View, ToastAndroid,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import Colors from "../../configs/Colors";
+import Colors from "../../../configs/Colors";
 import MapView, {Marker} from "react-native-maps";
-import API from "../../services/API";
-import {useGlobalVar} from "../../context/GlobalContex";
+import API from "../../../services/API";
+import {useGlobalVar} from "../../../context/GlobalContex";
 
-export default function CourseDetail({navigation,  route}) {
+export default function CourseDetail({navigation, route}) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
 
@@ -116,7 +116,7 @@ export default function CourseDetail({navigation,  route}) {
                 </View>
                 <View style={styles.viewImage}>
                     <Image
-                        source={require("../../assets/Appicon.png")}
+                        source={require("../../../assets/Appicon.png")}
                         style={styles.image}
                     />
                 </View>

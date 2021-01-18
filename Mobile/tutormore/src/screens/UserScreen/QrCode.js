@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import {
-  Button,
   StyleSheet,
   Text,
   View,
-  FlatList,
   SafeAreaView,
-  Image,
   StatusBar,
   TouchableOpacity,
-  Alert,
-  Modal
 } from "react-native";
 import { Icon } from "react-native-elements";
 import QRCode from "react-native-qrcode-svg";

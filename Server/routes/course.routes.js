@@ -16,6 +16,12 @@ module.exports = function (app) {
   );
 
   app.get(
+    "/api/course/categories",
+    // [authJwt.verifyToken],
+    controller.findCourseFromCategories
+  );
+
+  app.get(
     "/api/course/findOne/:id",
     // [authJwt.verifyToken],
     controller.findOneCourse

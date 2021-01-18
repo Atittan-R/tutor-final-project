@@ -44,7 +44,7 @@ export default function MyCourse({ navigation }) {
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.push("CourseDetail")}
+            onPress={() => navigation.navigate("CourseDetail", { course: item })}
             style={styles.button}
             key={item.id}>
             <View style={styles.card}>

@@ -119,7 +119,7 @@ export default function Me({ navigation }) {
             </Pressable>
             <Pressable
               key={"home"}
-              onPress={() => navigation.navigate("Home", { name: "MyCourse" })}
+              onPress={() => navigation.navigate("MyCourse")}
               style={({ pressed }) => [
                 {
                   backgroundColor: pressed ? Colors.primary : Colors.white,

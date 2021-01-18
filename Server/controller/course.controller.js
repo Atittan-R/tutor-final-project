@@ -2,7 +2,7 @@ const db = require("../models");
 const Course = db.course;
 const Tag = db.tag;
 const User = db.user;
-const Categories = db.user;
+const Categories = db.categories;
 
 exports.createCourse = (req, res) => {
   //Save Course Data to Database
@@ -68,17 +68,52 @@ exports.findAllCourse = async (req, res) => {
         "rate",
       ],
       include: [
-        {
-          model: User,
-          as: "tutors",
-        },
         // {
         //   // model: Categories,
         //   // as: "categories",
         //   // attributes: ["name"],
         // },
+        {
+          model: User,
+          as: "tutors",
+        },
       ],
     });
+    await res.status(201).send(result);
+  } catch (err) {
+    await res.status(500).send({ message: err.message });
+  }
+};
+
+exports.findCourseFromCategories = async (req, res) => {
+  const cate = req.body.cate;
+  try {
+    const result = await Course.findAll({
+      attributes: [
+        "id",
+        "name",
+        "day",
+        "time_start",
+        "time_end",
+        "duration",
+        "amount",
+        "lat",
+        "long",
+        "distance",
+        "createdAt",
+        "description",
+        "rate",
+      ],
+      include: [
+        {
+          model: Categories,
+          as: "CourseCate",
+          where: { name: cate },
+          attributes: ["name"],
+        },
+      ],
+    });
+
     await res.status(201).send(result);
   } catch (err) {
     await res.status(500).send({ message: err.message });

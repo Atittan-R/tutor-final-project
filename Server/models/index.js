@@ -55,10 +55,10 @@ db.course.belongsTo(db.user, {
 
 //SECTION Tag and Categories
 //REVIEW Course has Categories (one-to-many)
-db.categories.hasMany(db.course, { as: "courses" });
+db.categories.hasMany(db.course, { as: "CourseCate" });
 db.course.belongsTo(db.categories, {
   foreignKey: "categoryId",
-  as: "categories",
+  as: "CourseCate",
 });
 
 //REVIEW user has many request (one-to-many)

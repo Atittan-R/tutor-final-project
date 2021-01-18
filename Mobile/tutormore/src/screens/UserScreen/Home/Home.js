@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { SwipeablePanel } from "rn-swipeable-panel";
 import Colors from "../../../configs/Colors";
-import { Rating } from "react-native-elements";
+import {Icon, Rating} from "react-native-elements";
 import PanelCategory from "../../../components/swipers/PanelCategory";
 import { actionCreators, initialState, reducer } from "./CourseReducer";
 import API from "../../../services/API";
@@ -125,15 +125,13 @@ export default function Home({ navigation }) {
                                 flex: 1,
                                 alignItems: "center",
                             }}
-                            onPress={() => openPanel()}
-                        >
+                            onPress={() => openPanel()}>
                             <View
                                 style={{
                                     padding: 15,
                                     backgroundColor: Colors.gray,
                                     borderRadius: 20,
-                                }}
-                            >
+                                }}>
                                 <Image
                                     style={{ width: 50, height: 50, resizeMode: "contain" }}
                                     source={require("../../../assets/images/categories/digital.png")}
@@ -150,19 +148,16 @@ export default function Home({ navigation }) {
                                 flex: 1,
                                 alignItems: "center",
                             }}
-                            onPress={() => openPanel()}
-                        >
+                            onPress={() => navigation.navigate("List",{categories: "Medicine"})} >
                             <View
                                 style={{
                                     padding: 15,
                                     backgroundColor: Colors.gray,
                                     borderRadius: 20,
-                                }}
-                            >
+                                }}>
                                 <Image
                                     style={{ width: 50, height: 50, resizeMode: "contain" }}
-                                    source={require("../../../assets/images/categories/doctor.png")}
-                                />
+                                    source={require("../../../assets/images/categories/doctor.png")} />
                             </View>
                             <Text style={{ marginVertical: 2, textAlign: "center" }}>
                                 Doctor
