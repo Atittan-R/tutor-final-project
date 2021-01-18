@@ -32,13 +32,6 @@ const HomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="MyCourse"
-        component={MyCourse}
-        options={{
-          headerTitle: "MyCourse",
-        }}
-      />
-      <Stack.Screen
         name="CourseEnroll"
         component={CourseEnroll}
         options={{

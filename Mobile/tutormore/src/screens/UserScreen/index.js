@@ -9,3 +9,4 @@ export { default as Me } from "./Me";
 export { default as SearchRequest } from "./SearchRequest";
 export { default as RegisterTutor } from "./RegisterTutor";
 export { default as NearMe } from "./NearMe";
+export { default as QrCode } from "./QrCode";

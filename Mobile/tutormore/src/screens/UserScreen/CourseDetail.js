@@ -76,7 +76,7 @@ export default function CourseDetail({ navigation }) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                { text: "OK", onPress: () => navigation.push("MyCourse") },
+                { text: "OK", onPress: () => navigation.navigate("Me", { screen: "MyCourse" }) },
             ],
             { cancelable: false }
         );
