@@ -109,7 +109,7 @@ export default function Home({ navigation }) {
   // search bar
   const [filterItem, setFilterItem] = useState(null)
   const searchAction = (text) => {
-    setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
+    setFilterItem(dataList.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
   }
   return (
     <>
@@ -123,6 +123,10 @@ export default function Home({ navigation }) {
           onChangeText={(text) => searchAction(text)}
           placeholder="Search"
         />
+        <TouchableOpacity
+          onPress={() => navigation.push("Search")}>
+          <Icon name="filter-alt" type="material" color={Colors.secondary} />
+        </TouchableOpacity>
       </View>
       <ScrollView>
         {/*Category*/}

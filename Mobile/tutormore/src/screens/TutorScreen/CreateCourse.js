@@ -37,11 +37,11 @@ export default function CreateCourse({ navigation }) {
                         label={"Course"}
                         placeholder={"Enter your course name"}
                         onChangeText={setCourseName} />
-                    {/* <ModalDate />
+                    <ModalDate />
                     <Clock
                         label={"Time Start"} />
                     <Clock
-                        label={"Time End"} /> */}
+                        label={"Time End"} />
                     <TermCourse />
                     <TextInputButton
                         label={"Amount"}
@@ -51,7 +51,7 @@ export default function CreateCourse({ navigation }) {
                     <Catagory
                         selectedValue={catagory}
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
-                    {/* <Tag /> */}
+                    <Tag />
                     <Location />
                 </View>
             </ScrollView >

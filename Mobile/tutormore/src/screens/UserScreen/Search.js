@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements';
+import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Icon, Rating } from 'react-native-elements';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
 
 export default function Search({ navigation }) {
@@ -11,20 +12,144 @@ export default function Search({ navigation }) {
         setSearch({ search });
     };
 
+    const tag = [
+        {
+            id: "0",
+            name: "Computer ",
+            description: "จะสอนให้น้องๆ นะครับ ทุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน",
+            time: "17.0-21.0",
+            date: "Mon Wed Fri",
+            tutors: "Pixels",
+            rate: 2.2,
+        },
+        {
+            id: "1",
+            name: "Computer Programming",
+            description:
+                "จะสอนให้น้อไม่ดื้อตั้งใจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
+            time: "17.0-21.0",
+            date: "Mon Wed Fri",
+            tutors: "Pixels",
+            rate: 5.0,
+        },
+        {
+            id: "2",
+            name: "Data Structure",
+            description:
+                "จะสอนให้น้องๆ นะครับ ทุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafawefawefawefawefawfeweเลย",
+            time: "17.0-21.0",
+            date: "Mon Wed Fri",
+            tutors: "Pixels",
+            rate: 3.9,
+        },
+        {
+            id: "3",
+            name: "Computer Programming",
+            description:
+                "จะสอนให้น้องๆ นะครับ ุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
+            time: "17.0-21.0",
+            date: "Mon Wed Fri",
+            tutors: "Pixels",
+            rate: 3.9,
+        },
+        {
+            id: "4",
+            name: "Computer Programming",
+            description:
+                "จะสอนให้น้องๆ นะครับ ุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
+            time: "17.0-21.0",
+            date: "Mon Wed Fri",
+            tutors: "Pixels",
+            rate: 0.5,
+        },
+        {
+            id: "5",
+            name: "Computer Programming",
+            description:
+                "จะสอนให้น้องๆ นะครับ ุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
+            time: "17.0-21.0",
+            date: "Mon Wed Fri",
+            tutors: "Pixels",
+            rate: 3.2,
+        },
+    ];
     return (
-        <SafeAreaView style={styles.container}>
+        <>
+            <SafeAreaView style={styles.container} />
             <View style={styles.viewItem}>
                 <TouchableOpacity
-                    onPress={() => navigation.push("Home")}>
+                    onPress={() => navigation.pop()}>
                     <Icon name="arrow-back-outline" type="ionicon" style={{ color: Colors.secondary }} />
                 </TouchableOpacity>
                 <TextInput
                     placeholder="Search"
                     onChangeText={updateSearch}
                     value={search}
-                    style={styles.search} />
+                    style={styles.search}
+                    autoFocus={true}
+                    selectTextOnFocus={true} />
             </View>
-        </SafeAreaView>
+            <ScrollView style={styles.view}>
+                <View style={styles.line} />
+                <View style={[styles.topic, styles.row]}>
+                    <View style={styles.box} />
+                    <Text style={styles.textRec}>Trending Tags</Text>
+                </View>
+                <FlatList
+                    data={tag}
+                    keyExtractor={item => item.id}
+                    horizontal={true}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity>
+                            <View style={styles.card}>
+                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
+                                <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
+                                <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    }
+                />
+
+                <View style={styles.line} />
+                <View style={[styles.topic, styles.row]}>
+                    <View style={styles.box} />
+                    <Text style={styles.textRec}>Course</Text>
+                </View>
+                <FlatList
+                    data={tag}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity>
+                            <View style={
+                                {
+                                    backgroundColor: "#fff",
+                                    padding: 5,
+                                    flexDirection: "row",
+                                    marginHorizontal: 2,
+                                    flexWrap: "wrap"
+                                }}>
+                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={{ width: 70, height: 70, borderRadius: 5 }} />
+                                <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
+                                    <Text style={styles.textTitle}>{item.name}</Text>
+                                    <Text numberOfLines={1} style={{
+                                        color: "gray",
+                                        fontSize: 12,
+                                    }}>{item.description}</Text>
+                                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
+                                        <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                        <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
+                                        <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
+                                        <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time}</Text>
+                                        <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
+                                        <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    }
+                />
+            </ScrollView>
+        </>
     )
 }
 
@@ -40,7 +165,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.gray,
         borderRadius: 30,
         paddingHorizontal: 20,
-
     },
     search: {
         flex: 1,
@@ -63,4 +187,58 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         backgroundColor: Colors.primary
     },
+    view: {
+        backgroundColor: Colors.white
+    },
+    line: {
+        marginVertical: 10,
+        marginHorizontal: 8,
+        paddingVertical: 0.4,
+        backgroundColor: Colors.gray,
+    },
+    row: {
+        flexDirection: "row",
+    },
+    column: {
+        flexDirection: "column",
+    },
+    box: {
+        marginTop: -10,
+        marginLeft: 8,
+        paddingVertical: 1,
+        paddingHorizontal: 2.5,
+        borderRadius: 30,
+        backgroundColor: Colors.primary,
+    },
+    topic: {
+        flex: 1,
+        marginBottom: 10,
+    },
+    textRec: {
+        flex: 1,
+        alignSelf: "center",
+        color: Colors.secondary,
+        paddingLeft: 5,
+        fontSize: 20,
+        fontWeight: "bold",
+    },
+    image: {
+        width: 110,
+        height: 110,
+        borderRadius: 5,
+        justifyContent: "center"
+    },
+    textTitle: {
+        fontWeight: "bold",
+        color: Colors.secondary,
+    },
+    textBody: {
+        color: Colors.secondary,
+        fontSize: 12,
+    },
+    card: {
+        width: 120,
+        padding: 5,
+        marginHorizontal: 2
+    }
 })
