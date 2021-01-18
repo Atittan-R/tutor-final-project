@@ -6,7 +6,8 @@ import {
   CourseDetail,
   MyCourse,
   Search,
-  RegisterTutor
+  RegisterTutor,
+  NearMe
 } from "../../../screens/UserScreen";
 import LoadingScreen from "../../../components/Loading";
 import { useGlobalVar } from "../../../context/GlobalContex";
@@ -56,6 +57,13 @@ const HomeStack = () => {
         component={RegisterTutor}
         options={{
           headerTitle: "RegisterTutor",
+        }}
+      />
+      <Stack.Screen
+        name="NearMe"
+        component={NearMe}
+        options={{
+          headerTitle: "NearMe",
         }}
       />
     </Stack.Navigator>

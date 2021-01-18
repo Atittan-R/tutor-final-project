@@ -16,6 +16,7 @@ import { SwipeablePanel } from "rn-swipeable-panel";
 import Colors from "../../configs/Colors";
 import { Icon, Rating } from "react-native-elements";
 import PanelCategory from "../../components/swipers/PanelCategory";
+import { Picker } from "@react-native-community/picker";
 
 export default function Home({ navigation }) {
   const [panelProps, setPanelProps] = useState({
@@ -111,6 +112,7 @@ export default function Home({ navigation }) {
   const searchAction = (text) => {
     setFilterItem(dataList.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
   }
+  const { pick, setPicker } = useState();
   return (
     <>
       <SafeAreaView style={styles.container} />
@@ -125,8 +127,22 @@ export default function Home({ navigation }) {
         />
         <TouchableOpacity
           onPress={() => navigation.push("Search")}>
-          <Icon name="filter-alt" type="material" color={Colors.secondary} />
+
+          <Icon name="search" type="material" color={Colors.secondary} />
         </TouchableOpacity>
+        {/* <Picker
+          selectedValue={pick}
+          style={{
+            height: 20,
+            width: 200,
+            justifyContent: "space-between",
+            color: Colors.secondary
+          }}
+          onValueChange={(text) => setPicker(text)}>
+          <Picker.Item label="" value={0} />
+          <Picker.Item label="Search" value={1} onPress={() => navigation.push("Search")} />
+          <Picker.Item label="Near Me" value={2} />
+        </Picker> */}
       </View>
       <ScrollView>
         {/*Category*/}
