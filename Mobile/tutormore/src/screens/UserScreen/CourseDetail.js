@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
     Button,
     Image,
@@ -11,12 +11,12 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import {Icon} from "react-native-elements";
+import { Icon } from "react-native-elements";
 import Colors from "../../configs/Colors";
-import MapView, {Marker} from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import LoadingScreen from "../../components/Loading";
 
-export default function CourseDetail({navigation}) {
+export default function CourseDetail({ navigation }) {
     const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
     const [date, setDateNow] = useState(new Date());
     const [duration, setDuration] = useState(3);
@@ -36,15 +36,15 @@ export default function CourseDetail({navigation}) {
 
     function movementMarker(e) {
         // get coordinate from mapviews
-        const {latitude, longitude} = e.coordinate;
+        const { latitude, longitude } = e.coordinate;
         // update coordinate
         setDraggable({
-            draggable: {latitude, longitude},
+            draggable: { latitude, longitude },
         });
     }
 
     function onClickMap(e) {
-        const {latitude, longitude} = e.coordinate;
+        const { latitude, longitude } = e.coordinate;
         setDraggable({
             latitude: latitude,
             longitude: longitude,
@@ -76,145 +76,144 @@ export default function CourseDetail({navigation}) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                {text: "OK", onPress: () => navigation.push("MyCourse")},
+                { text: "OK", onPress: () => navigation.push("MyCourse") },
             ],
-            {cancelable: false}
+            { cancelable: false }
         );
     };
-    return  (
+    return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container}>
-                <View style={styles.headerBar}>
-                    <TouchableOpacity
-                        style={{color: Colors.secondary, marginRight: 10}}
-                        onPress={() => navigation.push("Home")}
-                    >
-                        <Icon
-                            name="arrow-back-outline"
-                            type="ionicon"
-                            color={Colors.secondary}
-                        />
-                    </TouchableOpacity>
-                    <Text style={styles.textHeader}>Course Name</Text>
+            <SafeAreaView style={styles.container} />
+            <View style={styles.headerBar}>
+                <TouchableOpacity
+                    style={{ color: Colors.secondary, marginRight: 10 }}
+                    onPress={() => navigation.push("Home")}
+                >
+                    <Icon
+                        name="arrow-back-outline"
+                        type="ionicon"
+                        color={Colors.secondary}
+                    />
+                </TouchableOpacity>
+                <Text style={styles.textHeader}>Course Name</Text>
+            </View>
+
+            {/* body */}
+            <ScrollView style={{ backgroundColor: Colors.white }}>
+                <View style={styles.barTitle}>
+                    <Text style={{ marginLeft: 20, fontWeight: "bold", color: Colors.secondary }}>
+                        Details
+                        </Text>
+                </View>
+                <View style={styles.viewImage}>
+                    <Image
+                        source={require("../../assets/Appicon.png")}
+                        style={styles.image}
+                    />
+                </View>
+                <View style={styles.view}>
+                    <Icon name="book" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Course</Text>
+                        <Text style={styles.text}>{details.course}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="event" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Date</Text>
+                        <Text style={styles.text}>{details.date}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="schedule" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Time</Text>
+                        <Text style={styles.text}>{details.time}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="timer" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Duraton</Text>
+                        <Text style={styles.text}>{details.duration}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="person" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Amount</Text>
+                        <Text style={styles.text}>{details.amount}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="place" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Place</Text>
+                        <Text style={styles.text}>Suranari, Mueang Nakhon Rat...</Text>
+                    </View>
                 </View>
 
-                {/* body */}
-                <ScrollView style={{backgroundColor: Colors.white}}>
-                    <View style={styles.barTitle}>
-                        <Text style={{ marginLeft: 20, fontWeight: "bold", color: Colors.secondary}}>
-                            Details
-                        </Text>
-                    </View>
-                    <View style={styles.viewImage}>
-                        <Image
-                            source={require("../../assets/Appicon.png")}
-                            style={styles.image}
-                        />
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="book" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Course</Text>
-                            <Text style={styles.text}>{details.course}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="event" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Date</Text>
-                            <Text style={styles.text}>{details.date}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="schedule" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Time</Text>
-                            <Text style={styles.text}>{details.time}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="timer" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Duraton</Text>
-                            <Text style={styles.text}>{details.duration}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="person" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Amount</Text>
-                            <Text style={styles.text}>{details.amount}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="place" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Place</Text>
-                            <Text style={styles.text}>Suranari, Mueang Nakhon Rat...</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.viewMap}>
-                        <MapView
-                            style={styles.map}
-                            region={region}
-                            onRegionChangeComplete={(region) => setRegion(region)}
-                            onPress={(e) => onClickMap(e.nativeEvent)}
-                        >
-                            <Marker
-                                draggable
-                                coordinate={draggable}
-                                // onDragStart={true}
-                                // onDragStart={console.log('onDragStart', arguments)}
+                <View style={styles.viewMap}>
+                    <MapView
+                        style={styles.map}
+                        region={region}
+                        onRegionChangeComplete={(region) => setRegion(region)}
+                        onPress={(e) => onClickMap(e.nativeEvent)}
+                    >
+                        <Marker
+                            draggable
+                            coordinate={draggable}
+                            // onDragStart={true}
+                            // onDragStart={console.log('onDragStart', arguments)}
                             onDragEnd={(e) => movementMarker(e.nativeEvent)}
-                            />
-                        </MapView>
-                    </View>
-
-                    <View style={styles.barTitle}>
-                        <Text
-                            style={{
-                                marginLeft: 20,
-                                fontWeight: "bold",
-                                color: Colors.secondary,
-                            }}
-                        >
-                            Tutor Profile
-                        </Text>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="person" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Name</Text>
-                            <Text style={styles.text}>{profile.name}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon name="school" type="material" color={Colors.secondary}/>
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Major</Text>
-                            <Text style={styles.text}>{profile.major}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.view}>
-                        <Icon
-                            name="line"
-                            type="fontisto"
-                            color={Colors.secondary}
-                            size={20}
                         />
-                        <View style={styles.viewItem}>
-                            <Text style={styles.title}>Line ID</Text>
-                            <Text style={styles.text}>{profile.line}</Text>
-                        </View>
-                    </View>
+                    </MapView>
+                </View>
 
-                    <TouchableOpacity style={styles.button} onPress={alertEnroll}>
-                        <Text style={styles.title}>Enroll</Text>
-                    </TouchableOpacity>
-                </ScrollView>
-            </SafeAreaView>
+                <View style={styles.barTitle}>
+                    <Text
+                        style={{
+                            marginLeft: 20,
+                            fontWeight: "bold",
+                            color: Colors.secondary,
+                        }}
+                    >
+                        Tutor Profile
+                        </Text>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="person" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Name</Text>
+                        <Text style={styles.text}>{profile.name}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="school" type="material" color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Major</Text>
+                        <Text style={styles.text}>{profile.major}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon
+                        name="line"
+                        type="fontisto"
+                        color={Colors.secondary}
+                        size={20}
+                    />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Line ID</Text>
+                        <Text style={styles.text}>{profile.line}</Text>
+                    </View>
+                </View>
+                <TouchableOpacity style={styles.button} onPress={alertEnroll}>
+                    <Text style={styles.title}>Enroll</Text>
+                </TouchableOpacity>
+                <View style={{ marginVertical: 10 }} />
+            </ScrollView>
         </>
     );
 }

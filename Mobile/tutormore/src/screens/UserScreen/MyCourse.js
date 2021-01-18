@@ -18,11 +18,11 @@ import Colors from "../../configs/Colors";
 
 export default function MyCourse({ navigation }) {
   const data = [
-    { id: 1, course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 2, course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month" },
-    { id: 3, course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month" },
-    { id: 4, course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 5, course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
+    { id: 1, name: "Pixels", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
+    { id: 2, name: "Pao", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month" },
+    { id: 3, name: "Yumyum", course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month" },
+    { id: 4, name: "Qbix", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
+    { id: 5, name: "Bankza", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
   ];
   const [modalVisible, setModalVisible] = useState(false);
   return (
@@ -32,7 +32,7 @@ export default function MyCourse({ navigation }) {
       <View style={styles.headerBar}>
         <TouchableOpacity
           style={{ color: Colors.secondary, marginRight: 10 }}
-          onPress={() => navigation.push("Home")}>
+          onPress={() => navigation.pop()}>
           <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
         </TouchableOpacity>
         <Text style={styles.textHeader}>My Course</Text>
@@ -62,22 +62,7 @@ export default function MyCourse({ navigation }) {
                 >
                   <Icon name="qr-code-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
-                {/* <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalVisible}
-                  keyExtractor={item.id}>
-                  <TouchableOpacity
-                    // style={styles.closeButton}
-                    onPress={() => {
-                      setModalVisible(!modalVisible);
-                    }}>
-                    <Text style={styles.textStyle}>Cancel</Text>
-                  </TouchableOpacity>
-                </Modal> */}
               </View>
-
-
             </View>
           </View>
         )} />
