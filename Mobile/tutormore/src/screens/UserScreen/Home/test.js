@@ -26,11 +26,12 @@ const MyComponent = () => {
                 const response = await API.get(
                     '/course/findAll'
                 )
-                const course = await response.json()
+                const course = await response.data
                 console.log("course:",course)
-                dispatch(actionCreators.success(course))
+                // dispatch(actionCreators.success(course))
             } catch (e) {
-                dispatch(actionCreators.failure())
+                // dispatch(actionCreators.failure())
+                console.log(e)
             }
         }
         fetchCourse()
@@ -61,12 +62,12 @@ const MyComponent = () => {
                 style={styles.container}
                 keyExtractor={(course) => course.id}
                 data={course}
-                renderItem={({ item: { id, title, body }, index }) => (
+                renderItem={({ item: { id, name, amount }, index }) => (
                     <View key={id} style={styles.post}>
                         <Text style={styles.title}>
-                            {index}. {title}
+                            {index}. {name}
                         </Text>
-                        <Text style={styles.body}>{body}</Text>
+                        <Text style={styles.body}>{amount}</Text>
                     </View>
                 )}
             />

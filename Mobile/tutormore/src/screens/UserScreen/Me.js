@@ -24,7 +24,10 @@ export default function Me({ navigation }) {
         )
     }
 
-    const user = JSON.parse(state.userData);
+    let user = JSON.parse(state.userData);
+    if(user === null){
+        user = "-";
+    }
     // console.log(state.userData)
     // setProfile(JSON.parse(state.userData))
     return (
@@ -114,7 +117,6 @@ export default function Me({ navigation }) {
                                 <Icon name="navigate-next" type="material" color={Colors.secondary} />
                             </View>
                         </Pressable>
-                        {user.roles.length === 2 &&
                             <Pressable
                                 onPress={() => navigation.navigate("RoleSelect")}
                                 style={({ pressed }) => [
@@ -130,7 +132,7 @@ export default function Me({ navigation }) {
                                     <Icon name="navigate-next" type="material" color={Colors.secondary} />
                                 </View>
                             </Pressable>
-                        {user.roles.length === 2 &&
+                        { user.roles.length === 2 &&
                             <Pressable
                                 onPress={() => navigation.navigate("Root", { name: "RoleSelect" })}
                                 style={({ pressed }) => [
