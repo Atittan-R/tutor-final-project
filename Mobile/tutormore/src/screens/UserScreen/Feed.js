@@ -29,10 +29,10 @@ export default function Feed({ navigation }) {
 
     const userid = JSON.parse(state.userData);
     console.log("user_id", userid.id)
-    const join = async (resId, userId) => {
+    const join = async (resId) => {
         try {
             const join_req = await API.post("join", {
-                userId: userId, requestId: resId
+                userId: userid.id, requestId: resId
             });
             console.log(join_req.data.status);
             isjoin.push({ id: resId })
@@ -45,10 +45,10 @@ export default function Feed({ navigation }) {
         }
     }
 
-    const cancel = async (resId, userId) => {
+    const cancel = async (resId) => {
         try {
             const cancel_join = await API.post("join/cancel", {
-                userId: userId, requestId: resId
+                userId: userid.id, requestId: resId
             });
             console.log(cancel_join.data);
             // isjoin.push({id:resId})
@@ -161,11 +161,11 @@ export default function Feed({ navigation }) {
                                 {
                                     isjoin.map((i) => i.id).includes(item.id) ?
                                         <TouchableOpacity style={styles.button_cancel}
-                                                          onPress={() => cancel(item.id, 2)}>
+                                                          onPress={() => cancel(item.id)}>
                                             <Text style={styles.text}>cancel</Text>
                                         </TouchableOpacity>
                                         : <TouchableOpacity style={styles.button} onPress={() =>
-                                            join(item.id, userid.id)
+                                            join(item.id)
                                             // setCount((cnt) => cnt + 1)
                                         }>
                                             <Text style={styles.text}>Join</Text>

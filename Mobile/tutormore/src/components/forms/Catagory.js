@@ -48,7 +48,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     flex: 0.8,
-    paddingVertical: 13,
     justifyContent: "space-between",
     color: Colors.secondary
   },

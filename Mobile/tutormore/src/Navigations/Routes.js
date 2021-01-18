@@ -16,20 +16,24 @@ export const renderingCheck = () => {
     const [state, dispatch] = authentication;
 
     //after select role from <RoleSelection/>
-    console.log("state.userRoles: ", state.userRoles)
-    console.log("state.userRole: ", state.userRole)
-    console.log("state.userData: ", state.userData, "\n");
+    // console.log("state.userRoles: ", state.userRoles)
+    // console.log("state.userRole: ", state.userRole)
+    // console.log("state.userData: ", state.userData, "\n");
 
-    if (state.userData === null) {
-        return <AuthenticationStack />
-    } else if (state.userRole) {
-        console.log("Hello ", state.userRole)
-        return role_router[state.userRole]
-    } else if (JSON.parse(state.userRoles).length === 1) {
-        return role_router[JSON.parse(state.userRoles)];
-    } else if (JSON.parse(state.userRoles).length === 2) {
-        return <RoleSelection />
-    }
+    // if (state.userData === null) {
+    //     return <AuthenticationStack />
+    // } else if (state.userRole) {
+    //     console.log("Hello ", state.userRole)
+    //     return role_router[state.userRole]
+    // } else if (JSON.parse(state.userRoles).length === 1) {
+    //     return role_router[JSON.parse(state.userRoles)];
+    // } else if (JSON.parse(state.userRoles).length === 2) {
+    //     return <RoleSelection />
+    // }
+    return (state.userRole == null ?
+        <RoleSelection /> :
+        role_router[state.userRole])
+
 };
 
 const RootStack = createStackNavigator();

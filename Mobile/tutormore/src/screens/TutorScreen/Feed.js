@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     FlatList,
     Image,
@@ -6,31 +6,83 @@ import {
     StatusBar,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View
 } from 'react-native'
 import { Icon } from 'react-native-elements';
+import { useGlobalVar } from "../../context/GlobalContex";
 import Colors from '../../configs/Colors';
-
+import API from "../../services/API"
 export default function Feed({ navigation }) {
-    const data = [
-        { id: 1, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 2, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 3, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 4, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 5, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 6, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 7, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 8, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 9, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 10, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 11, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 12, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 13, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 14, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 15, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-    ];
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+    const userid = JSON.parse(state.userData);
+    // console.log("user_id", userid.id)
+    const [request, setRequest] = useState([]);
+    // const data = [
+    //     { id: 1, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 2, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
+    //     { id: 3, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
+    //     { id: 4, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 5, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 6, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 7, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
+    //     { id: 8, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
+    //     { id: 9, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 10, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 11, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 12, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
+    //     { id: 13, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
+    //     { id: 14, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
+    //     { id: 15, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
+    // ];
+    const taked = async (requestId) =>{
+        try {
+           
+            // const teke_res = await API.post("/taked", {
+            //     tutorId: 2,requestId:requestId
+            // });
+            // console.log('====================================');
+            // console.log((teke_res));
+            // console.log('====================================');
+            setRequest(request.filter((i)=>i.id!==requestId))
+            console.log(request);
+            // navigation.navigate("CreateCourse")
 
+        } catch (error) {
+            console.log('====================================');
+            console.log(error);
+            console.log('====================================');
+        }
+    }
+    const fetchApi = async () => {
+        try {
+            const fetch_req = await API.get("/request/findAll");
+            // const fetch_join = await API.post("/user/join", {
+            //     userId: userid.id,
+            // // });
+            // console.log('====================================');
+            // console.log((fetch_join));
+            // console.log('====================================');
+            setRequest(fetch_req.data.request.filter((i)=>i.status=="Available"))
+            // setisJoin(fetch_join.data)
+
+        } catch (error) {
+            console.log('====================================');
+            console.log(error);
+            console.log('====================================');
+            error
+        }
+    }
+
+    const [filterItem, setFilterItem] = useState(null)
+    const searchAction = (text) => {
+        setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
+    }
+    useEffect(() => {
+        fetchApi();
+    }, [])
     return (
         <>
             {/* header */}
@@ -42,27 +94,23 @@ export default function Feed({ navigation }) {
                     <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Feed Request</Text>
-                <TouchableOpacity
+              
+                        <TextInput
                     style={styles.search}
-                    onPress={() => navigation.push("SearchRequest")}
-                >
-                    <Text style={{ color: Colors.secondary }}>search</Text>
-                    <Icon
-                        name="search-outline"
-                        type="ionicon"
-                        style={{ color: Colors.secondary }}
-                    />
-                </TouchableOpacity>
+                    placeholder="Search"
+                    onChangeText={(text) => searchAction(text)}
+                />
+                 
             </View>
 
             <FlatList
-                data={data}
+                data={filterItem ? filterItem : request}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) =>
                     <View style={styles.cardView}>
                         <View style={styles.viewItem}>
                             <Image source={require("../../assets/profile.jpg")} style={styles.image} />
-                            <Text style={styles.title}>{item.name}</Text>
+                            <Text style={styles.title}>{item.user.username}</Text>
                         </View>
                         <View
                             style={{
@@ -77,7 +125,7 @@ export default function Feed({ navigation }) {
                             <View>
                                 <View style={styles.viewItem}>
                                     <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
-                                    <Text style={styles.title}>{item.course}</Text>
+                                    <Text style={styles.title}>{item.name}</Text>
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Icon name="event" type="material" color={Colors.secondary} style={styles.icon} />
@@ -85,11 +133,11 @@ export default function Feed({ navigation }) {
                                 </View>
                                 <View style={styles.viewItem}>
                                     <Icon name="schedule" type="material" color={Colors.secondary} style={styles.icon} />
-                                    <Text style={styles.text}>{item.time}</Text>
+                                    <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
                                 </View>
                             </View>
                             <TouchableOpacity style={styles.button}
-                                onPress={() => navigation.navigate("CreateCourse")}
+                                onPress={() => taked(item.id)}
                             >
                                 <Text style={styles.text}>Take</Text>
                             </TouchableOpacity>
