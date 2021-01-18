@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from "react-native";
 import Colors from "../../configs/Colors";
 import { Picker } from "@react-native-community/picker";
 
-export default function TermCourse() {
-  const [selectedValue, setSelectedValue] = useState("");
+export default function TermCourse(props) {
+  const [selectedValue, setSelectedValue] = props.value
   return (
     <View style={styles.inputItem}>
       <Text style={{ flex: 0.35, color: Colors.secondary }} >Duration </Text>

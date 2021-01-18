@@ -93,11 +93,13 @@ db.request.belongsToMany(db.tag, {
   through: "tag_request",
   foreignKey: "requestId",
   otherKey: "tagId",
+  as: "tag",
 });
 db.tag.belongsToMany(db.request, {
   through: "tag_request",
   foreignKey: "tagId",
   otherKey: "requestId",
+  as: "requests",
 });
 
 //REVIEW Request has Categories (one-to-many)

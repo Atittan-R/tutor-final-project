@@ -13,7 +13,6 @@ exports.createCourse = (req, res) => {
     time_end: req.body.time_end,
     duration: req.body.duration,
     description: req.body.description,
-    price: req.body.price,
     amount: req.body.amount,
     lat: req.body.lat,
     long: req.body.long,
@@ -23,22 +22,23 @@ exports.createCourse = (req, res) => {
     .then((course) => {
       if (req.body.tagname) {
         for (i = 0; i < req.body.tagname.length; i++) {
-          Tag.create({
-            name: req.body.tagname[i],
-            courseId: course.id,
-            categoryId: course.categoryId,
-          }).then((tag) => {
-            //Set Join table tag_course
-            course.setTags(tag).then(() => {
-              //Display Response
-              res.status(201).send({
-                course: course,
-                message: "Course was registered successfully!",
-              });
-            });
+        Tag.create({
+          name: req.body.tagname[i],
+          courseId: course.id,
+          categoryId: course.categoryId,
+        }).then((tag) => {
+          //Set Join table tag_course
+          course.setTags(tag).then(() => {
+            //Display Response
+           
           });
-        }
-      } else {
+        });
+      }
+      res.status(201).send({
+        course: course,
+        message: "Course was registered successfully!",
+      });
+    } else {
         res.status(404).send({
           message: "Not found Tagname !!!",
         });
@@ -189,3 +189,4 @@ exports.deleteCourse = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+

@@ -20,53 +20,18 @@ export default function Feed({ navigation }) {
     const userid = JSON.parse(state.userData);
     // console.log("user_id", userid.id)
     const [request, setRequest] = useState([]);
-    // const data = [
-    //     { id: 1, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 2, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-    //     { id: 3, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-    //     { id: 4, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 5, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 6, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 7, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-    //     { id: 8, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-    //     { id: 9, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 10, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 11, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 12, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-    //     { id: 13, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-    //     { id: 14, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-    //     { id: 15, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-    // ];
     const taked = async (requestId) =>{
-        try {
-           
-            // const teke_res = await API.post("/taked", {
-            //     tutorId: 2,requestId:requestId
-            // });
-            // console.log('====================================');
-            // console.log((teke_res));
-            // console.log('====================================');
-            setRequest(request.filter((i)=>i.id!==requestId))
-            console.log(request);
-            // navigation.navigate("CreateCourse")
-
-        } catch (error) {
-            console.log('====================================');
-            console.log(error);
-            console.log('====================================');
-        }
+     
+            navigation.navigate("Feed Request",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}} )
+      
     }
     const fetchApi = async () => {
         try {
             const fetch_req = await API.get("/request/findAll");
-            // const fetch_join = await API.post("/user/join", {
-            //     userId: userid.id,
-            // // });
-            // console.log('====================================');
-            // console.log((fetch_join));
-            // console.log('====================================');
+        
+            // console.log(fetch_req);
             setRequest(fetch_req.data.request.filter((i)=>i.status=="Available"))
-            // setisJoin(fetch_join.data)
+          
 
         } catch (error) {
             console.log('====================================');
@@ -83,6 +48,7 @@ export default function Feed({ navigation }) {
     useEffect(() => {
         fetchApi();
     }, [])
+    // console.log(request);
     return (
         <>
             {/* header */}

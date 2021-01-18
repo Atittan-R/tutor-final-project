@@ -6,11 +6,17 @@ import Colors from "../../configs/Colors";
 export default function Tag(props) {
   const { onChangeTags,value } = props;
   const [claerTag,setClaerTag] =props.claerTag
-  const [tags, setTags]=value
+  const [mytags, setTags]=value
+
 //  console.log('=================claerTag===================');
 //  console.log(claerTag);
-//  console.log(tags);
+//  console.log((Object.values(mytags)));
 //  console.log('====================================');
+// useEffect(() => {
+//  setTags(tags)
+  
+
+// })
   return (
     <View style={styles.inputItem}>
       
@@ -21,16 +27,13 @@ export default function Tag(props) {
           textInputProps={{
             placeholder: "Enter your tags"
           }}
-          initialTags={tags}
-          onChangeTags={onChangeTags}
+          initialTags={[]}
+          onChangeTags={tags =>setTags(tags)}
           containerStyle={{ justifyContent: "center" }}
           inputStyle={{ backgroundColor: "white" }}
-          renderTag={({ tag, index, onPress,deleteTagOnPress, readonly }) => (
-            <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
-              <Text style={styles.text}>{tag}</Text>
-            </TouchableOpacity>
-          )}
+          
         />
+        
       </View>
     </View>
   );

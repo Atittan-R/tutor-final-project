@@ -4,7 +4,7 @@ const { user } = require("../models");
 const Request = db.request;
 const Tag = db.tag;
 const User = db.user;
-
+const Categorie=db.categories
 exports.createRequest = (req, res) => {
   //Save Request Data to Database
   Request.create({
@@ -58,7 +58,35 @@ exports.findAllRequest = (req, res) => {
         //     attributes: ["name"],
         // },
       },
+      {
+        model: Categorie,
+
+        as: "categories",
+        attributes: ["id","name"],
+        // through: {
+        //     attributes: ["name"],
+        // },
+      },
+      {
+        model: Tag,
+        as: "tag",
+        attributes: ["name"],
+          through: {
+            attributes: [],
+        },
+      },
     ],
+    // include: [
+    //   {
+    //     model: Categorie,
+
+    //     as: "categories",
+    //     attributes: ["name"],
+    //     // through: {
+    //     //     attributes: ["name"],
+    //     // },
+    //   },
+    // ],
   })
     .then((request) => {
       res.status(202).send({ request });
@@ -134,4 +162,24 @@ exports.deleteRequest = (req, res) => {
     .catch((err) => {
       res.status(500).send({ message: err.message });
     });
+
+  
+
 };
+
+exports.RequestTag =async (req, res) => {
+  const requestId=req.body.requestId
+   tag=await Request.findByPk(requestId,{
+    include: [
+      {
+        model: Tag,
+        as: "tag",
+        attributes: ["name"],
+        through: {
+            attributes: [],
+        },
+      },
+    ],
+   })
+   res.send(tag)
+}
