@@ -37,7 +37,7 @@ export default function Feed({ navigation }) {
             console.log(join_req.data.status);
             isjoin.push({ id: resId })
             setisJoin([...isjoin, { id: resId }])
-            console.log(isjoin);
+            // console.log(isjoin);
         } catch (error) {
             console.log('====================================');
             console.log(error);
@@ -76,7 +76,6 @@ export default function Feed({ navigation }) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
-            error
         }
     }
 

@@ -47,10 +47,10 @@ db.user.belongsToMany(db.role, {
 db.ROLES = ["user", "admin", "tutor"];
 
 //NOTE User own Course (one-to-many)
-db.user.hasMany(db.course, { foreignKey: "tutorId", as: "courses" });
+db.user.hasMany(db.course, { as: "tutors" });
 db.course.belongsTo(db.user, {
   foreignKey: "tutorId",
-  as: "user",
+  as: "tutors",
 });
 
 //SECTION Tag and Categories
@@ -159,28 +159,30 @@ db.request.belongsToMany(db.user, {
   as: "join_users",
 });
 
-// courseenroll 
+// courseenroll
 db.user.belongsToMany(db.course, {
   through: "course_enroll",
   foreignKey: "userId",
-  as: "courseEnroll", })
+  as: "courseEnroll",
+});
 
 db.course.belongsToMany(db.user, {
   through: "course_enroll",
   foreignKey: "courseId",
   as: "courseEnroll",
-})
+});
 
-// attendance 
+// attendance
 db.user.belongsToMany(db.course, {
   through: "attendance",
   foreignKey: "userId",
-  as: "attenDance", })
+  as: "attenDance",
+});
 
 db.course.belongsToMany(db.user, {
   through: "attendance",
   foreignKey: "courseId",
   as: "attenDance",
-})
+});
 
 module.exports = db;

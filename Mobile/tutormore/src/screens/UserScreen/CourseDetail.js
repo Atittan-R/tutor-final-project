@@ -16,22 +16,24 @@ import Colors from "../../configs/Colors";
 import MapView, {Marker} from "react-native-maps";
 import LoadingScreen from "../../components/Loading";
 
-export default function CourseDetail({navigation}) {
+export default function CourseDetail({navigation,  route}) {
     const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
     const [date, setDateNow] = useState(new Date());
     const [duration, setDuration] = useState(3);
     const [price, setPrice] = useState(300);
-
+    const {course} = route.params;
     const [region, setRegion] = useState({
-        latitude: 51.5079145,
-        longitude: -0.0899163,
+        latitude: course.lat.valueOf(),
+        longitude: course.long.valueOf(),
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     });
 
     const [draggable, setDraggable] = useState({
-        latitude: 51.5078788,
-        longitude: -0.0877321,
+        latitude: course.lat.valueOf(),
+        longitude: course.long.valueOf(),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
     });
 
     function movementMarker(e) {
@@ -116,35 +118,35 @@ export default function CourseDetail({navigation}) {
                         <Icon name="book" type="material" color={Colors.secondary}/>
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Course</Text>
-                            <Text style={styles.text}>{details.course}</Text>
+                            <Text style={styles.text}>{course.name}</Text>
                         </View>
                     </View>
                     <View style={styles.view}>
                         <Icon name="event" type="material" color={Colors.secondary}/>
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Date</Text>
-                            <Text style={styles.text}>{details.date}</Text>
+                            <Text style={styles.text}>{course.day}</Text>
                         </View>
                     </View>
                     <View style={styles.view}>
                         <Icon name="schedule" type="material" color={Colors.secondary}/>
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Time</Text>
-                            <Text style={styles.text}>{details.time}</Text>
+                            <Text style={styles.text}>{course.time_start+" - "+course.time_end}</Text>
                         </View>
                     </View>
                     <View style={styles.view}>
                         <Icon name="timer" type="material" color={Colors.secondary}/>
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Duraton</Text>
-                            <Text style={styles.text}>{details.duration}</Text>
+                            <Text style={styles.text}>{course.duration}</Text>
                         </View>
                     </View>
                     <View style={styles.view}>
                         <Icon name="person" type="material" color={Colors.secondary}/>
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Amount</Text>
-                            <Text style={styles.text}>{details.amount}</Text>
+                            <Text style={styles.text}>{course.amount}</Text>
                         </View>
                     </View>
                     <View style={styles.view}>
@@ -158,17 +160,17 @@ export default function CourseDetail({navigation}) {
                     <View style={styles.viewMap}>
                         <MapView
                             style={styles.map}
-                            region={region}
-                            onRegionChangeComplete={(region) => setRegion(region)}
+                            region={draggable}
+                            onRegionChangeComplete={(region) => setRegion(draggable)}
                             onPress={(e) => onClickMap(e.nativeEvent)}
                         >
-                            <Marker
-                                draggable
-                                coordinate={draggable}
-                                // onDragStart={true}
-                                // onDragStart={console.log('onDragStart', arguments)}
-                            onDragEnd={(e) => movementMarker(e.nativeEvent)}
-                            />
+                            {/*<Marker*/}
+                            {/*    // draggable*/}
+                            {/*    coordinate={draggable}*/}
+                            {/*    // onDragStart={true}*/}
+                            {/*    // onDragStart={console.log('onDragStart', arguments)}*/}
+                            {/*onDragEnd={(e) => movementMarker(e.nativeEvent)}*/}
+                            {/*/>*/}
                         </MapView>
                     </View>
 
@@ -187,14 +189,14 @@ export default function CourseDetail({navigation}) {
                         <Icon name="person" type="material" color={Colors.secondary}/>
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Name</Text>
-                            <Text style={styles.text}>{profile.name}</Text>
+                            <Text style={styles.text}>{course.tutors.username}</Text>
                         </View>
                     </View>
                     <View style={styles.view}>
                         <Icon name="school" type="material" color={Colors.secondary}/>
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Major</Text>
-                            <Text style={styles.text}>{profile.major}</Text>
+                            <Text style={styles.text}>{course.tutors.major}</Text>
                         </View>
                     </View>
                     <View style={styles.view}>
@@ -206,7 +208,7 @@ export default function CourseDetail({navigation}) {
                         />
                         <View style={styles.viewItem}>
                             <Text style={styles.title}>Line ID</Text>
-                            <Text style={styles.text}>{profile.line}</Text>
+                            <Text style={styles.text}>{course.tutors.phonenumber}</Text>
                         </View>
                     </View>
 

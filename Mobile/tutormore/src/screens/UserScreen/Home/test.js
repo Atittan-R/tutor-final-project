@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import {ActivityIndicator, FlatList, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
-import { actionCreators, initialState, reducer } from './courses'
+import { actionCreators, initialState, reducer } from './CourseReducer'
 import API from "../../../services/API";
 
 const wait = timeout => {
@@ -15,26 +15,26 @@ const MyComponent = () => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        wait(2000).then(() => setRefreshing(false));
+        fetchData().then(() => setRefreshing(false));
     }, []);
 
-    useEffect(() => {
-        async function fetchCourse() {
-            dispatch(actionCreators.loading())
-
-            try {
-                const response = await API.get(
-                    '/course/findAll'
-                )
-                const course = await response.data
-                console.log("course:",course)
-                // dispatch(actionCreators.success(course))
-            } catch (e) {
-                // dispatch(actionCreators.failure())
-                console.log(e)
-            }
+    async function fetchData() {
+        dispatch(actionCreators.loading())
+        try {
+            const response = await API.get(
+                '/course/findAll'
+            )
+            const course = await response.data.course
+            console.log("course:",course)
+            dispatch(actionCreators.success(course))
+        } catch (e) {
+            dispatch(actionCreators.failure())
+            console.log(e)
         }
-        fetchCourse()
+    }
+
+    useEffect(() => {
+        fetchData()
     }, [])
 
     const { course, loading, error } = state
