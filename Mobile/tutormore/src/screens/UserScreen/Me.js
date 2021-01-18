@@ -24,13 +24,16 @@ export default function Me({ navigation }) {
         )
     }
 
-    const user = JSON.parse(state.userData);
+    let user = JSON.parse(state.userData);
+    if (user === null) {
+        user = "-";
+    }
     // console.log(state.userData)
     // setProfile(JSON.parse(state.userData))
     return (
         <>
             <ScrollView style={{ backgroundColor: Colors.background }}>
-                <SafeAreaView style={styles.contrainer}>
+                <SafeAreaView>
                     <View style={styles.coverArea}>
                         <View style={styles.coverArea}>
                             <Image
@@ -117,23 +120,6 @@ export default function Me({ navigation }) {
                         {user.roles.length === 2 &&
                             <Pressable
                                 onPress={() => navigation.navigate("RoleSelect")}
-                                style={({ pressed }) => [
-                                    {
-                                        backgroundColor: pressed ? Colors.primary : Colors.white,
-                                    },
-                                    styles.wrapperCustom,
-                                ]}
-                            >
-                                <View style={styles.viewItem}>
-                                    <Icon name="edit" type="material" color={Colors.secondary} />
-                                    <Text style={styles.textNormal}>Edit Profile</Text>
-                                    <Icon name="navigate-next" type="material" color={Colors.secondary} />
-                                </View>
-                            </Pressable>
-                        }
-                        {user.roles.length === 2 &&
-                            <Pressable
-                                onPress={() => navigation.navigate("Root", { name: "RoleSelect" })}
                                 style={({ pressed }) => [
                                     {
                                         backgroundColor: pressed ? Colors.primary : Colors.white,

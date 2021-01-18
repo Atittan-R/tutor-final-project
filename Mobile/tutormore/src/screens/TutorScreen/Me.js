@@ -36,7 +36,7 @@ export default function Me({ navigation, route }) {
     return (
         <>
             <ScrollView style={{ backgroundColor: Colors.background }}>
-                <SafeAreaView style={styles.contrainer}>
+                <SafeAreaView>
                     {Profile.map((i) => {
                         return (
                             <View style={styles.coverArea}>
@@ -73,7 +73,7 @@ export default function Me({ navigation, route }) {
 
                     <View style={styles.coverArea}>
                         <Pressable
-                            onPress={() => navigation.navigate("CreateCourse")}
+                            onPress={() => navigation.navigate("Course",{screen:'CreateCourse'})}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
@@ -89,7 +89,7 @@ export default function Me({ navigation, route }) {
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => navigation.navigate("TeachingList")}
+                            onPress={() => navigation.navigate("Course",{screen:"TeachingList"})}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
@@ -136,7 +136,6 @@ export default function Me({ navigation, route }) {
                         </Pressable>
                         <Pressable
                             onPress={() => { setModalVisible(true) }}
-
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,

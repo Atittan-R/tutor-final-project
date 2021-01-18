@@ -19,6 +19,23 @@ export default function CreateCourse({ navigation }) {
     const [amount, setAmount] = useState("");
     const [catagory, setCatagory] = useState("");
 
+    //TODO
+    const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
+    const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
+    const [day, setDay] = useState("")
+    const [claerdate, setClaerDate] = useState(false);
+    const [tags, setTags] = useState([])
+    const [claerTag, setClaerTag] = useState(false)
+
+    //TODO
+    const getTimeStart = (result) => {
+        setTimeStart(result);
+    }
+    const getTimeEnd = (result) => {
+        setTimeEnd(result);
+    }
+
+
     return (
         <>
             {/* header */}
@@ -36,22 +53,21 @@ export default function CreateCourse({ navigation }) {
                     <TextInputButton
                         label={"Course"}
                         placeholder={"Enter your course name"}
-                        onChangeText={setCourseName} />
-                    <ModalDate />
-                    <Clock
-                        label={"Time Start"} />
-                    <Clock
-                        label={"Time End"} />
+                        onChangeText={(text) => setCourseName(text)} />
+                    <ModalDate dayValue={[day, setDay]} />
+                    <Clock label="Time Start" name="Time Start" callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
+                    <Clock label="Time End" name="Time End" callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
                     <TermCourse />
                     <TextInputButton
                         label={"Amount"}
                         placeholder={"Enter the number of seats"}
-                        onChangeText={setAmount}
+                        onChangeText={(text) =>setAmount(text)}
                         keyboardType={"phone-pad"} />
                     <Catagory
                         selectedValue={catagory}
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
-                    <Tag />
+                    <Tag
+                        onChangeTags={(tags) => setTags(tags)} value={[tags, setTags]} claerTag={[claerTag, setClaerTag]} />
                     <Location />
                 </View>
             </ScrollView >

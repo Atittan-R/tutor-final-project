@@ -47,7 +47,6 @@ exports.createRequest = (req, res) => {
 
 exports.findAllRequest = (req, res) => {
   Request.findAll({
-    attributes: ["id", "name", "date", "time_start", "time_end"],
 
     include: [
       {

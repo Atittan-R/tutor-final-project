@@ -11,7 +11,7 @@ const CreateCourseStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="CreateCourse"
+      initialRouteName="CreateCourseStack"
     >
       <Stack.Screen name="CreateCourse" component={CreateCourse} />
       <Stack.Screen name="CourseDetail" component={CourseDetail} />
