@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { CreateCourse, CourseDetail, TeachingList, CheckList } from "../../../screens/TutorScreen"
+import { CreateCourse, CourseDetail, TeachingList, CheckList, } from "../../../screens/TutorScreen"
+
 
 
 const Stack = createStackNavigator();

@@ -38,4 +38,10 @@ module.exports = function (app) {
     // [authJwt.verifyToken, authJwt.isTutor],
     controller.deleteCourse
   );
+
+  // app.get(
+  //   "/api/course/find/user",
+  //   // [authJwt.verifyToken, authJwt.isTutor],
+  //   controller.CouserfindAllUser
+  // );
 };

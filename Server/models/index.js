@@ -47,7 +47,7 @@ db.user.belongsToMany(db.role, {
 db.ROLES = ["user", "admin", "tutor"];
 
 //NOTE User own Course (one-to-many)
-db.user.hasMany(db.course, { foreignKey: "tutorId", as: "courses" });
+db.user.hasMany(db.course, { as: "courses" });
 db.course.belongsTo(db.user, {
   foreignKey: "tutorId",
   as: "user",
@@ -93,11 +93,13 @@ db.request.belongsToMany(db.tag, {
   through: "tag_request",
   foreignKey: "requestId",
   otherKey: "tagId",
+  as: "tag",
 });
 db.tag.belongsToMany(db.request, {
   through: "tag_request",
   foreignKey: "tagId",
   otherKey: "requestId",
+  as: "requests",
 });
 
 //REVIEW Request has Categories (one-to-many)
