@@ -6,6 +6,8 @@ import {
   CourseDetail,
   MyCourse,
   Search, test,
+  RegisterTutor,
+  NearMe
 } from "../../../screens/UserScreen";
 import LoadingScreen from "../../../components/Loading";
 import { useGlobalVar } from "../../../context/GlobalContex";
