@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { Me } from "../../../screens/UserScreen"
+import { Me, MyCourse, QrCode } from "../../../screens/UserScreen"
 
 
 const Stack = createStackNavigator();
@@ -14,6 +14,20 @@ const MeStack = () => {
             initialRouteName="Me"
         >
             <Stack.Screen name="Me" component={Me} />
+            <Stack.Screen
+                name="MyCourse"
+                component={MyCourse}
+                options={{
+                    headerTitle: "MyCourse",
+                }}
+            />
+            <Stack.Screen
+                name="QrCode"
+                component={QrCode}
+                options={{
+                    headerTitle: "QrCode",
+                }}
+            />
         </Stack.Navigator>
     )
 }

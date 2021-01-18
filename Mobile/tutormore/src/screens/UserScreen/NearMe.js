@@ -21,6 +21,7 @@ export default function Search({ navigation }) {
             date: "Mon Wed Fri",
             tutors: "Pixels",
             rate: 2.2,
+            distance: 0.8
         },
         {
             id: "1",
@@ -28,9 +29,10 @@ export default function Search({ navigation }) {
             description:
                 "จะสอนให้น้อไม่ดื้อตั้งใจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
             time: "17.0-21.0",
-            date: "Mon Wed Fri",
+            date: "Mon Wed Fri Tue Thu Sat",
             tutors: "Pixels",
             rate: 5.0,
+            distance: 1.2
         },
         {
             id: "2",
@@ -41,6 +43,7 @@ export default function Search({ navigation }) {
             date: "Mon Wed Fri",
             tutors: "Pixels",
             rate: 3.9,
+            distance: 3.5
         },
         {
             id: "3",
@@ -51,6 +54,7 @@ export default function Search({ navigation }) {
             date: "Mon Wed Fri",
             tutors: "Pixels",
             rate: 3.9,
+            distance: 3.6
         },
         {
             id: "4",
@@ -61,6 +65,7 @@ export default function Search({ navigation }) {
             date: "Mon Wed Fri",
             tutors: "Pixels",
             rate: 0.5,
+            distance: 4.2
         },
         {
             id: "5",
@@ -71,6 +76,7 @@ export default function Search({ navigation }) {
             date: "Mon Wed Fri",
             tutors: "Pixels",
             rate: 3.2,
+            distance: 4.9
         },
     ];
     return (
@@ -81,44 +87,14 @@ export default function Search({ navigation }) {
                     onPress={() => navigation.pop()}>
                     <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
-                <TextInput
-                    placeholder="Search"
-                    onChangeText={updateSearch}
-                    value={search}
-                    style={styles.search}
-                    autoFocus={true}
-                    selectTextOnFocus={true} />
-                <TouchableOpacity
-                    onPress={() => navigation.push("NearMe")}>
-                    <Icon name="location-on" type="material" color={Colors.secondary} />
-                    <Text style={styles.textBody}>near me</Text>
-                </TouchableOpacity>
+                <Text style={styles.textHeader}>Places near me</Text>
+                <Icon name="location-on" type="material" color={Colors.secondary} />
             </View>
             <ScrollView style={styles.view}>
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={styles.box} />
-                    <Text style={styles.textRec}>Trending Tags</Text>
-                </View>
-                <FlatList
-                    data={tag}
-                    keyExtractor={item => item.id}
-                    horizontal={true}
-                    renderItem={({ item }) =>
-                        <TouchableOpacity>
-                            <View style={styles.card}>
-                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
-                                <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
-                                <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    }
-                />
-
-                <View style={styles.line} />
-                <View style={[styles.topic, styles.row]}>
-                    <View style={styles.box} />
-                    <Text style={styles.textRec}>Course</Text>
+                    <Text style={styles.textRec}>Near Me</Text>
                 </View>
                 <FlatList
                     data={tag}
@@ -133,20 +109,22 @@ export default function Search({ navigation }) {
                                     marginHorizontal: 2,
                                     flexWrap: "wrap"
                                 }}>
-                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={{ width: 70, height: 70, borderRadius: 5 }} />
+                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
                                 <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
-                                    <Text style={styles.textTitle}>{item.name}</Text>
-                                    <Text numberOfLines={1} style={{
-                                        color: "gray",
-                                        fontSize: 12,
-                                    }}>{item.description}</Text>
+                                    <Text numberOfLines={1} style={styles.textTitle}>{item.name}</Text>
+                                    <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
+                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                        <Icon name="schedule" type="material" color="gray" size={15} />
+                                        <Text style={styles.textGray}>{item.time}</Text>
+                                        <Icon name="calendar-today" type="material" color="gray" size={15} />
+                                        <Text style={styles.textGray}>{item.date}</Text>
+                                    </View>
                                     <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
                                         <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
-                                        <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
-                                        <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                                        <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time}</Text>
-                                        <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
-                                        <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
+                                        <Text style={styles.textBlack}>{item.rate}</Text>
+                                        <Icon name="outlined-flag" type="material" color={Colors.secondary} size={15} />
+                                        <Text style={styles.textBlack}>{item.distance} km.</Text>
+
                                     </View>
                                 </View>
                             </View>
@@ -171,22 +149,11 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         paddingHorizontal: 20,
     },
-    search: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: 5,
-        paddingHorizontal: 20,
-        marginHorizontal: 10,
-        borderRadius: 30,
-        backgroundColor: Colors.gray
-    },
     viewItem: {
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         alignItems: "center",
         paddingHorizontal: 10,
         paddingVertical: 10,
@@ -228,22 +195,32 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     image: {
-        width: 110,
-        height: 110,
+        width: 100,
+        height: 100,
         borderRadius: 5,
-        justifyContent: "center"
     },
     textTitle: {
         fontWeight: "bold",
         color: Colors.secondary,
     },
-    textBody: {
+    textBlack: {
         color: Colors.secondary,
         fontSize: 12,
+        marginHorizontal: 5
+    },
+    textGray: {
+        color: "gray",
+        fontSize: 12,
+        marginHorizontal: 5
     },
     card: {
         width: 120,
         padding: 5,
         marginHorizontal: 2
-    }
+    },
+    textHeader: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: Colors.secondary,
+    },
 })

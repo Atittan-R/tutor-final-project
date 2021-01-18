@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer, useState} from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
     FlatList,
     Image,
@@ -10,16 +10,16 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import {SwipeablePanel} from "rn-swipeable-panel";
+import { SwipeablePanel } from "rn-swipeable-panel";
 import Colors from "../../../configs/Colors";
-import {Rating} from "react-native-elements";
+import { Rating } from "react-native-elements";
 import PanelCategory from "../../../components/swipers/PanelCategory";
-import {actionCreators, initialState, reducer} from "./CourseReducer";
+import { actionCreators, initialState, reducer } from "./CourseReducer";
 import API from "../../../services/API";
 import LoadingScreen from "../../../components/Loading";
-import {styles} from "./Style";
+import { styles } from "./Style";
 
-export default function Home({navigation}) {
+export default function Home({ navigation }) {
     // search bar
     const [filterItem, setFilterItem] = useState(null)
     const searchAction = (text) => {
@@ -73,7 +73,7 @@ export default function Home({navigation}) {
         fetchData()
     }, [])
 
-    const {course, loading, error} = state
+    const { course, loading, error } = state
 
     if (loading) {
         return (
@@ -91,7 +91,7 @@ export default function Home({navigation}) {
 
     return (
         <>
-            <SafeAreaView style={styles.container}/>
+            <SafeAreaView style={styles.container} />
 
             {/*Majors*/}
             <View style={styles.viewItem}>
@@ -101,14 +101,18 @@ export default function Home({navigation}) {
                     onChangeText={(text) => searchAction(text)}
                     placeholder="Search"
                 />
+                <TouchableOpacity
+                    onPress={() => navigation.push("Search")}>
+                    <Icon name="search" type="material" color={Colors.secondary} />
+                </TouchableOpacity>
             </View>
             <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 {/*Category*/}
                 <View style={styles.bg}>
-                    <View style={styles.line}/>
-                    <View style={{marginVertical: 10}}>
+                    <View style={styles.line} />
+                    <View style={{ marginVertical: 10 }}>
                         <View style={[styles.topic, styles.row]}>
-                            <View style={[styles.column, styles.box]}/>
+                            <View style={[styles.column, styles.box]} />
                             <Text style={[styles.column, styles.textRec]}>Category</Text>
                         </View>
                     </View>
@@ -131,11 +135,11 @@ export default function Home({navigation}) {
                                 }}
                             >
                                 <Image
-                                    style={{width: 50, height: 50, resizeMode: "contain"}}
+                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
                                     source={require("../../../assets/images/categories/digital.png")}
                                 />
                             </View>
-                            <Text style={{marginVertical: 2, textAlign: "center"}}>
+                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
                                 Digital
                             </Text>
                         </TouchableOpacity>
@@ -156,11 +160,11 @@ export default function Home({navigation}) {
                                 }}
                             >
                                 <Image
-                                    style={{width: 50, height: 50, resizeMode: "contain"}}
+                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
                                     source={require("../../../assets/images/categories/doctor.png")}
                                 />
                             </View>
-                            <Text style={{marginVertical: 2, textAlign: "center"}}>
+                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
                                 Doctor
                             </Text>
                         </TouchableOpacity>
@@ -182,11 +186,11 @@ export default function Home({navigation}) {
                                 }}
                             >
                                 <Image
-                                    style={{width: 50, height: 50, resizeMode: "contain"}}
+                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
                                     source={require("../../../assets/images/categories/engineering.png")}
                                 />
                             </View>
-                            <Text style={{marginVertical: 2, textAlign: "center"}}>
+                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
                                 Engineering
                             </Text>
                         </TouchableOpacity>
@@ -207,11 +211,11 @@ export default function Home({navigation}) {
                                 }}
                             >
                                 <Image
-                                    style={{width: 50, height: 50, resizeMode: "contain"}}
+                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
                                     source={require("../../../assets/images/categories/more.png")}
                                 />
                             </View>
-                            <Text style={{marginVertical: 2, textAlign: "center"}}>
+                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
                                 More..(Test)
                             </Text>
                         </TouchableOpacity>
@@ -219,10 +223,10 @@ export default function Home({navigation}) {
                 </View>
                 {/* recommend */}
                 <View style={styles.bg}>
-                    <View style={styles.line}/>
-                    <View style={{marginVertical: 10}}>
+                    <View style={styles.line} />
+                    <View style={{ marginVertical: 10 }}>
                         <View style={[styles.topic, styles.row]}>
-                            <View style={[styles.column, styles.box]}/>
+                            <View style={[styles.column, styles.box]} />
                             <Text style={[styles.column, styles.textRec]}>Recommend</Text>
                         </View>
                     </View>
@@ -231,7 +235,7 @@ export default function Home({navigation}) {
                         horizontal={true}
                         data={course}
                         keyExtractor={(item) => item.id}
-                        renderItem={({item}) => (
+                        renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={{
                                     padding: 5,
@@ -262,10 +266,10 @@ export default function Home({navigation}) {
                                         source={require("../../../assets/images/categories/digital.png")}
                                     />
                                     <View>
-                                        <Text style={{marginVertical: 2, fontWeight: "bold"}}>
+                                        <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
                                             {item.name}
                                         </Text>
-                                        <Text numberOfLines={1} style={{fontSize: 12}}>{item.description}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 12 }}>{item.description}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -274,26 +278,26 @@ export default function Home({navigation}) {
                 </View>
 
                 <View style={styles.bg}>
-                    <View style={styles.line}/>
+                    <View style={styles.line} />
                     <View style={[styles.topic, styles.row]}>
-                        <View style={[styles.column, styles.box]}/>
+                        <View style={[styles.column, styles.box]} />
                         <Text style={[styles.column, styles.textRec]}>All Course</Text>
                     </View>
 
                     <FlatList
                         data={filterItem ? filterItem : course}
                         keyExtractor={(item) => item.id}
-                        renderItem={({item}) => (
+                        renderItem={({ item }) => (
                             <Pressable
                                 style={styles.card}
                                 // TODO Set PARAM to CourseDetail
                                 onPress={() => {
-                                    navigation.navigate("CourseDetail",{course: item});
+                                    navigation.navigate("CourseDetail", { course: item });
                                 }}
                             >
                                 <View style={styles.row}>
-                                    <View style={[styles.column, {paddingLeft: 120}]}>
-                                        <View style={{position: "absolute", top: -36, left: 3}}>
+                                    <View style={[styles.column, { paddingLeft: 120 }]}>
+                                        <View style={{ position: "absolute", top: -36, left: 3 }}>
                                             <Image
                                                 style={[
                                                     styles.column,
@@ -314,17 +318,17 @@ export default function Home({navigation}) {
                                         </View>
                                     </View>
 
-                                    <View style={[styles.column, {flex: 1}]}>
-                                        <View style={[styles.row, {flex: 2}]}>
+                                    <View style={[styles.column, { flex: 1 }]}>
+                                        <View style={[styles.row, { flex: 2 }]}>
                                             <Text style={styles.courseTitle}>{item.name}</Text>
                                         </View>
 
                                         <View style={styles.row}>
                                             <Text numberOfLines={2}
-                                                  style={[
-                                                      styles.courseDescription,
-                                                      {flex: 1, flexWrap: "wrap"},
-                                                  ]}
+                                                style={[
+                                                    styles.courseDescription,
+                                                    { flex: 1, flexWrap: "wrap" },
+                                                ]}
                                             >
                                                 {item.description}
                                             </Text>
@@ -356,7 +360,7 @@ export default function Home({navigation}) {
                 </View>
             </ScrollView>
             <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-                <PanelCategory/>
+                <PanelCategory />
             </SwipeablePanel>
         </>
     );
