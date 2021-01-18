@@ -21,9 +21,7 @@ export default function Feed({ navigation }) {
     // console.log("user_id", userid.id)
     const [request, setRequest] = useState([]);
     const taked = async (requestId) =>{
-     
             navigation.navigate("Feed Request",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}} )
-      
     }
     const fetchApi = async () => {
         try {

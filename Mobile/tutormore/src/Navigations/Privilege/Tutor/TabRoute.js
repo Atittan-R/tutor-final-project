@@ -29,7 +29,7 @@ export default function TapRoute() {
         }}
       />
       <Tabs.Screen
-        name="Feed"
+        name="Feed Request"
         component={FeedStack}
         options={{
           tabBarIcon: () => (
