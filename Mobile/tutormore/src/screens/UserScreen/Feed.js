@@ -15,17 +15,15 @@ import { Icon } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
 import { useGlobalVar } from "../../context/GlobalContex";
-const wait = (timeout) => {
-    return new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
-}
+import LoadingScreen from "../../components/Loading";
+
 export default function Feed({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [request, setRequest] = useState([]);
     const [isjoin, setisJoin] = useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
+    const [loading, setLoading] = useState(false);
 
     const userid = JSON.parse(state.userData);
     console.log("user_id", userid.id)
@@ -57,7 +55,7 @@ export default function Feed({ navigation }) {
         }
     }
     const fetchApi = async () => {
-
+        setLoading(true);
         try {
             const fetch_req = await API.get("/request/findAll");
             const fetch_join = await API.post("/user/join", {
@@ -66,7 +64,7 @@ export default function Feed({ navigation }) {
             // console.log((fetch_join));
             setRequest(fetch_req.data.request)
             setisJoin(fetch_join.data)
-
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -74,8 +72,7 @@ export default function Feed({ navigation }) {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        fetchApi();
-        wait(2000).then(() => setRefreshing(false));
+        fetchApi().then(() => setRefreshing(false));
     }, []);
 
     useEffect(() => {
@@ -107,64 +104,65 @@ export default function Feed({ navigation }) {
                     onChangeText={(text) => searchAction(text)}
                 />
             </View>
-
-            <FlatList
-                refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
-                }
-                data={filterItem ? filterItem : request}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) =>
-                    <View style={styles.cardView} key={item.id}>
-                        <View style={styles.viewItem}>
-                            <Image source={require("../../assets/profile.jpg")} style={styles.image} />
-                            <Text style={styles.title}>{item.user.username}</Text>
-                        </View>
-                        <View
-                            style={{
-                                marginTop: 5,
-                                borderTopColor: Colors.gray,
-                                borderTopWidth: 1,
-                                display: "flex",
-                                flexWrap: "wrap",
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                            }}>
-                            <View>
-                                <View style={styles.viewItem}>
-                                    <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
-                                    <Text style={styles.title}>{item.name}</Text>
+            {loading ? <LoadingScreen /> :
+                <FlatList
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
+                    }
+                    data={filterItem ? filterItem : request}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) =>
+                        <View style={styles.cardView} key={item.id}>
+                            <View style={styles.viewItem}>
+                                <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                                <Text style={styles.title}>{item.user.username}</Text>
+                            </View>
+                            <View
+                                style={{
+                                    marginTop: 5,
+                                    borderTopColor: Colors.gray,
+                                    borderTopWidth: 1,
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                }}>
+                                <View>
+                                    <View style={styles.viewItem}>
+                                        <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
+                                        <Text style={styles.title}>{item.name}</Text>
+                                    </View>
+                                    <View style={styles.viewItem}>
+                                        <Icon name="event" type="material" color={Colors.secondary}
+                                            style={styles.icon} />
+                                        <Text style={styles.text}>{item.date}</Text>
+                                    </View>
+                                    <View style={styles.viewItem}>
+                                        <Icon name="schedule" type="material" color={Colors.secondary}
+                                            style={styles.icon} />
+                                        {/* <Text style={styles.text}>{item.time}</Text> */}
+                                        <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.viewItem}>
-                                    <Icon name="event" type="material" color={Colors.secondary}
-                                        style={styles.icon} />
-                                    <Text style={styles.text}>{item.date}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Icon name="schedule" type="material" color={Colors.secondary}
-                                        style={styles.icon} />
-                                    {/* <Text style={styles.text}>{item.time}</Text> */}
-                                    <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
+                                <View style={styles.positionBTN}>
+                                    {
+                                        isjoin.map((i) => i.id).includes(item.id) ?
+                                            <TouchableOpacity style={styles.button_cancel}
+                                                              onPress={() => cancel(item.id)}>
+                                                <Text style={styles.text}>cancel</Text>
+                                            </TouchableOpacity>
+                                            : <TouchableOpacity style={styles.button} onPress={() =>
+                                                join(item.id)
+                                                // setCount((cnt) => cnt + 1)
+                                            }>
+                                                <Text style={styles.text}>Join</Text>
+                                            </TouchableOpacity>
+                                    }
                                 </View>
                             </View>
-                            <View style={styles.positionBTN}>
-                                {
-                                    isjoin.map((i) => i.id).includes(item.id) ?
-                                        <TouchableOpacity style={styles.button_cancel}
-                                                          onPress={() => cancel(item.id)}>
-                                            <Text style={styles.text}>cancel</Text>
-                                        </TouchableOpacity>
-                                        : <TouchableOpacity style={styles.button} onPress={() =>
-                                            join(item.id)
-                                            // setCount((cnt) => cnt + 1)
-                                        }>
-                                            <Text style={styles.text}>Join</Text>
-                                        </TouchableOpacity>
-                                }
-                            </View>
                         </View>
-                    </View>
-                } />
+                    }/>
+            }
         </>
     );
 }

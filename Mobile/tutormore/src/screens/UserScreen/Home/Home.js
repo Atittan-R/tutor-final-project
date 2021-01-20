@@ -48,12 +48,6 @@ export default function Home({navigation}) {
         onPressCloseButton: () => closePanel(),
     });
     const [isPanelActive, setIsPanelActive] = useState(false);
-    const wait = timeout => {
-        return new Promise(resolve => {
-            setTimeout(resolve, timeout);
-        });
-    };
-
     //Data
     async function fetchData() {
         dispatch(actionCreators.loading())
@@ -74,9 +68,6 @@ export default function Home({navigation}) {
 
     const {data, loading, error} = state
 
-    if (loading) {
-        return <LoadingScreen/>
-    }
     if (error) {
         return (
             <ScrollView style={styles.center}
@@ -104,160 +95,161 @@ export default function Home({navigation}) {
                     <Icon name="search" type="material" color={Colors.secondary}/>
                 </TouchableOpacity>
             </View>
-
-            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
-                {/*Category*/}
-                <View style={styles.bg}>
-                    <View style={{marginVertical: 10}}>
-                        <View style={[styles.topic, styles.row]}>
-                            <View style={[styles.column, styles.box]}/>
-                            <Text style={[styles.column, styles.textRec]}>Category</Text>
+            {loading ? <LoadingScreen/> :
+                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+                    {/*Category*/}
+                    <View style={styles.bg}>
+                        <View style={{marginVertical: 10}}>
+                            <View style={[styles.topic, styles.row]}>
+                                <View style={[styles.column, styles.box]}/>
+                                <Text style={[styles.column, styles.textRec]}>Category</Text>
+                            </View>
                         </View>
-                    </View>
 
-                    <View style={[styles.row,styles.cateWrap]}>
-                        <TouchableOpacity
-                            style={styles.touchStyle}
-                            onPress={() => navigation.navigate("List", {categories: "Digital Technology"})}>
-                            <View
-                                style={styles.touchView}>
-                                <Image
-                                    style={styles.touchImage}
-                                    source={require("../../../assets/images/categories/digital.png")}
-                                />
-                            </View>
-                            <Text style={styles.touchTopic}>
-                                Digital Technology
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.touchStyle}
-                            onPress={() => navigation.navigate("List", {categories: "Medicine"})}>
-                            <View
-                                style={styles.touchView}>
-                                <Image
-                                    style={styles.touchImage}
-                                    source={require("../../../assets/images/categories/doctor.png")}/>
-                            </View>
-                            <Text style={styles.touchTopic}>
-                                Doctor
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={styles.touchStyle}
-                            onPress={() => navigation.navigate("List", {categories: "Engineering"})}>
-                            <View style={styles.touchView}>
-                                <Image
-                                    style={styles.touchImage}
-                                    source={require("../../../assets/images/categories/engineering.png")}
-                                />
-                            </View>
-                            <Text style={styles.touchTopic}>
-                                Engineering
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={styles.touchStyle}
-                            // onPress={() => navigation.navigate("test")}>
-                            onPress={() => openPanel()}>
-                            <View style={styles.touchView}>
-                                <Image
-                                    style={styles.touchImage}
-                                    source={require("../../../assets/images/categories/more.png")}
-                                />
-                            </View>
-                            <Text style={styles.touchTopic}>
-                                More
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    </View>
-                {/* End Categories*/}
-
-                {/* recommend */}
-                <View style={styles.bg}>
-                    <View style={styles.line}/>
-                    <View style={{marginVertical: 10}}>
-                        <View style={[styles.topic, styles.row]}>
-                            <View style={[styles.column, styles.box]}/>
-                            <Text style={[styles.column, styles.textRec]}>Recommend</Text>
-                        </View>
-                    </View>
-
-                    <FlatList
-                        horizontal={true}
-                        data={data}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({item}) => (
+                        <View style={[styles.row, styles.cateWrap]}>
                             <TouchableOpacity
-                                style={styles.listStyle}>
-                                <View style={{padding: 15}}>
-                                    <Image source={{uri: "https://source.unsplash.com/random"}}
-                                           style={styles.courseImage}/>
-                                    <View>
-                                        <Text style={styles.listName}>
-                                            {item.name}
-                                        </Text>
-                                        <Text numberOfLines={1} style={styles.listDesc}>{item.description}</Text>
-                                    </View>
+                                style={styles.touchStyle}
+                                onPress={() => navigation.navigate("List", {categories: "Digital Technology"})}>
+                                <View
+                                    style={styles.touchView}>
+                                    <Image
+                                        style={styles.touchImage}
+                                        source={require("../../../assets/images/categories/digital.png")}
+                                    />
                                 </View>
+                                <Text style={styles.touchTopic}>
+                                    Digital Technology
+                                </Text>
                             </TouchableOpacity>
-                        )}
-                    />
-                </View>
-                {/* End Recommend */}
+                            <TouchableOpacity
+                                style={styles.touchStyle}
+                                onPress={() => navigation.navigate("List", {categories: "Medicine"})}>
+                                <View
+                                    style={styles.touchView}>
+                                    <Image
+                                        style={styles.touchImage}
+                                        source={require("../../../assets/images/categories/doctor.png")}/>
+                                </View>
+                                <Text style={styles.touchTopic}>
+                                    Doctor
+                                </Text>
+                            </TouchableOpacity>
 
-                <View style={styles.bg}>
-                    <View style={styles.line}/>
-                    <View style={[styles.topic, styles.row]}>
-                        <View style={[styles.column, styles.box]}/>
-                        <Text style={[styles.column, styles.textRec]}>All Course</Text>
+                            <TouchableOpacity
+                                style={styles.touchStyle}
+                                onPress={() => navigation.navigate("List", {categories: "Engineering"})}>
+                                <View style={styles.touchView}>
+                                    <Image
+                                        style={styles.touchImage}
+                                        source={require("../../../assets/images/categories/engineering.png")}
+                                    />
+                                </View>
+                                <Text style={styles.touchTopic}>
+                                    Engineering
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.touchStyle}
+                                // onPress={() => navigation.navigate("test")}>
+                                onPress={() => openPanel()}>
+                                <View style={styles.touchView}>
+                                    <Image
+                                        style={styles.touchImage}
+                                        source={require("../../../assets/images/categories/more.png")}
+                                    />
+                                </View>
+                                <Text style={styles.touchTopic}>
+                                    More
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    {data.length === 0 ?
-                        <NoDataScreen />:
+                    {/* End Categories*/}
+
+                    {/* recommend */}
+                    <View style={styles.bg}>
+                        <View style={styles.line}/>
+                        <View style={{marginVertical: 10}}>
+                            <View style={[styles.topic, styles.row]}>
+                                <View style={[styles.column, styles.box]}/>
+                                <Text style={[styles.column, styles.textRec]}>Recommend</Text>
+                            </View>
+                        </View>
+
                         <FlatList
-                            data={filterItem ? filterItem : data}
+                            horizontal={true}
+                            data={data}
                             keyExtractor={(item) => item.id}
                             renderItem={({item}) => (
                                 <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate("CourseDetail",{course: item});
-                                    }}
-                                    style={{marginTop: 5,}}>
-                                    <View style={styles.courseWrap}>
+                                    style={styles.listStyle}>
+                                    <View style={{padding: 15}}>
                                         <Image source={{uri: "https://source.unsplash.com/random"}}
                                                style={styles.courseImage}/>
-                                        <View style={styles.courseView}>
-                                            <Text numberOfLines={1} style={styles.courseName}>{item.name}</Text>
-                                            <View style={styles.courseViewDetail}>
-                                                <Text numberOfLines={1} style={styles.courseDescription}>
-                                                    {item.description}
-                                                </Text>
-                                            </View>
-                                            <View style={styles.courseViewDetail}>
-                                                <Icon name="schedule" type="material" color="gray" size={15}/>
-                                                <Text
-                                                    style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
-                                                <Icon name="calendar-today" type="material" color="gray" size={15}/>
-                                                <Text style={styles.textGray}>{item.day}</Text>
-                                            </View>
-                                            <View style={styles.courseDetail}>
-                                                <Rating imageSize={15} startingValue={item.rate} ractions={5}
-                                                        ratingCount={1}/>
-                                                <Text style={styles.textBlack}>{item.rate}</Text>
-                                                <Icon name="category" type="material" color="gray" size={15}/>
-                                                <Text style={styles.textBlack}>{item.CourseCate.name}</Text>
-                                            </View>
+                                        <View>
+                                            <Text style={styles.listName}>
+                                                {item.name}
+                                            </Text>
+                                            <Text numberOfLines={1} style={styles.listDesc}>{item.description}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
                             )}
                         />
-                    }
-                </View>
-            </ScrollView>
+                    </View>
+                    {/* End Recommend */}
+
+                    <View style={styles.bg}>
+                        <View style={styles.line}/>
+                        <View style={[styles.topic, styles.row]}>
+                            <View style={[styles.column, styles.box]}/>
+                            <Text style={[styles.column, styles.textRec]}>All Course</Text>
+                        </View>
+                        {data.length === 0 ?
+                            <NoDataScreen/> :
+                            <FlatList
+                                data={filterItem ? filterItem : data}
+                                keyExtractor={(item) => item.id}
+                                renderItem={({item}) => (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.navigate("CourseDetail", {course: item});
+                                        }}
+                                        style={{marginTop: 5,}}>
+                                        <View style={styles.courseWrap}>
+                                            <Image source={{uri: "https://source.unsplash.com/random"}}
+                                                   style={styles.courseImage}/>
+                                            <View style={styles.courseView}>
+                                                <Text numberOfLines={1} style={styles.courseName}>{item.name}</Text>
+                                                <View style={styles.courseViewDetail}>
+                                                    <Text numberOfLines={1} style={styles.courseDescription}>
+                                                        {item.description}
+                                                    </Text>
+                                                </View>
+                                                <View style={styles.courseViewDetail}>
+                                                    <Icon name="schedule" type="material" color="gray" size={15}/>
+                                                    <Text
+                                                        style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
+                                                    <Icon name="calendar-today" type="material" color="gray" size={15}/>
+                                                    <Text style={styles.textGray}>{item.day}</Text>
+                                                </View>
+                                                <View style={styles.courseDetail}>
+                                                    <Rating imageSize={15} startingValue={item.rate} ractions={5}
+                                                            ratingCount={1}/>
+                                                    <Text style={styles.textBlack}>{item.rate}</Text>
+                                                    <Icon name="category" type="material" color="gray" size={15}/>
+                                                    <Text style={styles.textBlack}>{item.CourseCate.name}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        }
+                    </View>
+                </ScrollView>
+            }
             <SwipeablePanel {...panelProps} isActive={isPanelActive}>
                 <PanelCategory/>
             </SwipeablePanel>
