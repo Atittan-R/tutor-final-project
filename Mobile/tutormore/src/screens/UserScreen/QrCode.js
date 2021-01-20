@@ -24,7 +24,7 @@ export default function QrCode({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <QRCode value={id} size={200} color={Colors.secondary} backgroundColor={Colors.primary} />
+        <QRCode value={id, name} size={200} color={Colors.secondary} backgroundColor={Colors.primary} />
         <Text style={styles.text}>{name}</Text>
       </View>
     </>

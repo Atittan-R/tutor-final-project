@@ -16,6 +16,7 @@ import Colors from "../../../configs/Colors";
 import MapView, {Marker} from "react-native-maps";
 import API from "../../../services/API";
 import {useGlobalVar} from "../../../context/GlobalContex";
+import LoadingScreen from "../../../components/Loading";
 
 export default function CourseDetail({navigation, route}) {
     const { authentication } = useGlobalVar();
@@ -54,10 +55,9 @@ export default function CourseDetail({navigation, route}) {
         });
     }
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    // console.log(currentUser.id)
-    // console.log(course.id)
+    console.log(currentUser.id, course.id,)
     const enrollData = async () =>{
         setLoading(true);
         try {
@@ -66,11 +66,16 @@ export default function CourseDetail({navigation, route}) {
                     userId: currentUser.id,
                     courseId: course.id,
                 })
-
-            // console.log(response.data.status)
+            setLoading(false);
+            console.log(response.data.status)
+            //TODO
+            // Generate QRCode
+            // Popup QRCode
+            // Ask where to go History or Back
             ToastAndroid.show("Enroll "+response.data.status, ToastAndroid.LONG);
+            navigation.navigate("Me", {screen: "MyCourse"})
         }catch (e) {
-            alert(error.response.data);
+            alert(e.response.data.status);
         }
     }
 
@@ -84,11 +89,16 @@ export default function CourseDetail({navigation, route}) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                { text: "OK", onPress: () => navigation.navigate("Me", { screen: "MyCourse" }) },
+                { text: "OK", onPress: async () => {
+                        await enrollData();
+                    }},
             ],
             { cancelable: false }
         );
     };
+    if(loading){
+        return <LoadingScreen />
+    }
     return (
         <>
             {/* header */}

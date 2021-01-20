@@ -221,7 +221,11 @@ export default function Home({navigation}) {
                             data={filterItem ? filterItem : data}
                             keyExtractor={(item) => item.id}
                             renderItem={({item}) => (
-                                <TouchableOpacity style={{marginTop: 5,}}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.navigate("CourseDetail",{course: item});
+                                    }}
+                                    style={{marginTop: 5,}}>
                                     <View style={styles.courseWrap}>
                                         <Image source={{uri: "https://source.unsplash.com/random"}}
                                                style={styles.courseImage}/>

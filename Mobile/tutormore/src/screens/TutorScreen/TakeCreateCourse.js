@@ -31,6 +31,7 @@ export default function TakeCreateCourse({ route, navigation }) {
     const [mytags, setTags] = useState([]);
     const [claerTag, setClaerTag] = useState(false);
     const [requsetId,setRequsetId]= useState(0);
+
     //TODO
     const getTimeStart = (result) => {
         setTimeStart(result);
@@ -70,32 +71,23 @@ export default function TakeCreateCourse({ route, navigation }) {
                 lat:lat.toString(),
                 long:long.toString()
             });
-            console.log('====================================');
             console.log((teke_res));
-            console.log('====================================');
             ToastAndroid.show("create course success !", ToastAndroid.SHORT);
             clear()
             navigation.navigate("Home",{screen:"Home"})
           
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
     useEffect( () => {
-
         setCourseName(req.map((i) => i.name).toString())
         setTimeStart(req.map((i) => i.time_start).toString())
         setTimeEnd(req.map((i) => i.time_end).toString())
         setDay(req.map((i) => i.date).toString())
         setCatagory(req.map((i) => i.categories.name).toString())
         setRequsetId(parseInt(req.map((i) => i.id).toString()))
-      
-        
     }, [])
- 
-    
 
     return (
         <>
