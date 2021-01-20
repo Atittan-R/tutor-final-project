@@ -15,7 +15,7 @@ import {
 import { SwipeablePanel } from "rn-swipeable-panel";
 import Colors from "../../configs/Colors";
 import { Icon, Rating } from "react-native-elements";
-import PanelCategory from "../../components/swipers/PanelCategory";
+import PanelCategory from "../../components/swipers/Categories";
 
 export default function Home({ navigation }) {
   const [panelProps, setPanelProps] = useState({
@@ -115,7 +115,6 @@ export default function Home({ navigation }) {
   return (
     <>
       <SafeAreaView style={styles.container} />
-
       {/*Majors*/}
       <View style={styles.viewItem}>
         <Text style={styles.titleHome}>Tutor More</Text>

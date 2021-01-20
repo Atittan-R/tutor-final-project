@@ -15,7 +15,6 @@ export default function QrCode({ navigation, route }) {
   const { id, name } = route.params;
   return (
     <>
-
       <SafeAreaView style={styles.container} />
       <View style={styles.headerBar}>
         <TouchableOpacity
@@ -25,11 +24,9 @@ export default function QrCode({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <QRCode value={id, name} size={200} color={Colors.secondary} backgroundColor={Colors.primary} />
+        <QRCode value={id} size={200} color={Colors.secondary} backgroundColor={Colors.primary} />
         <Text style={styles.text}>{name}</Text>
       </View>
-
-
     </>
   );
 }
@@ -60,6 +57,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.secondary
   }
-
-
 });

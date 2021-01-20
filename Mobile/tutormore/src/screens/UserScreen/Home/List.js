@@ -1,140 +1,115 @@
-import React, { useState } from 'react'
-import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, {useEffect, useReducer, useState} from 'react'
+import {Image, RefreshControl, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import { Icon, Rating } from 'react-native-elements';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Colors from "../../../configs/Colors";
+import {actionCreators, initialState, reducer} from "./CourseReducer";
+import API from "../../../services/API";
+import LoadingScreen from "../../../components/Loading";
+import NoDataScreen from "../../../components/Nodata";
 
 export default function List({ navigation, route }) {
     const { categories } = route.params;
-    console.log(categories)
-    // search bar
-    const [search, setSearch] = useState('');
-    const updateSearch = (search) => {
-        setSearch({ search });
+    // console.log(categories)
+    const [state, dispatch] = useReducer(reducer, initialState)
+    const {data, loading, error} = state;
+
+    const fetchCategory = async () =>{
+        dispatch(actionCreators.loading())
+        try{
+            const response = await API.post('/course/categories',{cate: categories})
+            const list = response.data
+            // console.log(response.data)
+            dispatch(actionCreators.success(list))
+        }catch (e) {
+            alert(e.response.data.message)
+        }
     };
+    useEffect(() => {
+        fetchCategory();
+    }, []);
 
-    const tag = [
-        {
-            id: "0",
-            name: "Computer ",
-            description: "จะสอนให้น้องๆ นะครับ ทุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน",
-            time: "17.0-21.0",
-            date: "Mon Wed Fri",
-            tutors: "Pixels",
-            rate: 2.2,
-            distance: 0.8
-        },
-        {
-            id: "1",
-            name: "Computer Programming",
-            description:
-                "จะสอนให้น้อไม่ดื้อตั้งใจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
-            time: "17.0-21.0",
-            date: "Mon Wed Fri Tue Thu Sat",
-            tutors: "Pixels",
-            rate: 5.0,
-            distance: 1.2
-        },
-        {
-            id: "2",
-            name: "Data Structure",
-            description:
-                "จะสอนให้น้องๆ นะครับ ทุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafaweจเเรียน คนหล่อ สวย ทุกคนwefaweafawefawefawefawefawfeweเลย",
-            time: "17.0-21.0",
-            date: "Mon Wed Fri",
-            tutors: "Pixels",
-            rate: 3.9,
-            distance: 3.5
-        },
-        {
-            id: "3",
-            name: "Computer Programming",
-            description:
-                "จะสอนให้น้องๆ นะครับ ุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
-            time: "17.0-21.0",
-            date: "Mon Wed Fri",
-            tutors: "Pixels",
-            rate: 3.9,
-            distance: 3.6
-        },
-        {
-            id: "4",
-            name: "Computer Programming",
-            description:
-                "จะสอนให้น้องๆ นะครับ ุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
-            time: "17.0-21.0",
-            date: "Mon Wed Fri",
-            tutors: "Pixels",
-            rate: 0.5,
-            distance: 4.2
-        },
-        {
-            id: "5",
-            name: "Computer Programming",
-            description:
-                "จะสอนให้น้องๆ นะครับ ุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน เเละเป็นคนหล่อ สวย ทุกคนเลย",
-            time: "17.0-21.0",
-            date: "Mon Wed Fri",
-            tutors: "Pixels",
-            rate: 3.2,
-            distance: 4.9
-        },
-    ];
-    return (
-        <>
-            <SafeAreaView style={styles.container} />
-            <View style={styles.viewItem}>
-                <TouchableOpacity
-                    onPress={() => navigation.pop()}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
-                <Text style={styles.textHeader}>Places near me</Text>
-                <Icon name="location-on" type="material" color={Colors.secondary} />
-            </View>
-            <ScrollView style={styles.view}>
-                <View style={styles.line} />
-                <View style={[styles.topic, styles.row]}>
-                    <View style={styles.box} />
-                    <Text style={styles.textRec}>Near Me</Text>
+    if (loading) {
+        return <LoadingScreen/>
+    }
+
+    if (error) {
+        return (
+            <ScrollView style={styles.center}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+                <View>
+                    <Text>Failed to load Data!</Text>
                 </View>
-                <FlatList
-                    data={tag}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) =>
-                        <TouchableOpacity>
-                            <View style={
-                                {
-                                    backgroundColor: "#fff",
-                                    padding: 5,
-                                    flexDirection: "row",
-                                    marginHorizontal: 2,
-                                    flexWrap: "wrap"
-                                }}>
-                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
-                                <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
-                                    <Text numberOfLines={1} style={styles.textTitle}>{item.name}</Text>
-                                    <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
-                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                        <Icon name="schedule" type="material" color="gray" size={15} />
-                                        <Text style={styles.textGray}>{item.time}</Text>
-                                        <Icon name="calendar-today" type="material" color="gray" size={15} />
-                                        <Text style={styles.textGray}>{item.date}</Text>
-                                    </View>
-                                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                        <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
-                                        <Text style={styles.textBlack}>{item.rate}</Text>
-                                        <Icon name="outlined-flag" type="material" color={Colors.secondary} size={15} />
-                                        <Text style={styles.textBlack}>{item.distance} km.</Text>
-
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    }
-                />
             </ScrollView>
-        </>
-    )
+        )
+    }
+
+        return (
+            <>
+                <SafeAreaView style={styles.container} />
+                <View style={styles.viewItem}>
+                    <TouchableOpacity
+                        onPress={() => navigation.pop()}>
+                        <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
+                    </TouchableOpacity>
+                    <Text style={styles.textHeader}>{categories}</Text>
+                    {/*<Icon name="location-on" type="material" color={Colors.secondary} />*/}
+                </View>
+                {data.length === 0 ?
+                    <NoDataScreen data={categories}/> :
+                    <ScrollView style={styles.view}>
+                        <View style={styles.line}/>
+                        <View style={[styles.topic, styles.row]}>
+                            <View style={styles.box}/>
+                            <Text style={styles.textRec}>{data.map((list) => list.CourseCate.name)}</Text>
+                        </View>
+                        <FlatList
+                            data={data}
+                            keyExtractor={item => item.id}
+                            renderItem={({item}) =>
+                                <TouchableOpacity>
+                                    <View style={
+                                        {
+                                            backgroundColor: "#fff",
+                                            padding: 5,
+                                            flexDirection: "row",
+                                            marginHorizontal: 2,
+                                            flexWrap: "wrap"
+                                        }}>
+                                        <Image source={{uri: "https://source.unsplash.com/random"}}
+                                               style={styles.image}/>
+                                        <View style={{
+                                            flex: 1,
+                                            marginLeft: 10,
+                                            justifyContent: "flex-start",
+                                            alignItems: "flex-start"
+                                        }}>
+                                            <Text numberOfLines={1} style={styles.textTitle}>{item.name}</Text>
+                                            <Text numberOfLines={1}
+                                                  style={{color: "gray", fontSize: 12,}}>{item.description}</Text>
+                                            <View style={{flexDirection: "row", alignItems: "center"}}>
+                                                <Icon name="schedule" type="material" color="gray" size={15}/>
+                                                <Text
+                                                    style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
+                                                <Icon name="calendar-today" type="material" color="gray" size={15}/>
+                                                <Text style={styles.textGray}>{item.day}</Text>
+                                            </View>
+                                            <View style={{flexDirection: "row", alignItems: "center", marginTop: 15}}>
+                                                <Rating imageSize={15} startingValue={item.rate} ractions={5}
+                                                        ratingCount={1}/>
+                                                <Text style={styles.textBlack}>{item.rate}</Text>
+                                                <Icon name="category" type="material" color="gray" size={15}/>
+                                                <Text style={styles.textBlack}>{item.CourseCate.name}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            }
+                        />
+                    </ScrollView>
+                }
+            </>
+        )
 }
 
 const styles = StyleSheet.create({
@@ -220,6 +195,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 2
     },
     textHeader: {
+        paddingHorizontal:10,
         fontSize: 20,
         fontWeight: "bold",
         color: Colors.secondary,

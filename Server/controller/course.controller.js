@@ -22,23 +22,22 @@ exports.createCourse = (req, res) => {
     .then((course) => {
       if (req.body.tagname) {
         for (i = 0; i < req.body.tagname.length; i++) {
-        Tag.create({
-          name: req.body.tagname[i],
-          courseId: course.id,
-          categoryId: course.categoryId,
-        }).then((tag) => {
-          //Set Join table tag_course
-          course.setTags(tag).then(() => {
-            //Display Response
-           
+          Tag.create({
+            name: req.body.tagname[i],
+            courseId: course.id,
+            categoryId: course.categoryId,
+          }).then((tag) => {
+            //Set Join table tag_course
+            course.setTags(tag).then(() => {
+              //Display Response
+            });
           });
+        }
+        res.status(201).send({
+          course: course,
+          message: "Course was registered successfully!",
         });
-      }
-      res.status(201).send({
-        course: course,
-        message: "Course was registered successfully!",
-      });
-    } else {
+      } else {
         res.status(404).send({
           message: "Not found Tagname !!!",
         });
@@ -68,11 +67,11 @@ exports.findAllCourse = async (req, res) => {
         "rate",
       ],
       include: [
-        // {
-        //   // model: Categories,
-        //   // as: "categories",
-        //   // attributes: ["name"],
-        // },
+        {
+          model: Categories,
+          as: "CourseCate",
+          attributes: ["name"],
+        },
         {
           model: User,
           as: "tutors",
@@ -189,4 +188,3 @@ exports.deleteCourse = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
-

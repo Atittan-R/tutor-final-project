@@ -15,7 +15,7 @@ module.exports = function (app) {
     controller.findAllCourse
   );
 
-  app.get(
+  app.post(
     "/api/course/categories",
     // [authJwt.verifyToken],
     controller.findCourseFromCategories

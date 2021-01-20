@@ -95,6 +95,30 @@ export default function Me({ navigation }) {
           <View style={{ padding: 5 }}></View>
 
           <View style={styles.coverArea}>
+            {user.roles.length === 1 && (
+                <Pressable
+                    onPress={() => navigation.navigate("RegisterTutor")}
+                    // onPress={() => _retrieveData}
+                    style={({ pressed }) => [
+                      { backgroundColor: pressed ? Colors.primary : Colors.white },
+                      styles.wrapperCustom,
+                    ]}
+                >
+                  <View style={styles.viewItem}>
+                    <Icon
+                        name="add-task"
+                        type="material"
+                        color={Colors.secondary}
+                    />
+                    <Text style={styles.textNormal}>Register Tutor</Text>
+                    <Icon
+                        name="navigate-next"
+                        type="material"
+                        color={Colors.secondary}
+                    />
+                  </View>
+                </Pressable>
+            )}
             <Pressable
               onPress={() => navigation.navigate("Feed", { name: "Request" })}
               // onPress={() => _retrieveData}

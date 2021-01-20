@@ -13,7 +13,7 @@ export const actionCreators = {
 export const initialState = {
     loading: true,
     error: false,
-    course: [],
+    data: [],
 }
 
 export function reducer(state, action) {
@@ -21,7 +21,7 @@ export function reducer(state, action) {
         case types.LOADING:
             return { ...state, loading: true, error: false }
         case types.SUCCESS:
-            return { loading: false, error: false, course: action.payload }
+            return { loading: false, error: false, data: action.payload }
         case types.FAILURE:
             return { ...state, loading: false, error: true }
     }

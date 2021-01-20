@@ -47,13 +47,6 @@ const HomeStack = () => {
         }}
       />
       <Stack.Screen
-        name="RegisterTutor"
-        component={RegisterTutor}
-        options={{
-          headerTitle: "RegisterTutor",
-        }}
-      />
-      <Stack.Screen
         name="NearMe"
         component={NearMe}
         options={{

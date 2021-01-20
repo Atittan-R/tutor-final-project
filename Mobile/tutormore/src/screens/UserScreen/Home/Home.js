@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, {useCallback, useEffect, useReducer, useState} from "react";
 import {
     FlatList,
     Image,
@@ -10,16 +10,17 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { SwipeablePanel } from "rn-swipeable-panel";
+import {SwipeablePanel} from "rn-swipeable-panel";
 import Colors from "../../../configs/Colors";
 import {Icon, Rating} from "react-native-elements";
-import PanelCategory from "../../../components/swipers/PanelCategory";
-import { actionCreators, initialState, reducer } from "./CourseReducer";
+import PanelCategory from "../../../components/swipers/Categories";
+import {actionCreators, initialState, reducer} from "./CourseReducer";
 import API from "../../../services/API";
 import LoadingScreen from "../../../components/Loading";
-import { styles } from "./Style";
+import {styles} from "./Style";
+import NoDataScreen from "../../../components/Nodata";
 
-export default function Home({ navigation }) {
+export default function Home({navigation}) {
     // search bar
     const [filterItem, setFilterItem] = useState(null)
     const searchAction = (text) => {
@@ -35,31 +36,29 @@ export default function Home({ navigation }) {
         fetchData().then(() => setRefreshing(false));
     }, []);
 
+    const openPanel = () => setIsPanelActive(true);
+    const closePanel = () => setIsPanelActive(false);
+
     //Panel Open Close
     const [panelProps, setPanelProps] = useState({
         fullWidth: true,
-        openLarge: false,
-        showCloseButton: true,
+        openLarge: true,
         closeOnTouchOutside: true,
         onClose: () => closePanel(),
         onPressCloseButton: () => closePanel(),
-        // ...or any prop you want
     });
     const [isPanelActive, setIsPanelActive] = useState(false);
-    const openPanel = () => {
-        setIsPanelActive(true);
-    };
-    const closePanel = () => {
-        setIsPanelActive(false);
+    const wait = timeout => {
+        return new Promise(resolve => {
+            setTimeout(resolve, timeout);
+        });
     };
 
     //Data
     async function fetchData() {
         dispatch(actionCreators.loading())
         try {
-            const response = await API.get(
-                '/course/findAll'
-            )
+            const response = await API.get('/course/findAll')
             const course = await response.data;
             // console.log("course:", course)
             dispatch(actionCreators.success(course))
@@ -73,27 +72,26 @@ export default function Home({ navigation }) {
         fetchData()
     }, [])
 
-    const { course, loading, error } = state
+    const {data, loading, error} = state
 
     if (loading) {
-        return (
-            <LoadingScreen />
-        )
+        return <LoadingScreen/>
     }
-
     if (error) {
         return (
-            <View style={styles.center}>
-                <Text>Failed to load posts!</Text>
-            </View>
+            <ScrollView style={styles.center}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+                <View>
+                    <Text>Failed to load posts!</Text>
+                </View>
+            </ScrollView>
         )
     }
 
     return (
         <>
-            <SafeAreaView style={styles.container} />
-
-            {/*Majors*/}
+            <SafeAreaView style={styles.container}/>
+            {/*Header*/}
             <View style={styles.viewItem}>
                 <Text style={styles.titleHome}>Tutor More</Text>
                 <TextInput
@@ -103,259 +101,161 @@ export default function Home({ navigation }) {
                 />
                 <TouchableOpacity
                     onPress={() => navigation.push("Search")}>
-                    <Icon name="search" type="material" color={Colors.secondary} />
+                    <Icon name="search" type="material" color={Colors.secondary}/>
                 </TouchableOpacity>
             </View>
-            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
                 {/*Category*/}
                 <View style={styles.bg}>
-                    <View style={styles.line} />
-                    <View style={{ marginVertical: 10 }}>
+                    <View style={{marginVertical: 10}}>
                         <View style={[styles.topic, styles.row]}>
-                            <View style={[styles.column, styles.box]} />
+                            <View style={[styles.column, styles.box]}/>
                             <Text style={[styles.column, styles.textRec]}>Category</Text>
                         </View>
                     </View>
 
-                    <ScrollView horizontal={true}>
+                    <View style={[styles.row,styles.cateWrap]}>
                         <TouchableOpacity
-                            style={{
-                                padding: 5,
-                                marginVertical: 2,
-                                flex: 1,
-                                alignItems: "center",
-                            }}
-                            onPress={() => openPanel()}>
+                            style={styles.touchStyle}
+                            onPress={() => navigation.navigate("List", {categories: "Digital Technology"})}>
                             <View
-                                style={{
-                                    padding: 15,
-                                    backgroundColor: Colors.gray,
-                                    borderRadius: 20,
-                                }}>
+                                style={styles.touchView}>
                                 <Image
-                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                                    style={styles.touchImage}
                                     source={require("../../../assets/images/categories/digital.png")}
                                 />
                             </View>
-                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
-                                Digital
+                            <Text style={styles.touchTopic}>
+                                Digital Technology
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{
-                                padding: 5,
-                                marginVertical: 2,
-                                flex: 1,
-                                alignItems: "center",
-                            }}
-                            onPress={() => navigation.navigate("List",{categories: "Medicine"})} >
+                            style={styles.touchStyle}
+                            onPress={() => navigation.navigate("List", {categories: "Medicine"})}>
                             <View
-                                style={{
-                                    padding: 15,
-                                    backgroundColor: Colors.gray,
-                                    borderRadius: 20,
-                                }}>
+                                style={styles.touchView}>
                                 <Image
-                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
-                                    source={require("../../../assets/images/categories/doctor.png")} />
+                                    style={styles.touchImage}
+                                    source={require("../../../assets/images/categories/doctor.png")}/>
                             </View>
-                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
+                            <Text style={styles.touchTopic}>
                                 Doctor
                             </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            style={{
-                                padding: 5,
-                                marginVertical: 2,
-                                flex: 1,
-                                alignItems: "center",
-                            }}
-                            onPress={() => openPanel()}
-                        >
-                            <View
-                                style={{
-                                    padding: 15,
-                                    backgroundColor: Colors.gray,
-                                    borderRadius: 20,
-                                }}
-                            >
+                            style={styles.touchStyle}
+                            onPress={() => navigation.navigate("List", {categories: "Engineering"})}>
+                            <View style={styles.touchView}>
                                 <Image
-                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                                    style={styles.touchImage}
                                     source={require("../../../assets/images/categories/engineering.png")}
                                 />
                             </View>
-                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
+                            <Text style={styles.touchTopic}>
                                 Engineering
                             </Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity
-                            style={{
-                                padding: 5,
-                                marginVertical: 2,
-                                flex: 1,
-                                alignItems: "center",
-                            }}
-                            onPress={() => navigation.navigate("test")}
-                        >
-                            <View
-                                style={{
-                                    padding: 15,
-                                    backgroundColor: Colors.gray,
-                                    borderRadius: 20,
-                                }}
-                            >
+                            style={styles.touchStyle}
+                            // onPress={() => navigation.navigate("test")}>
+                            onPress={() => openPanel()}>
+                            <View style={styles.touchView}>
                                 <Image
-                                    style={{ width: 50, height: 50, resizeMode: "contain" }}
+                                    style={styles.touchImage}
                                     source={require("../../../assets/images/categories/more.png")}
                                 />
                             </View>
-                            <Text style={{ marginVertical: 2, textAlign: "center" }}>
-                                More..(Test)
+                            <Text style={styles.touchTopic}>
+                                More
                             </Text>
                         </TouchableOpacity>
-                    </ScrollView>
-                </View>
+                    </View>
+                    </View>
+                {/* End Categories*/}
+
                 {/* recommend */}
                 <View style={styles.bg}>
-                    <View style={styles.line} />
-                    <View style={{ marginVertical: 10 }}>
+                    <View style={styles.line}/>
+                    <View style={{marginVertical: 10}}>
                         <View style={[styles.topic, styles.row]}>
-                            <View style={[styles.column, styles.box]} />
+                            <View style={[styles.column, styles.box]}/>
                             <Text style={[styles.column, styles.textRec]}>Recommend</Text>
                         </View>
                     </View>
 
                     <FlatList
                         horizontal={true}
-                        data={course}
+                        data={data}
                         keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
+                        renderItem={({item}) => (
                             <TouchableOpacity
-                                style={{
-                                    padding: 5,
-                                    marginVertical: 2,
-                                    marginHorizontal: 10,
-                                    flex: 1,
-                                    alignItems: "center",
-                                    backgroundColor: Colors.gray,
-                                    borderRadius: 20,
-                                    width: 150,
-                                    height: 150,
-                                    flexWrap: "wrap",
-                                    flexShrink: 1,
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        padding: 15,
-                                    }}
-                                >
-                                    <Image
-                                        style={{
-                                            width: 60,
-                                            height: 60,
-                                            resizeMode: "contain",
-                                            alignSelf: "center",
-                                        }}
-                                        source={require("../../../assets/images/categories/digital.png")}
-                                    />
+                                style={styles.listStyle}>
+                                <View style={{padding: 15}}>
+                                    <Image source={{uri: "https://source.unsplash.com/random"}}
+                                           style={styles.courseImage}/>
                                     <View>
-                                        <Text style={{ marginVertical: 2, fontWeight: "bold" }}>
+                                        <Text style={styles.listName}>
                                             {item.name}
                                         </Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 12 }}>{item.description}</Text>
+                                        <Text numberOfLines={1} style={styles.listDesc}>{item.description}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
                         )}
                     />
                 </View>
+                {/* End Recommend */}
 
                 <View style={styles.bg}>
-                    <View style={styles.line} />
+                    <View style={styles.line}/>
                     <View style={[styles.topic, styles.row]}>
-                        <View style={[styles.column, styles.box]} />
+                        <View style={[styles.column, styles.box]}/>
                         <Text style={[styles.column, styles.textRec]}>All Course</Text>
                     </View>
-
-                    <FlatList
-                        data={filterItem ? filterItem : course}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <Pressable
-                                style={styles.card}
-                                // TODO Set PARAM to CourseDetail
-                                onPress={() => {
-                                    navigation.navigate("CourseDetail", { course: item });
-                                }}
-                            >
-                                <View style={styles.row}>
-                                    <View style={[styles.column, { paddingLeft: 120 }]}>
-                                        <View style={{ position: "absolute", top: -36, left: 3 }}>
-                                            <Image
-                                                style={[
-                                                    styles.column,
-                                                    {
-                                                        width: 100,
-                                                        height: 160,
-                                                        marginRight: 10,
-                                                        borderRadius: 20,
-                                                    },
-                                                ]}
-                                                overflow={"hidden"}
-                                                resizeMode={"stretch"}
-                                                source={{
-                                                    uri:
-                                                        "https://images.template.net/715/Free-Children-Book-Cover-Template-2.jpg",
-                                                }}
-                                            />
-                                        </View>
-                                    </View>
-
-                                    <View style={[styles.column, { flex: 1 }]}>
-                                        <View style={[styles.row, { flex: 2 }]}>
-                                            <Text style={styles.courseTitle}>{item.name}</Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <Text numberOfLines={2}
-                                                style={[
-                                                    styles.courseDescription,
-                                                    { flex: 1, flexWrap: "wrap" },
-                                                ]}
-                                            >
-                                                {item.description}
-                                            </Text>
-                                        </View>
-
-                                        <View style={styles.row}>
-                                            <View style={styles.column}>
-                                                <Text style={styles.row}>{item.tutors.username}</Text>
+                    {data.length === 0 ?
+                        <NoDataScreen />:
+                        <FlatList
+                            data={filterItem ? filterItem : data}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({item}) => (
+                                <TouchableOpacity style={{marginTop: 5,}}>
+                                    <View style={styles.courseWrap}>
+                                        <Image source={{uri: "https://source.unsplash.com/random"}}
+                                               style={styles.courseImage}/>
+                                        <View style={styles.courseView}>
+                                            <Text numberOfLines={1} style={styles.courseName}>{item.name}</Text>
+                                            <View style={styles.courseViewDetail}>
+                                                <Text numberOfLines={1} style={styles.courseDescription}>
+                                                    {item.description}
+                                                </Text>
                                             </View>
-
-                                            <View
-                                                style={[
-                                                    styles.column,
-                                                    {
-                                                        flex: 1,
-                                                        alignItems: "flex-end",
-                                                    },
-                                                ]}
-                                            >
-                                                <Rating imageSize={20} readonly startingValue={ item.rate.valueOf() }/>
+                                            <View style={styles.courseViewDetail}>
+                                                <Icon name="schedule" type="material" color="gray" size={15}/>
+                                                <Text
+                                                    style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
+                                                <Icon name="calendar-today" type="material" color="gray" size={15}/>
+                                                <Text style={styles.textGray}>{item.day}</Text>
+                                            </View>
+                                            <View style={styles.courseDetail}>
+                                                <Rating imageSize={15} startingValue={item.rate} ractions={5}
+                                                        ratingCount={1}/>
+                                                <Text style={styles.textBlack}>{item.rate}</Text>
+                                                <Icon name="category" type="material" color="gray" size={15}/>
+                                                <Text style={styles.textBlack}>{item.CourseCate.name}</Text>
                                             </View>
                                         </View>
                                     </View>
-                                </View>
-                                {/*Course Title*/}
-                            </Pressable>
-                        )}
-                    />
+                                </TouchableOpacity>
+                            )}
+                        />
+                    }
                 </View>
             </ScrollView>
             <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-                <PanelCategory />
+                <PanelCategory/>
             </SwipeablePanel>
         </>
     );
