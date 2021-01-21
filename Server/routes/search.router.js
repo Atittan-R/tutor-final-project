@@ -10,15 +10,24 @@ module.exports = function (app) {
   //   });
 
  
-  app.get(
+  app.post(
     "/api/search",
     // [authJwt.verifyToken],
     controller.search
   );
   app.get(
-    "/api/recommended",
+    "/api/Tagrecommended",
     // [authJwt.verifyToken],
     controller.recommended
   );
- 
+  app.post(
+    "/api/search/course",
+    // [authJwt.verifyToken],
+    controller.searchCourse
+  );
+  app.post(
+    "/api/search/request",
+    // [authJwt.verifyToken],
+    controller.searchRequest
+  );
 };
