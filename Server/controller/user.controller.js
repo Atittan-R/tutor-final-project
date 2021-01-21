@@ -1,7 +1,4 @@
 const db = require("../models");
-const config = require("../config/auth.config");
-const express = require("express");
-const app = express();
 const User = db.user;
 
 exports.findAllUser = (req, res) => {

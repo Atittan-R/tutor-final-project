@@ -21,9 +21,9 @@ import LoadingScreen from "../../../components/Loading";
 export default function CourseDetail({navigation, route}) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-
-    const {course} = route.params;
     const currentUser = JSON.parse(state.userData);
+    const {course} = route.params;
+
     const [region, setRegion] = useState({
         latitude: course.lat.valueOf(),
         longitude: course.long.valueOf(),
