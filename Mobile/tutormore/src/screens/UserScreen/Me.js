@@ -45,7 +45,6 @@ export default function Me({ navigation }) {
 
   useEffect(() => {
     setProfile(user);
-    console.log(Profile);
   }, []);
 
   // console.log(state.userData)

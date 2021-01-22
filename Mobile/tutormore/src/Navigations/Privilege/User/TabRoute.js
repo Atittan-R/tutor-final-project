@@ -7,6 +7,7 @@ import Colors from "../../../configs/Colors";
 import MeStack from "./MeStack";
 import { Icon } from "react-native-elements";
 import RequestStack from "./RequestStack";
+import InboxStack from "./InboxStack";
 
 const Tabs = AnimatedTabBarNavigator();
 
@@ -38,6 +39,12 @@ export default function TapRoute() {
         options={{
           tabBarIcon: () => (
             <Icon name="add-circle" type="material" color={Colors.secondary} />
+          )
+        }} />
+        <Tabs.Screen name="Inbox" component={InboxStack}
+         options={{
+          tabBarIcon: () => (
+            <Icon name="notifications-active" type="material" color={Colors.secondary} />
           )
         }} />
       {/* <Tabs.Screen name="Notice" component={FeedStack} /> */}

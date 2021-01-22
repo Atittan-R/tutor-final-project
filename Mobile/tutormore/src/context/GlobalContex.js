@@ -63,7 +63,7 @@ export const GlobalProvider = ({children}) => {
     );
 
     const useLogin = async (data) => {
-        // console.log("Use Login",data)
+        // console.log("Use Login",data.email)
         try {
             const user = await API.post(
                 "/auth/signin",
@@ -87,13 +87,13 @@ export const GlobalProvider = ({children}) => {
     const auth = useMemo(
         () => ({
             signIn: async (data) => {
-                // console.log(data)
+                console.log("Hello",data)
                 try {
                     const user = await useLogin(data);
+                    console.log(user)
                     await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: JSON.stringify(user.data), r: JSON.stringify(user.data.roles)});
-
                 } catch (e) {
-                    console.log(e)
+                    alert(e)
                 }
             },
             signOut: async () => {
