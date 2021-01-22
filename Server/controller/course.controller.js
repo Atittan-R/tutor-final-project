@@ -2,7 +2,7 @@ const db = require("../models");
 const Course = db.course;
 const Tag = db.tag;
 const User = db.user;
-const Categories = db.user;
+const Categories = db.categories;
 
 exports.createCourse = (req, res) => {
   //Save Course Data to Database
@@ -13,7 +13,6 @@ exports.createCourse = (req, res) => {
     time_end: req.body.time_end,
     duration: req.body.duration,
     description: req.body.description,
-    price: req.body.price,
     amount: req.body.amount,
     lat: req.body.lat,
     long: req.body.long,
@@ -31,13 +30,13 @@ exports.createCourse = (req, res) => {
             //Set Join table tag_course
             course.setTags(tag).then(() => {
               //Display Response
-              res.status(201).send({
-                course: course,
-                message: "Course was registered successfully!",
-              });
             });
           });
         }
+        res.status(201).send({
+          course: course,
+          message: "Course was registered successfully!",
+        });
       } else {
         res.status(404).send({
           message: "Not found Tagname !!!",
@@ -69,16 +68,51 @@ exports.findAllCourse = async (req, res) => {
       ],
       include: [
         {
+          model: Categories,
+          as: "CourseCate",
+          attributes: ["name"],
+        },
+        {
           model: User,
           as: "tutors",
         },
-        // {
-        //   // model: Categories,
-        //   // as: "categories",
-        //   // attributes: ["name"],
-        // },
       ],
     });
+    await res.status(201).send(result);
+  } catch (err) {
+    await res.status(500).send({ message: err.message });
+  }
+};
+
+exports.findCourseFromCategories = async (req, res) => {
+  const cate = req.body.cate;
+  try {
+    const result = await Course.findAll({
+      attributes: [
+        "id",
+        "name",
+        "day",
+        "time_start",
+        "time_end",
+        "duration",
+        "amount",
+        "lat",
+        "long",
+        "distance",
+        "createdAt",
+        "description",
+        "rate",
+      ],
+      include: [
+        {
+          model: Categories,
+          as: "CourseCate",
+          where: { name: cate },
+          attributes: ["name"],
+        },
+      ],
+    });
+
     await res.status(201).send(result);
   } catch (err) {
     await res.status(500).send({ message: err.message });

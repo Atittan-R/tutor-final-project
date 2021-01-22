@@ -72,48 +72,43 @@ function initial() {
 
   Categories.create({
     id: 2,
-    name: "Information Technology",
-  });
-
-  Categories.create({
-    id: 3,
     name: "Management Technology",
   });
 
   Categories.create({
-    id: 4,
+    id: 3,
     name: "Engineering",
   });
   Categories.create({
-    id: 5,
+    id: 4,
     name: "Digital Technology",
   });
   Categories.create({
-    id: 6,
+    id: 5,
     name: "Science",
   });
   Categories.create({
-    id: 7,
+    id: 6,
     name: "Agricultural Technology",
   });
   Categories.create({
-    id: 8,
+    id: 7,
     name: "Foreign Languages",
   });
   Categories.create({
-    id: 9,
+    id: 8,
     name: "Medicine",
   });
   Categories.create({
-    id: 10,
+    id: 9,
     name: "Nurse",
   });
   Categories.create({
-    id: 11,
+    id: 10,
     name: "Dentistry",
   });
   Categories.create({
-    id: 12,
+    id: 11,
     name: "Public Health",
   });
 }

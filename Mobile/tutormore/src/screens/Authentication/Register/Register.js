@@ -144,7 +144,6 @@ const Register = ({ navigation }) => {
             label={"Sign Up"}
             disable={confirmMassage}
             onPress={() => callAPI({ email, password, phoneNumber, username })
-              //TODO Add Context to use
             }
           />
         </View>

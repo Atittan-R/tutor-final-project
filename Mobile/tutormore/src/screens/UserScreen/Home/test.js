@@ -1,7 +1,19 @@
 import React, {useCallback, useEffect, useReducer, useState} from 'react';
-import {ActivityIndicator, FlatList, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+    ActivityIndicator,
+    Button,
+    FlatList,
+    RefreshControl,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
 import { actionCreators, initialState, reducer } from './CourseReducer'
 import API from "../../../services/API";
+import Modal from 'react-native-modal';
+import LoadingScreen from "../../../components/Loading";
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -39,6 +51,12 @@ const MyComponent = () => {
 
     const { course, loading, error } = state
 
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
     if (loading) {
         return (
             <View style={styles.center}>
@@ -57,20 +75,21 @@ const MyComponent = () => {
 
     return (
         <>
-            <FlatList
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-                style={styles.container}
-                keyExtractor={(course) => course.id}
-                data={course}
-                renderItem={({ item: { id, name, amount }, index }) => (
-                    <View key={id} style={styles.post}>
-                        <Text style={styles.title}>
-                            {index}. {name}
-                        </Text>
-                        <Text style={styles.body}>{amount}</Text>
+            <View style={{flex: 1,justifyContent: "center",alignItems: "center"}}>
+                <View>
+                    <ActivityIndicator />
+                </View>
+                <Button title="Show modal" onPress={toggleModal} />
+                <Modal style={{flex:1,alignItems:"center",}}
+                       isVisible={isModalVisible}
+                       onSwipeComplete={() => setModalVisible(false)}
+                       swipeDirection="left">
+                    <View style={styles.scrollView}>
+                        <LoadingScreen />
+                        <Button title="Hide modal" onPress={toggleModal} />
                     </View>
-                )}
-            />
+                </Modal>
+            </View>
         </>
     );
 };
@@ -82,7 +101,9 @@ export const styles = StyleSheet.create({
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
     scrollView: {
-        flex: 1,
+        width: 100,
+        height: 100,
+        borderRadius: 10,
         backgroundColor: 'pink',
         alignItems: 'center',
         justifyContent: 'center',

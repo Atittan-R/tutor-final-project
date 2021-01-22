@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View,ToastAndroid } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View ,ToastAndroid} from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 import Amount from '../../components/forms/Amount';
@@ -14,77 +14,81 @@ import UploadImage from '../../components/forms/UploadImage';
 import Colors from '../../configs/Colors'
 import API from "../../services/API"
 
-export default function CreateCourse({ navigation }) {
-    const [day, setDay] = useState("")
-    const [mytags, setTags] = useState([]);
-    const [claerTag, setClaerTag] = useState(false);
-    const [claerdate, setClaerDate] = useState(false);
-    const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
-    const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
+export default function TakeCreateCourse({ route, navigation }) {
+    const { req } = route.params
     const [coureName, setCourseName] = useState("");
-    const [amount, setAmount] = useState("");
+    const [amount, setAmount] = useState(0);
     const [catagory, setCatagory] = useState("");
+    const [selectedValue, setSelectedValue] = useState("");
     const [lat, setlat] = useState(14.8817767)
     const [long, setlong] = useState(102.0185075)
-    const [selectedValue, setSelectedValue] = useState("");
+      
+    //TODO
+    const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
+    const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
+    const [day, setDay] = useState("")
+    const [claerdate, setClaerDate] = useState(false);
+    const [mytags, setTags] = useState([]);
+    const [claerTag, setClaerTag] = useState(false);
+    const [requsetId,setRequsetId]= useState(0);
+
+    //TODO
     const getTimeStart = (result) => {
         setTimeStart(result);
     }
     const getTimeEnd = (result) => {
         setTimeEnd(result);
     }
-    const clear = () => {
-        setCourseName("")
-        setClaerTag(true)
-        setDay(null)
-        setCatagory(null)
-        // setDescription("")
-        // setTags([])
-        setTimeEnd(new Date(0, 0, 0, 0))
-        setTimeStart(new Date(0, 0, 0, 0))
-        setClaerDate(true)
-    }
-    const create= async ()=>{
 
-
-
+    const taked = async () =>{
+        // console.log("day ",day)
+        // console.log("tag ",mytags);
+        // console.log("name ",coureName)
+        // console.log("duration ",selectedValue)
+        // console.log("amount ",amount)
+        // console.log(lat,'  ',long)
+        // console.log("reqId", requsetId)
+        // console.log("catagory "(req.map((i) => i.categories.id)))
+        const clear = () => {
+            setCourseName("")
+            setClaerTag(true)
+            setDay(null)
+            setCatagory(null)
+            // setDescription("")
+            // setTags([])
+            setTimeEnd(new Date(0, 0, 0, 0))
+            setTimeStart(new Date(0, 0, 0, 0))
+            setClaerDate(true)
+        }
         try {
-            console.log(coureName);
-            console.log(day.toString());
-            console.log(catagory);
-            console.log(TimeStart.getHours() + ":" + TimeStart.getMinutes());
-            console.log(TimeEnd.getHours() + ":" + TimeEnd.getMinutes());
-            console.log(mytags.toString());
-            console.log(lat.toString());
-            console.log(long.toString());
-            console.log(selectedValue);
-            const createCourse = await API.post("course/create", {
-                name: coureName,
-                day: day.toString(),
-                time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(),
-                time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
-                // description: Description,
-                categoryId: catagory,
-        
-                userId: 2,
-                tagname: mytags,
+           
+            const teke_res = await API.post("/taked", {
+                tutorId: 2,
+                requestId:requsetId,
+                amount:amount,
+                tagname:mytags,
                 duration:selectedValue,
                 lat:lat.toString(),
                 long:long.toString()
             });
-            // console.log('====================================');
-            // console.log(createCourse);
-            // console.log('====================================');
+            console.log((teke_res));
+            ToastAndroid.show("create course success !", ToastAndroid.SHORT);
             clear()
             navigation.navigate("Home",{screen:"Home"})
-            ToastAndroid.show("create course success !", ToastAndroid.SHORT);
+          
         } catch (error) {
-            alert(error)
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
+    useEffect( () => {
+        setCourseName(req.map((i) => i.name).toString())
+        setTimeStart(req.map((i) => i.time_start).toString())
+        setTimeEnd(req.map((i) => i.time_end).toString())
+        setDay(req.map((i) => i.date).toString())
+        setCatagory(req.map((i) => i.categories.name).toString())
+        setRequsetId(parseInt(req.map((i) => i.id).toString()))
+    }, [])
+
     return (
         <>
             {/* header */}
@@ -92,7 +96,7 @@ export default function CreateCourse({ navigation }) {
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Course</Text>
                 <TouchableOpacity
-                    onPress={() => create()}>
+                    onPress={() =>taked()}>
                     <Icon name="check" type="material" color={Colors.secondary} />
                 </TouchableOpacity>
             </View>
@@ -101,26 +105,31 @@ export default function CreateCourse({ navigation }) {
                     <UploadImage />
                     <TextInputButton
                         label={"Course"}
-                        placeholder={"Enter your course name"}
-                        onTextChange={(text) => setCourseName(text)}
-                        value={coureName}
-                        />
-                    <ModalDate dayValue={[day, setDay]}/>
-                    <Clock 
-                        label={"Time Start"} callback={getTimeStart} claerdate={[claerdate, setClaerDate]}/>
-                    <Clock
-                        label={"Time End"} callback={getTimeEnd} claerdate={[claerdate, setClaerDate]}/>
+                        onTextChange={(text) => setCourseName(text)} value={coureName}editable={true} />
+                    <TextInputButton
+                        label={"Date"}
+                        
+                        onTextChange={(text) => setCourseName(text)} value={day} editable={false} />
+                    <TextInputButton
+                        label={"Time Start"}
+                        onTextChange={(text) => setCourseName(text)} value={TimeStart} editable={false} />
+                    <TextInputButton
+                        label={"Time End"}
+                        onTextChange={(text) => setCourseName(text)} value={TimeEnd} editable={false} />
+             
                     <TermCourse  value={[selectedValue, setSelectedValue]}/>
                     <TextInputButton
                         label={"Amount"}
                         placeholder={"Enter the number of seats"}
                         onTextChange={(text) => setAmount(text)}
+                        keyboardType={"phone-pad"}
                         value={amount}
-                        keyboardType={"phone-pad"} />
-                    <Catagory
-                        selectedValue={catagory}
-                        onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
-                    <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]}/>
+                    />
+                     <TextInputButton
+                        label={"Category"}
+                        onTextChange={(text) => setCourseName(text)} value={catagory} editable={false} />
+                    <Tag
+                         value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
                     <Location lat={[lat, setlat]} long={[long, setlong]}/>
                 </View>
             </ScrollView >

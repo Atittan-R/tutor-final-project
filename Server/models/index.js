@@ -55,10 +55,10 @@ db.course.belongsTo(db.user, {
 
 //SECTION Tag and Categories
 //REVIEW Course has Categories (one-to-many)
-db.categories.hasMany(db.course, { as: "courses" });
+db.categories.hasMany(db.course, { as: "CourseCate" });
 db.course.belongsTo(db.categories, {
   foreignKey: "categoryId",
-  as: "categories",
+  as: "CourseCate",
 });
 
 //REVIEW user has many request (one-to-many)
@@ -93,11 +93,13 @@ db.request.belongsToMany(db.tag, {
   through: "tag_request",
   foreignKey: "requestId",
   otherKey: "tagId",
+  as: "tag",
 });
 db.tag.belongsToMany(db.request, {
   through: "tag_request",
   foreignKey: "tagId",
   otherKey: "requestId",
+  as: "requests",
 });
 
 //REVIEW Request has Categories (one-to-many)
@@ -160,11 +162,11 @@ db.request.belongsToMany(db.user, {
 });
 
 // courseenroll
-db.user.belongsToMany(db.course, {
-  through: "course_enroll",
-  foreignKey: "userId",
-  as: "courseEnroll",
-});
+// db.user.belongsToMany(db.course, {
+//   through: "course_enroll",
+//   foreignKey: "userId",
+//   as: "courseEnroll",
+// });
 
 db.course.belongsToMany(db.user, {
   through: "course_enroll",

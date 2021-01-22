@@ -28,8 +28,9 @@ export default function RoleSelection({navigation})  {
     }, [selected]);
 
     const onSubmitHandler = async (role) => {
-        console.log("Set new Role to")
-        dispatch({type: "ROLE_ENTRY", role: role})
+        // console.log("Set new Role to")
+        dispatch({type: "ROLE_ENTRY", role: role});
+
     };
     return (
         <View style={styles.container}>

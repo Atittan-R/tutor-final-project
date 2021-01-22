@@ -5,6 +5,7 @@ import { PrivilegeUser, PrivilegeTutor } from "./Privilege";
 import { useGlobalVar } from "../context/GlobalContex";
 import RoleSelection from "../screens/Authentication/RoleSelection";
 import { createStackNavigator } from "@react-navigation/stack";
+import { RegisterTutor } from "../screens/UserScreen";
 
 export const role_router = {
     ROLE_USER: <PrivilegeUser />,
@@ -20,19 +21,18 @@ export const renderingCheck = () => {
     // console.log("state.userRole: ", state.userRole)
     // console.log("state.userData: ", state.userData, "\n");
 
-    // if (state.userData === null) {
-    //     return <AuthenticationStack />
-    // } else if (state.userRole) {
-    //     console.log("Hello ", state.userRole)
-    //     return role_router[state.userRole]
-    // } else if (JSON.parse(state.userRoles).length === 1) {
-    //     return role_router[JSON.parse(state.userRoles)];
-    // } else if (JSON.parse(state.userRoles).length === 2) {
-    //     return <RoleSelection />
-    // }
-    return (state.userRole == null ?
-        <RoleSelection /> :
-        role_router[state.userRole])
+    if (state.userData === null) {
+        return <AuthenticationStack />
+    } else if (state.userRole) {
+        return role_router[state.userRole]
+    } else if (JSON.parse(state.userRoles).length === 1) {
+        return role_router[JSON.parse(state.userRoles)];
+    } else if (JSON.parse(state.userRoles).length === 2) {
+        return <RoleSelection />
+    }
+    // return (state.userRole == null ?
+    //     <RoleSelection /> :
+    //     role_router[state.userRole])
 
 };
 
@@ -46,8 +46,15 @@ export default function Routes() {
                     headerShown: false,
                 }}
                 initialRouteName="Root">
-                <RootStack.Screen name={"ROLE"} component={renderingCheck} />
+                <RootStack.Screen name={"route"} component={renderingCheck} />
                 <RootStack.Screen name={"RoleSelect"} component={RoleSelection} />
+                <RootStack.Screen
+                    name="RegisterTutor"
+                    component={RegisterTutor}
+                    options={{
+                        headerTitle: "Register Tutor",
+                    }}
+                />
             </RootStack.Navigator>
         </NavigationContainer>);
 }

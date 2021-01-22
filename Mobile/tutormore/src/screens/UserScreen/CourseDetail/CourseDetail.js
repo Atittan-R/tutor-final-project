@@ -9,19 +9,21 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
+    View, ToastAndroid,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import Colors from "../../configs/Colors";
-import MapView, { Marker } from "react-native-maps";
-import LoadingScreen from "../../components/Loading";
+import Colors from "../../../configs/Colors";
+import MapView, {Marker} from "react-native-maps";
+import API from "../../../services/API";
+import {useGlobalVar} from "../../../context/GlobalContex";
+import LoadingScreen from "../../../components/Loading";
 
-export default function CourseDetail({ navigation, route }) {
-    const data = ["Database", "Mon Wed Fri", "17.0-21.0", "1 Month", "21/30"];
-    const [date, setDateNow] = useState(new Date());
-    const [duration, setDuration] = useState(3);
-    const [price, setPrice] = useState(300);
-    const { course } = route.params;
+export default function CourseDetail({navigation, route}) {
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+
+    const {course} = route.params;
+    const currentUser = JSON.parse(state.userData);
     const [region, setRegion] = useState({
         latitude: course.lat.valueOf(),
         longitude: course.long.valueOf(),
@@ -53,20 +55,29 @@ export default function CourseDetail({ navigation, route }) {
         });
     }
 
-    //course details
-    const details = {
-        course: "Database",
-        date: "Mon Wed Fri",
-        time: "17.0-21.0",
-        duration: "1 month",
-        amount: "21/30",
-    };
-    //tutor profile
-    const profile = {
-        name: "Yami Sukehiro",
-        major: "Information of Technology(ES)",
-        line: "@yami.y",
-    };
+    const [loading, setLoading] = useState(false);
+
+    console.log(currentUser.id, course.id,)
+    const enrollData = async () =>{
+        setLoading(true);
+        try {
+            const response = await API.post("/enroll/course",
+                {
+                    userId: currentUser.id,
+                    courseId: course.id,
+                })
+            setLoading(false);
+            console.log(response.data.status)
+            //TODO
+            // Generate QRCode
+            // Popup QRCode
+            // Ask where to go History or Back
+            ToastAndroid.show("Enroll "+response.data.status, ToastAndroid.LONG);
+            navigation.navigate("Me", {screen: "MyCourse"})
+        }catch (e) {
+            alert(e.response.data.status);
+        }
+    }
 
     const alertEnroll = () => {
         Alert.alert(
@@ -78,11 +89,16 @@ export default function CourseDetail({ navigation, route }) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                { text: "OK", onPress: () => navigation.navigate("Me", { screen: "MyCourse" }) },
+                { text: "OK", onPress: async () => {
+                        await enrollData();
+                    }},
             ],
             { cancelable: false }
         );
     };
+    if(loading){
+        return <LoadingScreen />
+    }
     return (
         <>
             {/* header */}
@@ -110,7 +126,7 @@ export default function CourseDetail({ navigation, route }) {
                 </View>
                 <View style={styles.viewImage}>
                     <Image
-                        source={require("../../assets/Appicon.png")}
+                        source={require("../../../assets/Appicon.png")}
                         style={styles.image}
                     />
                 </View>
@@ -223,6 +239,9 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    },
+    bottom:{
+        paddingBottom: 50,
     },
     headerBar: {
         display: "flex",

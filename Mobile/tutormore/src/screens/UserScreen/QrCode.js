@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import {
-  Button,
   StyleSheet,
   Text,
   View,
-  FlatList,
   SafeAreaView,
-  Image,
   StatusBar,
   TouchableOpacity,
-  Alert,
-  Modal
 } from "react-native";
 import { Icon } from "react-native-elements";
 import QRCode from "react-native-qrcode-svg";
@@ -20,7 +15,6 @@ export default function QrCode({ navigation, route }) {
   const { id, name } = route.params;
   return (
     <>
-
       <SafeAreaView style={styles.container} />
       <View style={styles.headerBar}>
         <TouchableOpacity
@@ -33,8 +27,6 @@ export default function QrCode({ navigation, route }) {
         <QRCode value={id, name} size={200} color={Colors.secondary} backgroundColor={Colors.primary} />
         <Text style={styles.text}>{name}</Text>
       </View>
-
-
     </>
   );
 }
@@ -65,6 +57,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.secondary
   }
-
-
 });

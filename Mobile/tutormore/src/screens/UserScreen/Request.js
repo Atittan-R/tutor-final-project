@@ -31,14 +31,8 @@ export default function Request({ navigation }) {
     }
 
     const creteRequst = async () => {
-
         try {
-            var d = new Date()
-            console.log(CourseName);
-            console.log(day.toString());
-            console.log(Description);
-            console.log(catagory);
-            console.log(tags);
+
             const requst = await API.post("request/create", {
                 name: CourseName,
                 date: day.toString(),
@@ -48,7 +42,7 @@ export default function Request({ navigation }) {
                 categoryId: catagory,
                 userId: 2,
                 tagname: tags
-                ///To Do tag
+              
             });
             console.log(requst.data);
             console.log('====================================');
@@ -56,8 +50,8 @@ export default function Request({ navigation }) {
             navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
 
         } catch (error) {
-            // console.log(error);
-            if (error.response.status == 404) {
+         
+            if (error.response.status==404) {
                 clear();
                 navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
             }
@@ -87,16 +81,7 @@ export default function Request({ navigation }) {
         console.log("day :", day);
         console.log("Tags :", tags);
     }, [CourseName])
-    // useEffect(() => {
-    //     console.log('=================TimeStart===================');
-    //     console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
-    //     console.log('====================================');
-    // }, [TimeStart])
-    // useEffect(() => {
-    //     console.log('=================TimeEnd===================');
-    //     console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
-    //     console.log('====================================');
-    // }, [TimeEnd])
+ 
     return (
         <>
             {/* header */}

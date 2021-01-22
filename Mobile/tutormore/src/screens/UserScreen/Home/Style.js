@@ -10,6 +10,58 @@ export const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 10,
     },
+    cateWrap:{
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        marginHorizontal: 20,
+    },
+    touchStyle: {
+        marginHorizontal: 5,
+        padding: 5,
+        flex: 1,
+        alignItems: "center",
+    },
+    touchView: {
+        padding: 3,
+        backgroundColor: Colors.gray,
+        borderRadius: 23,
+    },
+    touchImage: {
+        width: 50,
+        height: 50,
+        resizeMode: "contain"
+    },
+    touchTopic:{
+        marginVertical: 3,
+        fontSize: 12,
+        textAlign: "center"
+    },
+    listStyle:{
+        padding: 5,
+        marginVertical: 2,
+        marginHorizontal: 10,
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: Colors.gray,
+        borderRadius: 20,
+        width: 150,
+        height: 150,
+        flexWrap: "wrap",
+        flexShrink: 1,
+    },
+    listImage:{
+        width: 60,
+        height: 60,
+        resizeMode: "contain",
+        alignSelf: "center",
+    },
+    listName:{
+        marginVertical: 2, fontWeight: "bold"
+    },
+    listDesc:{
+        fontSize: 12
+    },
     line: {
         marginVertical: 10,
         marginHorizontal: 8,
@@ -62,22 +114,40 @@ export const styles = StyleSheet.create({
         elevation: 6,
         borderRadius: 18,
     },
-    courseTitle: {
-        fontSize: 20,
+    courseWrap:{
+        backgroundColor: "#fff",
+        padding: 5,
+        flexDirection: "row",
+        marginHorizontal: 2,
+        flexWrap: "wrap"
+    },
+    courseView:{
+        flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start"
+    },
+    courseName: {
         fontWeight: "bold",
         color: Colors.secondary,
-        paddingBottom: 10,
     },
-    courseDescription: {
-        fontSize: 13,
-        flex: 1,
-        flexWrap: "wrap",
-        // backgroundColor: Colors.primary,
-        color: Colors.heading,
-        paddingBottom: 10,
+    courseImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 5,
     },
+    courseDescription: { color: "gray", fontSize: 12, },
+    courseViewDetail: {flexDirection: "row", alignItems: "center", marginTop: 12  },
+    courseDetail: {flexDirection: "row", alignItems: "center",marginTop: 5 },
     bg: {
         backgroundColor: Colors.white,
+    },
+    textGray:{
+        color: "gray",
+        fontSize: 12,
+        marginHorizontal: 5
+    },
+    textBlack: {
+        color: Colors.secondary,
+        fontSize: 12,
+        marginHorizontal: 5
     },
     view: {
         display: "flex",
@@ -115,4 +185,10 @@ export const styles = StyleSheet.create({
         fontSize: 30,
         color: Colors.secondary,
     },
+    center:{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    }
+
 });

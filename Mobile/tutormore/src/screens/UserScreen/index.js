@@ -1,7 +1,8 @@
 export { default as Home } from "./Home/Home";
 export { default as test } from "./Home/test";
-export { default as CourseDetail } from "./CourseDetail";
-export { default as MyCourse } from "./MyCourse";
+export { default as List } from "./Home/List";
+export { default as CourseDetail } from "./CourseDetail/CourseDetail";
+export { default as MyCourse } from "./MyCourse/MyCourse";
 export { default as CourseEnroll } from "./CourseEnroll";
 export { default as Search } from "./Search";
 export { default as Feed } from "./Feed";

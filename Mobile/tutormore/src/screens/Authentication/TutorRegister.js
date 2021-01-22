@@ -7,8 +7,7 @@ export default function TutorRegister({ navigation }) {
       <Text>Tutor Register</Text>
       <Button
         title={"Course List"}
-        onPress={() => navigation.navigate("Home")}
-      ></Button>
+        onPress={() => navigation.navigate("Home")} />
     </View>
   );
 }

@@ -3,17 +3,16 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
 
-export default function Location() {
-  const [region, setRegion] = useState({
-    latitude: 51.5079145,
-    longitude: -0.0899163,
+export default function Location(props) {
+  const [lat, setlat]=props.lat
+  const [long, setlong]=props.long
+  const [draggable, setDraggable] = useState({
+    latitude: lat,
+    longitude: long,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-  const [draggable, setDraggable] = useState({
-    latitude: 51.5078788,
-    longitude: -0.0877321,
-  });
+
   function movementMarker(e) {
     // get coordinate from mapviews
     const { latitude, longitude } = e.coordinate;
@@ -24,6 +23,8 @@ export default function Location() {
   }
   function onClickMap(e) {
     const { latitude, longitude } = e.coordinate;
+    setlat(latitude)
+    setlong(longitude)
     setDraggable({
       latitude: latitude,
       longitude: longitude,
@@ -35,8 +36,8 @@ export default function Location() {
       <View style={styles.textDate}>
         <MapView
           style={styles.map}
-          region={region}
-          onRegionChangeComplete={(region) => setRegion(region)}
+          region={draggable}
+          onRegionChangeComplete={(region) => setDraggable(region)}
           onPress={(e) => onClickMap(e.nativeEvent)}
         >
           <Marker
