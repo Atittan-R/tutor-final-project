@@ -12,16 +12,16 @@ import {
   Alert,
   Modal
 } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Rating } from "react-native-elements";
 import Colors from "../../configs/Colors";
 
 export default function TeachingList({ navigation }) {
   const data = [
-    { id: 1, course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 2, course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month" },
-    { id: 3, course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month" },
-    { id: 4, course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 5, course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
+    { id: 1, course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month", rate: 4.8 },
+    { id: 2, course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month", rate: 1.8 },
+    { id: 3, course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month", rate: 4.5 },
+    { id: 4, course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month", rate: 2.6 },
+    { id: 5, course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month", rate: 3.7 },
   ];
 
   return (
@@ -43,29 +43,42 @@ export default function TeachingList({ navigation }) {
         keyExtractor={(i) => i}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.push("CheckList")}
+            onPress={() => navigation.push("CheckList", { id: item.id, course: item.course })}
+            key={item.id}
           >
-            <View style={styles.viewItem}>
+            <View style={styles.card}>
               <Image source={require("../../assets/Appicon.png")} style={styles.image} />
-              <View>
-                <Text style={styles.title}>{item.course}</Text>
-                <Text style={styles.text}>{item.date}</Text>
-                <Text style={styles.text}>{item.time}</Text>
-                <Text style={styles.text}>{item.duration}</Text>
+              <View style={styles.content}>
+                <Text numberOfLines={1} style={styles.title}>{item.course}</Text>
+                <View style={styles.contentRow}>
+                  <Icon name="calendar-today" type="material" color="gray" size={15} />
+                  <Text style={styles.textGray}>{item.time}</Text>
+                  <Icon name="schedule" type="material" color="gray" size={15} />
+                  <Text style={styles.textGray}>{item.date}</Text>
+                </View>
+                <View style={styles.contentRow}>
+                  <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                  <Text style={styles.textGray}>{item.rate}</Text>
+                </View>
                 <View style={styles.icon}>
+                  {/* detail */}
                   <TouchableOpacity
-                    onPress={() => navigation.push("CourseDetail")}
+                    // onPress={() => navigation.push("CourseDetail",{id:item.id, course:item.course})}
                     style={styles.button}>
-                    <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} />
+                    <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>
                   </TouchableOpacity>
+
+                  {/* edit */}
                   <TouchableOpacity
                     style={styles.button}
                   // onPress={() => setModalVisible(true)}
                   >
-                    <Icon name="edit" type="material" color={Colors.secondary} />
+                    <Icon name="edit" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Edit</Text>
                   </TouchableOpacity>
+
+                  {/* delete */}
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
@@ -80,7 +93,7 @@ export default function TeachingList({ navigation }) {
                       )
                     }}
                   >
-                    <Icon name="delete-outline" type="material" color={Colors.secondary} />
+                    <Icon name="delete-outline" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Delete</Text>
                   </TouchableOpacity>
                 </View>
@@ -113,29 +126,33 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
 
   },
-  viewItem: {
-    flex: 1,
+  card: {
+    padding: 5,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginHorizontal: 10,
-    marginTop: 10,
-    borderRadius: 5,
-    padding: 10,
+    marginHorizontal: 2,
+    flexWrap: "wrap",
     backgroundColor: Colors.white
   },
   icon: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
+    marginTop: 15
   },
   image: {
     width: 100,
     height: 100,
-    marginRight: 10
+    borderRadius: 5
   },
-  text: {
-    color: Colors.secondary
+  textBlack: {
+    color: Colors.secondary,
+    fontSize: 12,
+    marginHorizontal: 5
+  },
+  textGray: {
+    color: "gray",
+    fontSize: 12,
+    marginHorizontal: 5
   },
   title: {
     fontWeight: "bold",
@@ -148,5 +165,14 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     alignItems: "center"
   },
+  content: {
+    flex: 1, marginLeft: 10,
+    justifyContent: "flex-start",
+    alignItems: "flex-start"
+  },
+  contentRow: {
+    flexDirection: "row",
+    alignItems: "center"
+  }
 
 });

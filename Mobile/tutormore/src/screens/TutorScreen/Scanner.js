@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Colors from "../../configs/Colors";
-import { Icon } from 'react-native-elements';
+import { Icon, Tooltip } from 'react-native-elements';
 
 export default function Scanner({ navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -15,10 +15,11 @@ export default function Scanner({ navigation }) {
         })();
     }, []);
 
+    // data คือข้อมูลที่ได้จากการสแกน
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        // navigation.navigate("CheckCourse");
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        // navigation.navigate("Course", { screen: "Attendance" });
+        alert(`${data} has been scanned!`);
     };
 
     if (hasPermission === null) {
@@ -45,7 +46,7 @@ export default function Scanner({ navigation }) {
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                     style={StyleSheet.absoluteFillObject}
                 />
-                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} backgroundColor={Colors.primary} />}
             </View>
         </>
     )
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "center",
+        backgroundColor: Colors.primary,
     },
 });
 

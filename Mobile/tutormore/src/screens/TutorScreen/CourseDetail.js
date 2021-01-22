@@ -63,7 +63,7 @@ export default function CourseDetail({ navigation }) {
       "Are you sure to confirm?",
       [
         { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-        { text: "OK", onPress: () => navigation.push("TeachingList") }
+        { text: "OK", onPress: () => navigation.navigate("Me", { screen: "TeachingList" }) }
       ],
       { cancelable: false }
     )
