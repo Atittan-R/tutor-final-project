@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { Me, Scanner } from "../../../screens/TutorScreen"
-import {RoleSelection} from "../../../screens/Authentication";
+import { Me, Scanner, TeachingList, CheckList, Attendance } from "../../../screens/TutorScreen"
+import { RoleSelection } from "../../../screens/Authentication";
 
 
 const Stack = createStackNavigator();
@@ -16,14 +16,16 @@ const MeStack = () => {
     >
       <Stack.Screen name="Me" component={Me} />
       <Stack.Screen name="Scanner" component={Scanner} />
-        <Stack.Screen
-            name="RoleSelect"
-            component={RoleSelection}
-            options={{
-                headerTitle: "RoleSelect",
-            }}
-        />
-
+      <Stack.Screen
+        name="RoleSelect"
+        component={RoleSelection}
+        options={{
+          headerTitle: "RoleSelect",
+        }}
+      />
+      <Stack.Screen name="TeachingList" component={TeachingList} />
+      <Stack.Screen name="CheckList" component={CheckList} />
+      <Stack.Screen name="Attendance" component={Attendance} />
     </Stack.Navigator>
 
   )

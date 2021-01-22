@@ -29,7 +29,7 @@ export default function Me({ navigation, route }) {
             "Are you sure you want to sign out?",
             [
                 { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-                { text: "OK", onPress: () => auth.signOut()}],
+                { text: "OK", onPress: () => auth.signOut() }],
             { cancelable: false }
         )
     }
@@ -73,7 +73,7 @@ export default function Me({ navigation, route }) {
 
                     <View style={styles.coverArea}>
                         <Pressable
-                            onPress={() => navigation.navigate("Course",{screen:'CreateCourse'})}
+                            onPress={() => navigation.navigate("Course", { screen: 'CreateCourse' })}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
@@ -89,7 +89,7 @@ export default function Me({ navigation, route }) {
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => navigation.navigate("Course",{screen:"TeachingList"})}
+                            onPress={() => navigation.push("TeachingList")}
                             style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
