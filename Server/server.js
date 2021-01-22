@@ -32,6 +32,7 @@ require("./routes/attendance.router")(app);
 require("./routes/search.router")(app);
 require("./routes/tutor.routes")(app);
 require("./routes/notification.routes")(app);
+
 //Connect to database by calling models
 const db = require("./models");
 const Role = db.role;

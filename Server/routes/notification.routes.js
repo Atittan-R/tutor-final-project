@@ -1,5 +1,6 @@
-const { authJwt } = require("../middleware");
 const controller = require("../controller/notification.controller");
+const { verifySignUp, verifyNoti } = require("../middleware");
+
 module.exports = function (app) {
   //   app.use(function (req, res, next) {
   //     res.header(
@@ -13,5 +14,20 @@ module.exports = function (app) {
     "/api/notification/push",
     // [authJwt.verifyToken],
     controller.sendPushNotification
+  );
+
+  //To get Token
+  app.post(
+    "/api/notification/token",
+    // [authJwt.verifyToken],
+    [verifyNoti.checkTokenExisted],
+    controller.saveToken
+  );
+
+  //To push message
+  app.post(
+    "/api/notification/message",
+    // [authJwt.verifyToken],
+    controller.handlePushTokens
   );
 };

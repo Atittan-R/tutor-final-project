@@ -53,6 +53,7 @@ exports.enRollHistory = async (req, res) => {
     const result = await Course.findAll({
       include: [
         {
+          
           model: User,
           as: "courseEnroll",
           where: { id: user_id },

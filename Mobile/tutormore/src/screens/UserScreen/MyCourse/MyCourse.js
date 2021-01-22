@@ -25,7 +25,6 @@ export default function MyCourse({ navigation }) {
   const currentUser = JSON.parse(state.userData);
 
   const [books, setBooks] = useState([...new Array(4).fill({})]);
-
   const fetchMyCourse = async ()=>{
     setLoading(true);
     try{
@@ -43,6 +42,7 @@ export default function MyCourse({ navigation }) {
 
   const renderPlaceholders = () =>
       books.map((e, i) => <MyCoursePlaceholder key={i} />);
+  // console.log(data.id)
 
   return (
       <>
@@ -64,7 +64,7 @@ export default function MyCourse({ navigation }) {
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("CourseDetail", {course: item})}
+                        onPress={() => navigation.navigate("CourseDetail", {course: item, obj: [currentUser.id,item.id].toString()})}
                         style={styles.button}
                         key={item.id}>
                       <View style={styles.card}>
@@ -83,7 +83,8 @@ export default function MyCourse({ navigation }) {
                                   id: currentUser.id,
                                   name: currentUser.username
                                 })}>
-                              <QRCode value={currentUser.username} size={20} color={Colors.secondary}/>
+
+                              <QRCode value={[currentUser.id,item.id].toString()} size={20} color={Colors.secondary}/>
                             </TouchableOpacity>
                           </View>
                         </View>
