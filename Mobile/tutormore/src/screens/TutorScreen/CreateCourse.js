@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View,ToastAndroid } from 'react-native'
+import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid, Button, Image, Pressable } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 import Amount from '../../components/forms/Amount';
@@ -13,7 +13,7 @@ import TextInputButton from '../../components/forms/TextInputButton';
 import UploadImage from '../../components/forms/UploadImage';
 import Colors from '../../configs/Colors'
 import API from "../../services/API"
-
+import { SwipeablePanel } from 'rn-swipeable-panel';
 export default function CreateCourse({ navigation }) {
     const [day, setDay] = useState("")
     const [mytags, setTags] = useState([]);
@@ -44,7 +44,7 @@ export default function CreateCourse({ navigation }) {
         setTimeStart(new Date(0, 0, 0, 0))
         setClaerDate(true)
     }
-    const create= async ()=>{
+    const create = async () => {
 
 
 
@@ -65,18 +65,18 @@ export default function CreateCourse({ navigation }) {
                 time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
                 // description: Description,
                 categoryId: catagory,
-        
+
                 userId: 2,
                 tagname: mytags,
-                duration:selectedValue,
-                lat:lat.toString(),
-                long:long.toString()
+                duration: selectedValue,
+                lat: lat.toString(),
+                long: long.toString()
             });
             // console.log('====================================');
             // console.log(createCourse);
             // console.log('====================================');
             clear()
-            navigation.navigate("Home",{screen:"Home"})
+            navigation.navigate("Home", { screen: "Home" })
             ToastAndroid.show("create course success !", ToastAndroid.SHORT);
         } catch (error) {
             alert(error)
@@ -85,6 +85,34 @@ export default function CreateCourse({ navigation }) {
             console.log('====================================');
         }
     }
+
+    const [requireImage, setRequireImage] = useState(require('../../assets/course/picture.png'));
+    const [isPanelActive, setIsPanelActive] = useState(false);
+    const [panelProps, setPanelProps] = useState({
+        fullWidth: true,
+        onlySmall: true,
+        showCloseButton: true,
+        onClose: () => setIsPanelActive(false),
+        onPressCloseButton: () => setIsPanelActive(false),
+    });
+    const changeImage = (id) => {
+        if (id == 1) { setRequireImage(require('../../assets/course/analytics.png')); }
+        else if (id == 2) { setRequireImage(require('../../assets/course/directory.png')); }
+        else if (id == 3) { setRequireImage(require('../../assets/course/electrician.png')); }
+        else if (id == 4) { setRequireImage(require('../../assets/course/geography.png')); }
+
+        else if (id == 5) { setRequireImage(require('../../assets/course/growth.png')); }
+        else if (id == 6) { setRequireImage(require('../../assets/course/heart-rate-monitor.png')); }
+        else if (id == 7) { setRequireImage(require('../../assets/course/multimedia.png')); }
+        else if (id == 8) { setRequireImage(require('../../assets/course/nurse.png')); }
+
+        else if (id == 9) { setRequireImage(require('../../assets/course/stethoscope.png')); }
+        else if (id == 10) { setRequireImage(require('../../assets/course/test-tube.png')); }
+        else if (id == 11) { setRequireImage(require('../../assets/course/tooth.png')); }
+        else if (id == 12) { setRequireImage(require('../../assets/course/notebook.png')); }
+    }
+
+
     return (
         <>
             {/* header */}
@@ -98,19 +126,22 @@ export default function CreateCourse({ navigation }) {
             </View>
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
-                    <UploadImage />
+                    <TouchableOpacity onPress={() => setIsPanelActive(true)}>
+                        <Image source={requireImage} style={styles.imageTitle} />
+                        <Text style={styles.text}>Change image</Text>
+                    </TouchableOpacity>
                     <TextInputButton
                         label={"Course"}
                         placeholder={"Enter your course name"}
                         onTextChange={(text) => setCourseName(text)}
                         value={coureName}
-                        />
-                    <ModalDate dayValue={[day, setDay]}/>
-                    <Clock 
-                        label={"Time Start"} callback={getTimeStart} claerdate={[claerdate, setClaerDate]}/>
+                    />
+                    <ModalDate dayValue={[day, setDay]} />
                     <Clock
-                        label={"Time End"} callback={getTimeEnd} claerdate={[claerdate, setClaerDate]}/>
-                    <TermCourse  value={[selectedValue, setSelectedValue]}/>
+                        label={"Time Start"} callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
+                    <Clock
+                        label={"Time End"} callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
+                    <TermCourse value={[selectedValue, setSelectedValue]} />
                     <TextInputButton
                         label={"Amount"}
                         placeholder={"Enter the number of seats"}
@@ -120,10 +151,54 @@ export default function CreateCourse({ navigation }) {
                     <Catagory
                         selectedValue={catagory}
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
-                    <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]}/>
-                    <Location lat={[lat, setlat]} long={[long, setlong]}/>
+                    <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
+                    <Location lat={[lat, setlat]} long={[long, setlong]} />
                 </View>
             </ScrollView >
+            <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(1)} >
+                        <Image source={require('../../assets/course/analytics.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(2)} >
+                        <Image source={require('../../assets/course/directory.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(3)} >
+                        <Image source={require('../../assets/course/electrician.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(4)} >
+                        <Image source={require('../../assets/course/geography.png')} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(5)} >
+                        <Image source={require('../../assets/course/growth.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(6)} >
+                        <Image source={require('../../assets/course/heart-rate-monitor.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(7)} >
+                        <Image source={require('../../assets/course/multimedia.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(8)} >
+                        <Image source={require('../../assets/course/nurse.png')} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(9)} >
+                        <Image source={require('../../assets/course/stethoscope.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(10)} >
+                        <Image source={require('../../assets/course/test-tube.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(11)} >
+                        <Image source={require('../../assets/course/tooth.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(12)} >
+                        <Image source={require('../../assets/course/notebook.png')} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+            </SwipeablePanel>
         </>
     )
 }
@@ -176,5 +251,29 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: Colors.secondary
     },
-
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 5,
+    },
+    row: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        paddingTop: 10,
+        marginTop: 15
+    },
+    imageTitle: {
+        width: 120,
+        height: 120,
+        borderRadius: 5,
+        marginTop: 10,
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    text: {
+        color: "grey",
+        alignSelf: "center",
+        // fontWeight: "bold"
+    }
 })
