@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     text: {
-        color: "grey",
+        color: Colors.gray,
         alignSelf: "center",
         // fontWeight: "bold"
     }
