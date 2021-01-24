@@ -9,7 +9,7 @@ import {
   StatusBar,
   TouchableOpacity,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Rating } from "react-native-elements";
 import QRCode from "react-native-qrcode-svg";
 import Colors from "../../../configs/Colors";
 import { useGlobalVar } from "../../../context/GlobalContex";
@@ -83,8 +83,14 @@ export default function MyCourse({ navigation }) {
                         id: currentUser.id,
                         name: currentUser.username
                       })}>
-                      <QRCode value={currentUser.username, 11} size={20} color={Colors.secondary} />
+                      <QRCode value={"currentUser.username, 11"} size={20} color={Colors.secondary} />
+                      <Text style={styles.textBlack}>QR Code</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.push("RatingCourse", { id: item.id, name: item.name })}>
+                      <Icon name="star-outline" type="material" color={Colors.secondary} />
+                      <Text style={styles.textBlack}>Rating</Text>
+                    </TouchableOpacity>
+
                   </View>
                 </View>
               </View>

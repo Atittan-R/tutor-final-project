@@ -20,16 +20,16 @@ export default function Feed({ navigation }) {
     const userid = JSON.parse(state.userData);
     // console.log("user_id", userid.id)
     const [request, setRequest] = useState([]);
-    const taked = async (requestId) =>{
-            navigation.navigate("Feed Request",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}} )
+    const taked = async (requestId) => {
+        navigation.navigate("Feed Request", { screen: "TakeCreateCourse", params: { req: request.filter((i) => i.id == requestId) } })
     }
     const fetchApi = async () => {
         try {
             const fetch_req = await API.get("/request/findAll");
-        
+
             // console.log(fetch_req);
-            setRequest(fetch_req.data.request.filter((i)=>i.status=="Available"))
-          
+            setRequest(fetch_req.data.request.filter((i) => i.status == "Available"))
+
 
         } catch (error) {
             console.log('====================================');
@@ -52,19 +52,14 @@ export default function Feed({ navigation }) {
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.navigate("Home")}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
                 <Text style={styles.textHeader}>Feed Request</Text>
-              
-                        <TextInput
+
+                <TextInput
                     style={styles.search}
                     placeholder="Search"
                     onChangeText={(text) => searchAction(text)}
                 />
-                 
+
             </View>
 
             <FlatList

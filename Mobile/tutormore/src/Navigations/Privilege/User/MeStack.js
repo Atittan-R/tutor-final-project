@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { Me, MyCourse, QrCode } from "../../../screens/UserScreen"
+import { Me, MyCourse, QrCode, RatingCourse } from "../../../screens/UserScreen"
 
 
 const Stack = createStackNavigator();
@@ -26,6 +26,13 @@ const MeStack = () => {
                 component={QrCode}
                 options={{
                     headerTitle: "QrCode",
+                }}
+            />
+            <Stack.Screen
+                name="RatingCourse"
+                component={RatingCourse}
+                options={{
+                    headerTitle: "RatingCourse",
                 }}
             />
         </Stack.Navigator>
