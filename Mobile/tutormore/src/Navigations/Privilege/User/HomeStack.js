@@ -1,13 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
-    CourseEnroll,
-    Home,
-    CourseDetail,
-    MyCourse,
-    Search, test,
-    RegisterTutor,
-    NearMe, List
+  CourseEnroll,
+  Home,
+  CourseDetail,
+  MyCourse,
+  Search, test,
+  RegisterTutor,
+  NearMe, List
 } from "../../../screens/UserScreen";
 import LoadingScreen from "../../../components/Loading";
 import { useGlobalVar } from "../../../context/GlobalContex";

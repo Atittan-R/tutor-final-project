@@ -15,8 +15,10 @@ export default function TapRoute() {
   return (
     <Tabs.Navigator
       tabBarOptions={{
+        activeBackgroundColor: Colors.primary,
+        activeTabBackgrounds: Colors.secondary,
         activeTintColor: Colors.secondary,
-        inactiveTintColor: "#fff",
+        inactiveTintColor: Colors.secondary,
       }}
     >
       <Tabs.Screen

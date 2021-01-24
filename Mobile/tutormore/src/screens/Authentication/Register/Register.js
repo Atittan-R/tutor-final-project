@@ -1,14 +1,14 @@
 import CheckBox from "@react-native-community/checkbox";
 import React, { useEffect, useReducer, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, StyleSheet, Text, View} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
 import SecondaryButton from "../../../components/buttons/SecondaryButton";
 import PrimaryInput from "../../../components/forms/PrimaryInput";
 import Colors from "../../../configs/Colors";
 import { useGlobalVar } from "../../../context/GlobalContex";
 import API from "../../../services/API";
-
+import { SwipeablePanel } from 'rn-swipeable-panel';
 function Confrimation(state, action) {
   switch (action.type) {
     case "CONFIRM":
@@ -53,20 +53,51 @@ const Register = ({ navigation }) => {
     }
     return cf;
   };
+
+  const [requireImage, setRequireImage] = useState(require('../../../assets/course/picture.png'));
+    const [isPanelActive, setIsPanelActive] = useState(false);
+    const [panelProps, setPanelProps] = useState({
+        fullWidth: true,
+        onlySmall: true,
+        showCloseButton: true,
+        onClose: () => setIsPanelActive(false),
+        onPressCloseButton: () => setIsPanelActive(false),
+    });
+    const changeImage = (id) => {
+        if (id == 1) { setRequireImage(require('../../../assets/avatar/dwarf.png')); }
+        else if (id == 2) { setRequireImage(require('../../../assets/avatar/elf.png')); }
+        else if (id == 3) { setRequireImage(require('../../../assets/avatar/fairy.png')); }
+        else if (id == 4) { setRequireImage(require('../../../assets/avatar/knight.png')); }
+
+        else if (id == 5) { setRequireImage(require('../../../assets/avatar/little-red-riding-hood.png')); }
+        else if (id == 6) { setRequireImage(require('../../../assets/avatar/mermaid.png')); }
+        else if (id == 7) { setRequireImage(require('../../../assets/avatar/pig.png')); }
+        else if (id == 8) { setRequireImage(require('../../../assets/avatar/robin-hood.png')); }
+
+        else if (id == 9) { setRequireImage(require('../../../assets/avatar/scarecrow.png')); }
+        else if (id == 10) { setRequireImage(require('../../../assets/avatar/teacher.png')); }
+        else if (id == 11) { setRequireImage(require('../../../assets/avatar/wizard.png')); }
+        else if (id == 12) { setRequireImage(require('../../../assets/avatar/wolf.png')); }
+    }
   return (
+   <>
     <ScrollView style={{ margin: 0, backgroundColor: Colors.white }}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
           <Text style={styles.textTitle}>Sign Up</Text>
         </View>
-        <View style={styles.btnWrapper}>
+        {/* <View style={styles.btnWrapper}>
           <SecondaryButton
             label={"Sign Up With Facebook"}
             btnType={"FACEBOOK"}
             background={"dodgerblue"}
             fontColor={"white"}
           />
-        </View>
+        </View> */}
+        <TouchableOpacity onPress={() => setIsPanelActive(true)}>
+                        <Image source={requireImage} style={styles.imageTitle} />
+                        <Text style={styles.text}>Change image</Text>
+                    </TouchableOpacity>
         <Text style={styles.textOr}>Or Sign up with E-mail</Text>
 
         <View style={styles.inputWrap}>
@@ -148,7 +179,52 @@ const Register = ({ navigation }) => {
           />
         </View>
       </View>
-    </ScrollView>
+      </ScrollView>
+      <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(1)} >
+                        <Image source={require('../../../assets/avatar/dwarf.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(2)} >
+                        <Image source={require('../../../assets/avatar/elf.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(3)} >
+                        <Image source={require('../../../assets/avatar/fairy.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(4)} >
+                        <Image source={require('../../../assets/avatar/knight.png')} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(5)} >
+                        <Image source={require('../../../assets/avatar/little-red-riding-hood.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(6)} >
+                        <Image source={require('../../../assets/avatar/mermaid.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(7)} >
+                        <Image source={require('../../../assets/avatar/pig.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(8)} >
+                        <Image source={require('../../../assets/avatar/robin-hood.png')} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(9)} >
+                        <Image source={require('../../../assets/avatar/scarecrow.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(10)} >
+                        <Image source={require('../../../assets/avatar/teacher.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(11)} >
+                        <Image source={require('../../../assets/avatar/wizard.png')} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(12)} >
+                        <Image source={require('../../../assets/avatar/wolf.png')} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+            </SwipeablePanel>
+    </>
   );
 };
 
@@ -218,4 +294,29 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
   },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingTop: 10,
+    marginTop: 15
+},
+image: {
+  width: 60,
+  height: 60,
+  borderRadius: 5,
+},
+imageTitle: {
+    width: 120,
+    height: 120,
+    borderRadius: 5,
+    marginTop: 10,
+    justifyContent: "center",
+    alignSelf: "center"
+},
+text: {
+    color: Colors.gray,
+    alignSelf: "center",
+    // fontWeight: "bold"
+}
 });

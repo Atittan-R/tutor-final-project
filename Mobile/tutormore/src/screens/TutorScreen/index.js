@@ -9,3 +9,4 @@ export { default as CheckList } from "./CheckList";
 export { default as Me } from "./Me";
 export { default as Scanner } from "./Scanner";
 export { default as Attendance } from "./Attendance";
+export { default as TakeCreateCourse } from "./TakeCreateCourse";

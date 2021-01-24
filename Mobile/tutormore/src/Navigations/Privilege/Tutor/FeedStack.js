@@ -14,9 +14,9 @@ const FeedStack = () => {
       }}
       initialRouteName="Feed"
     >
-      <Stack.Screen name="Feed" component={Feed} />
+      {/* <Stack.Screen name="Feed" component={Feed} />
       <Stack.Screen name="SearchRequest" component={SearchRequest} />
-      <Stack.Screen name="TakeCreateCourse" component={TakeCreateCourse} />
+      <Stack.Screen name="TakeCreateCourse" component={TakeCreateCourse} /> */}
 
     </Stack.Navigator>
 

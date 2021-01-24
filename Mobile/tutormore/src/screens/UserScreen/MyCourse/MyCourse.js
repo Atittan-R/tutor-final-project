@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,10 +9,10 @@ import {
   StatusBar,
   TouchableOpacity,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Rating } from "react-native-elements";
 import QRCode from "react-native-qrcode-svg";
 import Colors from "../../../configs/Colors";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
 import API from "../../../services/API";
 import MyCoursePlaceholder from "./MyCoursePlaceholder";
 
@@ -25,14 +25,14 @@ export default function MyCourse({ navigation }) {
   const currentUser = JSON.parse(state.userData);
 
   const [books, setBooks] = useState([...new Array(4).fill({})]);
-  const fetchMyCourse = async ()=>{
+  const fetchMyCourse = async () => {
     setLoading(true);
-    try{
-      const response = await API.get("enroll/history/"+currentUser.id);
+    try {
+      const response = await API.get("enroll/history/" + currentUser.id);
       await setData(response.data);
       setLoading(false);
       // console.log(response.data.courseEnroll)
-    }catch (e){
+    } catch (e) {
       alert(e.response.data.message);
     }
   }
@@ -41,57 +41,80 @@ export default function MyCourse({ navigation }) {
   }, []);
 
   const renderPlaceholders = () =>
-      books.map((e, i) => <MyCoursePlaceholder key={i} />);
-  // console.log(data.id)
+    books.map((e, i) => <MyCoursePlaceholder key={i} />);
 
   return (
-      <>
-        {/* header */}
-        <SafeAreaView style={styles.container} />
-        <View style={styles.headerBar}>
-          <TouchableOpacity
-              style={{ color: Colors.secondary, marginRight: 10 }}
-              onPress={() => navigation.pop()}>
-            <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>My Course</Text>
-        </View>
+    <>
+      {/* header */}
+      <SafeAreaView style={styles.container} />
+      <View style={styles.headerBar}>
+        <TouchableOpacity
+          style={{ color: Colors.secondary, marginRight: 10 }}
+          onPress={() => navigation.pop()}>
+          <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>My Course</Text>
+      </View>
 
-        {/* body */}
-        {loading ? renderPlaceholders() :
-            <FlatList
-                data={data}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => (
+      {/* body */}
+      {loading ? renderPlaceholders() :
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("CourseDetail", { course: item })}
+              style={styles.button}
+              key={item.id}>
+              <View style={styles.card}>
+                <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
+                <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }}>
+                  <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Icon name="calendar-today" type="material" color="gray" size={15} />
+                    <Text style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
+                    <Icon name="schedule" type="material" color="gray" size={15} />
+                    <Text style={styles.textGray}>{item.day}</Text>
+                  </View>
+                  <View style={styles.qrcode}>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("CourseDetail", {course: item, obj: [currentUser.id,item.id].toString()})}
-                        style={styles.button}
-                        key={item.id}>
+                      onPress={() => navigation.navigate("CourseDetail", { course: item, obj: [currentUser.id, item.id].toString() })}
+                      style={styles.button}
+                      key={item.id}>
                       <View style={styles.card}>
-                        <Image source={{uri: "https://source.unsplash.com/random"}} style={styles.image}/>
-                        <View style={{flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start"}}>
+                        <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
+                        <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }}>
                           <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
-                          <View style={{flexDirection: "row", alignItems: "center"}}>
-                            <Icon name="calendar-today" type="material" color="gray" size={15}/>
+                          <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Icon name="calendar-today" type="material" color="gray" size={15} />
                             <Text style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
-                            <Icon name="schedule" type="material" color="gray" size={15}/>
+                            <Icon name="schedule" type="material" color="gray" size={15} />
                             <Text style={styles.textGray}>{item.day}</Text>
                           </View>
                           <View style={styles.qrcode}>
                             <TouchableOpacity
-                                onPress={() => navigation.push("QrCode", {
-                                  id: currentUser.id,
-                                  name: currentUser.username
-                                })}>
-                              <QRCode value={[item.id+'/'+currentUser.id].toString()} size={20} color={Colors.secondary}/>
+                              onPress={() => navigation.push("QrCode", {
+                                id: currentUser.id,
+                                name: currentUser.username
+                              })}>
+                              <QRCode value={[item.id + '/' + currentUser.id].toString()} size={20} color={Colors.secondary} />
                             </TouchableOpacity>
                           </View>
                         </View>
                       </View>
                     </TouchableOpacity>
-                )}/>
-        }
-      </>
+                    <TouchableOpacity onPress={() => navigation.push("RatingCourse", { id: item.id, name: item.name })}>
+                      <Icon name="star-outline" type="material" color={Colors.secondary} />
+                      <Text style={styles.textBlack}>Rating</Text>
+                    </TouchableOpacity>
+
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )} />
+      }
+    </>
   );
 }
 
