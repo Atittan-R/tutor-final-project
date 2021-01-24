@@ -10,11 +10,6 @@ module.exports = function (app) {
   //     next();
   //   });
 
-  app.post(
-    "/api/notification/push",
-    // [authJwt.verifyToken],
-    controller.sendPushNotification
-  );
 
   //To get Token
   app.post(
@@ -31,3 +26,9 @@ module.exports = function (app) {
     controller.handlePushTokens
   );
 };
+
+  // app.post(
+  //   "/api/notification/push",
+  //   // [authJwt.verifyToken],
+  //   controller.sendPushNotification
+  // );

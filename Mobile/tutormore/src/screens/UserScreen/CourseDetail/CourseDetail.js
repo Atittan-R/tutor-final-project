@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Button,
     Image,
@@ -21,8 +21,10 @@ import LoadingScreen from "../../../components/Loading";
 export default function CourseDetail({navigation, route}) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
+    const [detail, setDetail] = useState({});
     const currentUser = JSON.parse(state.userData);
     const {course} = route.params;
+    console.log(course)
 
     const [region, setRegion] = useState({
         latitude: course.lat.valueOf(),
@@ -96,6 +98,18 @@ export default function CourseDetail({navigation, route}) {
             { cancelable: false }
         );
     };
+    useEffect(() => {
+        async function courseData (id){
+            try {
+                const res = await API.get("/course/findOne/"+id)
+                setDetail(res.data.course);
+            }catch (e){
+                console.log(e.message.data)
+            }
+        }
+        courseData(course)
+    }, []);
+
     if(loading){
         return <LoadingScreen />
     }

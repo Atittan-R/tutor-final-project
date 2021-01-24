@@ -1,5 +1,5 @@
 const { authJwt } = require("../middleware");
-const controller = require("../controller/tutors.controller");
+const controller = require("../controller/Box.controller");
 module.exports = function (app) {
   //   app.use(function (req, res, next) {
   //     res.header(
@@ -10,8 +10,18 @@ module.exports = function (app) {
   //   });
 
   app.post(
-    "/api/box/",
+    "/api/box/:userid",
     // [authJwt.verifyToken],
-    controller.getBox
+    controller.BoxList
+  );
+
+  app.post(
+      "/api/box/read/:id",
+      controller.updateStatus
+  )
+  app.delete(
+    "/api/box/delete",
+    // [authJwt.verifyToken],
+    controller.deleteMessage
   );
 };

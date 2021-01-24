@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 const PanelCategory = ({category}) => {
     const navigation = useNavigation();
     const majors = category.map((cate) => (
-        <View style={styles.container}>
+        <View style={styles.container} key={cate.id}>
             <TouchableOpacity style={styles.touchView} onPress={() => navigation.navigate("List", {categories: cate.name})}>
                 <View style={styles.press}>
                     <Image

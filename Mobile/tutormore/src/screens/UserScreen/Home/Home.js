@@ -214,7 +214,7 @@ export default function Home({navigation}) {
                                 renderItem={({item}) => (
                                     <TouchableOpacity
                                         onPress={() => {
-                                            navigation.navigate("CourseDetail", {course: item});
+                                            navigation.navigate("CourseDetail", {course: item.id});
                                         }}
                                         style={{marginTop: 5,}}>
                                         <View style={styles.courseWrap}>

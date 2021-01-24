@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     FlatList,
-    Image,
+    RefreshControl,
     SafeAreaView,
     StatusBar,
     StyleSheet,
@@ -9,74 +9,131 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 import {Icon} from "react-native-elements";
 import Colors from "../../configs/Colors";
-import {responsiveHeight, responsiveWidth} from "react-native-responsive-dimensions";
+import API from "../../services/API";
+import {useGlobalVar} from "../../context/GlobalContex";
+import LoadingScreen from "../../components/Loading";
+//
 
-const data = [{
-    image: require("../../assets/Appicon.png"),
-    title: "Hello Title",
-    message: "message from the other side message from the other side message from the other side message from the other side"
-}, {
-    image: require("../../assets/Appicon.png"),
-    title: "Hello Title",
-    message: "message from the other side message from the other side message from the other side message from the other side"
-}, {
-    image: require("../../assets/Appicon.png"),
-    title: "Hello Title",
-    message: "message from the other side message from the other side message from the other side message from the other side"
-}, {
-    image: require("../../assets/Appicon.png"),
-    title: "Hello Title",
-    message: "message from the other side message from the other side message from the other side message from the other side"
-},{
-    image: require("../../assets/Appicon.png"),
-    title: "Hello Title",
-    message: "message from the other side message from the other side message from the other side message from the other side"
-},{
-    image: require("../../assets/Appicon.png"),
-    title: "Hello Title",
-    message: "message from the other side message from the other side message from the other side message from the other side"
-},]
+
 
 const Inbox = () => {
-    return (
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+    const currentUser = JSON.parse(state.userData);
+    const [data, setData] = useState({});
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const navigation = useNavigation();
+
+    async function sendMessage () {
+       const res =  await API.post("/notification/message",{
+            takeId: 1,
+            title: "Message",
+            body: "ได้ยัง ไอ่หอยยย"
+        })
+        console.log(res.data)
+    }
+
+     const getMessageBox  = async () =>{
+        setLoading(true);
+        try {
+            if(currentUser.id) {
+                const response = await API.post(/box/ + currentUser.id);
+                setData(response.data)
+                setLoading(false);
+            }else{
+                console.log("Hello")
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getMessageBox().then(() => setRefreshing(false));
+    }, []);
+
+    const readMessage = async (id, courseid) =>{
+        if(courseid){
+            navigation.navigate("Home", {screen: "CourseDetail", params: { course: courseid }})
+            console.log(courseid)
+        }
+
+        const response = await API.post("/box/read/"+id);
+        console.log(response.data.message)
+    }
+
+    useEffect( () => {
+       function display(){
+           getMessageBox();
+           if( data){
+               setLoading(false);
+           }else{
+               setLoading(true)
+           }
+       }
+        display();
+    },[]);
+
+    return(
         <>
             {/* header */}
             <SafeAreaView style={styles.container}/>
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Inbox</Text>
             </View>
-
-            <FlatList
-                data={data}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => (
-                    <TouchableOpacity style={styles.wrap}>
-                        <View style={styles.row}>
-                            {/*Image*/}
-                            <View style={styles.imgLeft}>
-                                <Image
-                                    style={styles.icon}
-                                    source={item.image}/>
-                            </View>
-
-                            {/*Body*/}
-                            <View style={styles.body}>
-                                <View style={styles.wrapTitle}>
-                                    <Text style={styles.title}>{item.title}</Text>
+            { loading ? <LoadingScreen/> : (
+                <FlatList
+                    data={data.box}
+                    keyExtractor={(item) => item.id}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
+                    }
+                    renderItem={({item}) => (
+                        <TouchableOpacity style={styles.wrap}
+                            onPress={ () => {
+                                readMessage(item.id, item.data)
+                            }}
+                            key={item.id}
+                        >
+                            <View style={styles.row}>
+                                {/*Image*/}
+                                <View style={styles.imgLeft}>
+                                    {/*<Image*/}
+                                    {/*    style={styles.icon}*/}
+                                    {/*    source={item.image}/>*/}
+                                    <View style={styles.icon} >
+                                        <Icon name="mail" type="ionicon" size={30} color={Colors.primary} />
+                                        {
+                                            item.status === "new" &&
+                                            <View style={{backgroundColor: "red", width: 10, height: 10, borderRadius: 100,position: "absolute", top: 8, right: 8}} />
+                                        }
+                                    </View>
                                 </View>
-                                <View style={styles.wrapMessage}>
-                                    <Text numberOfLines={3} style={styles.message}>
-                                        {item.message}
-                                    </Text>
+
+                                {/*Body*/}
+
+                                <View style={styles.body}>
+                                    <View style={styles.wrapTitle}>
+                                        <Text style={styles.title}>{item.title}</Text>
+                                    </View>
+                                    <View style={styles.wrapMessage}>
+                                        <Text numberOfLines={3} style={styles.message}>
+                                            {item.message}
+                                        </Text>
+                                    </View>
+                                    <Text style={[styles.message, styles.clickHere]}>Click Here!</Text>
                                 </View>
-                                <Text style={[styles.message, styles.clickHere]}>Click Here!</Text>
                             </View>
-                        </View>
-                    </TouchableOpacity>
-                )}
-            />
+                        </TouchableOpacity>
+                    )}
+                />
+            )}
         </>
     );
 };
@@ -111,25 +168,26 @@ export const styles = StyleSheet.create({
     },
     wrap: {
         flexWrap: "wrap",
-        margin: 10,
-        borderRadius: 4,
+        marginVertical: .5,
         backgroundColor: Colors.white,
     },
     imgLeft: {
         flex: 1,
         flexDirection: "column",
         margin: 8,
-        paddingRight: 10,
+        alignItems: "center",
+        justifyContent:"center",
         // paddingVertical: 10,
         // backgroundColor: Colors.facebookBg,
     },
     icon: {
-        // height: responsiveHeight(25),
-        // width: responsiveWidth(25),
-        height: 100,
-        width: 100,
+        height:50,
+        width:50,
+        borderRadius: 30,
         resizeMode: "contain",
-        // backgroundColor: Colors.gray,
+        alignItems: "center",
+        justifyContent:"center",
+        backgroundColor: Colors.gray,
     },
     body: {
         flex: 3,

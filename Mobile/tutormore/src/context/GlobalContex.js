@@ -73,24 +73,24 @@ export const GlobalProvider = ({children}) => {
                 }
             );
             // console.log("User From Login: ", user.data);
-            if(user != null){
+            if(user){
                 await AsyncStorage.setItem("userData", JSON.stringify(user.data));
                 await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
                 await AsyncStorage.setItem("userRoles", JSON.stringify(user.data.roles));
+                return user;
             }
-            return user;
         } catch (error) {
-            alert(error.response.data.message);
+            alert("Catch! => ",error.response.data.message);
         }
     }
 
     const auth = useMemo(
         () => ({
             signIn: async (data) => {
-                console.log("Hello",data)
+                // console.log("Hello",data)
                 try {
                     const user = await useLogin(data);
-                    console.log(user)
+                    // console.log(user)
                     await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: JSON.stringify(user.data), r: JSON.stringify(user.data.roles)});
                 } catch (e) {
                     alert(e)
@@ -109,9 +109,9 @@ export const GlobalProvider = ({children}) => {
                 dispatch({type: "SIGN_OUT"})
             },
             signUp: async (data) => {
+                // console.log("data signup from Global state", data)
                 const user = await useLogin(data);
                 dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
-                // await console.log("data signup from Global state", data);
             },
             roleEntry: async (data) => {
                 // dispatch({type: "ROLE_ENTRY", role: data.role})

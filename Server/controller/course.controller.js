@@ -121,7 +121,34 @@ exports.findCourseFromCategories = async (req, res) => {
 
 exports.findOneCourse = (req, res) => {
   const id = req.params.id;
-  Course.findByPk(id)
+  Course.findByPk(id,{
+    attributes: [
+      "id",
+      "name",
+      "day",
+      "time_start",
+      "time_end",
+      "duration",
+      "amount",
+      "lat",
+      "long",
+      "distance",
+      "createdAt",
+      "description",
+      "rate",
+    ],
+    include: [
+      {
+        model: Categories,
+        as: "CourseCate",
+        attributes: ["name"],
+      },
+      {
+        model: User,
+        as: "tutors",
+      },
+    ],
+  })
     .then((course) => {
       res.status(202).send({ course });
     })

@@ -47,7 +47,6 @@ export default function CreateCourse({ navigation }) {
     const create= async ()=>{
 
 
-
         try {
             console.log(coureName);
             console.log(day.toString());

@@ -33,6 +33,7 @@ db.cartitem = require("./cartItem.model")(sequelize, Sequelize);
 db.take = require("./take.model")(sequelize, Sequelize);
 db.tutorInfo = require("./tutorInfo.model")(sequelize, Sequelize);
 db.token = require("./token.model")(sequelize, Sequelize);
+db.box = require("./box.model")(sequelize, Sequelize);
 
 db.ROLES = ["user", "admin", "tutor"];
 //SECTION USER ROLES
@@ -53,6 +54,11 @@ db.tutorInfo.belongsTo(db.user, {
   foreignKey: {
     name: "userId",
   },
+});
+
+db.user.hasMany(db.box);
+db.box.belongsTo(db.user, {
+  foreignKey: "userId"
 });
 
 db.user.hasMany(db.token, { as: "token" });
