@@ -5,7 +5,7 @@ const db = require("../models");
 const Take = db.take;
 const Request = db.request;
 const Course = db.course;
-const Tag=db.tag;
+const Tag = db.tag;
 exports.takend = async (req, res) => {
   //create Take
   //  find Request by id
@@ -39,24 +39,23 @@ exports.takend = async (req, res) => {
       time_end: resquest.time_end,
       duration: req.body.duration,
       lat: req.body.lat,
-      amount:req.body.amount,
+      amount: req.body.amount,
       long: req.body.long,
       tutorId: req.body.tutorId,
       categoryId: resquest.categoryId,
     });
-    res.status(200).send(createCourse)
+
+    // res.status(200).send(createCourse);
     if (req.body.tagname) {
       for (i = 0; i < req.body.tagname.length; i++) {
-    const tag =  await Tag.create({
-        name: req.body.tagname[i],
-        courseId: createCourse.id,
-        categoryId: createCourse.categoryId,
-      })
-      createCourse.setTags(tag)
-    }}
-   
-   
-
+        const tag = await Tag.create({
+          name: req.body.tagname[i],
+          courseId: createCourse.id,
+          categoryId: createCourse.categoryId,
+        });
+        createCourse.setTags(tag);
+      }
+    }
 
     // update Take Table courseId= new courseId
     await Take.update(
@@ -69,8 +68,11 @@ exports.takend = async (req, res) => {
         },
       }
     );
-  } else {
-    res.status(401).send("kuy");
-  }
 
+    //This line have to send respone to noti (createCourse.id)
+    const result = await Take.findByPk(take.id);
+    res.status(200).send(result);
+  } else {
+    res.status(401).send("This Request have been taken!!");
+  }
 };

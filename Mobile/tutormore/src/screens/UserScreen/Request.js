@@ -47,7 +47,9 @@ export default function Request({ navigation }) {
             console.log(requst.data);
             console.log('====================================');
             clear()
-            navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
+            navigation.navigate("Feed", { name: "Feed", onGoBack: () => {
+                    fetchData()
+                } })
 
         } catch (error) {
          

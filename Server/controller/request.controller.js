@@ -27,7 +27,7 @@ exports.createRequest = (req, res) => {
             categoryId: request.categoryId,
           }).then((tag) => {
             //Set Join table tag_request
-            request.setTags(tag).then(() => {});
+            Request.setTags(tag).then(() => {});
           });
         }
         res.status(201).send({
