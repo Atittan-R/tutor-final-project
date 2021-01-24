@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   StyleSheet,
@@ -14,16 +14,46 @@ import {
 } from "react-native";
 import { Icon, Rating } from "react-native-elements";
 import Colors from "../../configs/Colors";
+import { useGlobalVar } from "../../context/GlobalContex";
+import API from "../../services/API";
+
 
 export default function TeachingList({ navigation }) {
-  const data = [
-    { id: 1, course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month", rate: 4.8 },
-    { id: 2, course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month", rate: 1.8 },
-    { id: 3, course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month", rate: 4.5 },
-    { id: 4, course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month", rate: 2.6 },
-    { id: 5, course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month", rate: 3.7 },
-  ];
+  const { authentication } = useGlobalVar();
+  const [state, dispatch] = authentication;
+  const currentUser = JSON.parse(state.userData);
+  const [Mylist, setMylist] = useState()
 
+
+const Delete = async(id) =>{
+  setMylist(Mylist.filter((i)=>i.id!=id))
+  try {
+    const del=await API.delete("/course/delete/"+id)
+  } catch (error) {
+    console.log(error);
+  }
+
+
+}
+// const Edit=(id)=>{
+
+// }
+
+const fetchlist=async()=>{
+  try {
+    const list=await API.post("/user/MyCourse",{
+      userId:currentUser.id
+    })
+    setMylist(list.data)
+  } catch (error) {
+    console.log(error);
+  }
+
+
+}
+useEffect(() => {
+  fetchlist()
+}, [])
   return (
     <>
       {/* header */}
@@ -39,22 +69,22 @@ export default function TeachingList({ navigation }) {
 
       {/* body */}
       <FlatList
-        data={data}
-        keyExtractor={(i) => i}
+        data={Mylist}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.push("CheckList", { id: item.id, course: item.course })}
-            key={item.id}
+            onPress={() => navigation.push("CheckList",{course: item.name,id:item.id })}
+            // key={item.id}
           >
             <View style={styles.card}>
               <Image source={require("../../assets/Appicon.png")} style={styles.image} />
               <View style={styles.content}>
-                <Text numberOfLines={1} style={styles.title}>{item.course}</Text>
+                <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
                 <View style={styles.contentRow}>
                   <Icon name="calendar-today" type="material" color="gray" size={15} />
-                  <Text style={styles.textGray}>{item.time}</Text>
+                  <Text style={styles.textGray}>{item.time_start} {item.time_end}</Text>
                   <Icon name="schedule" type="material" color="gray" size={15} />
-                  <Text style={styles.textGray}>{item.date}</Text>
+                  <Text style={styles.textGray}>{item.day}</Text>
                 </View>
                 <View style={styles.contentRow}>
                   <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
@@ -72,7 +102,7 @@ export default function TeachingList({ navigation }) {
                   {/* edit */}
                   <TouchableOpacity
                     style={styles.button}
-                  // onPress={() => setModalVisible(true)}
+                  onPress={() =>navigation.push("EditCourse", {req: item})}
                   >
                     <Icon name="edit" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Edit</Text>
@@ -87,7 +117,7 @@ export default function TeachingList({ navigation }) {
                         item.course + ", are you sure to delete?",
                         [
                           { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-                          { text: "OK", onPress: () => console.log("Cancel Pressed"), style: "cancel" }
+                          { text: "OK", onPress: () => Delete(item.id), style: "cancel" }
                         ],
                         { cancelable: false }
                       )

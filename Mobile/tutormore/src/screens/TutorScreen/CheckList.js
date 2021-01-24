@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     FlatList,
     SafeAreaView,
@@ -10,28 +10,48 @@ import {
 } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Colors from '../../configs/Colors'
+import API from "../../services/API";
 
-export default function CheckList({ navigation, route }) {
-    const { id, course } = route.params;
-    const data = [
-        { id: 1, date: "Mon 11 Jan 2021" },
-        { id: 2, date: "Tue 12 Jan 2021" },
-        { id: 3, date: "Wed 13 Jan 2021" },
-        { id: 4, date: "Thu 14 Jan 2021" },
-        { id: 5, date: "Fri 15 Jan 2021" },
-        { id: 1, date: "Mon 11 Jan 2021" },
-        { id: 2, date: "Tue 12 Jan 2021" },
-        { id: 3, date: "Wed 13 Jan 2021" },
-        { id: 4, date: "Thu 14 Jan 2021" },
-        { id: 5, date: "Fri 15 Jan 2021" },
-        { id: 1, date: "Mon 11 Jan 2021" },
-        { id: 2, date: "Tue 12 Jan 2021" },
-        { id: 3, date: "Wed 13 Jan 2021" },
-        { id: 4, date: "Thu 14 Jan 2021" },
-        { id: 5, date: "Fri 15 Jan 2021" },
-
-    ];
-
+export default function CheckList({ navigation, route ,props}) {
+    const {course,id}  = route.params;
+    // const {key}=props
+    const [CheckData, setCheckData] = useState()     
+    const fetchCheckList=async()=>{
+        try {
+          const CheckList=await API.post("/selete/attendance",{
+            courseId:id
+          })
+        const data=(CheckList.data)
+        const groups = await data.reduce((groups, day) => {
+            const date = day.createdAt.split('T')[0];
+            if (!groups[date]) {
+              groups[date] = [];
+            }
+            groups[date].push(day);
+            return groups;
+          },{});
+          
+          // Edit: to add it in the array format instead
+          const groupArrays = await Object.keys(groups).map((date) => {
+            return {
+              date,
+              data: groups[date]
+            };
+          });
+          setCheckData(groupArrays);
+        } catch (error) {
+          console.log(error);
+      
+        }
+    }
+      
+      
+      useEffect(() => {
+        fetchCheckList()
+        // console.log(key);
+      }, [])
+    //   console.log(CheckData.map((i)=>i.data));
+    // console.log(key);
     return (
         <>
             {/* header */}
@@ -44,14 +64,16 @@ export default function CheckList({ navigation, route }) {
                         <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                     </TouchableOpacity>
                     <Text style={styles.textHeader} numberOfLines={1}>{course}</Text>
+                 
                 </View>
             </View>
             <FlatList
-                data={data}
-                keyExtractor={item => item.id}
+                data={CheckData}
+                // keyExtractor={item => item.id}
+                // key={item.id}
                 renderItem={({ item }) =>
                     <TouchableOpacity
-                        onPress={() => navigation.push("Attendance", { id: item.id, date: item.date })}
+                        onPress={() => navigation.push("Attendance", {date: item.date ,data:item.data})}
                     >
                         <View style={styles.card}>
                             <Text style={styles.title}>{item.date}</Text>

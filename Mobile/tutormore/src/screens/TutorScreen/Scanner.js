@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button, SafeAreaView, StatusBar, TouchableOpaci
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Colors from "../../configs/Colors";
 import { Icon, Tooltip } from 'react-native-elements';
+import API from '../../services/API';
 
 export default function Scanner({ navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -16,10 +17,28 @@ export default function Scanner({ navigation }) {
     }, []);
 
     // data คือข้อมูลที่ได้จากการสแกน
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned =  async({ type, data }) => {
         setScanned(true);
-        // navigation.navigate("Course", { screen: "Attendance" });
-        alert(`${data} has been scanned!`);
+        // ;
+        try {
+           const value=data.split('/')
+           console.log(value[0],value[1]);
+            const attendance=await API.post("/attendance",{
+               courseId:parseInt(value[0]),
+               userId:parseInt(value[1])
+             
+             })
+             console.log(attendance.data);
+             alert(attendance.data.status);
+             navigation.navigate("Course", { screen: "Attendance" })
+        } catch (error) {
+             alert(error);
+        }
+    // console.log();
+    // // console.log('====================================');
+    // // console.log(data[0]);
+    // // console.log('====================================');
+        // alert(`${data} has been scanned!`);
     };
 
     if (hasPermission === null) {

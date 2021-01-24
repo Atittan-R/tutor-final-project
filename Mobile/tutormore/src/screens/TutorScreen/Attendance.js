@@ -13,14 +13,15 @@ import Colors from '../../configs/Colors'
 
 export default function Attendance({ navigation, route }) {
     // const { id } = params.id;
-    const { date } = route.params;
-    const data = [
-        { id: 1, name: "Kinkaku" },
-        { id: 2, name: "Inostuke" },
-        { id: 3, name: "Mamoru" },
-        { id: 4, name: "Ryuji" },
-        { id: 5, name: "Lie" },
-    ]
+    const { date,data } = route.params;
+    // const data = [
+    //     { id: 1, name: "Kinkaku" },
+    //     { id: 2, name: "Inostuke" },
+    //     { id: 3, name: "Mamoru" },
+    //     { id: 4, name: "Ryuji" },
+    //     { id: 5, name: "Lie" },
+    // ]
+    console.log("data: ",data);
     return (
         <>
             {/* header */}
@@ -41,7 +42,7 @@ export default function Attendance({ navigation, route }) {
                 renderItem={({ item }) =>
                     <TouchableOpacity>
                         <View style={styles.card}>
-                            <Text style={styles.title}>{item.name}</Text>
+                            <Text style={styles.title}>{item.username}</Text>
                         </View>
                     </TouchableOpacity>
                 }

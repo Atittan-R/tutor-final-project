@@ -38,6 +38,11 @@ module.exports = function (app) {
     // [authJwt.verifyToken],
     controller.Userjoin
   );
+  app.post(
+    "/api/user/MyCourse",
+    // [authJwt.verifyToken],
+    controller.MyCourse
+  );
 };
 
 // app.get("/api/test/all", controller.allAccess);
