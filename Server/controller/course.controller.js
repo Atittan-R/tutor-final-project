@@ -169,7 +169,6 @@ exports.updateCourse = (req, res) => {
           time_end: req.body.time_end,
           duration: req.body.duration,
           description: req.body.description,
-          price: req.body.price,
           lat: req.body.lat,
           long: req.body.long,
         },

@@ -7,8 +7,8 @@ export default function Location(props) {
   const [lat, setlat]=props.lat
   const [long, setlong]=props.long
   const [draggable, setDraggable] = useState({
-    latitude: lat,
-    longitude: long,
+    latitude: lat||14.8817767,
+    longitude: long||102.0185075,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });

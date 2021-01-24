@@ -13,54 +13,34 @@ import {
 } from "react-native";
 import { Icon } from "react-native-elements";
 import Colors from "../../../configs/Colors";
-import MapView, {Marker} from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import API from "../../../services/API";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
+import { Linking } from "react-native";
 
-export default function CourseDetail({navigation, route}) {
+export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [detail, setDetail] = useState({});
     const currentUser = JSON.parse(state.userData);
-    const {course} = route.params;
-    console.log(course)
+    const { course } = route.params;
 
-    const [region, setRegion] = useState({
-        latitude: course.lat.valueOf(),
-        longitude: course.long.valueOf(),
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
 
     const [draggable, setDraggable] = useState({
-        latitude: course.lat.valueOf(),
-        longitude: course.long.valueOf(),
+        latitude: parseFloat(course.lat),
+        longitude: parseFloat(course.long),
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     });
 
-    function movementMarker(e) {
-        // get coordinate from mapviews
-        const { latitude, longitude } = e.coordinate;
-        // update coordinate
-        setDraggable({
-            draggable: { latitude, longitude },
-        });
-    }
 
-    function onClickMap(e) {
-        const { latitude, longitude } = e.coordinate;
-        setDraggable({
-            latitude: latitude,
-            longitude: longitude,
-        });
-    }
+    
 
     const [loading, setLoading] = useState(false);
 
     console.log(currentUser.id, course.id,)
-    const enrollData = async () =>{
+    const enrollData = async () => {
         setLoading(true);
         try {
             const response = await API.post("/enroll/course",
@@ -74,9 +54,9 @@ export default function CourseDetail({navigation, route}) {
             // Generate QRCode
             // Popup QRCode
             // Ask where to go History or Back
-            ToastAndroid.show("Enroll "+response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", {screen: "MyCourse"})
-        }catch (e) {
+            ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
+            navigation.navigate("Me", { screen: "MyCourse" })
+        } catch (e) {
             alert(e.response.data.status);
         }
     }
@@ -91,9 +71,11 @@ export default function CourseDetail({navigation, route}) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                { text: "OK", onPress: async () => {
+                {
+                    text: "OK", onPress: async () => {
                         await enrollData();
-                    }},
+                    }
+                },
             ],
             { cancelable: false }
         );
@@ -113,6 +95,7 @@ export default function CourseDetail({navigation, route}) {
     if(loading){
         return <LoadingScreen />
     }
+    console.log(detail);
     return (
         <>
             {/* header */}
@@ -148,58 +131,61 @@ export default function CourseDetail({navigation, route}) {
                     <Icon name="book" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Course</Text>
-                        <Text style={styles.text}>{course.name}</Text>
+                        <Text style={styles.text}>{detail.name}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="event" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Date</Text>
-                        <Text style={styles.text}>{course.day}</Text>
+                        <Text style={styles.text}>{detail.day}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="schedule" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Time</Text>
-                        <Text style={styles.text}>{course.time_start + " - " + course.time_end}</Text>
+                        <Text style={styles.text}>{detail.time_start + " - " + detail.time_end}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="timer" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Duraton</Text>
-                        <Text style={styles.text}>{course.duration}</Text>
+                        <Text style={styles.text}>{detail.duration}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
-                        <Text style={styles.text}>{course.amount}</Text>
+                        <Text style={styles.text}>{detail.amount}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="place" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Place</Text>
-                        <Text style={styles.text}>Suranari, Mueang Nakhon Rat...</Text>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL('google.navigation:q='+draggable.latitude+","+draggable.longitude)}>
+                        <Text style={styles.text}>navigate</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.viewMap}>
                     <MapView
                         style={styles.map}
                         region={draggable}
-                        onRegionChangeComplete={(region) => setRegion(draggable)}
-                        onPress={(e) => onClickMap(e.nativeEvent)}
+                        scrollEnabled={false}
+                        // zoomEnabled={false}
+                        // pitchEnabled={false}
+                        // rotateEnabled={false}
+                      
                     >
-                        {/*<Marker*/}
-                        {/*    // draggable*/}
-                        {/*    coordinate={draggable}*/}
-                        {/*    // onDragStart={true}*/}
-                        {/*    // onDragStart={console.log('onDragStart', arguments)}*/}
-                        {/*onDragEnd={(e) => movementMarker(e.nativeEvent)}*/}
-                        {/*/>*/}
+                        <Marker
+                       
+                            coordinate={draggable}
+                        />
                     </MapView>
                 </View>
 
@@ -218,14 +204,14 @@ export default function CourseDetail({navigation, route}) {
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Name</Text>
-                        <Text style={styles.text}>{course.tutors.username}</Text>
+                        <Text style={styles.text}>{detail.tutors.username}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="school" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Major</Text>
-                        <Text style={styles.text}>{course.tutors.major}</Text>
+                        <Text style={styles.text}>{detail.tutors.major}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -237,7 +223,7 @@ export default function CourseDetail({navigation, route}) {
                     />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Line ID</Text>
-                        <Text style={styles.text}>{course.tutors.phonenumber}</Text>
+                        <Text style={styles.text}>{detail.tutors.phonenumber}</Text>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
@@ -254,7 +240,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
-    bottom:{
+    bottom: {
         paddingBottom: 50,
     },
     headerBar: {

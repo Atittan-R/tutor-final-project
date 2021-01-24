@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon, Rating } from 'react-native-elements';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
+import API from '../../services/API';
 
 export default function Search({ navigation }) {
 
     // search bar
     const [search, setSearch] = useState('');
-    const updateSearch = (search) => {
-        setSearch({ search });
-    };
-
-    const tag = [
+    const [Request, setRequest] = useState([])
+    const [Course, setCourse] = useState([])
+    const course = [
         {
             id: "0",
             name: "Computer ",
@@ -73,6 +72,41 @@ export default function Search({ navigation }) {
             rate: 3.2,
         },
     ];
+    const fetchCourse= async()=>{
+        try {
+            const   courses=await API.post("/search/course",{
+                searchQuerying:search
+            })
+        
+            // console.log(courses.data);
+            setCourse(courses.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const fetchRequest= async()=>{
+        try {
+          const  requests=await API.post("/search/request",{
+                searchQuerying:search
+            })
+        
+            console.log(requests.data);
+            setRequest(requests.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        if(search!=""){
+            fetchCourse()
+            fetchRequest()
+        }else{
+           setRequest([])
+            setCourse([])
+        }
+      
+    }, [search])
     return (
         <>
             <SafeAreaView style={styles.container} />
@@ -83,7 +117,7 @@ export default function Search({ navigation }) {
                 </TouchableOpacity>
                 <TextInput
                     placeholder="Search"
-                    onChangeText={updateSearch}
+                    onChangeText={(text)=>setSearch(text)}
                     value={search}
                     style={styles.search}
                     autoFocus={true}
@@ -101,7 +135,7 @@ export default function Search({ navigation }) {
                     <Text style={styles.textRec}>Trending Tags</Text>
                 </View>
                 <FlatList
-                    data={tag}
+                    data={Request}
                     keyExtractor={item => item.id}
                     horizontal={true}
                     renderItem={({ item }) =>
@@ -110,6 +144,14 @@ export default function Search({ navigation }) {
                                 <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
                                 <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
                                 <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
+                                
+                                {   item.join_users.length>0?
+                                
+                                  <Text  style={styles.textBody}>{item.join_users.map((i)=>i.joinCount)}</Text>
+                                     :
+                                     <Text  style={styles.textBody}>{0}</Text>
+                                }
+                         
                             </View>
                         </TouchableOpacity>
                     }
@@ -121,7 +163,7 @@ export default function Search({ navigation }) {
                     <Text style={styles.textRec}>Course</Text>
                 </View>
                 <FlatList
-                    data={tag}
+                    data={Course}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>
                         <TouchableOpacity>
@@ -144,7 +186,7 @@ export default function Search({ navigation }) {
                                         <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
                                         <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
                                         <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                                        <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time}</Text>
+                                        <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
                                         <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
                                         <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
                                     </View>

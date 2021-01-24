@@ -83,8 +83,7 @@ export default function MyCourse({ navigation }) {
                                   id: currentUser.id,
                                   name: currentUser.username
                                 })}>
-
-                              <QRCode value={[currentUser.id,item.id].toString()} size={20} color={Colors.secondary}/>
+                              <QRCode value={[item.id+'/'+currentUser.id].toString()} size={20} color={Colors.secondary}/>
                             </TouchableOpacity>
                           </View>
                         </View>
