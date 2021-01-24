@@ -44,15 +44,16 @@ export default function TakeCreateCourse({ route, navigation }) {
         setTimeEnd(result);
     }
 
+    async function sendMessage (takeid) {
+        const res =  await API.post("/notification/message",{
+            takeId: takeid,
+            title: "Message",
+            body: "ได้ยัง ไอ่หอยยย"
+        })
+        console.log(res.data)
+    }
+
     const taked = async () =>{
-        // console.log("day ",day)
-        // console.log("tag ",mytags);
-        // console.log("name ",coureName)
-        // console.log("duration ",selectedValue)
-        // console.log("amount ",amount)
-        // console.log(lat,'  ',long)
-        // console.log("reqId", requsetId)
-        // console.log("catagory "(req.map((i) => i.categories.id)))
 
         const clear = () => {
             setCourseName("")
@@ -66,21 +67,21 @@ export default function TakeCreateCourse({ route, navigation }) {
             setClaerDate(true)
         }
         try {
-           
             const teke_res = await API.post("/taked", {
                 tutorId: currentUser.id,
-                requestId:requsetId,
-                amount:amount,
-                tagname:mytags,
-                duration:selectedValue,
+                requestId: requsetId,
+                amount: amount,
+                tagname: mytags,
+                duration: selectedValue,
                 lat:lat.toString(),
                 long:long.toString()
             });
-            console.log((teke_res.data));
+            await sendMessage(teke_res.data.id);
+
+            console.log("Hello",teke_res.data.id);
             ToastAndroid.show("create course success !", ToastAndroid.SHORT);
             clear()
-            navigation.navigate("Home",{screen:"Home"})
-          
+            navigation.navigate("Home",{screen:"Feed"})
         } catch (error) {
             console.log(error);
         }

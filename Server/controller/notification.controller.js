@@ -73,7 +73,7 @@ exports.handlePushTokens = async (req, res) => {
     const body = req.body.body;
     const title = req.body.title;
     const take = req.body.takeId;
-
+    console.log(take)
     const courseWasCreate = await prepareCourse(take)
     const target = await prepareReceiver(take);
 

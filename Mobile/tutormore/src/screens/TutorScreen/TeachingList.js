@@ -93,7 +93,7 @@ useEffect(() => {
                 <View style={styles.icon}>
                   {/* detail */}
                   <TouchableOpacity
-                    // onPress={() => navigation.push("CourseDetail",{id:item.id, course:item.course})}
+                    onPress={() => navigation.navigate("Home", {screen: "CourseDetail", params: { course: item.id }}) }
                     style={styles.button}>
                     <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>

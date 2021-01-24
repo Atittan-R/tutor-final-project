@@ -60,7 +60,7 @@ export const renderingCheck = () => {
                         navigation.navigate("Home", {screen: "CourseDetail", params: {
                             course: notification.request.content.data.course
                         }})
-                        navigation.navigate("Feed Request",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}})
+                        navigation.navigate("Home",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}})
                     }else{
                         console.log("no course")
                     }

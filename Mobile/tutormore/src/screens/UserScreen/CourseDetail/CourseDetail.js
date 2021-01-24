@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {
-    Button,
     Image,
     Alert,
     SafeAreaView,
@@ -25,17 +24,26 @@ export default function CourseDetail({ navigation, route }) {
     const [detail, setDetail] = useState({});
     const currentUser = JSON.parse(state.userData);
     const { course } = route.params;
+    console.log("Course parameter",course)
+    useEffect(() => {
+        async function courseData (){
 
+            try {
+                const res = await API.get("/course/findOne/"+course)
+                setDetail(res.data.course);
+            }catch (e){
+                console.log(e.message.data)
+            }
+        }
+        courseData();
+    }, []);
 
     const [draggable, setDraggable] = useState({
-        latitude: parseFloat(course.lat),
-        longitude: parseFloat(course.long),
+        latitude: parseFloat(detail.lat),
+        longitude: parseFloat(detail.long),
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     });
-
-
-    
 
     const [loading, setLoading] = useState(false);
 
@@ -80,17 +88,6 @@ export default function CourseDetail({ navigation, route }) {
             { cancelable: false }
         );
     };
-    useEffect(() => {
-        async function courseData (id){
-            try {
-                const res = await API.get("/course/findOne/"+id)
-                setDetail(res.data.course);
-            }catch (e){
-                console.log(e.message.data)
-            }
-        }
-        courseData(course)
-    }, []);
 
     if(loading){
         return <LoadingScreen />
@@ -110,6 +107,7 @@ export default function CourseDetail({ navigation, route }) {
                         type="ionicon"
                         color={Colors.secondary}
                     />
+
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Course Name</Text>
             </View>
@@ -204,14 +202,15 @@ export default function CourseDetail({ navigation, route }) {
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Name</Text>
-                        <Text style={styles.text}>{detail.tutors.username}</Text>
+                        {/*{console.log( detail )}*/}
+                        {/*<Text style={styles.text}>{detail.tutors.username}</Text>*/}
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="school" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Major</Text>
-                        <Text style={styles.text}>{detail.tutors.major}</Text>
+                        {/*<Text style={styles.text}>{detail.tutors.major}</Text>*/}
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -223,7 +222,7 @@ export default function CourseDetail({ navigation, route }) {
                     />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Line ID</Text>
-                        <Text style={styles.text}>{detail.tutors.phonenumber}</Text>
+                        {/*<Text style={styles.text}>{detail.tutors.phonenumber}</Text>*/}
                     </View>
                 </View>
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>

@@ -28,9 +28,6 @@ const HomeStack = () => {
       <Stack.Screen
         name="CourseDetail"
         component={CourseDetail}
-        options={{
-          headerTitle: "Register",
-        }}
       />
       <Stack.Screen
         name="CourseEnroll"

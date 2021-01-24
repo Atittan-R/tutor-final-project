@@ -42,9 +42,8 @@ export default function CreateCourse({ navigation }) {
         setTimeStart(new Date(0, 0, 0, 0))
         setClaerDate(true)
     }
+
     const create = async () => {
-
-
         try {
             const createCourse = await API.post("course/create", {
                 name: coureName,
@@ -64,7 +63,6 @@ export default function CreateCourse({ navigation }) {
             ToastAndroid.show("create course success !", ToastAndroid.SHORT);
         } catch (error) {
             console.log(error);
-
         }
     }
 

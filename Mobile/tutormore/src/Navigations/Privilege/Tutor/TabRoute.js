@@ -30,19 +30,19 @@ export default function TapRoute() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="Feed Request"
-        component={FeedStack}
-        options={{
-          tabBarIcon: () => (
-            <Icon
-              name="dynamic-feed"
-              type="material"
-              color={Colors.secondary}
-            />
-          ),
-        }}
-      />
+      {/*<Tabs.Screen*/}
+      {/*  name="Feed Request"*/}
+      {/*  component={FeedStack}*/}
+      {/*  options={{*/}
+      {/*    tabBarIcon: () => (*/}
+      {/*      <Icon*/}
+      {/*        name="dynamic-feed"*/}
+      {/*        type="material"*/}
+      {/*        color={Colors.secondary}*/}
+      {/*      />*/}
+      {/*    ),*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Tabs.Screen
         name="Course"
         component={CreateCourseStack}

@@ -17,8 +17,6 @@ import {useGlobalVar} from "../../context/GlobalContex";
 import LoadingScreen from "../../components/Loading";
 //
 
-
-
 const Inbox = () => {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -28,15 +26,6 @@ const Inbox = () => {
     const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
-
-    async function sendMessage () {
-       const res =  await API.post("/notification/message",{
-            takeId: 1,
-            title: "Message",
-            body: "ได้ยัง ไอ่หอยยย"
-        })
-        console.log(res.data)
-    }
 
      const getMessageBox  = async () =>{
         setLoading(true);

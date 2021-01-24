@@ -63,7 +63,7 @@ export const GlobalProvider = ({children}) => {
     );
 
     const useLogin = async (data) => {
-        // console.log("Use Login",data.email)
+        console.log("Use Login",data.email)
         try {
             const user = await API.post(
                 "/auth/signin",

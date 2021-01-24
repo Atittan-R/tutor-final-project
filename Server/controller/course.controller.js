@@ -119,9 +119,9 @@ exports.findCourseFromCategories = async (req, res) => {
   }
 };
 
-exports.findOneCourse = (req, res) => {
+exports.findOneCourse = async (req, res) => {
   const id = req.params.id;
-  Course.findByPk(id,{
+  await Course.findByPk(id,{
     attributes: [
       "id",
       "name",

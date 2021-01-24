@@ -117,8 +117,6 @@ export default function TakeCreateCourse({ route, navigation }) {
                         onTextChange={(text) => setAmount(text)}
                         value={amount}
                         keyboardType={"phone-pad"}
-
-                     
                     />
                      <Catagory
                         selectedValue={catagory}
