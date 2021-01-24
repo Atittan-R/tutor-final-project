@@ -53,6 +53,7 @@ exports.enRollHistory = async (req, res) => {
     const result = await Course.findAll({
       include: [
         {
+          
           model: User,
           as: "courseEnroll",
           where: { id: user_id },
@@ -80,8 +81,7 @@ exports.seleteEnRoll = async (req, res) => {
     const userId = req.body.userId;
     const courseId = req.body.courseId;
     const course = await Course.findByPk(courseId, {
-      // attributes: ["name","createdAt",[Sequelize.fn('DATE_FORMAT', Sequelize.col('createdAt'), '%H'), 'dates']],
-      // attributes: ['id', [Sequelize.fn('day',Sequelize.col('courseEnroll.createdAt')), 'groupCreatedAt']],
+
       include: [
         {
           model: User,
@@ -91,9 +91,7 @@ exports.seleteEnRoll = async (req, res) => {
           },
         },
       ],
-      // group: [Sequelize.fn('DAY', Sequelize.col('courseEnroll.createdAt'))]
-      // group: ['groupCreatedAt']
-      // group: [db.Sequelize.fn('day', db.Sequelize.col('courseEnroll.createdAt'))]
+
     });
     res.status(201).send(course.courseEnroll);
   } catch (err) {

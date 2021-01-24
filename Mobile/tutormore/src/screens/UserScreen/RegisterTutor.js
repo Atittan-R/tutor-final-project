@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import {
+    Alert,
     SafeAreaView,
     ScrollView,
     StatusBar,
     StyleSheet,
-    Text,
+    Text, ToastAndroid,
     TouchableOpacity,
     View,
 } from "react-native";
@@ -14,8 +15,14 @@ import TextInputButton from "../../components/forms/TextInputButton";
 import Calendar from "../../components/forms/Calendar";
 import CheckBox from "@react-native-community/checkbox";
 import Experience from "../../components/forms/Experience";
+import API from "../../services/API";
+import {useGlobalVar} from "../../context/GlobalContex";
 
 export default function ResgisterTutor({ navigation }) {
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+    const currentUser = JSON.parse(state.userData);
+
     const [firstname, setFirstname] = useState('');
     const [surname, setSurname] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -28,6 +35,44 @@ export default function ResgisterTutor({ navigation }) {
     const getBirthDate = (result) => {
         setBirthDate(result);
     }
+
+    const alertEnroll = () => {
+        Alert.alert(
+            "Enroll",
+            "Are you sure to enroll?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                },
+                { text: "OK", onPress: async () => {
+                        await signupTutor();
+                    }},
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const signupTutor = async () => {
+        try{
+            // console.log("Hello", firstname,email,surname, phoneNumber,major,birthDath.getDate(),experience)
+             const response = await API.post("/tutor/signup/"+currentUser.id,{
+                firstname: firstname,
+                email: email,
+                lastname: surname,
+                major: major,
+                phoneNumber: phoneNumber,
+                dob: birthDath,
+                exp: experience
+            });
+            ToastAndroid.show(response.data.message, ToastAndroid.LONG);
+            navigation.navigate("RoleSelect");
+        }catch (e) {
+
+        }
+    }
+
 
     return (
         <>
@@ -58,13 +103,11 @@ export default function ResgisterTutor({ navigation }) {
                     <TextInputButton
                         label={"Name"}
                         placeholder={"Enter your name"}
-                        value={firstname}
-                        onChangeText={(text) => setFirstname(text)} />
+                        onTextChange={(text) => setFirstname(text)} />
                     <TextInputButton
                         label={"Surname"}
                         placeholder={"Enter your surname"}
-                        value={surname}
-                        onChangeText={(text) => setSurname(text)} />
+                        onTextChange={(text) => setSurname(text)} />
                     <Calendar
                         label={"Date of Birth"}
                         callback={getBirthDate}
@@ -72,30 +115,32 @@ export default function ResgisterTutor({ navigation }) {
                     <TextInputButton
                         label={"Phone Number"}
                         placeholder={"Enter your phone number"}
-                        value={phoneNumber}
-                        onChangeText={(text) => setPhoneNumber(text)}
+                        onTextChange={(text) => setPhoneNumber(text)}
                         keyboardType={"phone-pad"} />
                     <TextInputButton
                         label={"Line ID"}
                         placeholder={"Enter your line id"}
-                        value={lineId}
-                        onChangeText={(text) => setLineId(text)}
+                        onTextChange={(text) => setLineId(text)}
                         keyboardType={"email-address"} />
                     <TextInputButton
                         label={"Email"}
                         placeholder={"Enter your email"}
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
+                        // value={email}
+                        onTextChange={(text) => setEmail(text)}
                         keyboardType={"email-address"} />
                     <TextInputButton
                         label={"Major"}
                         placeholder={"Enter your major"}
-                        value={major}
-                        onChangeText={(text) => setMajor(text)} />
+                        // value={major}
+                        onTextChange={(text) => setMajor(text)} />
                     <Experience
                         selectedValue={experience}
                         onValueChange={(text) => setExperience(text)} />
                 </View>
+
+                <TouchableOpacity style={styles.button} onPress={alertEnroll}>
+                    <Text style={styles.title}>Submit</Text>
+                </TouchableOpacity>
             </ScrollView>
         </>
     );

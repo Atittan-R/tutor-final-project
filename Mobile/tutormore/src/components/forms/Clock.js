@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 export default function Clock(props) {
-    const { label,callback} = props;
+    const { label,callback,value} = props;
     const [claerdate,setClaerDate]=props.claerdate;
     const [date, setDate] = useState(new Date(0,0,0,0));
     const [show, setShow] = useState();
@@ -27,6 +27,8 @@ export default function Clock(props) {
     useEffect(() => {
         callback(date)
     }, [date])
+
+  
     return (
         <View style={styles.inputItem}>
             <Text style={{ flex: 0.35, color: Colors.secondary }}>{label}</Text>

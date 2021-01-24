@@ -14,7 +14,7 @@ module.exports = function (app) {
     // [authJwt.verifyToken],
     controller.attenDance
   );
-  app.get(
+  app.post(
     "/api/selete/attendance",
     // [authJwt.verifyToken],
     controller.seleteAttenDance

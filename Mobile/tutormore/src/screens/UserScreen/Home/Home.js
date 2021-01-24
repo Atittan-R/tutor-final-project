@@ -70,9 +70,9 @@ export default function Home({ navigation }) {
 
     if (error) {
         return (
-            <ScrollView style={styles.center}
+            <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                <View>
+                <View style={styles.center}>
                     <Text>Failed to load posts!</Text>
                 </View>
             </ScrollView>

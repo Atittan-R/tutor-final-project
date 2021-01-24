@@ -1,9 +1,6 @@
 const db = require("../models");
-const config = require("../config/auth.config");
-const express = require("express");
-const app = express();
 const User = db.user;
-
+const Course =db.course;
 exports.findAllUser = (req, res) => {
   User.findAll()
     .then((user) => {
@@ -99,6 +96,16 @@ exports.Userjoin = async (req, res) => {
   await res.status(201).send(userJoin.requests);
 };
 
+
+exports.MyCourse = async (req, res) => {
+  const userId = req.body.userId
+  const course= await Course.findAll({
+    where:{
+      tutorId:userId
+    }
+  })
+  res.status(200).send(course)
+}
 // exports.allAccess = (req, res) => {
 //   res.status(200).send("Public Content.");
 // };

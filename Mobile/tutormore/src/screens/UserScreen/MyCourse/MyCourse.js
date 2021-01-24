@@ -25,7 +25,6 @@ export default function MyCourse({ navigation }) {
   const currentUser = JSON.parse(state.userData);
 
   const [books, setBooks] = useState([...new Array(4).fill({})]);
-
   const fetchMyCourse = async () => {
     setLoading(true);
     try {
@@ -79,12 +78,30 @@ export default function MyCourse({ navigation }) {
                   </View>
                   <View style={styles.qrcode}>
                     <TouchableOpacity
-                      onPress={() => navigation.push("QrCode", {
-                        id: currentUser.id,
-                        name: currentUser.username
-                      })}>
-                      <QRCode value={"currentUser.username, 11"} size={20} color={Colors.secondary} />
-                      <Text style={styles.textBlack}>QR Code</Text>
+                      onPress={() => navigation.navigate("CourseDetail", { course: item, obj: [currentUser.id, item.id].toString() })}
+                      style={styles.button}
+                      key={item.id}>
+                      <View style={styles.card}>
+                        <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
+                        <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }}>
+                          <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
+                          <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Icon name="calendar-today" type="material" color="gray" size={15} />
+                            <Text style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
+                            <Icon name="schedule" type="material" color="gray" size={15} />
+                            <Text style={styles.textGray}>{item.day}</Text>
+                          </View>
+                          <View style={styles.qrcode}>
+                            <TouchableOpacity
+                              onPress={() => navigation.push("QrCode", {
+                                id: currentUser.id,
+                                name: currentUser.username
+                              })}>
+                              <QRCode value={[item.id + '/' + currentUser.id].toString()} size={20} color={Colors.secondary} />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.push("RatingCourse", { id: item.id, name: item.name })}>
                       <Icon name="star-outline" type="material" color={Colors.secondary} />

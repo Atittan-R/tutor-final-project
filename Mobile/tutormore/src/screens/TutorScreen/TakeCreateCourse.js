@@ -13,6 +13,7 @@ import TextInputButton from '../../components/forms/TextInputButton';
 import UploadImage from '../../components/forms/UploadImage';
 import Colors from '../../configs/Colors'
 import API from "../../services/API"
+import {useGlobalVar} from "../../context/GlobalContex";
 
 export default function TakeCreateCourse({ route, navigation }) {
     const { req } = route.params
@@ -22,7 +23,10 @@ export default function TakeCreateCourse({ route, navigation }) {
     const [selectedValue, setSelectedValue] = useState("");
     const [lat, setlat] = useState(14.8817767)
     const [long, setlong] = useState(102.0185075)
-      
+    const { authentication } = useGlobalVar();
+    const [state, dipatch] = authentication
+    const currentUser = JSON.parse(state.userData);
+
     //TODO
     const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
     const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
@@ -49,6 +53,7 @@ export default function TakeCreateCourse({ route, navigation }) {
         // console.log(lat,'  ',long)
         // console.log("reqId", requsetId)
         // console.log("catagory "(req.map((i) => i.categories.id)))
+
         const clear = () => {
             setCourseName("")
             setClaerTag(true)
@@ -63,7 +68,7 @@ export default function TakeCreateCourse({ route, navigation }) {
         try {
            
             const teke_res = await API.post("/taked", {
-                tutorId: 2,
+                tutorId: currentUser.id,
                 requestId:requsetId,
                 amount:amount,
                 tagname:mytags,
@@ -71,7 +76,7 @@ export default function TakeCreateCourse({ route, navigation }) {
                 lat:lat.toString(),
                 long:long.toString()
             });
-            console.log((teke_res));
+            console.log((teke_res.data));
             ToastAndroid.show("create course success !", ToastAndroid.SHORT);
             clear()
             navigation.navigate("Home",{screen:"Home"})

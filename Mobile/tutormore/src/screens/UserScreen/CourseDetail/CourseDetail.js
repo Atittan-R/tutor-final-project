@@ -13,52 +13,33 @@ import {
 } from "react-native";
 import { Icon } from "react-native-elements";
 import Colors from "../../../configs/Colors";
-import MapView, {Marker} from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import API from "../../../services/API";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
+import { Linking } from "react-native";
 
-export default function CourseDetail({navigation, route}) {
+export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-
-    const {course} = route.params;
     const currentUser = JSON.parse(state.userData);
-    const [region, setRegion] = useState({
-        latitude: course.lat.valueOf(),
-        longitude: course.long.valueOf(),
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
+    const { course } = route.params;
+
 
     const [draggable, setDraggable] = useState({
-        latitude: course.lat.valueOf(),
-        longitude: course.long.valueOf(),
+        latitude: parseFloat(course.lat),
+        longitude: parseFloat(course.long),
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     });
 
-    function movementMarker(e) {
-        // get coordinate from mapviews
-        const { latitude, longitude } = e.coordinate;
-        // update coordinate
-        setDraggable({
-            draggable: { latitude, longitude },
-        });
-    }
 
-    function onClickMap(e) {
-        const { latitude, longitude } = e.coordinate;
-        setDraggable({
-            latitude: latitude,
-            longitude: longitude,
-        });
-    }
+    
 
     const [loading, setLoading] = useState(false);
 
     console.log(currentUser.id, course.id,)
-    const enrollData = async () =>{
+    const enrollData = async () => {
         setLoading(true);
         try {
             const response = await API.post("/enroll/course",
@@ -72,9 +53,9 @@ export default function CourseDetail({navigation, route}) {
             // Generate QRCode
             // Popup QRCode
             // Ask where to go History or Back
-            ToastAndroid.show("Enroll "+response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", {screen: "MyCourse"})
-        }catch (e) {
+            ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
+            navigation.navigate("Me", { screen: "MyCourse" })
+        } catch (e) {
             alert(e.response.data.status);
         }
     }
@@ -89,16 +70,19 @@ export default function CourseDetail({navigation, route}) {
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                { text: "OK", onPress: async () => {
+                {
+                    text: "OK", onPress: async () => {
                         await enrollData();
-                    }},
+                    }
+                },
             ],
             { cancelable: false }
         );
     };
-    if(loading){
+    if (loading) {
         return <LoadingScreen />
     }
+    console.log(course);
     return (
         <>
             {/* header */}
@@ -169,23 +153,26 @@ export default function CourseDetail({navigation, route}) {
                     <Icon name="place" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Place</Text>
-                        <Text style={styles.text}>Suranari, Mueang Nakhon Rat...</Text>
+                        <TouchableOpacity
+                   onPress={() => Linking.openURL('google.navigation:q='+draggable.latitude+","+draggable.longitude)}>
+                        <Text style={styles.text}>navigate</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.viewMap}>
                     <MapView
                         style={styles.map}
                         region={draggable}
-                        onRegionChangeComplete={(region) => setRegion(draggable)}
-                        onPress={(e) => onClickMap(e.nativeEvent)}
+                        scrollEnabled={false}
+                        // zoomEnabled={false}
+                        // pitchEnabled={false}
+                        // rotateEnabled={false}
+                      
                     >
-                        {/*<Marker*/}
-                        {/*    // draggable*/}
-                        {/*    coordinate={draggable}*/}
-                        {/*    // onDragStart={true}*/}
-                        {/*    // onDragStart={console.log('onDragStart', arguments)}*/}
-                        {/*onDragEnd={(e) => movementMarker(e.nativeEvent)}*/}
-                        {/*/>*/}
+                        <Marker
+                       
+                            coordinate={draggable}
+                        />
                     </MapView>
                 </View>
 
@@ -240,7 +227,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
-    bottom:{
+    bottom: {
         paddingBottom: 50,
     },
     headerBar: {

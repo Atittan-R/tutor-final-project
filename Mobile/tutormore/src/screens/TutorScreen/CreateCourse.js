@@ -38,8 +38,6 @@ export default function CreateCourse({ navigation }) {
         setClaerTag(true)
         setDay(null)
         setCatagory(null)
-        // setDescription("")
-        // setTags([])
         setTimeEnd(new Date(0, 0, 0, 0))
         setTimeStart(new Date(0, 0, 0, 0))
         setClaerDate(true)
@@ -49,40 +47,25 @@ export default function CreateCourse({ navigation }) {
 
 
         try {
-            console.log(coureName);
-            console.log(day.toString());
-            console.log(catagory);
-            console.log(TimeStart.getHours() + ":" + TimeStart.getMinutes());
-            console.log(TimeEnd.getHours() + ":" + TimeEnd.getMinutes());
-            console.log(mytags.toString());
-            console.log(lat.toString());
-            console.log(long.toString());
-            console.log(selectedValue);
             const createCourse = await API.post("course/create", {
                 name: coureName,
                 day: day.toString(),
                 time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(),
                 time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
-                // description: Description,
                 categoryId: catagory,
-
+                amount: amount,
                 userId: 2,
                 tagname: mytags,
                 duration: selectedValue,
                 lat: lat.toString(),
                 long: long.toString()
             });
-            // console.log('====================================');
-            // console.log(createCourse);
-            // console.log('====================================');
             clear()
             navigation.navigate("Home", { screen: "Home" })
             ToastAndroid.show("create course success !", ToastAndroid.SHORT);
         } catch (error) {
-            alert(error)
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
+
         }
     }
 

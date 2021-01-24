@@ -3,14 +3,12 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-const http = require("http").Server(app);
-const user = require("../Server/controller/user.controller");
 const corsOptions = {
   origin: "http://localhost:8081/",
 };
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
-// app.use(cors());
+app.use(cors());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,6 +30,9 @@ require("./routes/take.routes")(app);
 require("./routes/enroll.router")(app);
 require("./routes/attendance.router")(app);
 require("./routes/search.router")(app);
+require("./routes/tutor.routes")(app);
+require("./routes/notification.routes")(app);
+
 //Connect to database by calling models
 const db = require("./models");
 const Role = db.role;
@@ -45,7 +46,8 @@ db.sequelize.sync();
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3986;
-http.listen(PORT, () => {
+// const PORT = process.env.PORT || 9001;
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}\n`);
 });
 
@@ -66,49 +68,38 @@ function initial() {
   });
 
   Categories.create({
-    id: 1,
     name: "General Education",
   });
 
   Categories.create({
-    id: 2,
     name: "Management Technology",
   });
 
   Categories.create({
-    id: 3,
     name: "Engineering",
   });
   Categories.create({
-    id: 4,
     name: "Digital Technology",
   });
   Categories.create({
-    id: 5,
     name: "Science",
   });
   Categories.create({
-    id: 6,
     name: "Agricultural Technology",
   });
   Categories.create({
-    id: 7,
     name: "Foreign Languages",
   });
   Categories.create({
-    id: 8,
     name: "Medicine",
   });
   Categories.create({
-    id: 9,
     name: "Nurse",
   });
   Categories.create({
-    id: 10,
     name: "Dentistry",
   });
   Categories.create({
-    id: 11,
     name: "Public Health",
   });
 }

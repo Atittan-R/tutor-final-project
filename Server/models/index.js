@@ -31,7 +31,10 @@ db.cart = require("./cart.model")(sequelize, Sequelize);
 db.request = require("./request.model")(sequelize, Sequelize);
 db.cartitem = require("./cartItem.model")(sequelize, Sequelize);
 db.take = require("./take.model")(sequelize, Sequelize);
+db.tutorInfo = require("./tutorInfo.model")(sequelize, Sequelize);
+db.token = require("./token.model")(sequelize, Sequelize);
 
+db.ROLES = ["user", "admin", "tutor"];
 //SECTION USER ROLES
 //NOTE have Roles (many-to-many)
 db.role.belongsToMany(db.user, {
@@ -44,7 +47,19 @@ db.user.belongsToMany(db.role, {
   foreignKey: "userId",
   otherKey: "roleId",
 });
-db.ROLES = ["user", "admin", "tutor"];
+
+db.user.hasOne(db.tutorInfo);
+db.tutorInfo.belongsTo(db.user, {
+  foreignKey: {
+    name: "userId",
+  },
+});
+
+db.user.hasMany(db.token, { as: "token" });
+db.token.belongsTo(db.user, {
+  foreignKey: "userId",
+  as: "token",
+});
 
 //NOTE User own Course (one-to-many)
 db.user.hasMany(db.course, { as: "tutors" });
@@ -162,11 +177,11 @@ db.request.belongsToMany(db.user, {
 });
 
 // courseenroll
-// db.user.belongsToMany(db.course, {
-//   through: "course_enroll",
-//   foreignKey: "userId",
-//   as: "courseEnroll",
-// });
+db.user.belongsToMany(db.course, {
+  through: "course_enroll",
+  foreignKey: "userId",
+  as: "courseEnroll",
+});
 
 db.course.belongsToMany(db.user, {
   through: "course_enroll",
