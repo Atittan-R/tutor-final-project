@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
 
 export default function Location(props) {
   const [lat, setlat]= props.lat
   const [long, setlong]= props.long
+  const [modalVisible, setModalVisible]=props.modal
   const [draggable, setDraggable] = useState({
     latitude: lat || 14.8817767,
     longitude: long || 102.0185075,
@@ -32,10 +38,17 @@ export default function Location(props) {
   }
   return (
     <View style={styles.inputItem}>
-      <Text style={{ flex: 0.35, color: Colors.secondary }} >Location</Text>
+      { !modalVisible&&
+            <Text style={{ flex: 0.35, color: Colors.secondary }}>Location</Text>
+      }
+   
       <View style={styles.textDate}>
         <MapView
-          style={styles.map}
+          style={
+            modalVisible?
+            styles.mapfull
+            :
+            styles.map}
           region={draggable}
           onRegionChangeComplete={(region) => setDraggable(region)}
           onPress={(e) => onClickMap(e.nativeEvent)}
@@ -62,7 +75,7 @@ export const styles = StyleSheet.create({
   textDate: {
     flexDirection: "row",
     flexWrap: "wrap",
-    flex: 0.9,
+    flex: 1,
   },
   drop: {
     height: 20,
@@ -81,6 +94,10 @@ export const styles = StyleSheet.create({
   },
   map: {
     height: 150,
-    width: 230
+    width: 230,
+  },
+  mapfull: {
+    height: 750,
+    flexGrow:1
   },
 });
