@@ -1,13 +1,13 @@
 import React from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Colors from "../../configs/Colors";
 import { useNavigation } from '@react-navigation/native';
 
-const PanelCategory = ({category}) => {
+const PanelCategory = ({ category }) => {
     const navigation = useNavigation();
     const majors = category.map((cate) => (
         <View style={styles.container} key={cate.id}>
-            <TouchableOpacity style={styles.touchView} onPress={() => navigation.navigate("List", {categories: cate.name})}>
+            <TouchableOpacity style={styles.touchView} onPress={() => navigation.navigate("List", { categories: cate.name })}>
                 <View style={styles.press}>
                     <Image
                         style={styles.image}
@@ -19,7 +19,7 @@ const PanelCategory = ({category}) => {
                 </Text>
             </TouchableOpacity>
         </View>
-        )
+    )
     );
     return (
         <View style={styles.wrap}>
@@ -31,13 +31,13 @@ const PanelCategory = ({category}) => {
 export default PanelCategory;
 
 const styles = StyleSheet.create({
-    wrap:{
+    wrap: {
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "flex-start",
         margin: 20,
     },
-    container:{
+    container: {
         flexDirection: "row",
         justifyContent: "center",
         flexWrap: "wrap",
