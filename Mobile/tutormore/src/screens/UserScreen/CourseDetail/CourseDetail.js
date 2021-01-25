@@ -17,7 +17,7 @@ import API from "../../../services/API";
 import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
-import {actionCreators, initialState, reducer} from "./reduce";
+import {actionCreators, initialState, reducer} from "../Reducer";
 
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
@@ -202,17 +202,17 @@ export default function CourseDetail({ navigation, route }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                {/* <View style={styles.viewMap}>
-                    <MapView
-                        style={styles.map}
-                        region={draggable}
-                        onRegionChangeComplete={(region) => setDraggable(region)}
-                    >
-                        <Marker
-                            coordinate={{ latitude : parseFloat(data.lat) , longitude : parseFloat(data.long) }}
-                        />
-                    </MapView>
-                </View> */}
+                <View style={styles.viewMap}>
+                    {/*<MapView*/}
+                    {/*    style={styles.map}*/}
+                    {/*    region={draggable}*/}
+                    {/*    onRegionChangeComplete={(region) => setDraggable(region)}*/}
+                    {/*>*/}
+                    {/*    <Marker*/}
+                    {/*        coordinate={{ latitude : parseFloat(data.lat) , longitude : parseFloat(data.long) }}*/}
+                    {/*    />*/}
+                    {/*</MapView>*/}
+                </View>
 
                 <View style={styles.barTitle}>
                     <Text
@@ -252,7 +252,6 @@ export default function CourseDetail({ navigation, route }) {
                         <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber: "Not specified"}</Text>
                     </View>
                 </View>
-                
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
                     <Text style={styles.title}>Enroll</Text>
                 </TouchableOpacity>
