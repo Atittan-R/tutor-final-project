@@ -1,4 +1,4 @@
-import {StatusBar, StyleSheet} from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import Colors from "../../../configs/Colors";
 
 export const styles = StyleSheet.create({
@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 10,
     },
-    cateWrap:{
+    cateWrap: {
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "center",
@@ -32,34 +32,29 @@ export const styles = StyleSheet.create({
         height: 50,
         resizeMode: "contain"
     },
-    touchTopic:{
+    touchTopic: {
         marginVertical: 3,
         fontSize: 12,
         textAlign: "center"
     },
-    listStyle:{
+    listStyle: {
         padding: 5,
-        marginVertical: 2,
-        marginHorizontal: 10,
         flex: 1,
         alignItems: "center",
-        backgroundColor: Colors.gray,
-        borderRadius: 20,
-        width: 150,
-        height: 150,
+        width: 120,
         flexWrap: "wrap",
-        flexShrink: 1,
+
     },
-    listImage:{
+    listImage: {
         width: 60,
         height: 60,
         resizeMode: "contain",
         alignSelf: "center",
     },
-    listName:{
+    listName: {
         marginVertical: 2, fontWeight: "bold"
     },
-    listDesc:{
+    listDesc: {
         fontSize: 12
     },
     line: {
@@ -114,14 +109,14 @@ export const styles = StyleSheet.create({
         elevation: 6,
         borderRadius: 18,
     },
-    courseWrap:{
+    courseWrap: {
         backgroundColor: "#fff",
         padding: 5,
         flexDirection: "row",
         marginHorizontal: 2,
         flexWrap: "wrap"
     },
-    courseView:{
+    courseView: {
         flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start"
     },
     courseName: {
@@ -134,12 +129,12 @@ export const styles = StyleSheet.create({
         borderRadius: 5,
     },
     courseDescription: { color: "gray", fontSize: 12, },
-    courseViewDetail: {flexDirection: "row", alignItems: "center", marginTop: 12  },
-    courseDetail: {flexDirection: "row", alignItems: "center",marginTop: 5 },
+    courseViewDetail: { flexDirection: "row", alignItems: "center", marginTop: 12 },
+    courseDetail: { flexDirection: "row", alignItems: "center", marginTop: 5 },
     bg: {
         backgroundColor: Colors.white,
     },
-    textGray:{
+    textGray: {
         color: "gray",
         fontSize: 12,
         marginHorizontal: 5
@@ -185,7 +180,7 @@ export const styles = StyleSheet.create({
         fontSize: 30,
         color: Colors.secondary,
     },
-    center:{
+    center: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",

@@ -113,7 +113,7 @@ export default function Home({ navigation }) {
                                     style={styles.touchView}>
                                     <Image
                                         style={styles.touchImage}
-                                        source={require("../../../assets/images/categories/digital.png")}
+                                        source={require("../../../assets/course/multimedia.png")}
                                     />
                                 </View>
                                 <Text style={styles.touchTopic}>
@@ -127,7 +127,7 @@ export default function Home({ navigation }) {
                                     style={styles.touchView}>
                                     <Image
                                         style={styles.touchImage}
-                                        source={require("../../../assets/images/categories/doctor.png")} />
+                                        source={require("../../../assets/course/stethoscope.png")} />
                                 </View>
                                 <Text style={styles.touchTopic}>
                                     Doctor
@@ -140,7 +140,7 @@ export default function Home({ navigation }) {
                                 <View style={styles.touchView}>
                                     <Image
                                         style={styles.touchImage}
-                                        source={require("../../../assets/images/categories/engineering.png")}
+                                        source={require("../../../assets/course/electrician.png")}
                                     />
                                 </View>
                                 <Text style={styles.touchTopic}>
@@ -180,14 +180,14 @@ export default function Home({ navigation }) {
                             horizontal={true}
                             data={data}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item: { name, description} }) => (
+                            renderItem={({ item: { name, description } }) => (
                                 <TouchableOpacity
                                     style={styles.listStyle}>
                                     <View style={{ padding: 15 }}>
                                         <Image source={{ uri: "https://source.unsplash.com/random" }}
                                             style={styles.courseImage} />
                                         <View>
-                                            <Text style={styles.listName}>
+                                            <Text numberOfLines={1} style={styles.listName}>
                                                 {name}
                                             </Text>
                                             <Text numberOfLines={1} style={styles.listDesc}>{description}</Text>
@@ -210,7 +210,7 @@ export default function Home({ navigation }) {
                             <FlatList
                                 data={filterItem ? filterItem : data}
                                 keyExtractor={(item) => item.id}
-                                renderItem={({ item: {id, name, description, time_start, time_end, day, rate, CourseCate}}) => (
+                                renderItem={({ item: { id, name, description, time_start, time_end, day, rate, CourseCate } }) => (
                                     <TouchableOpacity
                                         onPress={() => {
                                             // console.log("courseId", id)

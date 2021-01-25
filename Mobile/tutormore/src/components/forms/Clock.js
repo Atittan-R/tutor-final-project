@@ -5,22 +5,22 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 export default function Clock(props) {
-    const { label,callback,value} = props;
-    const [claerdate,setClaerDate]=props.claerdate;
-    const [date, setDate] = useState(new Date(0,0,0,0));
+    const { label, callback, value } = props;
+    const [claerdate, setClaerDate] = props.claerdate;
+    const [date, setDate] = useState(new Date(0, 0, 0, 0));
     const [show, setShow] = useState();
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
-        setDate(currentDate);  
+        setDate(currentDate);
     };
-    
+
     const showTimepickerStart = () => {
         setShow(true);
     };
     useEffect(() => {
-        if(claerdate){
-            setDate(new Date(0,0,0,0))
+        if (claerdate) {
+            setDate(new Date(0, 0, 0, 0))
             setClaerDate(false)
         }
     }, [claerdate])
@@ -28,12 +28,12 @@ export default function Clock(props) {
         callback(date)
     }, [date])
 
-  
+
     return (
         <View style={styles.inputItem}>
-            <Text style={{ flex: 0.35, color: Colors.secondary }}>{label}</Text>
+            {/* <Text style={{ flex: 0.35, color: Colors.secondary }}>{label}</Text> */}
             <View style={styles.textDate} >
-                <Text style={styles.text}>{date.getHours()}:{(date.getMinutes()<10?'0':'') + date.getMinutes()}</Text>
+                <Text style={styles.text}>{date.getHours()}:{(date.getMinutes() < 10 ? '0' : '') + date.getMinutes()}</Text>
                 <TouchableOpacity onPress={showTimepickerStart}>
                     <Icon name={'clock'} type={'feather'} color={Colors.secondary} />
                 </TouchableOpacity>
@@ -53,7 +53,7 @@ export default function Clock(props) {
 
 export const styles = StyleSheet.create({
     inputItem: {
-        margin: 5,
+        marginVertical: 5,
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: Colors.white,
@@ -61,15 +61,15 @@ export const styles = StyleSheet.create({
     },
     textDate: {
         backgroundColor: Colors.background,
-        borderRadius: 5,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
+        borderRadius: 20,
+        padding: 15,
         flexDirection: "row",
         flexWrap: "wrap",
-        flex: 0.8,
+        flex: 1,
         justifyContent: "space-between",
     },
     text: {
-        color: Colors.secondary
+        color: Colors.secondary,
+        fontSize: 16,
     }
 })
