@@ -214,6 +214,7 @@ export default function Home({ navigation }) {
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
                                         onPress={() => {
+                                            console.log("courseId", item.id)
                                             navigation.navigate("CourseDetail", {course: item.id});
                                         }}
                                         style={{ marginTop: 5, }}>
