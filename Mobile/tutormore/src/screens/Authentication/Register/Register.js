@@ -1,7 +1,16 @@
 import CheckBox from "@react-native-community/checkbox";
 import React, {useEffect, useReducer, useState} from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    Image,
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    ToastAndroid,
+    TouchableOpacity,
+    View
+} from "react-native";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
 import SecondaryButton from "../../../components/buttons/SecondaryButton";
 import PrimaryInput from "../../../components/forms/PrimaryInput";
@@ -41,6 +50,7 @@ const Register = ({navigation}) => {
                 phonenumber: data.phoneNumber,
             });
             console.log(signup.data);
+            ToastAndroid.show("Register Success!", ToastAndroid.LONG);
             navigation.navigate("Login");
         } catch (error) {
             console.log(error.response.data.message);

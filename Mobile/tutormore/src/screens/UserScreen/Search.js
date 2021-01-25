@@ -72,24 +72,24 @@ export default function Search({ navigation }) {
             rate: 3.2,
         },
     ];
-    const fetchCourse= async()=>{
+    const fetchCourse = async () => {
         try {
-            const   courses=await API.post("/search/course",{
-                searchQuerying:search
+            const courses = await API.post("/search/course", {
+                searchQuerying: search
             })
-        
+
             // console.log(courses.data);
             setCourse(courses.data)
         } catch (error) {
             console.log(error);
         }
     }
-    const fetchRequest= async()=>{
+    const fetchRequest = async () => {
         try {
-          const  requests=await API.post("/search/request",{
-                searchQuerying:search
+            const requests = await API.post("/search/request", {
+                searchQuerying: search
             })
-        
+
             console.log(requests.data);
             setRequest(requests.data)
         } catch (error) {
@@ -98,14 +98,14 @@ export default function Search({ navigation }) {
     }
 
     useEffect(() => {
-        if(search!=""){
+        if (search != "") {
             fetchCourse()
             fetchRequest()
-        }else{
-           setRequest([])
+        } else {
+            setRequest([])
             setCourse([])
         }
-      
+
     }, [search])
     return (
         <>
@@ -117,7 +117,7 @@ export default function Search({ navigation }) {
                 </TouchableOpacity>
                 <TextInput
                     placeholder="Search"
-                    onChangeText={(text)=>setSearch(text)}
+                    onChangeText={(text) => setSearch(text)}
                     value={search}
                     style={styles.search}
                     autoFocus={true}
@@ -132,7 +132,7 @@ export default function Search({ navigation }) {
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={styles.box} />
-                    <Text style={styles.textRec}>Trending Tags</Text>
+                    <Text style={styles.textRec}>Request Course</Text>
                 </View>
                 <FlatList
                     data={Request}
@@ -144,14 +144,14 @@ export default function Search({ navigation }) {
                                 <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
                                 <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
                                 <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
-                                
-                                {   item.join_users.length>0?
-                                
-                                  <Text  style={styles.textBody}>{item.join_users.map((i)=>i.joinCount)}</Text>
-                                     :
-                                     <Text  style={styles.textBody}>{0}</Text>
+
+                                {item.join_users.length > 0 ?
+
+                                    <Text style={styles.textBody}>{item.join_users.map((i) => i.joinCount)}</Text>
+                                    :
+                                    <Text style={styles.textBody}>{0}</Text>
                                 }
-                         
+
                             </View>
                         </TouchableOpacity>
                     }

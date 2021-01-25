@@ -47,7 +47,7 @@ export default function Feed({ navigation }) {
                 userId: userid.id, requestId: resId
             });
             // console.log(cancel_join.data);
-            isjoin.push({id:resId})
+            isjoin.push({ id: resId })
             setisJoin(isjoin.filter(x => x.id !== resId))
             // console.log(isjoin);
         } catch (error) {
@@ -148,7 +148,7 @@ export default function Feed({ navigation }) {
                                     {
                                         isjoin.map((i) => i.id).includes(item.id) ?
                                             <TouchableOpacity style={styles.button_cancel}
-                                                              onPress={() => cancel(item.id)}>
+                                                onPress={() => cancel(item.id)}>
                                                 <Text style={styles.text}>cancel</Text>
                                             </TouchableOpacity>
                                             : <TouchableOpacity style={styles.button} onPress={() =>
@@ -161,7 +161,7 @@ export default function Feed({ navigation }) {
                                 </View>
                             </View>
                         </View>
-                    }/>
+                    } />
             }
         </>
     );
@@ -172,8 +172,8 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
-    positionBTN:{
-       flex:1,
+    positionBTN: {
+        flex: 1,
         justifyContent: "flex-end",
         alignItems: "flex-end",
     },

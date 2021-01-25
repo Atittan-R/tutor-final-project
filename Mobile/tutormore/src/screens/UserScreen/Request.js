@@ -42,18 +42,20 @@ export default function Request({ navigation }) {
                 categoryId: catagory,
                 userId: 2,
                 tagname: tags
-              
+
             });
             console.log(requst.data);
             console.log('====================================');
             clear()
-            navigation.navigate("Feed", { name: "Feed", onGoBack: () => {
+            navigation.navigate("Feed", {
+                name: "Feed", onGoBack: () => {
                     fetchData()
-                } })
+                }
+            })
 
         } catch (error) {
-         
-            if (error.response.status==404) {
+
+            if (error.response.status == 404) {
                 clear();
                 navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
             }
@@ -83,7 +85,7 @@ export default function Request({ navigation }) {
         console.log("day :", day);
         console.log("Tags :", tags);
     }, [CourseName])
- 
+
     return (
         <>
             {/* header */}
@@ -99,16 +101,15 @@ export default function Request({ navigation }) {
             </View>
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
-                    <TextInputButton label="Course" placeholder="Enter your course name" value={CourseName}
+                    <TextInputButton placeholder="Course" value={CourseName}
                         onTextChange={(text) => setCourseName(text)} />
+                    <TextInputButton
+                        placeholder="Description"
+                        onTextChange={(text) => setDescription(text)} value={Description} />
                     <ModalDate dayValue={[day, setDay]} />
-                    <Clock label="Time Start" name="Time Start" callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
-                    <Clock label="Time End" name="Time End" callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
+                    <Clock name="Time Start" callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
+                    <Clock name="Time End" callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
                 </View>
-                <TextInputButton
-                    label="Description"
-                    placeholder="Enter your description"
-                    onTextChange={(text) => setDescription(text)} value={Description} />
                 <Catagory
                     selectedValue={catagory}
                     onValueChange={(text) => setCatagory(text)} />

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {
     Image,
     Alert,
@@ -8,7 +8,7 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View, ToastAndroid,
+    View, ToastAndroid, RefreshControl,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import Colors from "../../../configs/Colors";
@@ -17,36 +17,51 @@ import API from "../../../services/API";
 import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
+import {actionCreators, initialState, reducer} from "./reduce";
 
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
- 
+    const [detail, setDetail] = useState({});
+    const [reduce, loadDispatch] = useReducer(reducer, initialState)
+
     const currentUser = JSON.parse(state.userData);
     const { course } = route.params;
     console.log("Course parameter",course)
-    const [detail, setDetail] = useState();
-    // const [draggable, setDraggable] = useState({
-    //     latitude: parseFloat(detail.lat)|| 14.8817767,
-    //     longitude: parseFloat(detail.long)|| 102.0185075,
-    //     latitudeDelta: 0.01,
-    //     longitudeDelta: 0.01,
-    // });
 
-    // const [loading, setLoading] = useState(false);
+     const courseData  = async () => {
+        loadDispatch(actionCreators.loading())
+        try {
+            const res = await API.get("/course/findOne/"+course)
+            console.log("res: ",res.data.course)
+            const courseDetail = await res.data.course;
+            loadDispatch(actionCreators.success(courseDetail));
+        }catch (e){
+            loadDispatch(actionCreators.failure())
+            console.log("err",e.message)
+        }
+    }
 
-    console.log(currentUser.id, course,)
-    
+    useEffect(() => {
+        courseData();
+    }, []);
+
+    const [draggable, setDraggable] = useState({
+        latitude: parseFloat(detail.lat),
+        longitude: parseFloat(detail.long),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    });
+
+    // console.log(currentUser.id, course)
     const enrollData = async () => {
-        setLoading(true);
         try {
             const response = await API.post("/enroll/course",
                 {
                     userId: currentUser.id,
-                    courseId: course.id,
+                    courseId: course,
                 })
-            setLoading(false);
-            console.log(response.data.status)
+            console.log("status ",response.data.status)
             //TODO
             // Generate QRCode
             // Popup QRCode
@@ -78,29 +93,27 @@ export default function CourseDetail({ navigation, route }) {
         );
     };
 
-    // if(loading){
-    //     return <LoadingScreen />
-    // }
-const courseData = async()=>{
 
-        try {
-            const res = await API.get("/course/findOne/"+1)
-            console.log(res.data.course);
-            setDetail(res.data.course);
-        }catch (e){
-            console.log(e.message.data)
-        }
+    // console.log("detail: ",detail.tutors.email);
+    const { data, loading, error } = reduce
+    if(loading){
+        return <LoadingScreen />
     }
-    useEffect(() => {
-        
-        courseData();
 
-    }, []);
+    if (error) {
+        return (
+            <ScrollView
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                <View style={styles.center}>
+                    <Text>Failed to load posts!</Text>
+                </View>
+            </ScrollView>
+        )
+    }
 
-    // console.log(detail);
-    return ( 
-    // <View></View>)
-        <View>
+    console.log("data: ",data)
+    return (
+        <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
@@ -135,35 +148,42 @@ const courseData = async()=>{
                     <Icon name="book" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Course</Text>
-                        <Text style={styles.text}>{detail.name}</Text>
+                        <Text style={styles.text}>{data.name}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="event" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Date</Text>
-                        <Text style={styles.text}>{detail.day}</Text>
+                        <Text style={styles.text}>{data.day}</Text>
+                    </View>
+                </View>
+                <View style={styles.view}>
+                    <Icon name="category" type="material"  color={Colors.secondary} />
+                    <View style={styles.viewItem}>
+                        <Text style={styles.title}>Category</Text>
+                        <Text style={styles.text}>{data.CourseCate.name}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="schedule" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Time</Text>
-                        <Text style={styles.text}>{detail.time_start + " - " + detail.time_end}</Text>
+                        <Text style={styles.text}>{data.time_start + " - " + data.time_end}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="timer" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Duraton</Text>
-                        <Text style={styles.text}>{detail.duration}</Text>
+                        <Text style={styles.text}>{data.duration}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
-                        <Text style={styles.text}>{detail.amount}</Text>
+                        <Text style={styles.text}>{data.amount}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -180,15 +200,10 @@ const courseData = async()=>{
                     <MapView
                         style={styles.map}
                         region={draggable}
-                        scrollEnabled={false}
-                        // zoomEnabled={false}
-                        // pitchEnabled={false}
-                        // rotateEnabled={false}
-                      
+                        onRegionChangeComplete={(region) => setDraggable(region)}
                     >
                         <Marker
-                       
-                            coordinate={draggable}
+                            coordinate={{ latitude : parseFloat(data.lat) , longitude : parseFloat(data.long) }}
                         />
                     </MapView>
                 </View> */}
@@ -209,14 +224,14 @@ const courseData = async()=>{
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Name</Text>
                         {/*{console.log( detail )}*/}
-                        {/* <Text style={styles.text}>{detail.tutors.username}</Text> */}
+                        <Text style={styles.text}>{data.tutors.username ? data.tutors.username: "Not specified"}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="school" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Major</Text>
-                        {/* <Text style={styles.text}>{detail.tutors.major}</Text> */}
+                        <Text style={styles.text}>{data.tutors.major ? data.tutors.major: "Not specified"}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -228,7 +243,7 @@ const courseData = async()=>{
                     />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Line ID</Text>
-                        {/* <Text style={styles.text}>{detail.tutors.phonenumber}</Text> */}
+                        <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber: "Not specified"}</Text>
                     </View>
                 </View>
                 
@@ -237,7 +252,7 @@ const courseData = async()=>{
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
-        </View>
+        </>
     );
 }
 
@@ -337,7 +352,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadius: 5,
         padding: 10,
-        // alignItems: "stretch",
         elevation: 2,
     },
 });
