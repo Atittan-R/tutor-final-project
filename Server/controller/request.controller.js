@@ -5,6 +5,8 @@ const Request = db.request;
 const Tag = db.tag;
 const User = db.user;
 const Categorie=db.categories
+const Sequelize = require('sequelize');
+
 exports.createRequest = (req, res) => {
   //Save Request Data to Database
   Request.create({
@@ -51,7 +53,6 @@ exports.findAllRequest = (req, res) => {
     include: [
       {
         model: User,
-
         as: "user",
         // through: {
         //     attributes: ["name"],

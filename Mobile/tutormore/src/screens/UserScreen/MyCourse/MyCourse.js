@@ -66,7 +66,6 @@ export default function MyCourse({ navigation, route }) {
   const renderPlaceholders = () =>
     books.map((e, i) => <MyCoursePlaceholder key={i} />);
   const { data, loading, error } = reduce;
-  const { data, loading, error } = reduce;
 
   if (error) {
     return (
