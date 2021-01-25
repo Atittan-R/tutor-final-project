@@ -30,4 +30,9 @@ module.exports = function (app) {
     // [authJwt.verifyToken],
     controller.searchRequest
   );
+  app.post(
+    "/api/search/tag",
+    // [authJwt.verifyToken],
+    controller.findtag
+  );
 };
