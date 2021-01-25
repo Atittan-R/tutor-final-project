@@ -49,24 +49,22 @@ export default function Home({ navigation }) {
     });
     const [isPanelActive, setIsPanelActive] = useState(false);
     //Data
-    async function fetchData() {
-        dispatch(actionCreators.loading())
-        try {
-            const response = await API.get('/course/findAll')
-            const course = await response.data;
-            // console.log("course:", course)
-            dispatch(actionCreators.success(course))
-        } catch (e) {
-            dispatch(actionCreators.failure())
-            // console.log(e)
-        }
-    }
+    const { data, loading, error } = state
 
     useEffect(() => {
+        async function fetchData() {
+            dispatch(actionCreators.loading())
+            try {
+                const response = await API.get('/course/findAll')
+                const course = await response.data;
+                dispatch(actionCreators.success(course))
+            } catch (e) {
+                dispatch(actionCreators.failure())
+                // console.log(e)
+            }
+        }
         fetchData()
     }, [])
-
-    const { data, loading, error } = state
 
     if (error) {
         return (
@@ -181,7 +179,7 @@ export default function Home({ navigation }) {
                             horizontal={true}
                             data={data}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
+                            renderItem={({ item: { name, description} }) => (
                                 <TouchableOpacity
                                     style={styles.listStyle}>
                                     <View style={{ padding: 15 }}>
@@ -189,9 +187,9 @@ export default function Home({ navigation }) {
                                             style={styles.courseImage} />
                                         <View>
                                             <Text style={styles.listName}>
-                                                {item.name}
+                                                {name}
                                             </Text>
-                                            <Text numberOfLines={1} style={styles.listDesc}>{item.description}</Text>
+                                            <Text numberOfLines={1} style={styles.listDesc}>{description}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -211,36 +209,35 @@ export default function Home({ navigation }) {
                             <FlatList
                                 data={filterItem ? filterItem : data}
                                 keyExtractor={(item) => item.id}
-                                renderItem={({ item }) => (
+                                renderItem={({ item: {id, name, description, time_start, time_end, day, rate, CourseCate}}) => (
                                     <TouchableOpacity
                                         onPress={() => {
-                                            console.log("courseId", item.id)
-                                            navigation.navigate("CourseDetail", {course: item.id});
+                                            navigation.navigate("CourseDetail", {course: id});
                                         }}
                                         style={{ marginTop: 5, }}>
                                         <View style={styles.courseWrap}>
                                             <Image source={{ uri: "https://source.unsplash.com/random" }}
                                                 style={styles.courseImage} />
                                             <View style={styles.courseView}>
-                                                <Text numberOfLines={1} style={styles.courseName}>{item.name}</Text>
+                                                <Text numberOfLines={1} style={styles.courseName}>{name}</Text>
                                                 <View style={styles.courseViewDetail}>
                                                     <Text numberOfLines={1} style={styles.courseDescription}>
-                                                        {item.description}
+                                                        {description}
                                                     </Text>
                                                 </View>
                                                 <View style={styles.courseViewDetail}>
                                                     <Icon name="schedule" type="material" color="gray" size={15} />
                                                     <Text
-                                                        style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
+                                                        style={styles.textGray}>{time_start + " - " + time_end}</Text>
                                                     <Icon name="calendar-today" type="material" color="gray" size={15} />
-                                                    <Text style={styles.textGray}>{item.day}</Text>
+                                                    <Text style={styles.textGray}>{day}</Text>
                                                 </View>
                                                 <View style={styles.courseDetail}>
-                                                    <Rating imageSize={15} startingValue={item.rate} ractions={5}
+                                                    <Rating imageSize={15} startingValue={rate} ractions={5}
                                                         ratingCount={1} />
-                                                    <Text style={styles.textBlack}>{item.rate}</Text>
+                                                    <Text style={styles.textBlack}>{rate}</Text>
                                                     <Icon name="category" type="material" color="gray" size={15} />
-                                                    <Text style={styles.textBlack}>{item.CourseCate.name}</Text>
+                                                    <Text style={styles.textBlack}>{CourseCate.name}</Text>
                                                 </View>
                                             </View>
                                         </View>
