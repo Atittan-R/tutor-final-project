@@ -21,6 +21,10 @@ module.exports = (sequelize, Sequelize) => {
     date_of_birth: {
       type: Sequelize.DATE,
     },
+    rate: {
+      type: Sequelize.DECIMAL(3, 2),
+    },
+
   });
 
   return TutorInfo;

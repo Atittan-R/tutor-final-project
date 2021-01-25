@@ -7,16 +7,31 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
+  ToastAndroid,
 } from "react-native";
 import { Icon, Rating } from "react-native-elements";
 import Colors from "../../configs/Colors";
+import API from "../../services/API";
 
 export default function RatingCourse({ navigation, route }) {
-  const { id, name } = route.params;
+  const { id, name,userId } = route.params;
   const [rating, setRating] = useState();
 
-  saveRating = () => {
-    console.log(rating);
+  saveRating = async() => {
+    try {
+      console.log(rating);
+      const rate = await API.post("/update/rate",{
+        userId:userId,
+        courseId:id,
+        rate:rating
+      }
+      )
+      ToastAndroid.show("success", ToastAndroid.LONG);
+      navigation.navigate("Me", { screen: "MyCourse" })
+    } catch (error) {
+      
+    }
+   
   }
   return (
     <>

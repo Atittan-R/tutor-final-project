@@ -78,7 +78,7 @@ export default function MyCourse({ navigation }) {
                   </View>
                   <View style={styles.qrcode}>
 
-                    <TouchableOpacity onPress={() => navigation.push("RatingCourse", { id: item.id, name: item.name })}>
+                    <TouchableOpacity onPress={() => navigation.push("RatingCourse", { id: item.id, name: item.name ,userId: currentUser.id})}>
                       <Icon name="star-outline" type="material" color={Colors.secondary} />
                       <Text style={styles.textBlack}>Rating</Text>
                     </TouchableOpacity>

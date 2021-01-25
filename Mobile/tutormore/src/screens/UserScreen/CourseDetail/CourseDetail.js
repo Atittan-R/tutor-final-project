@@ -61,6 +61,12 @@ export default function CourseDetail({ navigation, route }) {
                     userId: currentUser.id,
                     courseId: course,
                 })
+            const courserate=await API.post("/create/rate",
+            {
+                userId: currentUser.id,
+                courseId: course,
+            })
+            console.log("rate ",courserate.data)
             console.log("status ",response.data.status)
             //TODO
             // Generate QRCode
