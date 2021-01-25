@@ -31,6 +31,18 @@ export default function Home({ navigation }) {
     const [refreshing, setRefreshing] = useState(false);
     const [state, dispatch] = useReducer(reducer, initialState)
 
+    async function fetchData() {
+        dispatch(actionCreators.loading())
+        try {
+            const response = await API.get('/course/findAll')
+            const course = await response.data;
+            dispatch(actionCreators.success(course))
+        } catch (e) {
+            dispatch(actionCreators.failure())
+            // console.log(e)
+        }
+    }
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         fetchData().then(() => setRefreshing(false));
@@ -52,17 +64,6 @@ export default function Home({ navigation }) {
     const { data, loading, error } = state
 
     useEffect(() => {
-        async function fetchData() {
-            dispatch(actionCreators.loading())
-            try {
-                const response = await API.get('/course/findAll')
-                const course = await response.data;
-                dispatch(actionCreators.success(course))
-            } catch (e) {
-                dispatch(actionCreators.failure())
-                // console.log(e)
-            }
-        }
         fetchData()
     }, [])
 
@@ -212,6 +213,7 @@ export default function Home({ navigation }) {
                                 renderItem={({ item: {id, name, description, time_start, time_end, day, rate, CourseCate}}) => (
                                     <TouchableOpacity
                                         onPress={() => {
+                                            // console.log("courseId", id)
                                             navigation.navigate("CourseDetail", {course: id});
                                         }}
                                         style={{ marginTop: 5, }}>
