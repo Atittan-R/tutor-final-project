@@ -7,48 +7,48 @@ import img from "../../assets/images/categories/management.png"
 const cate = [
     {
         id: "1",
-        name: "General]nEducation",
+        name: "General Education",
         image: require('../../assets/course/geography.png')
     },
     {
         id: "2",
-        name: "Management\nTechnology",
+        name: "Management Technology",
         image: require('../../assets/course/analytics.png')
     }, {
         id: "3",
-        name: "Engineering\n",
+        name: "Engineering",
         image: require('../../assets/course/electrician.png')
     }, {
         id: "4",
-        name: "Digital\nTechnology",
+        name: "Digital Technology",
         image: require('../../assets/course/multimedia.png')
     }, {
         id: "5",
-        name: "Science\n",
+        name: "Science",
         image: require('../../assets/course/test-tube.png')
     }, {
         id: "6",
-        name: "Agricultural\nTechnology",
+        name: "Agricultural Technology",
         image: require('../../assets/course/growth.png')
     }, {
         id: "7",
-        name: "Foreign\nLanguages",
+        name: "Foreign Languages",
         image: require('../../assets/course/directory.png')
     }, {
         id: "8",
-        name: "Medicine\n",
+        name: "Medicine",
         image: require('../../assets/course/stethoscope.png')
     }, {
         id: "9",
-        name: "Nurse\n",
+        name: "Nurse",
         image: require('../../assets/course/nurse.png')
     }, {
         id: "10",
-        name: "Dentistry\n",
+        name: "Dentistry",
         image: require('../../assets/course/tooth.png')
     }, {
         id: "11",
-        name: "Public\nHealth",
+        name: "Public Health",
         image: require('../../assets/course/heart-rate-monitor.png')
     }];
 

@@ -16,9 +16,9 @@ export default function ModalDate(props) {
     const [sunday, setSunday] = useState();
     const [everyday, setEveryday] = useState();
     const [days, setDays] = useState();
-    const [day,setDay]=props.dayValue;
+    const [day, setDay] = props.dayValue;
     const [modalVisible, setModalVisible] = useState(false);
-    const x=[];
+    const x = [];
 
     const selectDate = () => {
         checkday();
@@ -31,17 +31,17 @@ export default function ModalDate(props) {
             setModalVisible(!modalVisible);
         }
     }
-    const checkday = ()=>{
-        monday? x.push("Mon"):x
-        thursday? x.push("Thu"):x
-        friday? x.push("Fri"):x
-        wednesday? x.push("Wed"):x
-        tuesday? x.push("Tue"):x
-        sunday? x.push("Sun"):x
-        saturday? x.push("Sat"):x
+    const checkday = () => {
+        monday ? x.push("Mon") : x
+        thursday ? x.push("Thu") : x
+        friday ? x.push("Fri") : x
+        wednesday ? x.push("Wed") : x
+        tuesday ? x.push("Tue") : x
+        sunday ? x.push("Sun") : x
+        saturday ? x.push("Sat") : x
         setDay(x)
     }
-    const cancalDay=()=>{
+    const cancalDay = () => {
         setMonday(false)
         setSunday(false)
         setSaturday(false)
@@ -61,14 +61,12 @@ export default function ModalDate(props) {
         }
     }, [everyday])
     useEffect(() => {
-        if(day==null){
+        if (day == null) {
             cancalDay()
         }
     }, [day])
     return (
         <View style={styles.inputItem} >
-            <Text style={{ flex: 0.35, color: Colors.secondary }}>Date</Text>
-
             <View style={styles.textDate}>
                 <View style={styles.wrapText}>
                     <Text style={styles.text}>{everyday ? "Everyday" : null}</Text>
@@ -186,7 +184,7 @@ export default function ModalDate(props) {
                                     style={styles.closeButton}
                                     onPress={() => {
                                         setModalVisible(!modalVisible)
-                                        
+
                                     }}>
                                     <Text style={styles.textStyle}>Cancel</Text>
                                 </TouchableOpacity>
@@ -213,7 +211,7 @@ export default function ModalDate(props) {
 }
 export const styles = StyleSheet.create({
     inputItem: {
-        margin: 5,
+        marginVertical: 5,
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: "#fff",
@@ -274,15 +272,15 @@ export const styles = StyleSheet.create({
     },
     textDate: {
         backgroundColor: Colors.background,
-        borderRadius: 5,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
+        borderRadius: 20,
+        padding: 15,
         flexDirection: "row",
-        flexWrap: "wrap",
-        flex: 0.8,
+        alignItems: "center",
+        flex: 1,
         justifyContent: "space-between",
     },
     text: {
-        color: Colors.secondary
+        color: Colors.secondary,
+        fontSize: 16,
     },
 })

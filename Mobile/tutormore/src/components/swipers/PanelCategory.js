@@ -39,12 +39,14 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-evenly",
+        alignItems: "center",
         flexWrap: "wrap",
         width: 100,
         height: 100,
-        margin: 6,
-        padding: 10,
+        margin: 2,
+        padding: 5,
+        // backgroundColor: Colors.primary,
     },
     touchView: {
         justifyContent: "center",
@@ -59,7 +61,8 @@ const styles = StyleSheet.create({
     text: {
         marginVertical: 3,
         fontSize: 12,
-        textAlign: "center"
+        textAlign: "center",
+        color: Colors.secondary
     },
     image: {
         width: 50,
