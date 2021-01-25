@@ -7,7 +7,6 @@ export default function TermCourse(props) {
   const [selectedValue, setSelectedValue] = props.value
   return (
     <View style={styles.inputItem}>
-      <Text style={{ flex: 0.35, color: Colors.secondary }} >Duration </Text>
       <View style={styles.textDate}>
         <Picker
           selectedValue={selectedValue}
@@ -26,28 +25,21 @@ export default function TermCourse(props) {
 };
 export const styles = StyleSheet.create({
   inputItem: {
-    margin: 5,
+    marginVertical: 5,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
     flex: 1,
   },
   textDate: {
     backgroundColor: Colors.background,
-    borderRadius: 5,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    flex: 0.8,
-    justifyContent: "space-between",
-    color: Colors.secondary
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    flex: 1,
   },
   drop: {
-    height: 20,
-    width: 200,
-    justifyContent: "space-between",
-    fontSize: 20,
+    flex: 1,
+    fontSize: 16,
     color: Colors.secondary
   },
 });

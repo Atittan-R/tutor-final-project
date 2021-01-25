@@ -63,7 +63,7 @@ export default function MyCourse({ navigation }) {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => navigation.navigate("CourseDetail", { course: item })}
+              onPress={() => navigation.navigate("CourseDetail2", { course: item.id })}
               style={styles.button}
               key={item.id}>
               <View style={styles.card}>
@@ -82,15 +82,15 @@ export default function MyCourse({ navigation }) {
                       <Icon name="star-outline" type="material" color={Colors.secondary} />
                       <Text style={styles.textBlack}>Rating</Text>
                     </TouchableOpacity>
-           
-                            <TouchableOpacity  style={{alignItems:"center"}}
-                              onPress={() => navigation.push("QrCode", {
-                                id: currentUser.id,
-                                name: currentUser.username
-                              })}>
-                              <QRCode value={[item.id + '/' + currentUser.id].toString()} size={20} color={Colors.secondary} />
-                              <Text style={styles.textBlack}>QR Code</Text>
-                            </TouchableOpacity>
+
+                    <TouchableOpacity style={{ alignItems: "center" }}
+                      onPress={() => navigation.push("QrCode", {
+                        id: currentUser.id,
+                        name: currentUser.username
+                      })}>
+                      <QRCode value={[item.id + '/' + currentUser.id].toString()} size={20} color={Colors.secondary} />
+                      <Text style={styles.textBlack}>QR Code</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>

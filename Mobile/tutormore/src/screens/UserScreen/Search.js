@@ -132,6 +132,20 @@ export default function Search({ navigation }) {
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={styles.box} />
+                    <Text style={styles.textRec}>Trending Tags</Text>
+                </View>
+                <View style={[styles.row, { flexWrap: "wrap" }]}>
+                    <TouchableOpacity onPress={() => navigation.push("TagSearch")}>
+                        <Text style={styles.tag}>Tag1</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.tag}>Tag2</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.tag}>Tag3</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.tag}>Tag4</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.tag}>Tag5sfsdgrwdgbdfhb</Text></TouchableOpacity>
+                </View>
+                <View style={styles.line} />
+                <View style={[styles.topic, styles.row]}>
+                    <View style={styles.box} />
                     <Text style={styles.textRec}>Request Course</Text>
                 </View>
                 <FlatList
@@ -173,7 +187,8 @@ export default function Search({ navigation }) {
                                     padding: 5,
                                     flexDirection: "row",
                                     marginHorizontal: 2,
-                                    flexWrap: "wrap"
+                                    flexWrap: "wrap",
+                                    marginBottom: 1
                                 }}>
                                 <Image source={{ uri: "https://source.unsplash.com/random" }} style={{ width: 70, height: 70, borderRadius: 5 }} />
                                 <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
@@ -287,5 +302,12 @@ const styles = StyleSheet.create({
         width: 120,
         padding: 5,
         marginHorizontal: 2
+    },
+    tag: {
+        color: Colors.secondary,
+        backgroundColor: Colors.gray,
+        borderRadius: 5,
+        margin: 10,
+        padding: 5
     }
 })

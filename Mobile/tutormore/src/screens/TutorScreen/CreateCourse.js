@@ -99,10 +99,6 @@ export default function CreateCourse({ navigation }) {
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Course</Text>
-                <TouchableOpacity
-                    onPress={() => create()}>
-                    <Icon name="check" type="material" color={Colors.secondary} />
-                </TouchableOpacity>
             </View>
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
@@ -111,8 +107,7 @@ export default function CreateCourse({ navigation }) {
                         <Text style={styles.text}>Change image</Text>
                     </TouchableOpacity>
                     <TextInputButton
-                        label={"Course"}
-                        placeholder={"Enter your course name"}
+                        placeholder={"Course"}
                         onTextChange={(text) => setCourseName(text)}
                         value={coureName}
                     />
@@ -123,8 +118,7 @@ export default function CreateCourse({ navigation }) {
                         label={"Time End"} callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
                     <TermCourse value={[selectedValue, setSelectedValue]} />
                     <TextInputButton
-                        label={"Amount"}
-                        placeholder={"Enter the number of seats"}
+                        placeholder={"Number of seats"}
                         onTextChange={(text) => setAmount(text)}
                         value={amount}
                         keyboardType={"phone-pad"} />
@@ -134,6 +128,10 @@ export default function CreateCourse({ navigation }) {
                     <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
                     <Location lat={[lat, setlat]} long={[long, setlong]} />
                 </View>
+                <TouchableOpacity style={styles.button} onPress={() => create()}>
+                    <Text style={styles.title}>Create</Text>
+                </TouchableOpacity>
+                <View style={{ marginVertical: 10 }} />
             </ScrollView >
             <SwipeablePanel {...panelProps} isActive={isPanelActive}>
                 <View style={styles.row}>
@@ -255,5 +253,14 @@ const styles = StyleSheet.create({
         color: "#a5a5a5",
         alignSelf: "center",
         // fontWeight: "bold"
-    }
+    },
+    button: {
+        justifyContent: "center",
+        flexDirection: "row",
+        backgroundColor: Colors.primary,
+        borderRadius: 30,
+        marginTop: 10,
+        paddingVertical: 10,
+        elevation: 2,
+    },
 })

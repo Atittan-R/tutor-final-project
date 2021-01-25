@@ -29,7 +29,6 @@ export default function Calendar(props) {
     }, [date])
     return (
         <View style={styles.inputItem}>
-            <Text style={{ flex: 0.35, color: Colors.secondary }}>{label}</Text>
             <View style={styles.textDate} >
                 <Text style={styles.text}>{date.toLocaleDateString()}</Text>
                 <TouchableOpacity onPress={showTimepickerStart}>
@@ -51,7 +50,7 @@ export default function Calendar(props) {
 
 export const styles = StyleSheet.create({
     inputItem: {
-        margin: 5,
+        marginVertical: 5,
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: Colors.white,
@@ -59,12 +58,11 @@ export const styles = StyleSheet.create({
     },
     textDate: {
         backgroundColor: Colors.background,
-        borderRadius: 5,
-        paddingHorizontal: 20,
+        borderRadius: 20,
+        padding: 15,
         flexDirection: "row",
         flexWrap: "wrap",
-        flex: 0.8,
-        paddingVertical: 13,
+        flex: 1,
         justifyContent: "space-between",
     },
     text: {

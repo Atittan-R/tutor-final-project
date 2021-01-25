@@ -16,8 +16,9 @@ import Calendar from "../../components/forms/Calendar";
 import CheckBox from "@react-native-community/checkbox";
 import Experience from "../../components/forms/Experience";
 import API from "../../services/API";
-import {useGlobalVar} from "../../context/GlobalContex";
-
+import { useGlobalVar } from "../../context/GlobalContex";
+import Catagory from "../../components/forms/Catagory";
+import { StackActions } from '@react-navigation/native';
 export default function ResgisterTutor({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -35,40 +36,43 @@ export default function ResgisterTutor({ navigation }) {
     const getBirthDate = (result) => {
         setBirthDate(result);
     }
-
+    const [catagory, setCatagory] = useState("");
     const alertEnroll = () => {
         Alert.alert(
-            "Enroll",
-            "Are you sure to enroll?",
+            "Register",
+            "Are you sure to register?",
             [
                 {
                     text: "Cancel",
                     onPress: () => console.log("Cancel Pressed"),
                     style: "cancel",
                 },
-                { text: "OK", onPress: async () => {
+                {
+                    text: "OK", onPress: async () => {
                         await signupTutor();
-                    }},
+                    }
+                },
             ],
             { cancelable: false }
         );
     };
 
     const signupTutor = async () => {
-        try{
+        try {
             // console.log("Hello", firstname,email,surname, phoneNumber,major,birthDath.getDate(),experience)
-             const response = await API.post("/tutor/signup/"+currentUser.id,{
+            const response = await API.post("/tutor/signup/" + currentUser.id, {
                 firstname: firstname,
                 email: email,
                 lastname: surname,
-                major: major,
+                major: catagory,
                 phoneNumber: phoneNumber,
                 dob: birthDath,
-                exp: experience
+                exp: experience,
+                lineId: lineId
             });
             ToastAndroid.show(response.data.message, ToastAndroid.LONG);
             navigation.navigate("RoleSelect");
-        }catch (e) {
+        } catch (e) {
 
         }
     }
@@ -81,7 +85,7 @@ export default function ResgisterTutor({ navigation }) {
             <View style={styles.headerBar}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.pop()}
+                    onPress={() => navigation.dispatch(StackActions.popToTop())}
                 >
                     <Icon
                         name="arrow-back-outline"
@@ -94,45 +98,39 @@ export default function ResgisterTutor({ navigation }) {
 
             {/* body */}
             <ScrollView style={{ backgroundColor: Colors.white, flex: 0 }}>
-                <View style={styles.barTitle}>
-                    <Text style={{ marginLeft: 20, fontWeight: "bold", fontSize: 16, color: Colors.secondary }}>
-                        Personal Information
-                        </Text>
+                <View style={styles.line} />
+                <View style={[styles.topic, styles.row]}>
+                    <View style={[styles.column, styles.box]} />
+                    <Text style={styles.textRec}>Personal Information</Text>
                 </View>
                 <View style={styles.view}>
                     <TextInputButton
-                        label={"Name"}
-                        placeholder={"Enter your name"}
+                        placeholder={"Name"}
                         onTextChange={(text) => setFirstname(text)} />
                     <TextInputButton
-                        label={"Surname"}
-                        placeholder={"Enter your surname"}
+                        placeholder={"Surname"}
                         onTextChange={(text) => setSurname(text)} />
                     <Calendar
-                        label={"Date of Birth"}
                         callback={getBirthDate}
                         claerdate={[claerdate, setClaerDate]} />
                     <TextInputButton
-                        label={"Phone Number"}
-                        placeholder={"Enter your phone number"}
+                        placeholder={"Phone Number"}
                         onTextChange={(text) => setPhoneNumber(text)}
                         keyboardType={"phone-pad"} />
                     <TextInputButton
-                        label={"Line ID"}
-                        placeholder={"Enter your line id"}
+                        placeholder={"Line ID"}
                         onTextChange={(text) => setLineId(text)}
                         keyboardType={"email-address"} />
                     <TextInputButton
-                        label={"Email"}
-                        placeholder={"Enter your email"}
-                        // value={email}
+                        placeholder={"Email"}
                         onTextChange={(text) => setEmail(text)}
                         keyboardType={"email-address"} />
-                    <TextInputButton
-                        label={"Major"}
-                        placeholder={"Enter your major"}
-                        // value={major}
-                        onTextChange={(text) => setMajor(text)} />
+                    {/* <TextInputButton
+                        placeholder={"Major"}
+                        onTextChange={(text) => setMajor(text)} /> */}
+                    <Catagory
+                        selectedValue={catagory}
+                        onValueChange={(itemValue, itemIndex) => setCatagory(itemIndex)} />
                     <Experience
                         selectedValue={experience}
                         onValueChange={(text) => setExperience(text)} />
@@ -141,6 +139,7 @@ export default function ResgisterTutor({ navigation }) {
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
                     <Text style={styles.title}>Submit</Text>
                 </TouchableOpacity>
+                <View style={{ marginVertical: 10 }} />
             </ScrollView>
         </>
     );
@@ -209,5 +208,33 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         // alignItems: "stretch",
         marginTop: 20,
+    },
+    line: {
+        marginVertical: 10,
+        marginHorizontal: 8,
+        paddingVertical: 0.4,
+        backgroundColor: Colors.gray,
+    },
+    box: {
+        marginTop: -10,
+        marginLeft: 8,
+        paddingVertical: 1,
+        paddingHorizontal: 2.5,
+        borderRadius: 30,
+        backgroundColor: Colors.primary,
+    },
+    row: {
+        flexDirection: "row",
+    },
+    column: {
+        flexDirection: "column",
+    },
+    textRec: {
+        flex: 1,
+        alignSelf: "center",
+        color: Colors.secondary,
+        paddingLeft: 5,
+        fontSize: 20,
+        fontWeight: "bold",
     },
 });

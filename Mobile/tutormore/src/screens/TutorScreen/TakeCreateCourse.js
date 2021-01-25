@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View ,ToastAndroid} from 'react-native'
+import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 import Amount from '../../components/forms/Amount';
@@ -13,7 +13,7 @@ import TextInputButton from '../../components/forms/TextInputButton';
 import UploadImage from '../../components/forms/UploadImage';
 import Colors from '../../configs/Colors'
 import API from "../../services/API"
-import {useGlobalVar} from "../../context/GlobalContex";
+import { useGlobalVar } from "../../context/GlobalContex";
 
 export default function TakeCreateCourse({ route, navigation }) {
     const { req } = route.params
@@ -34,7 +34,7 @@ export default function TakeCreateCourse({ route, navigation }) {
     const [claerdate, setClaerDate] = useState(false);
     const [mytags, setTags] = useState([]);
     const [claerTag, setClaerTag] = useState(false);
-    const [requsetId,setRequsetId]= useState(0);
+    const [requsetId, setRequsetId] = useState(0);
 
     //TODO
     const getTimeStart = (result) => {
@@ -44,8 +44,8 @@ export default function TakeCreateCourse({ route, navigation }) {
         setTimeEnd(result);
     }
 
-    async function sendMessage (takeid) {
-        const res =  await API.post("/notification/message",{
+    async function sendMessage(takeid) {
+        const res = await API.post("/notification/message", {
             takeId: takeid,
             title: "Message",
             body: "ได้ยัง ไอ่หอยยย"
@@ -53,7 +53,7 @@ export default function TakeCreateCourse({ route, navigation }) {
         console.log(res.data)
     }
 
-    const taked = async () =>{
+    const taked = async () => {
 
         const clear = () => {
             setCourseName("")
@@ -73,20 +73,20 @@ export default function TakeCreateCourse({ route, navigation }) {
                 amount: amount,
                 tagname: mytags,
                 duration: selectedValue,
-                lat:lat.toString(),
-                long:long.toString()
+                lat: lat.toString(),
+                long: long.toString()
             });
             await sendMessage(teke_res.data.id);
 
-            console.log("Hello",teke_res.data.id);
+            console.log("Hello", teke_res.data.id);
             ToastAndroid.show("create course success !", ToastAndroid.SHORT);
             clear()
-            navigation.navigate("Home",{screen:"Feed"})
+            navigation.navigate("Home", { screen: "Feed" })
         } catch (error) {
             console.log(error);
         }
     }
-    useEffect( () => {
+    useEffect(() => {
         setCourseName(req.map((i) => i.name).toString())
         setTimeStart(req.map((i) => i.time_start).toString())
         setTimeEnd(req.map((i) => i.time_end).toString())
@@ -101,20 +101,16 @@ export default function TakeCreateCourse({ route, navigation }) {
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Course</Text>
-                <TouchableOpacity
-                    onPress={() =>taked()}>
-                    <Icon name="check" type="material" color={Colors.secondary} />
-                </TouchableOpacity>
             </View>
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
                     <UploadImage />
                     <TextInputButton
                         label={"Course"}
-                        onTextChange={(text) => setCourseName(text)} value={coureName}editable={true} />
+                        onTextChange={(text) => setCourseName(text)} value={coureName} editable={true} />
                     <TextInputButton
                         label={"Date"}
-                        
+
                         onTextChange={(text) => setCourseName(text)} value={day} editable={false} />
                     <TextInputButton
                         label={"Time Start"}
@@ -122,8 +118,8 @@ export default function TakeCreateCourse({ route, navigation }) {
                     <TextInputButton
                         label={"Time End"}
                         onTextChange={(text) => setCourseName(text)} value={TimeEnd} editable={false} />
-             
-                    <TermCourse  value={[selectedValue, setSelectedValue]}/>
+
+                    <TermCourse value={[selectedValue, setSelectedValue]} />
                     <TextInputButton
                         label={"Amount"}
                         placeholder={"Enter the number of seats"}
@@ -131,12 +127,16 @@ export default function TakeCreateCourse({ route, navigation }) {
                         keyboardType={"phone-pad"}
                         value={amount}
                     />
-                     <TextInputButton
+                    <TextInputButton
                         label={"Category"}
                         onTextChange={(text) => setCourseName(text)} value={catagory} editable={false} />
                     <Tag
-                         value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
-                    <Location lat={[lat, setlat]} long={[long, setlong]}/>
+                        value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
+                    <Location lat={[lat, setlat]} long={[long, setlong]} />
+                    <TouchableOpacity style={styles.button} onPress={() => taked()}>
+                        <Text style={styles.title}>Create</Text>
+                    </TouchableOpacity>
+                    <View style={{ marginVertical: 10 }} />
                 </View>
             </ScrollView >
         </>
@@ -191,5 +191,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: Colors.secondary
     },
-
+    button: {
+        justifyContent: "center",
+        flexDirection: "row",
+        backgroundColor: Colors.primary,
+        borderRadius: 30,
+        marginTop: 10,
+        paddingVertical: 10,
+        elevation: 2,
+    },
 })

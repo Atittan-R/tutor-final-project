@@ -18,9 +18,8 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
 import { actionCreators, initialState, reducer } from "../Reducer";
-import { SwipeablePanel } from "rn-swipeable-panel";
 
-export default function CourseDetail({ navigation, route }) {
+export default function CourseDetail2({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [detail, setDetail] = useState({});
@@ -54,7 +53,7 @@ export default function CourseDetail({ navigation, route }) {
         longitudeDelta: 0.01,
     });
 
-    // console.log(currentUser.id, course)
+    console.log(data)
     const enrollData = async () => {
         try {
             const response = await API.post("/enroll/course",
@@ -113,15 +112,6 @@ export default function CourseDetail({ navigation, route }) {
     }
 
     console.log("data: ", data)
-    //Panel Open Close
-    // const [panelProps, setPanelProps] = useState({
-    //     fullWidth: true,
-    //     onlySmall: true,
-    //     closeOnTouchOutside: true,
-    //     onClose: () => setIsPanelActive(false),
-    //     onPressCloseButton: () => setIsPanelActive(false),
-    // });
-    // const [isPanelActive, setIsPanelActive] = useState(false);
     return (
         <>
             {/* header */}
@@ -221,14 +211,9 @@ export default function CourseDetail({ navigation, route }) {
                 </View>
 
                 <View style={styles.line} />
-                <View style={styles.viewMore}>
-                    <View style={[styles.topic, styles.row]}>
-                        <View style={[styles.column, styles.box]} />
-                        <Text style={styles.textRec}>Tutor Profile</Text>
-                    </View>
-                    <TouchableOpacity onPress={() => setIsPanelActive(true)}>
-                        <Text style={styles.textViewMore}>View More</Text>
-                    </TouchableOpacity>
+                <View style={[styles.topic, styles.row]}>
+                    <View style={[styles.column, styles.box]} />
+                    <Text style={styles.textRec}>Tutor Profile</Text>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
@@ -258,13 +243,10 @@ export default function CourseDetail({ navigation, route }) {
                     </View>
                 </View>
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
-                    <Text style={styles.title}>Enroll</Text>
+                    <Text style={styles.title}>Leave Course</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
-            {/* <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-                <Text>Kuy earth</Text>
-            </SwipeablePanel> */}
         </>
     );
 }
@@ -398,20 +380,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
     },
-    textViewMore: {
-        fontSize: 12,
-        color: "#00b",
-    },
-    viewMore: {
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        marginRight: 30,
-        flex: 1
-    },
-    topic: {
-        flex: 1,
-        marginBottom: 10,
-    },
+
 });

@@ -92,12 +92,6 @@ export default function Request({ navigation }) {
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Request</Text>
-                <TouchableOpacity
-                    style={styles.add}
-                    onPress={() => creteRequst()
-                    }>
-                    <Icon name="check" type="material" color={Colors.secondary} />
-                </TouchableOpacity>
             </View>
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
@@ -115,9 +109,11 @@ export default function Request({ navigation }) {
                     onValueChange={(text) => setCatagory(text)} />
                 <Tag
                     onChangeTags={(tags) => setTags(tags)} value={[tags, setTags]} claerTag={[claerTag, setClaerTag]} />
+                <TouchableOpacity style={styles.button} onPress={() => creteRequst()}>
+                    <Text style={styles.title}>Enroll</Text>
+                </TouchableOpacity>
+                <View style={{ marginVertical: 10 }} />
             </ScrollView>
-
-
         </>
     )
 }
@@ -162,5 +158,13 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flex: 0.8,
     },
-
+    button: {
+        justifyContent: "center",
+        flexDirection: "row",
+        backgroundColor: Colors.primary,
+        borderRadius: 30,
+        marginTop: 10,
+        paddingVertical: 10,
+        elevation: 2,
+    },
 })

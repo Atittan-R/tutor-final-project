@@ -7,7 +7,8 @@ import {
   MyCourse,
   Search, test,
   RegisterTutor,
-  NearMe, List
+  NearMe, List,
+  TagSearch
 } from "../../../screens/UserScreen";
 import LoadingScreen from "../../../components/Loading";
 import { useGlobalVar } from "../../../context/GlobalContex";
@@ -48,6 +49,13 @@ const HomeStack = () => {
         component={NearMe}
         options={{
           headerTitle: "NearMe",
+        }}
+      />
+      <Stack.Screen
+        name="TagSearch"
+        component={TagSearch}
+        options={{
+          headerTitle: "TagSearch",
         }}
       />
     </Stack.Navigator>
