@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useReducer, useState} from "react";
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Image,
   StatusBar,
-  TouchableOpacity,
+  TouchableOpacity, ScrollView, RefreshControl,
 } from "react-native";
 import { Icon, Rating } from "react-native-elements";
 import QRCode from "react-native-qrcode-svg";
@@ -15,33 +15,58 @@ import Colors from "../../../configs/Colors";
 import { useGlobalVar } from "../../../context/GlobalContex";
 import API from "../../../services/API";
 import MyCoursePlaceholder from "./MyCoursePlaceholder";
+import {actionCreators, initialState, reducer} from "../Reducer";
 
 export default function MyCourse({ navigation }) {
-  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [data, setData] = useState();
+
   const { authentication } = useGlobalVar();
   const [state, dispatch] = authentication;
   const currentUser = JSON.parse(state.userData);
+  const [reduce, loadDispatch] = useReducer(reducer, initialState)
 
+  //placeholder
   const [books, setBooks] = useState([...new Array(4).fill({})]);
+
+  //pull dawn to refresh data
+  const [refreshing, setRefreshing] = useState(false);
+
   const fetchMyCourse = async () => {
-    setLoading(true);
+    loadDispatch(actionCreators.loading())
     try {
       const response = await API.get("enroll/history/" + currentUser.id);
-      await setData(response.data);
-      setLoading(false);
+      const result = await response.data;
+      loadDispatch(actionCreators.success(result));
       // console.log(response.data.courseEnroll)
     } catch (e) {
+      loadDispatch(actionCreators.failure())
       alert(e.response.data.message);
     }
   }
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchMyCourse().then(() => setRefreshing(false));
+  }, []);
+
   useEffect(() => {
-    fetchMyCourse()
+    fetchMyCourse();
   }, []);
 
   const renderPlaceholders = () =>
     books.map((e, i) => <MyCoursePlaceholder key={i} />);
+
+  const { data, loading, error } = reduce;
+
+  if (error) {
+    return (
+        <ScrollView>
+          <View style={styles.center}>
+            <Text>Failed to load posts!</Text>
+          </View>
+        </ScrollView>
+    )
+  }
 
   return (
     <>
@@ -50,15 +75,16 @@ export default function MyCourse({ navigation }) {
       <View style={styles.headerBar}>
         <TouchableOpacity
           style={{ color: Colors.secondary, marginRight: 10 }}
-          onPress={() => navigation.pop()}>
+          onPress={() => navigation.navigate("Me")}>
           <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
         </TouchableOpacity>
         <Text style={styles.textHeader}>My Course</Text>
       </View>
 
       {/* body */}
+      {console.log(data)}
       {loading ? renderPlaceholders() :
-        <FlatList
+        <FlatList refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           data={data}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
@@ -78,8 +104,15 @@ export default function MyCourse({ navigation }) {
                   </View>
                   <View style={styles.qrcode}>
 
-                    <TouchableOpacity onPress={() => navigation.push("RatingCourse", { id: item.id, name: item.name })}>
-                      <Icon name="star-outline" type="material" color={Colors.secondary} />
+                    <TouchableOpacity onPress={() => navigation.push("RatingCourse", { id: item.id, name: item.name ,userId: currentUser.id})}>
+                    {item.status=="Rated"?
+                    <Icon name="star-outline" type="material" 
+                    color={Colors.secondary } />
+                    :
+                    <Icon name="star-outline" type="material" 
+                    color={Colors.secondary } />
+                    }
+                     
                       <Text style={styles.textBlack}>Rating</Text>
                     </TouchableOpacity>
 
@@ -101,7 +134,7 @@ export default function MyCourse({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.primary,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,

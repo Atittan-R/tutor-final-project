@@ -1,17 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon, Rating } from 'react-native-elements';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
+import Constants from 'expo-constants';
+import * as Location from 'expo-location';
+import { getDistance, getPreciseDistance } from 'geolib';
+import API from '../../services/API';
 
 export default function Search({ navigation }) {
 
     // search bar
+    const [course, setcourse] = useState([])
+    const [location, setLocation] = useState(null);
     const [search, setSearch] = useState('');
     const updateSearch = (search) => {
         setSearch({ search });
     };
+    const calculateDistance = (lat, long) => {
 
+        var dis = getDistance(
+            { latitude: location.coords.latitude, longitude: location.coords.longitude },
+            { latitude: parseFloat(lat), longitude: parseFloat(long) }
+        );
+        // alert(`Distance\n\n${dis} Meter\nOR\n${dis / 1000} KM`);
+        return dis / 1000
+    };
+    const fecth = async () => {
+        const courses = await API.get("course/findAll");
+        //  console.log(courses.data)
+        await courses.data.map((i) => i.distance = calculateDistance(i.lat, i.long));
+        await courses.data.sort((a, b) => (a.distance - b.distance))
+        console.log('====================================');
+        //  console.log(course.sort((a, b) =>  (a.distance - b.distance)))
+        console.log(courses.data)
+        console.log('====================================');
+        setcourse(courses.data)
+    }
     const tag = [
         {
             id: "0",
@@ -79,6 +104,50 @@ export default function Search({ navigation }) {
             distance: 4.9
         },
     ];
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            setLocation(location);
+
+
+            // if(location!=null){
+            //     fecth();
+            // }else{
+            //     console.log('====================================');
+            //     console.log(location);
+            //     console.log('====================================');
+            // }
+
+
+        })();
+
+    }, []);
+    useEffect(() => {
+        if (location != null) {
+            fecth();
+        } else {
+            console.log('====================================');
+            console.log(location);
+            console.log('====================================');
+        }
+
+    }, [location])
+    console.log(location);
+    //       let text = 'Waiting..';
+
+    //   if (errorMsg) {
+    //     text = errorMsg;
+    //   } else if (location) {
+    //     text = JSON.stringify(location.coords.latitude, location.coords.longitude);
+
+    //   }
+    // console.log(course);
     return (
         <>
             <SafeAreaView style={styles.container} />
@@ -97,7 +166,7 @@ export default function Search({ navigation }) {
                     <Text style={styles.textRec}>Near Me</Text>
                 </View>
                 <FlatList
-                    data={tag}
+                    data={course}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>
                         <TouchableOpacity>
@@ -115,9 +184,9 @@ export default function Search({ navigation }) {
                                     <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
                                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                                         <Icon name="schedule" type="material" color="gray" size={15} />
-                                        <Text style={styles.textGray}>{item.time}</Text>
+                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
                                         <Icon name="calendar-today" type="material" color="gray" size={15} />
-                                        <Text style={styles.textGray}>{item.date}</Text>
+                                        <Text style={styles.textGray}>{item.day}</Text>
                                     </View>
                                     <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
                                         <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />

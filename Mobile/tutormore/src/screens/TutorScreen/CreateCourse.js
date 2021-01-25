@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid, Button, Image, Pressable } from 'react-native'
+import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid, Button, Image, Pressable, Modal } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { ScrollView } from 'react-native-gesture-handler';
 import Amount from '../../components/forms/Amount';
@@ -15,6 +15,7 @@ import Colors from '../../configs/Colors'
 import API from "../../services/API"
 import { SwipeablePanel } from 'rn-swipeable-panel';
 export default function CreateCourse({ navigation }) {
+    const [modalVisible, setModalVisible] = useState(false);
     const [day, setDay] = useState("")
     const [mytags, setTags] = useState([]);
     const [claerTag, setClaerTag] = useState(false);
@@ -126,7 +127,28 @@ export default function CreateCourse({ navigation }) {
                         selectedValue={catagory}
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
                     <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
-                    <Location lat={[lat, setlat]} long={[long, setlong]} />
+                    <TouchableOpacity onPress={() => {
+                        setModalVisible(true)
+                    }}>
+                        <Location lat={[lat, setlat]} long={[long, setlong]} modal={[modalVisible, setModalVisible]} />
+
+                    </TouchableOpacity>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                    >
+                         <View style={styles.headerBar_modal}>
+                         <TouchableOpacity 
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <Icon name="cancel" type="material" color={Colors.secondary} />
+                        </TouchableOpacity>
+                         </View>
+                         
+                        <Location lat={[lat, setlat]} long={[long, setlong]} modal={[modalVisible, setModalVisible]} />
+                     
+                    </Modal>
                 </View>
                 <TouchableOpacity style={styles.button} onPress={() => create()}>
                     <Text style={styles.title}>Create</Text>
@@ -190,6 +212,16 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems: "center",
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: Colors.primary
+    },
+    headerBar_modal: {
+        display: "flex",
+        flexWrap: "wrap",
+        flexDirection: "row",
+        justifyContent: "flex-end",
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 10,

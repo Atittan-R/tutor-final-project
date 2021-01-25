@@ -30,7 +30,7 @@ export default function RoleSelection({ navigation }) {
     const onSubmitHandler = async (role) => {
         // console.log("Set new Role to")
         dispatch({ type: "ROLE_ENTRY", role: role });
-
+        navigation.jumpTo("Home", { screen: "Home" })
     };
     return (
         <View style={styles.container}>

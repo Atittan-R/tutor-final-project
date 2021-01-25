@@ -18,12 +18,11 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
 import { actionCreators, initialState, reducer } from "../Reducer";
-import { SwipeablePanel } from "rn-swipeable-panel";
 
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const [detail, setDetail] = useState({});
+
     const [reduce, loadDispatch] = useReducer(reducer, initialState)
 
     const currentUser = JSON.parse(state.userData);
@@ -42,17 +41,18 @@ export default function CourseDetail({ navigation, route }) {
             console.log("err", e.message)
         }
     }
-
+    const [draggable, setDraggable] = useState({
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    });
     useEffect(() => {
         courseData();
     }, []);
 
-    const [draggable, setDraggable] = useState({
-        latitude: parseFloat(detail.lat),
-        longitude: parseFloat(detail.long),
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
+
+
 
     // console.log(currentUser.id, course)
     const enrollData = async () => {
@@ -62,6 +62,12 @@ export default function CourseDetail({ navigation, route }) {
                     userId: currentUser.id,
                     courseId: course,
                 })
+            const courserate = await API.post("/create/rate",
+                {
+                    userId: currentUser.id,
+                    courseId: course,
+                })
+            console.log("rate ", courserate.data)
             console.log("status ", response.data.status)
             //TODO
             // Generate QRCode
@@ -209,15 +215,19 @@ export default function CourseDetail({ navigation, route }) {
                     </View>
                 </View>
                 <View style={styles.viewMap}>
-                    {/* <MapView
+                    <MapView
                         style={styles.map}
-                        region={draggable}
+                        region={{
+                            latitude: parseFloat(data.lat), longitude: parseFloat(data.long),
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
                         onRegionChangeComplete={(region) => setDraggable(region)}
                     >
                         <Marker
-                            coordinate={{ latitude : parseFloat(data.lat) , longitude : parseFloat(data.long) }}
+                            coordinate={{ latitude: parseFloat(data.lat), longitude: parseFloat(data.long) }}
                         />
-                    </MapView> */}
+                    </MapView>
                 </View>
 
                 <View style={styles.line} />
@@ -257,6 +267,7 @@ export default function CourseDetail({ navigation, route }) {
                         <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                 </View>
+
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
                     <Text style={styles.title}>Enroll</Text>
                 </TouchableOpacity>
