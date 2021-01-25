@@ -23,6 +23,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require("./user.model")(sequelize, Sequelize);
+db.rate_course = require("./rate_course.model")(sequelize, Sequelize);
 db.role = require("./role.model")(sequelize, Sequelize);
 db.course = require("./course.model")(sequelize, Sequelize);
 db.categories = require("./category.model")(sequelize, Sequelize);

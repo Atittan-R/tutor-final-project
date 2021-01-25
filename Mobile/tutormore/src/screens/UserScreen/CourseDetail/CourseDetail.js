@@ -21,33 +21,22 @@ import { Linking } from "react-native";
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const [detail, setDetail] = useState({});
+ 
     const currentUser = JSON.parse(state.userData);
     const { course } = route.params;
     console.log("Course parameter",course)
-    useEffect(() => {
-        async function courseData (){
+    const [detail, setDetail] = useState();
+    // const [draggable, setDraggable] = useState({
+    //     latitude: parseFloat(detail.lat)|| 14.8817767,
+    //     longitude: parseFloat(detail.long)|| 102.0185075,
+    //     latitudeDelta: 0.01,
+    //     longitudeDelta: 0.01,
+    // });
 
-            try {
-                const res = await API.get("/course/findOne/"+course)
-                setDetail(res.data.course);
-            }catch (e){
-                console.log(e.message.data)
-            }
-        }
-        courseData();
-    }, []);
+    // const [loading, setLoading] = useState(false);
 
-    const [draggable, setDraggable] = useState({
-        latitude: parseFloat(detail.lat),
-        longitude: parseFloat(detail.long),
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
-
-    const [loading, setLoading] = useState(false);
-
-    console.log(currentUser.id, course.id,)
+    console.log(currentUser.id, course,)
+    
     const enrollData = async () => {
         setLoading(true);
         try {
@@ -89,12 +78,29 @@ export default function CourseDetail({ navigation, route }) {
         );
     };
 
-    if(loading){
-        return <LoadingScreen />
+    // if(loading){
+    //     return <LoadingScreen />
+    // }
+const courseData = async()=>{
+
+        try {
+            const res = await API.get("/course/findOne/"+1)
+            console.log(res.data.course);
+            setDetail(res.data.course);
+        }catch (e){
+            console.log(e.message.data)
+        }
     }
-    console.log(detail);
-    return (
-        <>
+    useEffect(() => {
+        
+        courseData();
+
+    }, []);
+
+    // console.log(detail);
+    return ( 
+    // <View></View>)
+        <View>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
@@ -170,7 +176,7 @@ export default function CourseDetail({ navigation, route }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.viewMap}>
+                {/* <View style={styles.viewMap}>
                     <MapView
                         style={styles.map}
                         region={draggable}
@@ -185,7 +191,7 @@ export default function CourseDetail({ navigation, route }) {
                             coordinate={draggable}
                         />
                     </MapView>
-                </View>
+                </View> */}
 
                 <View style={styles.barTitle}>
                     <Text
@@ -203,14 +209,14 @@ export default function CourseDetail({ navigation, route }) {
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Name</Text>
                         {/*{console.log( detail )}*/}
-                        {/*<Text style={styles.text}>{detail.tutors.username}</Text>*/}
+                        {/* <Text style={styles.text}>{detail.tutors.username}</Text> */}
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="school" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Major</Text>
-                        {/*<Text style={styles.text}>{detail.tutors.major}</Text>*/}
+                        {/* <Text style={styles.text}>{detail.tutors.major}</Text> */}
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -222,15 +228,16 @@ export default function CourseDetail({ navigation, route }) {
                     />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Line ID</Text>
-                        {/*<Text style={styles.text}>{detail.tutors.phonenumber}</Text>*/}
+                        {/* <Text style={styles.text}>{detail.tutors.phonenumber}</Text> */}
                     </View>
                 </View>
+                
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
                     <Text style={styles.title}>Enroll</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
-        </>
+        </View>
     );
 }
 
