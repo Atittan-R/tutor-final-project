@@ -29,6 +29,7 @@ exports.signup = async (req, res) => {
         experience: req.body.exp,
         date_of_birth: req.body.dob,
         userId: userId,
+        lineId: req.body.lineId,
       });
       const addRoleToNew = await User.findByPk(userId);
       // console.log(userId, addRoleToNew);

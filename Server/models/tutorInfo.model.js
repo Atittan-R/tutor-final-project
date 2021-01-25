@@ -21,6 +21,9 @@ module.exports = (sequelize, Sequelize) => {
     date_of_birth: {
       type: Sequelize.DATE,
     },
+    lineId:{
+     type: Sequelize.STRING,
+    }
   });
 
   return TutorInfo;

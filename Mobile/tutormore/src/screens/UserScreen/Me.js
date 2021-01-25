@@ -15,13 +15,20 @@ import Editprofile from "../../components/forms/Editprofile";
 import Colors from "../../configs/Colors";
 import { useGlobalVar } from "../../context/GlobalContex";
 import API from "../../services/API";
+import avatars from "../../configs/avatars";
 
 export default function Me({ navigation }) {
   const { auth, authentication } = useGlobalVar();
   const [state, dispatch] = authentication;
   const [modalVisible, setModalVisible] = useState(false);
+  const [Profile, setProfile] = useState({
+    username: "",
+    major: "",
+    phonenumber: "",
+    email: "",
+    avatar: 0,
+  });
 
-  const [Profile, setProfile] = useState({});
   const alertSignOut = () => {
     Alert.alert(
       "Sign out",
@@ -43,45 +50,47 @@ export default function Me({ navigation }) {
     user = "-";
   }
 
+  const getUser = async () => {
+    const response = await API.get("/user/findOne/" + user.id)
+    const data = await response.data.user
+    setProfile(data)
+  }
+
   useEffect(() => {
-    setProfile(user);
+    getUser();
   }, []);
 
-  // console.log(state.userData)
   return (
     <>
       <ScrollView style={{ backgroundColor: Colors.background }}>
         <SafeAreaView>
           <View style={styles.coverArea}>
             <View style={styles.coverArea}>
-              <Image
-                source={require("../../assets/profile.jpg")}
-                style={styles.imageProfile}
-              />
+              <Image source={avatars[Profile.avatar].image} style={styles.imageProfile} />
             </View>
 
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Name</Text>
               <Text style={styles.textNormal}>
-                {user.username === null ? "-" : user.username}
+                {Profile.username === null ? "-" : Profile.username}
               </Text>
             </View>
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Major</Text>
               <Text style={styles.textNormal}>
-                {user.major === null ? "-" : user.major}
+                {Profile.major === null ? "-" : Profile.major}
               </Text>
             </View>
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Tel.</Text>
               <Text style={styles.textNormal}>
-                {user.phonenumber === null ? "-" : user.phonenumber}
+                {Profile.phonenumber === null ? "-" : Profile.phonenumber}
               </Text>
             </View>
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Email</Text>
               <Text style={styles.textNormal}>
-                {user.email === null ? "-" : user.email}
+                {Profile.email === null ? "-" : Profile.email}
               </Text>
             </View>
             <Editprofile

@@ -3,6 +3,7 @@ const Course = db.course;
 const Tag = db.tag;
 const User = db.user;
 const Categories = db.categories;
+const Sequelize = require('sequelize');
 
 exports.createCourse = (req, res) => {
     //Save Course Data to Database
@@ -18,6 +19,7 @@ exports.createCourse = (req, res) => {
         long: req.body.long,
         tutorId: req.body.userId,
         categoryId: req.body.categoryId,
+        courseAvatar: req.body.courseAvatar ? req.body.courseAvatar : 0,
     })
         .then((course) => {
             if (req.body.tagname) {
@@ -51,6 +53,7 @@ exports.createCourse = (req, res) => {
 exports.findAllCourse = async (req, res) => {
     try {
         const result = await Course.findAll({
+            order: Sequelize.literal('createdAt DESC'),
             attributes: [
                 "id",
                 "name",
@@ -65,6 +68,7 @@ exports.findAllCourse = async (req, res) => {
                 "createdAt",
                 "description",
                 "rate",
+                "courseAvatar",
             ],
             include: [
                 {
@@ -88,6 +92,7 @@ exports.findCourseFromCategories = async (req, res) => {
     const cate = req.body.cate;
     try {
         const result = await Course.findAll({
+            order: Sequelize.literal('createdAt DESC'),
             attributes: [
                 "id",
                 "name",
@@ -102,6 +107,7 @@ exports.findCourseFromCategories = async (req, res) => {
                 "createdAt",
                 "description",
                 "rate",
+                "courseAvatar",
             ],
             include: [
                 {
@@ -137,6 +143,7 @@ exports.findOneCourse = async (req, res) => {
                 "createdAt",
                 "description",
                 "rate",
+                "courseAvatar",
             ],
             include: [
                 {
@@ -214,3 +221,23 @@ exports.deleteCourse = (req, res) => {
             res.status(500).send({message: err.message});
         });
 };
+
+exports.HomeCourse = async (req, res) => {
+    const major = req.params.major;
+    try{
+        const findCateId = await Categories.findOne({
+            where: {
+                name: major,
+            }})
+
+        const Courses = await Course.findAll({
+            order: Sequelize.literal('createdAt DESC'),
+        })
+        console.log(Courses)
+
+        res.status(201).send({message: Courses});
+    }catch (e){
+        res.status(500).send({message: e.message})
+    }
+
+}

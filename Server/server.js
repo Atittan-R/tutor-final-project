@@ -69,38 +69,49 @@ function initial() {
   });
 
   Categories.create({
+    id: 1,
     name: "General Education",
   });
 
   Categories.create({
+    id: 2,
     name: "Management Technology",
   });
 
   Categories.create({
+    id: 3,
     name: "Engineering",
   });
   Categories.create({
+    id: 4,
     name: "Digital Technology",
   });
   Categories.create({
+    id: 5,
     name: "Science",
   });
   Categories.create({
+    id: 6,
     name: "Agricultural Technology",
   });
   Categories.create({
+    id: 7,
     name: "Foreign Languages",
   });
   Categories.create({
+    id: 8,
     name: "Medicine",
   });
   Categories.create({
+    id: 9,
     name: "Nurse",
   });
   Categories.create({
+    id: 10,
     name: "Dentistry",
   });
   Categories.create({
+    id: 11,
     name: "Public Health",
   });
 }

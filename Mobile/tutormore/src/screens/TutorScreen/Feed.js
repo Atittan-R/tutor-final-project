@@ -14,6 +14,7 @@ import { Icon } from 'react-native-elements';
 import { useGlobalVar } from "../../context/GlobalContex";
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
+import avatars from "../../configs/avatars";
 export default function Feed({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -30,12 +31,10 @@ export default function Feed({ navigation }) {
             // console.log(fetch_req);
             setRequest(fetch_req.data.request.filter((i) => i.status == "Available"))
 
-
         } catch (error) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
-            error
         }
     }
 
@@ -68,7 +67,7 @@ export default function Feed({ navigation }) {
                 renderItem={({ item }) =>
                     <View style={styles.cardView}>
                         <View style={styles.viewItem}>
-                            <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                            <Image source={avatars[item.user.avatar].image} style={styles.image} />
                             <Text style={styles.title}>{item.user.username}</Text>
                         </View>
                         <View

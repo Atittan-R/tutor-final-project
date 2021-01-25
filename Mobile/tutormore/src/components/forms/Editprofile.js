@@ -6,12 +6,15 @@ import Colors from '../../configs/Colors'
 
 export default function Editprofile(props) {
     const [modalVisible, setModalVisible] = props.modalVisible
-    const [name, setname] = useState(props.profile.name)
+    const [Profile, setProfile] = props.ProfileUser;
+    const [name, setname] = useState(props.profile.username)
     const [major, setmajor] = useState(props.profile.major)
-    const [tel, settel] = useState(props.profile.tel)
+    const [tel, settel] = useState(props.profile.phonenumber)
     const [email, setemail] = useState(props.profile.email)
-    const [Profile, setProfile] = props.ProfileUser
+
+
     const User = { name: "", major: "", tel: "", email: "" }
+
     const save = (name, major, tel, email) => {
         User.name = name
         User.major = major

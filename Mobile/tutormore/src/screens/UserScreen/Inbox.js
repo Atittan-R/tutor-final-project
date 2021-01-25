@@ -66,7 +66,12 @@ const Inbox = () => {
                setLoading(true)
            }
        }
-        display();
+        const unsub = navigation.addListener('focus', () => {
+            display();
+        })
+
+        return unsub;
+
     },[]);
 
     return(

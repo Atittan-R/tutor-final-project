@@ -1,7 +1,20 @@
-import React, { useState } from 'react'
-import { Alert, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, ToastAndroid, Button, Image, Pressable } from 'react-native'
-import { Icon } from 'react-native-elements'
-import { ScrollView } from 'react-native-gesture-handler';
+import React, {useState} from 'react'
+import {
+    Alert,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+    ToastAndroid,
+    Button,
+    Image,
+    Pressable
+} from 'react-native'
+import {Icon} from 'react-native-elements'
+import {ScrollView} from 'react-native-gesture-handler';
 import Amount from '../../components/forms/Amount';
 import Catagory from '../../components/forms/Catagory';
 import Clock from '../../components/forms/Clock';
@@ -13,8 +26,11 @@ import TextInputButton from '../../components/forms/TextInputButton';
 import UploadImage from '../../components/forms/UploadImage';
 import Colors from '../../configs/Colors'
 import API from "../../services/API"
-import { SwipeablePanel } from 'rn-swipeable-panel';
-export default function CreateCourse({ navigation }) {
+import {SwipeablePanel} from 'rn-swipeable-panel';
+import courseAvatars from "../../configs/courseAvatars";
+import avatars from "../../configs/avatars";
+
+export default function CreateCourse({navigation}) {
     const [day, setDay] = useState("")
     const [mytags, setTags] = useState([]);
     const [claerTag, setClaerTag] = useState(false);
@@ -22,11 +38,13 @@ export default function CreateCourse({ navigation }) {
     const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
     const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
     const [coureName, setCourseName] = useState("");
+    const [courseAvatar, setCourseAvatar] = useState(0);
     const [amount, setAmount] = useState("");
     const [catagory, setCatagory] = useState("");
     const [lat, setlat] = useState(14.8817767)
     const [long, setlong] = useState(102.0185075)
     const [selectedValue, setSelectedValue] = useState("");
+
     const getTimeStart = (result) => {
         setTimeStart(result);
     }
@@ -56,11 +74,12 @@ export default function CreateCourse({ navigation }) {
                 tagname: mytags,
                 duration: selectedValue,
                 lat: lat.toString(),
-                long: long.toString()
+                long: long.toString(),
+                courseAvatar: courseAvatar,
             });
             clear()
-            navigation.navigate("Home", { screen: "Home" })
-            ToastAndroid.show("create course success !", ToastAndroid.SHORT);
+            navigation.navigate("Home", {screen: "Home"})
+            ToastAndroid.show("create course success !", ToastAndroid.LONG);
         } catch (error) {
             console.log(error);
         }
@@ -75,39 +94,27 @@ export default function CreateCourse({ navigation }) {
         onClose: () => setIsPanelActive(false),
         onPressCloseButton: () => setIsPanelActive(false),
     });
-    const changeImage = (id) => {
-        if (id == 1) { setRequireImage(require('../../assets/course/analytics.png')); }
-        else if (id == 2) { setRequireImage(require('../../assets/course/directory.png')); }
-        else if (id == 3) { setRequireImage(require('../../assets/course/electrician.png')); }
-        else if (id == 4) { setRequireImage(require('../../assets/course/geography.png')); }
-
-        else if (id == 5) { setRequireImage(require('../../assets/course/growth.png')); }
-        else if (id == 6) { setRequireImage(require('../../assets/course/heart-rate-monitor.png')); }
-        else if (id == 7) { setRequireImage(require('../../assets/course/multimedia.png')); }
-        else if (id == 8) { setRequireImage(require('../../assets/course/nurse.png')); }
-
-        else if (id == 9) { setRequireImage(require('../../assets/course/stethoscope.png')); }
-        else if (id == 10) { setRequireImage(require('../../assets/course/test-tube.png')); }
-        else if (id == 11) { setRequireImage(require('../../assets/course/tooth.png')); }
-        else if (id == 12) { setRequireImage(require('../../assets/course/notebook.png')); }
+    const changeImage = (courseAvatar) => {
+        setRequireImage(courseAvatar.image);
+        setCourseAvatar(courseAvatar.id)
     }
 
 
     return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container} />
+            <SafeAreaView style={styles.container}/>
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Course</Text>
                 <TouchableOpacity
                     onPress={() => create()}>
-                    <Icon name="check" type="material" color={Colors.secondary} />
+                    <Icon name="check" type="material" color={Colors.secondary}/>
                 </TouchableOpacity>
             </View>
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
                     <TouchableOpacity onPress={() => setIsPanelActive(true)}>
-                        <Image source={requireImage} style={styles.imageTitle} />
+                        <Image source={requireImage} style={styles.imageTitle}/>
                         <Text style={styles.text}>Change image</Text>
                     </TouchableOpacity>
                     <TextInputButton
@@ -116,66 +123,66 @@ export default function CreateCourse({ navigation }) {
                         onTextChange={(text) => setCourseName(text)}
                         value={coureName}
                     />
-                    <ModalDate dayValue={[day, setDay]} />
+                    <ModalDate dayValue={[day, setDay]}/>
                     <Clock
-                        label={"Time Start"} callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
+                        label={"Time Start"} callback={getTimeStart} claerdate={[claerdate, setClaerDate]}/>
                     <Clock
-                        label={"Time End"} callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
-                    <TermCourse value={[selectedValue, setSelectedValue]} />
+                        label={"Time End"} callback={getTimeEnd} claerdate={[claerdate, setClaerDate]}/>
+                    <TermCourse value={[selectedValue, setSelectedValue]}/>
                     <TextInputButton
                         label={"Amount"}
                         placeholder={"Enter the number of seats"}
                         onTextChange={(text) => setAmount(text)}
                         value={amount}
-                        keyboardType={"phone-pad"} />
+                        keyboardType={"phone-pad"}/>
                     <Catagory
                         selectedValue={catagory}
-                        onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
-                    <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
-                    <Location lat={[lat, setlat]} long={[long, setlong]} />
+                        onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)}/>
+                    <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]}/>
+                    <Location lat={[lat, setlat]} long={[long, setlong]}/>
                 </View>
-            </ScrollView >
+            </ScrollView>
             <SwipeablePanel {...panelProps} isActive={isPanelActive}>
                 <View style={styles.row}>
-                    <TouchableOpacity onPress={() => changeImage(1)} >
-                        <Image source={require('../../assets/course/analytics.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(1)}>
+                        <Image source={courseAvatars[1].image} style={styles.image}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(2)} >
-                        <Image source={require('../../assets/course/directory.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(2)}>
+                        <Image source={courseAvatars[2].image} style={styles.image}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(3)} >
-                        <Image source={require('../../assets/course/electrician.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(3)}>
+                        <Image source={courseAvatars[3].image} style={styles.image}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(4)} >
-                        <Image source={require('../../assets/course/geography.png')} style={styles.image} />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                    <TouchableOpacity onPress={() => changeImage(5)} >
-                        <Image source={require('../../assets/course/growth.png')} style={styles.image} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(6)} >
-                        <Image source={require('../../assets/course/heart-rate-monitor.png')} style={styles.image} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(7)} >
-                        <Image source={require('../../assets/course/multimedia.png')} style={styles.image} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(8)} >
-                        <Image source={require('../../assets/course/nurse.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(4)}>
+                        <Image source={courseAvatars[4].image} style={styles.image}/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.row}>
-                    <TouchableOpacity onPress={() => changeImage(9)} >
-                        <Image source={require('../../assets/course/stethoscope.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(5)}>
+                        <Image source={courseAvatars[5].image} style={styles.image}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(10)} >
-                        <Image source={require('../../assets/course/test-tube.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(6)}>
+                        <Image source={courseAvatars[6].image} style={styles.image}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(11)} >
-                        <Image source={require('../../assets/course/tooth.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(7)}>
+                        <Image source={courseAvatars[7].image} style={styles.image}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changeImage(12)} >
-                        <Image source={require('../../assets/course/notebook.png')} style={styles.image} />
+                    <TouchableOpacity onPress={() => changeImage(8)}>
+                        <Image source={courseAvatars[8].image} style={styles.image}/>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(9)}>
+                        <Image source={courseAvatars[9].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(10)}>
+                        <Image source={courseAvatars[10].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(11)}>
+                        <Image source={courseAvatars[11].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(12)}>
+                        <Image source={courseAvatars[12].image} style={styles.image}/>
                     </TouchableOpacity>
                 </View>
             </SwipeablePanel>

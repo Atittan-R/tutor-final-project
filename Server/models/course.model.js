@@ -33,6 +33,9 @@ module.exports = (sequelize, Sequelize) => {
     rate: {
       type: Sequelize.DECIMAL(3, 2),
     },
+    courseAvatar: {
+      type: Sequelize.INTEGER,
+    }
   });
 
   return Course;

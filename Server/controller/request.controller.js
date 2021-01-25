@@ -47,13 +47,12 @@ exports.createRequest = (req, res) => {
 
 exports.findAllRequest = (req, res) => {
   Request.findAll({
-
+    order: Sequelize.literal('createdAt DESC'),
     include: [
       {
         model: User,
 
         as: "user",
-        attributes: ["username"],
         // through: {
         //     attributes: ["name"],
         // },

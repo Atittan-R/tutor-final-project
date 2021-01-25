@@ -7,6 +7,7 @@ import {actionCreators, initialState, reducer} from "./CourseReducer";
 import API from "../../../services/API";
 import LoadingScreen from "../../../components/Loading";
 import NoDataScreen from "../../../components/Nodata";
+import courseAvatars from "../../../configs/courseAvatars";
 
 export default function List({ navigation, route }) {
     const { categories } = route.params;
@@ -76,7 +77,7 @@ export default function List({ navigation, route }) {
                                             marginHorizontal: 2,
                                             flexWrap: "wrap"
                                         }}>
-                                        <Image source={{uri: "https://source.unsplash.com/random"}}
+                                        <Image source={courseAvatars[item.courseAvatar].image}
                                                style={styles.image}/>
                                         <View style={{
                                             flex: 1,
