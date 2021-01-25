@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
   ToastAndroid,
-  Modal,
+  Modal, Image,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
@@ -49,7 +49,7 @@ export default function TakeCreateCourse({ route, navigation }) {
   const [mytags, setTags] = useState([]);
   const [claerTag, setClaerTag] = useState(false);
   const [requsetId, setRequsetId] = useState(0);
-
+  const [courseAvatar, setCourseAvatar] = useState(0);
   const [requireImage, setRequireImage] = useState(
     require("../../assets/course/picture.png")
   );
@@ -93,6 +93,7 @@ export default function TakeCreateCourse({ route, navigation }) {
         duration: selectedValue,
         lat: lat.toString(),
         long: long.toString(),
+        courseAvatar: courseAvatar,
       });
       await sendMessage(teke_res.data.id);
 
@@ -114,11 +115,17 @@ export default function TakeCreateCourse({ route, navigation }) {
     setRequsetId(parseInt(req.map((i) => i.id).toString()));
   }, []);
 
+  const [panelProps, setPanelProps] = useState({
+    fullWidth: true,
+    onlySmall: true,
+    showCloseButton: true,
+    onClose: () => setIsPanelActive(false),
+    onPressCloseButton: () => setIsPanelActive(false),
+  });
   const changeImage = (courseAvatar) => {
     setRequireImage(courseAvatar.image);
     setCourseAvatar(courseAvatar.id);
   };
-
   return (
     <>
       {/* header */}
@@ -128,7 +135,10 @@ export default function TakeCreateCourse({ route, navigation }) {
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
-          <UploadImage />
+          <TouchableOpacity onPress={() => setIsPanelActive(true)}>
+            <Image source={requireImage} style={styles.imageTitle} />
+            <Text style={styles.text}>Change image</Text>
+          </TouchableOpacity>
           <TextInputButton
             label={"Course"}
             onTextChange={(text) => setCourseName(text)}
@@ -205,78 +215,48 @@ export default function TakeCreateCourse({ route, navigation }) {
         </View>
       </ScrollView>
       <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-        <View style={styles.row}>
-          <TouchableOpacity
-            onPress={() => changeImage(courseAvatars.analytics)}
-          >
-            <Image
-              source={courseAvatars.analytics.image}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => changeImage(courseAvatars.directory)}
-          >
-            <Image
-              source={courseAvatars.directory.image}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => changeImage(courseAvatars.electrician)}
-          >
-            <Image
-              source={courseAvatars.electrician.image}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => changeImage(courseAvatars.geography)}
-          >
-            <Image
-              source={courseAvatars.geography.image}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity onPress={() => changeImage(courseAvatars.growth)}>
-            <Image source={courseAvatars.growth.image} style={styles.image} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => changeImage(courseAvatars.heart)}>
-            <Image source={courseAvatars.heart.image} style={styles.image} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => changeImage(courseAvatars.multimedia)}
-          >
-            <Image
-              source={courseAvatars.multimedia.image}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => changeImage(courseAvatars.nurse)}>
-            <Image source={courseAvatars.nurse.image} style={styles.image} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity
-            onPress={() => changeImage(courseAvatars.stethoscope)}
-          >
-            <Image
-              source={courseAvatars.stethoscope.image}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => changeImage(courseAvatars.tube)}>
-            <Image source={courseAvatars.tube.image} style={styles.image} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => changeImage(courseAvatars.tooth)}>
-            <Image source={courseAvatars.tooth.image} style={styles.image} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => changeImage(courseAvatars.notebook)}>
-            <Image source={courseAvatars.notebook.image} style={styles.image} />
-          </TouchableOpacity>
-        </View>
+            <View style={styles.row}>
+              <TouchableOpacity onPress={() => changeImage(1)}>
+                <Image source={courseAvatars[1].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(2)}>
+                <Image source={courseAvatars[2].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(3)}>
+                <Image source={courseAvatars[3].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(4)}>
+                <Image source={courseAvatars[4].image} style={styles.image} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.row}>
+              <TouchableOpacity onPress={() => changeImage(5)}>
+                <Image source={courseAvatars[5].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(6)}>
+                <Image source={courseAvatars[6].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(7)}>
+                <Image source={courseAvatars[7].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(8)}>
+                <Image source={courseAvatars[8].image} style={styles.image} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.row}>
+              <TouchableOpacity onPress={() => changeImage(9)}>
+                <Image source={courseAvatars[9].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(10)}>
+                <Image source={courseAvatars[10].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(11)}>
+                <Image source={courseAvatars[11].image} style={styles.image} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => changeImage(12)}>
+                <Image source={courseAvatars[12].image} style={styles.image} />
+              </TouchableOpacity>
+            </View>
       </SwipeablePanel>
     </>
   );
@@ -310,6 +290,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: Colors.secondary,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingTop: 10,
+    marginTop: 15,
+  },
+  image: {
+    width: 60,
+    height: 60,
+    borderRadius: 5,
+  },
+  imageTitle: {
+    width: 120,
+    height: 120,
+    borderRadius: 5,
+    marginTop: 10,
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  text: {
+    color: "#a5a5a5",
+    alignSelf: "center",
+    // fontWeight: "bold"
   },
   area: {
     backgroundColor: Colors.white,
