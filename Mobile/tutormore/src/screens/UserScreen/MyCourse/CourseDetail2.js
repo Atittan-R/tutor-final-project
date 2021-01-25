@@ -19,10 +19,10 @@ import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
 import { actionCreators, initialState, reducer } from "../Reducer";
 
-export default function CourseDetail({ navigation, route }) {
+export default function CourseDetail2({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-
+    const [detail, setDetail] = useState({});
     const [reduce, loadDispatch] = useReducer(reducer, initialState)
 
     const currentUser = JSON.parse(state.userData);
@@ -41,20 +41,19 @@ export default function CourseDetail({ navigation, route }) {
             console.log("err", e.message)
         }
     }
-    const [draggable, setDraggable] = useState({
-        latitude: 0,
-        longitude: 0,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
+
     useEffect(() => {
         courseData();
     }, []);
 
+    const [draggable, setDraggable] = useState({
+        latitude: parseFloat(detail.lat),
+        longitude: parseFloat(detail.long),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    });
 
-
-
-    // console.log(currentUser.id, course)
+    console.log(data)
     const enrollData = async () => {
         try {
             const response = await API.post("/enroll/course",
@@ -62,19 +61,13 @@ export default function CourseDetail({ navigation, route }) {
                     userId: currentUser.id,
                     courseId: course,
                 })
-            const courserate = await API.post("/create/rate",
-                {
-                    userId: currentUser.id,
-                    courseId: course,
-                })
-            console.log("rate ", courserate.data)
             console.log("status ", response.data.status)
             //TODO
             // Generate QRCode
             // Popup QRCode
             // Ask where to go History or Back
             ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", { screen: "MyCourse" , params: { focus: "focus" } })
+            navigation.navigate("Me", { screen: "MyCourse" })
         } catch (e) {
             alert(e.response.data.status);
         }
@@ -119,15 +112,6 @@ export default function CourseDetail({ navigation, route }) {
     }
 
     console.log("data: ", data)
-    //Panel Open Close
-    // const [panelProps, setPanelProps] = useState({
-    //     fullWidth: true,
-    //     onlySmall: true,
-    //     closeOnTouchOutside: true,
-    //     onClose: () => setIsPanelActive(false),
-    //     onPressCloseButton: () => setIsPanelActive(false),
-    // });
-    // const [isPanelActive, setIsPanelActive] = useState(false);
     return (
         <>
             {/* header */}
@@ -215,30 +199,21 @@ export default function CourseDetail({ navigation, route }) {
                     </View>
                 </View>
                 <View style={styles.viewMap}>
-                    <MapView
+                    {/* <MapView
                         style={styles.map}
-                        region={{
-                            latitude: parseFloat(data.lat), longitude: parseFloat(data.long),
-                            latitudeDelta: 0.01,
-                            longitudeDelta: 0.01,
-                        }}
+                        region={draggable}
                         onRegionChangeComplete={(region) => setDraggable(region)}
                     >
                         <Marker
-                            coordinate={{ latitude: parseFloat(data.lat), longitude: parseFloat(data.long) }}
+                            coordinate={{ latitude : parseFloat(data.lat) , longitude : parseFloat(data.long) }}
                         />
-                    </MapView>
+                    </MapView> */}
                 </View>
 
                 <View style={styles.line} />
-                <View style={styles.viewMore}>
-                    <View style={[styles.topic, styles.row]}>
-                        <View style={[styles.column, styles.box]} />
-                        <Text style={styles.textRec}>Tutor Profile</Text>
-                    </View>
-                    <TouchableOpacity onPress={() => setIsPanelActive(true)}>
-                        <Text style={styles.textViewMore}>View More</Text>
-                    </TouchableOpacity>
+                <View style={[styles.topic, styles.row]}>
+                    <View style={[styles.column, styles.box]} />
+                    <Text style={styles.textRec}>Tutor Profile</Text>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
@@ -267,15 +242,11 @@ export default function CourseDetail({ navigation, route }) {
                         <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                 </View>
-
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
-                    <Text style={styles.title}>Enroll</Text>
+                    <Text style={styles.title}>Leave Course</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
-            {/* <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-                <Text>Kuy earth</Text>
-            </SwipeablePanel> */}
         </>
     );
 }
@@ -409,20 +380,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
     },
-    textViewMore: {
-        fontSize: 12,
-        color: "#00b",
-    },
-    viewMore: {
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        marginRight: 30,
-        flex: 1
-    },
-    topic: {
-        flex: 1,
-        marginBottom: 10,
-    },
+
 });

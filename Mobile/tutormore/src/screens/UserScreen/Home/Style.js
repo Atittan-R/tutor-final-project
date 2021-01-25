@@ -184,6 +184,15 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    viewMore: {
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginRight: 10
+    },
+    textViewMore: {
+        fontSize: 12,
+        color: "#00b"
     }
 
 });

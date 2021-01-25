@@ -237,7 +237,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     textHeader: {
-        fontSize: 20,
         fontWeight: "bold",
         flex: 0.5,
         color: Colors.secondary,

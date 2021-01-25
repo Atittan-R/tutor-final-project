@@ -14,3 +14,5 @@ export { default as NearMe } from "./NearMe";
 export { default as QrCode } from "./QrCode";
 export { default as RatingCourse } from "./RatingCourse";
 export { default as Inbox } from "./Inbox";
+export { default as CourseDetail2 } from "./MyCourse/CourseDetail2";
+export { default as TagSearch } from "./TagSearch";

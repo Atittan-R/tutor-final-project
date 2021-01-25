@@ -35,7 +35,10 @@ module.exports = (sequelize, Sequelize) => {
     },
     courseAvatar: {
       type: Sequelize.INTEGER,
-    }
+    },
+    status: {
+      type: Sequelize.STRING,
+    },
   });
 
   return Course;

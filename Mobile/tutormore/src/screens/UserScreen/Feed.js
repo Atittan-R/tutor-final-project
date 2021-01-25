@@ -93,11 +93,6 @@ export default function Feed({ navigation }) {
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.navigate("Home")}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
                 <Text style={styles.textHeader}>Feed Request</Text>
                 <TextInput
                     style={styles.search}
@@ -121,28 +116,30 @@ export default function Feed({ navigation }) {
                             <View
                                 style={{
                                     marginTop: 5,
-                                    borderTopColor: Colors.gray,
-                                    borderTopWidth: 1,
                                     display: "flex",
                                     flexWrap: "wrap",
                                     flexDirection: "row",
                                     justifyContent: "space-between",
                                 }}>
                                 <View>
+                                    <Text style={styles.title}>{item.name}</Text>
                                     <View style={styles.viewItem}>
-                                        <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
-                                        <Text style={styles.title}>{item.name}</Text>
+                                        <Icon name="schedule" type="material" color={'gray'} size={15}
+                                            style={styles.icon} />
+                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                        <Icon name="event" type="material" color={"gray"} size={15}
+                                            style={styles.icon} />
+                                        <Text style={styles.textGray}>{item.date}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Icon name="event" type="material" color={Colors.secondary}
+                                        <Icon name="category" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.text}>{item.date}</Text>
+                                        <Text style={styles.textGray}>Catagory</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Icon name="schedule" type="material" color={Colors.secondary}
-                                            style={styles.icon} />
-                                        {/* <Text style={styles.text}>{item.time}</Text> */}
-                                        <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
+                                        <Text style={styles.tag}>tag1</Text>
+                                        <Text style={styles.tag}>tag2</Text>
+                                        <Text style={styles.tag}>tag3</Text>
                                     </View>
                                 </View>
                                 <View style={styles.positionBTN}>
@@ -195,8 +192,7 @@ export const styles = StyleSheet.create({
         color: Colors.secondary,
     },
     cardView: {
-        marginHorizontal: 10,
-        marginTop: 10,
+        marginBottom: 1,
         borderRadius: 5,
         padding: 10,
         backgroundColor: Colors.white
@@ -206,17 +202,18 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
+        marginRight: 50
     },
-    text: {
-        color: Colors.secondary
+    textGray: {
+        color: "gray",
+        fontSize: 12
     },
     title: {
         fontWeight: "bold",
         color: Colors.secondary
     },
     icon: {
-        marginRight: 10,
-        marginVertical: 2
+        margin: 5
     },
     image: {
         width: 30,
@@ -264,5 +261,15 @@ export const styles = StyleSheet.create({
     searchBar: {
         backgroundColor: Colors.primary,
         paddingBottom: 10,
+    },
+    textBlack: {
+        color: Colors.secondary
+    },
+    tag: {
+        backgroundColor: Colors.gray,
+        padding: 5,
+        marginRight: 5,
+        borderRadius: 5,
+        color: Colors.secondary
     }
 })

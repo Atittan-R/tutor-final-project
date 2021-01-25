@@ -30,7 +30,7 @@ export default function TapRoute() {
         }} />
       <Tabs.Screen name="Feed" component={FeedStack}
         options={{
-            dotCornerRadius: 10,
+          dotCornerRadius: 10,
           tabBarIcon: () => (
             <Icon name="dynamic-feed" type="material" color={Colors.secondary} />
           )
@@ -41,8 +41,8 @@ export default function TapRoute() {
             <Icon name="add-circle" type="material" color={Colors.secondary} />
           )
         }} />
-        <Tabs.Screen name="Inbox" component={InboxStack}
-         options={{
+      <Tabs.Screen name="Inbox" component={InboxStack}
+        options={{
           tabBarIcon: () => (
             <Icon name="notifications-active" type="material" color={Colors.secondary} />
           )

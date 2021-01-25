@@ -29,7 +29,7 @@ export default function Catagory(props) {
       </View>
     </View>
   );
-};
+}
 export const styles = StyleSheet.create({
   inputItem: {
     marginVertical: 5,
@@ -47,6 +47,6 @@ export const styles = StyleSheet.create({
   drop: {
     flex: 1,
     fontSize: 16,
-    color: Colors.secondary
+    color: Colors.secondary,
   },
 });

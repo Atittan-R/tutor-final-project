@@ -33,6 +33,7 @@ require("./routes/search.router")(app);
 require("./routes/tutor.routes")(app);
 require("./routes/notification.routes")(app);
 require("./routes/box.routes")(app);
+require("./routes/rate.router")(app);
 
 //Connect to database by calling models
 const db = require("./models");

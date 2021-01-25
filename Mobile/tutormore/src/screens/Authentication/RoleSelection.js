@@ -11,9 +11,9 @@ import {
 import Colors from "../../configs/Colors";
 import CharacterMrTeacherFullBody from "../../assets/characters/CharacterMrTeacherFullBody";
 import CharacterStudentFullBody from "../../assets/characters/CharacterStudentFullBody";
-import {useGlobalVar} from "../../context/GlobalContex";
+import { useGlobalVar } from "../../context/GlobalContex";
 
-export default function RoleSelection({navigation})  {
+export default function RoleSelection({ navigation }) {
     const { auth, authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [selected, setSelected] = useState({
@@ -29,12 +29,12 @@ export default function RoleSelection({navigation})  {
 
     const onSubmitHandler = async (role) => {
         // console.log("Set new Role to")
-        dispatch({type: "ROLE_ENTRY", role: role});
-
+        dispatch({ type: "ROLE_ENTRY", role: role });
+        navigation.jumpTo("Home", { screen: "Home" })
     };
     return (
         <View style={styles.container}>
-            <View style={{ marginHorizontal: 30 }}>
+            <View style={{ marginHorizontal: 20, flexWrap: "wrap", flex: 1 }}>
                 <View style={{ marginTop: 64 }}>
                     <Text style={{ fontSize: 36 }}>One</Text>
                     <Text style={{ fontSize: 36 }}>More thing!</Text>
@@ -116,14 +116,14 @@ export default function RoleSelection({navigation})  {
                                     borderRadius: 30,
                                     backgroundColor: Colors.gray,
                                 }}
-                                disabled={selected.role_select===""&& true}
+                                disabled={selected.role_select === "" && true}
                                 onPress={() => onSubmitHandler(selected.role_select)}
                             >
                                 <View
                                     style={{
                                         paddingVertical: 10,
                                         borderRadius: 30,
-                                        backgroundColor: selected.role_select===""? Colors.gray: Colors.primary,
+                                        backgroundColor: selected.role_select === "" ? Colors.gray : Colors.primary,
                                         alignItems: "center",
                                     }}
                                 >
@@ -148,18 +148,21 @@ export const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "center"
     },
     column: {
         flexDirection: "column",
     },
     card: {
-        padding: 16,
+        padding: 10,
         borderRadius: 8,
         backgroundColor: "#FFFFFF",
         minHeight: 230,
         justifyContent: "center",
-        marginRight: 16,
-        minWidth: 160,
+        margin: 5,
+        minWidth: 150,
         alignItems: "center",
     },
 });

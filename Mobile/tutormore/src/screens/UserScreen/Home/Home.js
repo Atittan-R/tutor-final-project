@@ -174,11 +174,12 @@ export default function Home({ navigation }) {
                     {/* recommend */}
                     <View style={styles.bg}>
                         <View style={styles.line} />
-                        <View style={{ marginVertical: 10 }}>
+                        <View style={[styles.row, styles.viewMore]}>
                             <View style={[styles.topic, styles.row]}>
                                 <View style={[styles.column, styles.box]} />
                                 <Text style={[styles.column, styles.textRec]}>Recommend</Text>
                             </View>
+                            <TouchableOpacity><Text style={styles.textViewMore}>View More</Text></TouchableOpacity>
                         </View>
 
                         <FlatList
@@ -206,9 +207,12 @@ export default function Home({ navigation }) {
 
                     <View style={styles.bg}>
                         <View style={styles.line} />
-                        <View style={[styles.topic, styles.row]}>
-                            <View style={[styles.column, styles.box]} />
-                            <Text style={[styles.column, styles.textRec]}>All Course</Text>
+                        <View style={[styles.row, styles.viewMore]}>
+                            <View style={[styles.topic, styles.row]}>
+                                <View style={[styles.column, styles.box]} />
+                                <Text style={[styles.column, styles.textRec]}>All Course</Text>
+                            </View>
+                            <TouchableOpacity><Text style={styles.textViewMore}>View More</Text></TouchableOpacity>
                         </View>
                         {data.length === 0 ?
                             <NoDataScreen /> :
