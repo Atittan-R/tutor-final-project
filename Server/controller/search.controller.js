@@ -38,31 +38,9 @@ exports.search = async (req, res) => {
 
 
         })
-        if (!searchTag.length) {
-            const searchCourse = await Course.findAll({
-                limit: 10,
-                attributes: ["name"],
-                where: {
-                    name:
-                    {
-                        [Op.regexp]: '^' + req.body.searchQuerying
-                    }
-                },
-                include: [
-                    {
-                        model: Tag,
-                        attributes: ["name", "id",],
-                        through: {
-                            attributes: [],
-
-                        },
-                    },
-                ],
-            })
-            res.status(200).send({ searchCourse });
-        } else {
+       
             res.status(200).send({ searchTag });
-        }
+        
 
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -74,7 +52,7 @@ exports.recommended = async (req, res) => {
     try {
         const teg = await Tag.findAll({
 
-            distinct: "name",
+            // distinct: "name",
             attributes: {
                 include:
                     ["name",[Sequelize.fn("COUNT", "name"), "TagCount"],
@@ -185,3 +163,41 @@ exports.searchRequest = async (req, res) => {
 //         res.status(500).send({ message: err.message });
 //     }
 // }
+
+exports.findtag = async (req, res) => {
+    try {
+        const teg = await Tag.findAll({
+            limit: 10,
+            attributes: ["id"],
+            through: {
+                attributes: [],
+            },
+
+            where: {
+                name:req.body.tag
+
+            },
+            include: [
+
+                {
+                    model: Course,
+                    attributes: ["name", "id"],
+                    through: {
+                        attributes: [],
+
+                    },
+
+                },
+
+
+            ],
+
+
+        })
+        res.status(201).send(teg)
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+
+
+}
