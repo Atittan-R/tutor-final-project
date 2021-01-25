@@ -6258,6 +6258,13 @@ react-native-animated-nav-tab-bar@^3.0.5:
     react-native-screens "^2.11.0"
     styled-components "^4.3.2"
 
+react-native-awesome-alerts@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-awesome-alerts/-/react-native-awesome-alerts-1.4.2.tgz#197c61a403bbe0bda8d4ddf7c9eaf41bba03f321"
+  integrity sha512-yKdah2rp6rTFaF0IlKU6U0TvhOVGpOQ2E50sFcPe2i6XzwjgBIhB6kNXunQDuvzBRCTgWkEjbd+TC30dmbNWvw==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-elements@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.1.0.tgz#ff2d6fd0ed91b1ebdd15598c4da1fcb2d5780c5f"
