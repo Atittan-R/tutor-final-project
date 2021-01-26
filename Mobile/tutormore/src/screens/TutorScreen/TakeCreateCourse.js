@@ -66,8 +66,8 @@ export default function TakeCreateCourse({ route, navigation }) {
   async function sendMessage(takeid) {
     const res = await API.post("/notification/message", {
       takeId: takeid,
-      title: "Message",
-      body: "ได้ยัง ไอ่หอยยย",
+      title: "Message!!",
+      body: "Course you was join have been created! :)",
     });
     console.log(res.data);
   }
@@ -95,6 +95,7 @@ export default function TakeCreateCourse({ route, navigation }) {
         long: long.toString(),
         courseAvatar: courseAvatar,
       });
+
       await sendMessage(teke_res.data.id);
 
       console.log("Hello", teke_res.data.id);
@@ -122,9 +123,9 @@ export default function TakeCreateCourse({ route, navigation }) {
     onClose: () => setIsPanelActive(false),
     onPressCloseButton: () => setIsPanelActive(false),
   });
-  const changeImage = (courseAvatar) => {
-    setRequireImage(courseAvatar.image);
-    setCourseAvatar(courseAvatar.id);
+  const changeImage = (id) => {
+    setRequireImage(courseAvatars[id].image);
+    setCourseAvatar(id);
   };
   return (
     <>

@@ -98,9 +98,9 @@ export default function CreateCourse({ navigation }) {
     onClose: () => setIsPanelActive(false),
     onPressCloseButton: () => setIsPanelActive(false),
   });
-  const changeImage = (courseAvatar) => {
-    setRequireImage(courseAvatar.image);
-    setCourseAvatar(courseAvatar.id);
+  const changeImage = (id) => {
+    setRequireImage(courseAvatars[id].image);
+    setCourseAvatar(id);
   };
 
   return (

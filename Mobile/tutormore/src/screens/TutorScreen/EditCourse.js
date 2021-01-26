@@ -18,6 +18,8 @@ export default function TakeCreateCourse({ route, navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const userid = JSON.parse(state.userData);
+    const [modalVisible, setModalVisible] = useState(false);
+
     const { req } = route.params
     const [coureName, setCourseName] = useState("");
     const [amount, setAmount] = useState(0);
@@ -123,7 +125,7 @@ export default function TakeCreateCourse({ route, navigation }) {
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)} />
                     {/* <Tag
                          value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} /> */}
-                    <Location lat={[lat, setlat]} long={[long, setlong]}/>
+                    <Location lat={[lat, setlat]} long={[long, setlong]} modal={[modalVisible, setModalVisible]}/>
                 </View>
             </ScrollView >
         </>
