@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     Alert,
     SafeAreaView,
@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import {Icon} from "react-native-elements";
 import Colors from "../../configs/Colors";
 import TextInputButton from "../../components/forms/TextInputButton";
 import Calendar from "../../components/forms/Calendar";
@@ -19,6 +19,7 @@ import API from "../../services/API";
 import { useGlobalVar } from "../../context/GlobalContex";
 import Catagory from "../../components/forms/Catagory";
 import { StackActions } from '@react-navigation/native';
+
 export default function ResgisterTutor({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -53,7 +54,7 @@ export default function ResgisterTutor({ navigation }) {
                     }
                 },
             ],
-            { cancelable: false }
+            {cancelable: false}
         );
     };
 
@@ -68,7 +69,7 @@ export default function ResgisterTutor({ navigation }) {
                 phoneNumber: phoneNumber,
                 dob: birthDath,
                 exp: experience,
-                lineId: lineId
+                lineId: lineId,
             });
             ToastAndroid.show(response.data.message, ToastAndroid.LONG);
             navigation.navigate("RoleSelect");
@@ -81,7 +82,7 @@ export default function ResgisterTutor({ navigation }) {
     return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container} />
+            <SafeAreaView style={styles.container}/>
             <View style={styles.headerBar}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
@@ -112,15 +113,15 @@ export default function ResgisterTutor({ navigation }) {
                         onTextChange={(text) => setSurname(text)} />
                     <Calendar
                         callback={getBirthDate}
-                        claerdate={[claerdate, setClaerDate]} />
+                        claerdate={[claerdate, setClaerDate]}/>
                     <TextInputButton
                         placeholder={"Phone Number"}
                         onTextChange={(text) => setPhoneNumber(text)}
-                        keyboardType={"phone-pad"} />
+                        keyboardType={"phone-pad"}/>
                     <TextInputButton
                         placeholder={"Line ID"}
                         onTextChange={(text) => setLineId(text)}
-                        keyboardType={"email-address"} />
+                        keyboardType={"email-address"}/>
                     <TextInputButton
                         placeholder={"Email"}
                         onTextChange={(text) => setEmail(text)}
@@ -133,7 +134,7 @@ export default function ResgisterTutor({ navigation }) {
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemIndex)} />
                     <Experience
                         selectedValue={experience}
-                        onValueChange={(text) => setExperience(text)} />
+                        onValueChange={(text) => setExperience(text)}/>
                 </View>
 
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>

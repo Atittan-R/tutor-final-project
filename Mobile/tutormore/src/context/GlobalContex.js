@@ -72,7 +72,7 @@ export const GlobalProvider = ({ children }) => {
                     password: data.password,
                 }
             );
-            // console.log("User From Login: ", user.data);
+            console.log("User From Login: ", user.data);
             if (user) {
                 await AsyncStorage.setItem("userData", JSON.stringify(user.data));
                 await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
@@ -116,6 +116,7 @@ export const GlobalProvider = ({ children }) => {
             roleEntry: async (data) => {
                 // dispatch({type: "ROLE_ENTRY", role: data.role})
             },
+
         }),
         []
     );

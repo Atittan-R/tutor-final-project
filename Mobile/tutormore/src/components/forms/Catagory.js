@@ -25,12 +25,11 @@ export default function Catagory(props) {
           <Picker.Item label="Nurse" value={9} />
           <Picker.Item label="Dentistry" value={10} />
           <Picker.Item label="Public Health" value={11} />
-
         </Picker>
       </View>
     </View>
   );
-};
+}
 export const styles = StyleSheet.create({
   inputItem: {
     marginVertical: 5,
@@ -48,6 +47,6 @@ export const styles = StyleSheet.create({
   drop: {
     flex: 1,
     fontSize: 16,
-    color: Colors.secondary
+    color: Colors.secondary,
   },
 });

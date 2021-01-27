@@ -45,6 +45,14 @@ module.exports = function (app) {
     controller.deleteCourse
   );
 
+  app.get(
+    "/api/course/home/:major",
+    // [authJwt.verifyToken, authJwt.isTutor],
+    controller.HomeCourse
+  );
+
+
+
   // app.get(
   //   "/api/course/find/user",
   //   // [authJwt.verifyToken, authJwt.isTutor],

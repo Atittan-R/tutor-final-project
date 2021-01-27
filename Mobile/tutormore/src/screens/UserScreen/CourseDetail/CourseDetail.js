@@ -74,7 +74,7 @@ export default function CourseDetail({ navigation, route }) {
             // Popup QRCode
             // Ask where to go History or Back
             ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", { screen: "MyCourse" })
+            navigation.navigate("Me", { screen: "MyCourse" , params: { focus: "focus" } })
         } catch (e) {
             alert(e.response.data.status);
         }

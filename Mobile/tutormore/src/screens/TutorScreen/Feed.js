@@ -14,6 +14,7 @@ import {
 import { Icon } from 'react-native-elements';
 import { useGlobalVar } from "../../context/GlobalContex";
 import Colors from '../../configs/Colors';
+import avatars from "../../configs/avatars";
 import API from "../../services/API";
 import LoadingScreen from "../../components/Loading";
 export default function Feed({ navigation }) {
@@ -35,12 +36,10 @@ export default function Feed({ navigation }) {
             // console.log(fetch_req);
             setRequest(fetch_req.data.request.filter((i) => i.status == "Available"))
 
-
         } catch (error) {
             console.log('====================================');
             console.log(error);
             console.log('====================================');
-            error
         }
     }
 

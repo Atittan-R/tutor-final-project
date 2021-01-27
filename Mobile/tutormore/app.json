@@ -4,7 +4,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/tutormoreLogo.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.hongbao.tutormore"
     },
     "assetBundlePatterns": [
       "**/*"

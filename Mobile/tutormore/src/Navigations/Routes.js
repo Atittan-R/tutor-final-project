@@ -57,10 +57,10 @@ export const renderingCheck = () => {
                 if(origin === 'selected'){
                     if (notification.request.content.data.course) {
                         console.log("notification: ", notification.request.content.data.course);
-                        navigation.navigate("Home", {screen: "CourseDetail", params: {
-                            course: notification.request.content.data.course
-                        }})
-                        navigation.navigate("Home",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}})
+                        // navigation.navigate("Home", {screen: "CourseDetail", params: {
+                        //     course: notification.request.content.data.course
+                        // }})
+                        // navigation.navigate("Home",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}})
                     }else{
                         console.log("no course")
                     }

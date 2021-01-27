@@ -16,6 +16,7 @@ import Colors from '../../configs/Colors';
 import API from "../../services/API"
 import { useGlobalVar } from "../../context/GlobalContex";
 import LoadingScreen from "../../components/Loading";
+import avatars from "../../configs/avatars";
 
 export default function Feed({ navigation }) {
     const { authentication } = useGlobalVar();
@@ -25,12 +26,12 @@ export default function Feed({ navigation }) {
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(false);
 
-    const userid = JSON.parse(state.userData);
-    console.log("user_id", userid.id)
+    const user = JSON.parse(state.userData);
+    console.log("user_id", user.id)
     const join = async (resId) => {
         try {
             const join_req = await API.post("join", {
-                userId: userid.id, requestId: resId
+                userId: user.id, requestId: resId
             });
             // console.log(join_req.data.status);
             isjoin.push({ id: resId })
@@ -44,7 +45,7 @@ export default function Feed({ navigation }) {
     const cancel = async (resId) => {
         try {
             const cancel_join = await API.post("join/cancel", {
-                userId: userid.id, requestId: resId
+                userId: user.id, requestId: resId
             });
             // console.log(cancel_join.data);
             isjoin.push({ id: resId })
@@ -59,7 +60,7 @@ export default function Feed({ navigation }) {
         try {
             const fetch_req = await API.get("/request/findAll");
             const fetch_join = await API.post("/user/join", {
-                userId: userid.id,
+                userId: user.id,
             });
             // console.log((fetch_join));
             setRequest(fetch_req.data.request)
@@ -109,7 +110,7 @@ export default function Feed({ navigation }) {
                     renderItem={({ item }) =>
                         <View style={styles.cardView} key={item.id}>
                             <View style={styles.viewItem}>
-                                <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                                <Image source={avatars[item.user.avatar].image} style={styles.image} />
                                 <Text style={styles.title}>{item.user.username}</Text>
                             </View>
                             <View

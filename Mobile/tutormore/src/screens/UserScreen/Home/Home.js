@@ -19,9 +19,14 @@ import API from "../../../services/API";
 import LoadingScreen from "../../../components/Loading";
 import { styles } from "./Style";
 import NoDataScreen from "../../../components/Nodata";
+import courseAvatars from "../../../configs/courseAvatars";
+import {useGlobalVar} from "../../../context/GlobalContex";
 
 export default function Home({ navigation }) {
     // search bar
+    const { authentication } = useGlobalVar();
+    const [a, dispatchA] = authentication;
+    let user = JSON.parse(a.userData);
     const [filterItem, setFilterItem] = useState(null)
     const searchAction = (text) => {
         setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
@@ -34,12 +39,12 @@ export default function Home({ navigation }) {
     async function fetchData() {
         dispatch(actionCreators.loading())
         try {
-            const response = await API.get('/course/findAll')
+            const response = await API.get('/course/findAll/')
             const course = await response.data;
+            console.log(course)
             dispatch(actionCreators.success(course))
         } catch (e) {
             dispatch(actionCreators.failure())
-            // console.log(e)
         }
     }
 
@@ -181,11 +186,11 @@ export default function Home({ navigation }) {
                             horizontal={true}
                             data={data}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item: { name, description } }) => (
+                            renderItem={({ item: { name, description, courseAvatar } }) => (
                                 <TouchableOpacity
                                     style={styles.listStyle}>
                                     <View style={{ padding: 15 }}>
-                                        <Image source={{ uri: "https://source.unsplash.com/random" }}
+                                        <Image source={courseAvatars[courseAvatar].image}
                                             style={styles.courseImage} />
                                         <View>
                                             <Text numberOfLines={1} style={styles.listName}>
@@ -214,7 +219,7 @@ export default function Home({ navigation }) {
                             <FlatList
                                 data={filterItem ? filterItem : data}
                                 keyExtractor={(item) => item.id}
-                                renderItem={({ item: { id, name, description, time_start, time_end, day, rate, CourseCate } }) => (
+                                renderItem={({ item: { id, name, description, time_start, time_end, day, rate, CourseCate, courseAvatar } }) => (
                                     <TouchableOpacity
                                         onPress={() => {
                                             // console.log("courseId", id)
@@ -222,7 +227,7 @@ export default function Home({ navigation }) {
                                         }}
                                         style={{ marginTop: 5, }}>
                                         <View style={styles.courseWrap}>
-                                            <Image source={{ uri: "https://source.unsplash.com/random" }}
+                                            <Image source={courseAvatars[courseAvatar].image}
                                                 style={styles.courseImage} />
                                             <View style={styles.courseView}>
                                                 <Text numberOfLines={1} style={styles.courseName}>{name}</Text>

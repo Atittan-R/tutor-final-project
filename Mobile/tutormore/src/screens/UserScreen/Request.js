@@ -110,7 +110,7 @@ export default function Request({ navigation }) {
                 <Tag
                     onChangeTags={(tags) => setTags(tags)} value={[tags, setTags]} claerTag={[claerTag, setClaerTag]} />
                 <TouchableOpacity style={styles.button} onPress={() => creteRequst()}>
-                    <Text style={styles.title}>Enroll</Text>
+                    <Text style={styles.title}>Submit</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
