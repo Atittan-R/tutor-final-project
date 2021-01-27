@@ -1,16 +1,34 @@
 import React, { useState } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 
+const data = [
+    { key: "1", title: "Android" },
+    { key: "2", title: "IOS" },
+    { key: "3", title: "React" },
+    { key: "4", title: "Node JS" },
+    { key: "5", title: "Java" },
+    { key: "6", title: "PHP" },
+    { key: "7", title: "Javascript" },
+
+];
 export default function Search({ navigation }) {
 
     // search bar
-    const [search, setSearch] = useState('');
-    const updateSearch = (search) => {
-        setSearch({ search });
-    };
+    const [search, setSearch] = useState({ data: data, search: "text" });
+    const [filterItem, setFilterItem] = useState(null)
+    const searchAction = (text) => {
+        // const newData = data.filter(item => {
+        //     const itemData = `${item.title}`;
+        //     const textData = text;
+        //     return itemData.indexOf(textData) > -1;
 
+        // });
+        // console.log("text: " + text);
+        // setSearch(newData);
+        setFilterItem(data.filter(i => i.title.toLowerCase().includes(text.toLowerCase())))
+    }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.viewItem}>
@@ -20,10 +38,23 @@ export default function Search({ navigation }) {
                 </TouchableOpacity>
                 <TextInput
                     placeholder="Search"
-                    onChangeText={updateSearch}
+                    onChangeText={(text) => searchAction(text)}
                     value={search}
                     style={styles.search} />
             </View>
+            <FlatList
+                data={filterItem ? filterItem : data}
+                keyExtractor={item => item.key}
+                renderItem={({ item }) =>
+                    <View key={item.key} style={styles.item}>
+                        <TouchableOpacity >
+                            <Text>{item.title}</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+
+            />
+
         </SafeAreaView>
     )
 }
@@ -40,27 +71,5 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.gray,
         borderRadius: 30,
         paddingHorizontal: 20,
-
-    },
-    search: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingVertical: 5,
-        paddingHorizontal: 20,
-        marginLeft: 20,
-        borderRadius: 30,
-        backgroundColor: Colors.gray
-    },
-    viewItem: {
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        backgroundColor: Colors.primary
-    },
-})
+    }
+});

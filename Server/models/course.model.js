@@ -27,7 +27,16 @@ module.exports = (sequelize, Sequelize) => {
     long: {
       type: Sequelize.STRING,
     },
-    distance : {
+    distance: {
+      type: Sequelize.STRING,
+    },
+    rate: {
+      type: Sequelize.DECIMAL(3, 2),
+    },
+    courseAvatar: {
+      type: Sequelize.INTEGER,
+    },
+    status: {
       type: Sequelize.STRING,
     },
   });

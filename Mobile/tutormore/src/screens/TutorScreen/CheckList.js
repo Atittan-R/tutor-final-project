@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     FlatList,
     SafeAreaView,
@@ -10,37 +10,48 @@ import {
 } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Colors from '../../configs/Colors'
-import DateTimePicker from '@react-native-community/datetimepicker';
+import API from "../../services/API";
 
-export default function CheckList({ navigation }) {
-    const data = [
-        { id: 1, date: "Mon 11 Jan 2021" },
-        { id: 2, date: "Tue 12 Jan 2021" },
-        { id: 3, date: "Wed 13 Jan 2021" },
-        { id: 4, date: "Thu 14 Jan 2021" },
-        { id: 5, date: "Fri 15 Jan 2021" },
-        { id: 1, date: "Mon 11 Jan 2021" },
-        { id: 2, date: "Tue 12 Jan 2021" },
-        { id: 3, date: "Wed 13 Jan 2021" },
-        { id: 4, date: "Thu 14 Jan 2021" },
-        { id: 5, date: "Fri 15 Jan 2021" },
-        { id: 1, date: "Mon 11 Jan 2021" },
-        { id: 2, date: "Tue 12 Jan 2021" },
-        { id: 3, date: "Wed 13 Jan 2021" },
-        { id: 4, date: "Thu 14 Jan 2021" },
-        { id: 5, date: "Fri 15 Jan 2021" },
-
-    ];
-    const [date, setDate] = useState(new Date());
-    const [show, setShow] = useState();
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios');
-        setDate(currentDate);
-    };
-    const showDatePickerStart = () => {
-        setShow(true);
-    };
+export default function CheckList({ navigation, route ,props}) {
+    const {course,id}  = route.params;
+    // const {key}=props
+    const [CheckData, setCheckData] = useState()     
+    const fetchCheckList=async()=>{
+        try {
+          const CheckList=await API.post("/selete/attendance",{
+            courseId:id
+          })
+        const data=(CheckList.data)
+        const groups = await data.reduce((groups, day) => {
+            const date = day.createdAt.split('T')[0];
+            if (!groups[date]) {
+              groups[date] = [];
+            }
+            groups[date].push(day);
+            return groups;
+          },{});
+          
+          // Edit: to add it in the array format instead
+          const groupArrays = await Object.keys(groups).map((date) => {
+            return {
+              date,
+              data: groups[date]
+            };
+          });
+          setCheckData(groupArrays);
+        } catch (error) {
+          console.log(error);
+      
+        }
+    }
+      
+      
+      useEffect(() => {
+        fetchCheckList()
+        // console.log(key);
+      }, [])
+    //   console.log(CheckData.map((i)=>i.data));
+    // console.log(key);
     return (
         <>
             {/* header */}
@@ -52,30 +63,19 @@ export default function CheckList({ navigation }) {
                         onPress={() => navigation.pop()}>
                         <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                     </TouchableOpacity>
-                    <Text style={styles.textHeader}>Check List{date.getDate()} {date.getMonth() + 1} {date.getFullYear()}</Text>
+                    <Text style={styles.textHeader} numberOfLines={1}>{course}</Text>
+                 
                 </View>
-                <TouchableOpacity
-                    style={styles.add}
-                    onPress={showDatePickerStart}
-                >
-                    <Text style={{ fontSize: 12, color: Colors.secondary }}>event</Text>
-                    <Icon name="event" type="material" color={Colors.secondary} />
-                </TouchableOpacity>
-                {show && (
-                    <DateTimePicker
-                        value={date}
-                        mode="date"
-                        is24Hour={true}
-                        display="default"
-                        onChange={onChange}
-                    />
-                )}
             </View>
             <FlatList
-                data={data}
+                data={CheckData}
+                // keyExtractor={item => item.id}
+                // key={item.id}
                 renderItem={({ item }) =>
-                    <TouchableOpacity>
-                        <View style={styles.viewItem}>
+                    <TouchableOpacity
+                        onPress={() => navigation.push("Attendance", {date: item.date ,data:item.data})}
+                    >
+                        <View style={styles.card}>
                             <Text style={styles.title}>{item.date}</Text>
                             <Icon name="navigate-next" type="material" color={Colors.secondary} />
                         </View>
@@ -111,16 +111,19 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: Colors.primary
     },
-    viewItem: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginHorizontal: 10,
-        marginTop: 10,
-        borderRadius: 5,
+    card: {
         padding: 10,
-        backgroundColor: Colors.white
+        flexDirection: "row",
+        marginHorizontal: 2,
+        flexWrap: "wrap",
+        backgroundColor: Colors.white,
+        justifyContent: "space-between",
+        borderBottomColor: Colors.primary,
+        borderTopColor: Colors.primary,
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+        borderTopWidth: 0.5,
+        borderBottomWidth: 0.5,
     },
     add: {
         paddingRight: 20,

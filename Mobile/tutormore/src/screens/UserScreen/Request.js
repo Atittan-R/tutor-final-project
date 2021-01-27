@@ -10,13 +10,18 @@ import Tag from '../../components/forms/Tag';
 
 
 import API from "../../services/API"
+import { Directions } from 'react-native-gesture-handler';
 
 export default function Request({ navigation }) {
-    const [CourseName,setCourseName]=useState("");
-    const [day, setDay] = useState(null)
-    const [claerdate,setClaerDate]=useState(false);
-    const [TimeStart, setTimeStart] = useState(new Date(0,0,0,0));
-    const [TimeEnd, setTimeEnd] = useState(new Date(0,0,0,0))
+    const [CourseName, setCourseName] = useState("");
+    const [day, setDay] = useState("")
+    const [claerdate, setClaerDate] = useState(false);
+    const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
+    const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
+    const [Description, setDescription] = useState("")
+    const [catagory, setCatagory] = useState(null)
+    const [tags, setTags] = useState([])
+    const [claerTag, setClaerTag] = useState(false)
 
     const getTimeStart = (result) => {
         setTimeStart(result);
@@ -26,91 +31,88 @@ export default function Request({ navigation }) {
     }
 
     const creteRequst = async () => {
-
         try {
-            var d = new Date()
+
             const requst = await API.post("request/create", {
                 name: CourseName,
                 date: day.toString(),
-                time_start: TimeStart.getHours()+":"+TimeStart.getMinutes(),
-                time_end: TimeEnd.getHours()+":"+TimeEnd.getMinutes(),
-                description:"xxxxxxx",
-                categoryId:1,
-                userId:2
+                time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(),
+                time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
+                description: Description,
+                categoryId: catagory,
+                userId: 2,
+                tagname: tags
+
             });
             console.log(requst.data);
+            console.log('====================================');
+            clear()
+            navigation.navigate("Feed", {
+                name: "Feed", onGoBack: () => {
+                    fetchData()
+                }
+            })
+
         } catch (error) {
-            error.response.status=404 ?  navigation.navigate("Feed")
-            :
-            console.log("ERR: ",error.response.status);
+
+            if (error.response.status == 404) {
+                clear();
+                navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
+            }
+            else {
+                console.log('====================================');
+                console.log("ERR: ", error.response.status);
+                console.log('====================================');
+
+            }
+
         }
     }
-
-    const clear =()=>{
+    const clear = () => {
         setCourseName("")
+        setClaerTag(true)
         setDay(null)
-        setTimeEnd(new Date(0,0,0,0))
-        setTimeStart(new Date(0,0,0,0))
+        setCatagory(null)
+        setDescription("")
+        // setTags([])
+        setTimeEnd(new Date(0, 0, 0, 0))
+        setTimeStart(new Date(0, 0, 0, 0))
         setClaerDate(true)
     }
-    const [description, setDescription] = useState("");
-    const [catagory, setCatagory] = useState("");
-    const [tag, setTags] = useState([]);
-    useEffect(() => {
-        console.log('====================================');
-        console.log("des " + description);
-        console.log("cat " + catagory);
-        console.log("tag " + tag);
-        console.log('====================================');
-    }, [description, catagory, tag])
 
-    // useEffect(() => {
-    //  console.log("CourseName :",CourseName);
-    //  console.log("day :",day);
-    // }, [CourseName])
-    // useEffect(() => {
-    //     console.log('=================TimeStart===================');
-    //     console.log(TimeStart.getHours()+":"+TimeStart.getMinutes());
-    //     console.log('====================================');
-    // }, [TimeStart])
-    // useEffect(() => {
-    //     console.log('=================TimeEnd===================');
-    //     console.log(TimeEnd.getHours()+":"+TimeEnd.getMinutes());
-    //     console.log('====================================');
-    // }, [TimeEnd])
+    useEffect(() => {
+        console.log("CourseName :", CourseName);
+        console.log("day :", day);
+        console.log("Tags :", tags);
+    }, [CourseName])
+
     return (
         <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.push("Feed")}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
                 <Text style={styles.textHeader}>Create Request</Text>
-                <TouchableOpacity
-                    style={styles.add}
-                    onPress={() => creteRequst()
-                    }>
-                    <Icon name="check" type="material" color={Colors.secondary} />
-                </TouchableOpacity>
             </View>
             <ScrollView style={styles.area}>
-                <TextInputButton label="Course" placeholder="Enter your course name"
-                    onTextChange={(text) => setCourseName(text)} />
-                <ModalDate dayValue={[day, setDay]} />
-                <Clock label="Time Start" name="Time Start" callback={getTimeStart} />
-                <Clock label="Time End" name="Time End" callback={getTimeEnd} />
-                <TextInputButton
-                    label="Description"
-                    placeholder="Enter your description"
-                    onChangeText={(text) => setDescription(text)} />
+                <View style={styles.content}>
+                    <TextInputButton placeholder="Course" value={CourseName}
+                        onTextChange={(text) => setCourseName(text)} />
+                    <TextInputButton
+                        placeholder="Description"
+                        onTextChange={(text) => setDescription(text)} value={Description} />
+                    <ModalDate dayValue={[day, setDay]} />
+                    <Clock name="Time Start" callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
+                    <Clock name="Time End" callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
+                </View>
                 <Catagory
                     selectedValue={catagory}
                     onValueChange={(text) => setCatagory(text)} />
                 <Tag
-                    onChangeTags={(tags) => setTags(tags)} />
+                    onChangeTags={(tags) => setTags(tags)} value={[tags, setTags]} claerTag={[claerTag, setClaerTag]} />
+                <TouchableOpacity style={styles.button} onPress={() => creteRequst()}>
+                    <Text style={styles.title}>Submit</Text>
+                </TouchableOpacity>
+                <View style={{ marginVertical: 10 }} />
             </ScrollView>
         </>
     )
@@ -156,5 +158,13 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flex: 0.8,
     },
-
+    button: {
+        justifyContent: "center",
+        flexDirection: "row",
+        backgroundColor: Colors.primary,
+        borderRadius: 30,
+        marginTop: 10,
+        paddingVertical: 10,
+        elevation: 2,
+    },
 })

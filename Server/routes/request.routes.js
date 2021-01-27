@@ -40,5 +40,11 @@ module.exports = function (app) {
       // [authJwt.verifyToken, authJwt.isTutor],
       controller.deleteRequest
     );
+    app.post(
+      "/api/request/tag",
+      // [authJwt.verifyToken, authJwt.isTutor],
+      controller.RequestTag
+    );
+    
   };
   

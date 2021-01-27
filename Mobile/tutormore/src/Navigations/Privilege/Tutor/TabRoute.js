@@ -15,8 +15,10 @@ export default function TapRoute() {
   return (
     <Tabs.Navigator
       tabBarOptions={{
+        activeBackgroundColor: Colors.primary,
+        activeTabBackgrounds: Colors.secondary,
         activeTintColor: Colors.secondary,
-        inactiveTintColor: "#fff",
+        inactiveTintColor: Colors.secondary,
       }}
     >
       <Tabs.Screen
@@ -28,21 +30,21 @@ export default function TapRoute() {
           ),
         }}
       />
+      {/*<Tabs.Screen*/}
+      {/*  name="Feed Request"*/}
+      {/*  component={FeedStack}*/}
+      {/*  options={{*/}
+      {/*    tabBarIcon: () => (*/}
+      {/*      <Icon*/}
+      {/*        name="dynamic-feed"*/}
+      {/*        type="material"*/}
+      {/*        color={Colors.secondary}*/}
+      {/*      />*/}
+      {/*    ),*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Tabs.Screen
-        name="Feed Request"
-        component={FeedStack}
-        options={{
-          tabBarIcon: () => (
-            <Icon
-              name="dynamic-feed"
-              type="material"
-              color={Colors.secondary}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="Create Course"
+        name="Course"
         component={CreateCourseStack}
         options={{
           tabBarIcon: () => (

@@ -1,94 +1,122 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React,{useEffect, useRef} from "react";
+import {NavigationContainer, useNavigation} from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
-import {PrivilegeUser, PrivilegeTutor} from "./Privilege";
+import {PrivilegeTutor, PrivilegeUser} from "./Privilege";
 import {useGlobalVar} from "../context/GlobalContex";
 import RoleSelection from "../screens/Authentication/RoleSelection";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import LoadingScreen from "../components/Loading";
+import {createStackNavigator} from "@react-navigation/stack";
+import {RegisterTutor} from "../screens/UserScreen";
+import registerForPushNotificationsAsync from "../services/NotificationsService";
+import * as Notifications from "expo-notifications";
+import API from "../services/API";
 
 export const role_router = {
     ROLE_USER: <PrivilegeUser/>,
     ROLE_TUTOR: <PrivilegeTutor/>,
 };
 
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+});
+
 export const renderingCheck = () => {
     const {authentication} = useGlobalVar();
     const [state, dispatch] = authentication;
-    const [newRole, setNewRole] = useState(null);
-    const {isLoading} = state;
-    useEffect(() => {
-        const entryRoling = async () => {
-            let entry
-            // let entryData
-            try {
-                entry = await AsyncStorage.getItem("entryRole");
-                // entryData = await AsyncStorage.getItem("userData");
-                setNewRole(entry)
-            } catch (e) {
-                entry = await AsyncStorage.setItem("entryRole", JSON.stringify("NoValue"));
+    const currentUser = JSON.parse(state.userData);
+    const notificationListener = useRef();
+    const responseListener = useRef();
+    const navigation = useNavigation();
+
+    const sendToken = async (userid,token) =>{
+        return await API.post("/notification/token", {
+            token: {
+                user: userid,
+                value: token
             }
-            dispatch({type: "ROLE_ENTRY", role: JSON.parse(entry)})
-        }
-        entryRoling();
-    }, [state.userRole]);
+        })
+    }
+    useEffect( () =>  {
+        registerForPushNotificationsAsync().then( async (token) => {
+                // console.log(token, "UserData",currentUser.id,)
+                if (currentUser.id && token) {
+                    await sendToken(currentUser.id,token);
+                    // console.log("User:",res.data)
+                }
+            }
+        );
+        // This listener is fired whenever a notification is received while the app is foregrounded
+        notificationListener.current = Notifications.addNotificationReceivedListener(
+            (notification) => {
+                const { origin } = notification;
+                console.log(notification)
 
-    //after select role from <RoleSelection/>
-    console.log("state.userRoles: ", state.userRoles)
-    console.log("select role: ", state.userRole)
-    console.log("state newRole: ", newRole)
-    console.log("state.userData: ", state.userData, "\n");
+                if(origin === 'selected'){
+                    if (notification.request.content.data.course) {
+                        console.log("notification: ", notification.request.content.data.course);
+                        // navigation.navigate("Home", {screen: "CourseDetail", params: {
+                        //     course: notification.request.content.data.course
+                        // }})
+                        // navigation.navigate("Home",{screen:"TakeCreateCourse",params:{req:request.filter((i)=>i.id==requestId)}})
+                    }else{
+                        console.log("no course")
+                    }
+                }else{
+                    console.log("receipt")
+                }
+            }
+        );
+        // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(
+            (response) => {
+                // console.log("response: ", response);
+            }
+        );
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener);
+            Notifications.removeNotificationSubscription(responseListener);
+        };
 
-    // if(isLoading===true){
-    //     if(state.userData !== null){
-    //         dispatch({type: "SET_LOADING", loading: false});
-    //     }else{
-    //     return <LoadingScreen />
-    //     }
-    // }else{
-        if (state.userData === null) {
-            return <AuthenticationStack/>
-        } else if (JSON.parse(state.userRoles).length === 1) {
-            return role_router[JSON.parse(state.userRoles)];
-        } else if (JSON.parse(state.userRoles).length === 2 && newRole !== null) {
-            // console.log(roleselection)
-            return <RoleSelection/>
-        } else {
-            //TODO
-            return role_router[state.userRole]
-        }
-    // }
+    }, []);
+    // END useEffect
 
-    // Use on product TODO
-    return state.userToken === null
-        // ? <AuthenticationStack />
-        // : currentuser.roles.length !== 1
-        //     ? (state.userRole === null || state.userRole === undefined)
-        //     ? <RoleSelection/>
-        //     : role_router[role]
-        // : role_router[currentuser.roles]
+    if (state.userData === null) {
+        return <AuthenticationStack/>
+    } else if (state.userRole) {
+        return role_router[state.userRole]
+    } else if (JSON.parse(state.userRoles).length === 1) {
+        return role_router[JSON.parse(state.userRoles)];
+    } else if (JSON.parse(state.userRoles).length === 2) {
+        return <RoleSelection/>
+    }
+    // return (state.userRole == null ?
+    //     <RoleSelection /> :
+    //     role_router[state.userRole])
 
-    //Test UI with out login
-    // return state.userRole === null || state.userRole === undefined ? (
-    //     <RoleSelection/>
-    // ) : (
-    //     role_router[role]
-    // );
 };
 
-//Test UI with out login
-
-//     return state.userRole === null || state.userRole === undefined ? (
-//         <RoleSelection/>
-//     ) : (
-//         role_router[state.userRole]
-//     );
-// };
+const RootStack = createStackNavigator();
 
 export default function Routes() {
     return (
         <NavigationContainer>
-            {renderingCheck()}
+            <RootStack.Navigator
+                screenOptions={{
+                    headerShown: false,
+                }}
+                initialRouteName="Root">
+                <RootStack.Screen name={"route"} component={renderingCheck}/>
+                <RootStack.Screen name={"RoleSelect"} component={RoleSelection}/>
+                <RootStack.Screen
+                    name="RegisterTutor"
+                    component={RegisterTutor}
+                    options={{
+                        headerTitle: "Register Tutor",
+                    }}
+                />
+            </RootStack.Navigator>
         </NavigationContainer>);
-    // return <NavigationContainer><AuthenticationStack/></NavigationContainer>;
 }

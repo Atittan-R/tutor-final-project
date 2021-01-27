@@ -1,102 +1,126 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     FlatList,
     Image,
+    RefreshControl,
     SafeAreaView,
     StatusBar,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View
 } from 'react-native'
 import { Icon } from 'react-native-elements';
+import { useGlobalVar } from "../../context/GlobalContex";
 import Colors from '../../configs/Colors';
-
+import avatars from "../../configs/avatars";
+import API from "../../services/API";
+import LoadingScreen from "../../components/Loading";
 export default function Feed({ navigation }) {
-    const data = [
-        { id: 1, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 2, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 3, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 4, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 5, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 6, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 7, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 8, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 9, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 10, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 11, name: "pixels dragon x", course: "Database", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 12, name: "ruin force", course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0" },
-        { id: 13, name: "michael rayder", course: "Data Com", date: "Everyday", time: "17.0-21.0" },
-        { id: 14, name: "lucius flux", course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0" },
-        { id: 15, name: "kuro monitor", course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0" },
-    ];
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+    const userid = JSON.parse(state.userData);
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [loading, setLoading] = useState(false);
 
+    // console.log("user_id", userid.id)
+    const [request, setRequest] = useState([]);
+    const taked = async (requestId) => {
+        navigation.navigate("Home", { screen: "TakeCreateCourse", params: { req: request.filter((i) => i.id == requestId) } })
+    }
+    const fetchApi = async () => {
+        try {
+            const fetch_req = await API.get("/request/findAll");
+
+            // console.log(fetch_req);
+            setRequest(fetch_req.data.request.filter((i) => i.status == "Available"))
+
+        } catch (error) {
+            console.log('====================================');
+            console.log(error);
+            console.log('====================================');
+        }
+    }
+
+    const [filterItem, setFilterItem] = useState(null)
+    const searchAction = (text) => {
+        setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
+    }
+    useEffect(() => {
+        fetchApi();
+    }, [])
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchApi().then(() => setRefreshing(false));
+    }, []);
+    // console.log(request);
     return (
         <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.navigate("Home")}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                </TouchableOpacity>
                 <Text style={styles.textHeader}>Feed Request</Text>
-                <TouchableOpacity
+                <TextInput
                     style={styles.search}
-                    onPress={() => navigation.push("SearchRequest")}
-                >
-                    <Text style={{ color: Colors.secondary }}>search</Text>
-                    <Icon
-                        name="search-outline"
-                        type="ionicon"
-                        style={{ color: Colors.secondary }}
-                    />
-                </TouchableOpacity>
+                    placeholder="Search"
+                    onChangeText={(text) => searchAction(text)}
+                />
             </View>
-
-            <FlatList
-                data={data}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) =>
-                    <View style={styles.cardView}>
-                        <View style={styles.viewItem}>
-                            <Image source={require("../../assets/profile.jpg")} style={styles.image} />
-                            <Text style={styles.title}>{item.name}</Text>
-                        </View>
-                        <View
-                            style={{
-                                marginTop: 5,
-                                borderTopColor: Colors.gray,
-                                borderTopWidth: 1,
-                                display: "flex",
-                                flexWrap: "wrap",
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                            }}>
-                            <View>
-                                <View style={styles.viewItem}>
-                                    <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
-                                    <Text style={styles.title}>{item.course}</Text>
+            {loading ? <LoadingScreen /> :
+                <FlatList
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
+                    }
+                    data={filterItem ? filterItem : request}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) =>
+                        <View style={styles.cardView}>
+                            <View style={styles.viewItem}>
+                                <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                                <Text style={styles.title}>{item.user.username}</Text>
+                            </View>
+                            <View
+                                style={{
+                                    marginTop: 5,
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                }}>
+                                <View>
+                                    <Text style={styles.title}>{item.name}</Text>
+                                    <View style={styles.viewItem}>
+                                        <Icon name="schedule" type="material" color={'gray'} size={15}
+                                            style={styles.icon} />
+                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                        <Icon name="event" type="material" color={"gray"} size={15}
+                                            style={styles.icon} />
+                                        <Text style={styles.textGray}>{item.date}</Text>
+                                    </View>
+                                    <View style={styles.viewItem}>
+                                        <Icon name="category" type="material" color={"gray"} size={15}
+                                            style={styles.icon} />
+                                        <Text style={styles.textGray}>Catagory</Text>
+                                    </View>
+                                    <View style={styles.viewItem}>
+                                        <Text style={styles.tag}>tag1</Text>
+                                        <Text style={styles.tag}>tag2</Text>
+                                        <Text style={styles.tag}>tag3</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.viewItem}>
-                                    <Icon name="event" type="material" color={Colors.secondary} style={styles.icon} />
-                                    <Text style={styles.text}>{item.date}</Text>
-                                </View>
-                                <View style={styles.viewItem}>
-                                    <Icon name="schedule" type="material" color={Colors.secondary} style={styles.icon} />
-                                    <Text style={styles.text}>{item.time}</Text>
+                                <View style={styles.positionBTN}>
+                                    <TouchableOpacity style={styles.button}
+                                        onPress={() => taked(item.id)}
+                                    >
+                                        <Text style={styles.text}>Take</Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
-                            <TouchableOpacity style={styles.button}
-                                onPress={() => navigation.navigate("CreateCourse")}
-                            >
-                                <Text style={styles.text}>Take</Text>
-                            </TouchableOpacity>
                         </View>
-                    </View>
-                }
-            />
+                    }
+                />
+            }
         </>
     )
 }
@@ -104,6 +128,11 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    },
+    positionBTN: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
     },
     headerBar: {
         display: "flex",
@@ -132,8 +161,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.gray,
     },
     cardView: {
-        marginHorizontal: 10,
-        marginTop: 10,
+        marginBottom: 1,
         borderRadius: 5,
         padding: 10,
         backgroundColor: Colors.white
@@ -143,17 +171,21 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
+        marginRight: 50
     },
     text: {
         color: Colors.secondary
+    },
+    textGray: {
+        color: "gray",
+        fontSize: 12
     },
     title: {
         fontWeight: "bold",
         color: Colors.secondary
     },
     icon: {
-        marginRight: 10,
-        marginVertical: 2
+        margin: 5
     },
     image: {
         width: 30,
@@ -169,11 +201,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 5,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        width: 55,
     },
     add: {
         padding: 10,
         borderRadius: 30,
         left: 120
+    },
+    tag: {
+        backgroundColor: Colors.gray,
+        padding: 5,
+        marginRight: 5,
+        borderRadius: 5,
+        color: Colors.secondary
     }
 })

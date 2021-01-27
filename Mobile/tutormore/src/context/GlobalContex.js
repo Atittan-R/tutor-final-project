@@ -1,12 +1,12 @@
-import React, {useState, createContext, useContext, useMemo} from "react";
-import {useReducer} from "react";
+import React, { useState, createContext, useContext, useMemo } from "react";
+import { useReducer } from "react";
 import API from "../services/API"
-import {isLoading} from "expo-font";
+import { isLoading } from "expo-font";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GlobalVarContext = createContext();
 
-export const GlobalProvider = ({children}) => {
+export const GlobalProvider = ({ children }) => {
     const [state, dispatch] = useReducer(
         (prevState, action) => {
             //reducer
@@ -63,7 +63,7 @@ export const GlobalProvider = ({children}) => {
     );
 
     const useLogin = async (data) => {
-        // console.log("Use Login",data)
+        console.log("Use Login", data)
         try {
             const user = await API.post(
                 "/auth/signin",
@@ -72,55 +72,51 @@ export const GlobalProvider = ({children}) => {
                     password: data.password,
                 }
             );
-            // console.log("User From Login: ", user.data);
-            if(user != null){
+            console.log("User From Login: ", user.data);
+            if (user) {
                 await AsyncStorage.setItem("userData", JSON.stringify(user.data));
                 await AsyncStorage.setItem("userToken", JSON.stringify(user.data.accessToken));
                 await AsyncStorage.setItem("userRoles", JSON.stringify(user.data.roles));
+                return user;
             }
-            return user;
         } catch (error) {
-            //TODO Cath error to show on UI
-            // console.error("Hello Error", error.response.data.message);
-            alert(error.response.data.message);
+            alert("Catch! => ", error.response.data.message);
         }
     }
 
     const auth = useMemo(
         () => ({
             signIn: async (data) => {
-                // console.log(data)
+                // console.log("Hello",data)
                 try {
                     const user = await useLogin(data);
-                    dispatch({type: "SET_LOADING", loading: false});
-                    await dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
-
+                    // console.log(user)
+                    await dispatch({ type: "SIGN_IN", token: user.data.accessToken, user: JSON.stringify(user.data), r: JSON.stringify(user.data.roles) });
                 } catch (e) {
-                    console.log(e)
+                    alert(e)
                 }
             },
             signOut: async () => {
-                try{
+                try {
                     await AsyncStorage.removeItem("userData");
                     await AsyncStorage.removeItem("userToken");
                     await AsyncStorage.removeItem("userRole");
                     await AsyncStorage.removeItem("userRoles");
 
-                }catch (e){
+                } catch (e) {
                     alert(e)
                 }
-                dispatch({type: "SIGN_OUT"})
-                dispatch({type: "SET_LOADING", loading: false});
+                dispatch({ type: "SIGN_OUT" })
             },
             signUp: async (data) => {
+                // console.log("data signup from Global state", data)
                 const user = await useLogin(data);
-                dispatch({type: "SET_LOADING", loading: false});
-                dispatch({type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles)});
-                // await console.log("data signup from Global state", data);
+                dispatch({ type: "SIGN_IN", token: user.data.accessToken, user: user.data, r: JSON.stringify(user.data.roles) });
             },
             roleEntry: async (data) => {
                 // dispatch({type: "ROLE_ENTRY", role: data.role})
             },
+
         }),
         []
     );

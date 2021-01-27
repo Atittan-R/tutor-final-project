@@ -9,6 +9,13 @@ module.exports = function (app) {
   //     next();
   //   });
 
+  //Course History
+  app.get(
+    "/api/enroll/history/:userid",
+    // [authJwt.verifyToken],
+    controller.enRollHistory
+  );
+
   app.post(
     "/api/enroll/course",
     // [authJwt.verifyToken],

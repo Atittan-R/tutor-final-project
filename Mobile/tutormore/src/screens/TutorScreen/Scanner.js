@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Colors from "../../configs/Colors";
-import { Icon } from 'react-native-elements';
+import { Icon, Tooltip } from 'react-native-elements';
+import API from '../../services/API';
 
 export default function Scanner({ navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -15,10 +16,29 @@ export default function Scanner({ navigation }) {
         })();
     }, []);
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    // data คือข้อมูลที่ได้จากการสแกน
+    const handleBarCodeScanned =  async({ type, data }) => {
         setScanned(true);
-        // navigation.navigate("CheckCourse");
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        // ;
+        try {
+           const value=data.split('/')
+           console.log(value[0],value[1]);
+            const attendance=await API.post("/attendance",{
+               courseId:parseInt(value[0]),
+               userId:parseInt(value[1])
+             
+             })
+             console.log(attendance.data);
+             alert(attendance.data.status);
+             navigation.navigate("Course", { screen: "Attendance" })
+        } catch (error) {
+             alert(error);
+        }
+    // console.log();
+    // // console.log('====================================');
+    // // console.log(data[0]);
+    // // console.log('====================================');
+        // alert(`${data} has been scanned!`);
     };
 
     if (hasPermission === null) {
@@ -45,7 +65,7 @@ export default function Scanner({ navigation }) {
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                     style={StyleSheet.absoluteFillObject}
                 />
-                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} backgroundColor={Colors.primary} />}
             </View>
         </>
     )
@@ -75,6 +95,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "center",
+        backgroundColor: Colors.primary,
     },
 });
 

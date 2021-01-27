@@ -2,18 +2,23 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize
+} from "react-native-responsive-dimensions";
 
-export default function Location() {
-  const [region, setRegion] = useState({
-    latitude: 51.5079145,
-    longitude: -0.0899163,
+export default function Location(props) {
+  const [lat, setlat] = props.lat
+  const [long, setlong] = props.long
+  const [modalVisible, setModalVisible] = props.modal
+  const [draggable, setDraggable] = useState({
+    latitude: lat || 14.8817767,
+    longitude: long || 102.0185075,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-  const [draggable, setDraggable] = useState({
-    latitude: 51.5078788,
-    longitude: -0.0877321,
-  });
+
   function movementMarker(e) {
     // get coordinate from mapviews
     const { latitude, longitude } = e.coordinate;
@@ -24,6 +29,8 @@ export default function Location() {
   }
   function onClickMap(e) {
     const { latitude, longitude } = e.coordinate;
+    setlat(latitude)
+    setlong(longitude)
     setDraggable({
       latitude: latitude,
       longitude: longitude,
@@ -31,12 +38,19 @@ export default function Location() {
   }
   return (
     <View style={styles.inputItem}>
-      <Text style={{ flex: 0.35, color: Colors.secondary }} >Location</Text>
+      { !modalVisible &&
+        <Text style={{ flex: 0.35, color: Colors.secondary }}>Location</Text>
+      }
+
       <View style={styles.textDate}>
         <MapView
-          style={styles.map}
-          region={region}
-          onRegionChangeComplete={(region) => setRegion(region)}
+          style={
+            modalVisible ?
+              styles.mapfull
+              :
+              styles.map}
+          region={draggable}
+          onRegionChangeComplete={(region) => setDraggable(region)}
           onPress={(e) => onClickMap(e.nativeEvent)}
         >
           <Marker
@@ -52,16 +66,12 @@ export default function Location() {
 };
 export const styles = StyleSheet.create({
   inputItem: {
-    margin: 5,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    backgroundColor: "#fff",
     flex: 1,
   },
   textDate: {
     flexDirection: "row",
     flexWrap: "wrap",
-    flex: 0.9,
+    flex: 1,
   },
   drop: {
     height: 20,
@@ -80,6 +90,10 @@ export const styles = StyleSheet.create({
   },
   map: {
     height: 150,
-    width: 230
+    width: 230,
+  },
+  mapfull: {
+    height: 750,
+    flexGrow: 1
   },
 });

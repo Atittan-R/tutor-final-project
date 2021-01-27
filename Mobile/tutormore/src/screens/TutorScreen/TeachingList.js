@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   StyleSheet,
@@ -12,18 +12,48 @@ import {
   Alert,
   Modal
 } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Rating } from "react-native-elements";
 import Colors from "../../configs/Colors";
+import { useGlobalVar } from "../../context/GlobalContex";
+import API from "../../services/API";
+
 
 export default function TeachingList({ navigation }) {
-  const data = [
-    { id: 1, course: "Database", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 2, course: "Com pro1", date: "Sun Mon Tue Wed Fri Sat", time: "17.0-21.0", duration: "1 month" },
-    { id: 3, course: "Data Com", date: "Everyday", time: "17.0-21.0", duration: "1 month" },
-    { id: 4, course: "HCI", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-    { id: 5, course: "Math for Com", date: "Mon Wed Fri", time: "17.0-21.0", duration: "1 month" },
-  ];
+  const { authentication } = useGlobalVar();
+  const [state, dispatch] = authentication;
+  const currentUser = JSON.parse(state.userData);
+  const [Mylist, setMylist] = useState()
 
+
+const Delete = async(id) =>{
+  setMylist(Mylist.filter((i)=>i.id!=id))
+  try {
+    const del=await API.delete("/course/delete/"+id)
+  } catch (error) {
+    console.log(error);
+  }
+
+
+}
+// const Edit=(id)=>{
+
+// }
+
+const fetchlist=async()=>{
+  try {
+    const list=await API.post("/user/MyCourse",{
+      userId:currentUser.id
+    })
+    setMylist(list.data)
+  } catch (error) {
+    console.log(error);
+  }
+
+
+}
+useEffect(() => {
+  fetchlist()
+}, [])
   return (
     <>
       {/* header */}
@@ -39,33 +69,46 @@ export default function TeachingList({ navigation }) {
 
       {/* body */}
       <FlatList
-        data={data}
-        keyExtractor={(i) => i}
+        data={Mylist}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.push("CheckList")}
+            onPress={() => navigation.push("CheckList",{course: item.name,id:item.id })}
+            // key={item.id}
           >
-            <View style={styles.viewItem}>
+            <View style={styles.card}>
               <Image source={require("../../assets/Appicon.png")} style={styles.image} />
-              <View>
-                <Text style={styles.title}>{item.course}</Text>
-                <Text style={styles.text}>{item.date}</Text>
-                <Text style={styles.text}>{item.time}</Text>
-                <Text style={styles.text}>{item.duration}</Text>
+              <View style={styles.content}>
+                <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
+                <View style={styles.contentRow}>
+                  <Icon name="calendar-today" type="material" color="gray" size={15} />
+                  <Text style={styles.textGray}>{item.time_start} {item.time_end}</Text>
+                  <Icon name="schedule" type="material" color="gray" size={15} />
+                  <Text style={styles.textGray}>{item.day}</Text>
+                </View>
+                <View style={styles.contentRow}>
+                  <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                  <Text style={styles.textGray}>{item.rate}</Text>
+                </View>
                 <View style={styles.icon}>
+                  {/* detail */}
                   <TouchableOpacity
-                    onPress={() => navigation.push("CourseDetail")}
+                    onPress={() => navigation.navigate("Home", {screen: "CourseDetail", params: { course: item.id }}) }
                     style={styles.button}>
-                    <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} />
+                    <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>
                   </TouchableOpacity>
+
+                  {/* edit */}
                   <TouchableOpacity
                     style={styles.button}
-                  // onPress={() => setModalVisible(true)}
+                  onPress={() =>navigation.push("EditCourse", {req: item})}
                   >
-                    <Icon name="edit" type="material" color={Colors.secondary} />
+                    <Icon name="edit" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Edit</Text>
                   </TouchableOpacity>
+
+                  {/* delete */}
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
@@ -74,13 +117,13 @@ export default function TeachingList({ navigation }) {
                         item.course + ", are you sure to delete?",
                         [
                           { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-                          { text: "OK", onPress: () => console.log("Cancel Pressed"), style: "cancel" }
+                          { text: "OK", onPress: () => Delete(item.id), style: "cancel" }
                         ],
                         { cancelable: false }
                       )
                     }}
                   >
-                    <Icon name="delete-outline" type="material" color={Colors.secondary} />
+                    <Icon name="delete-outline" type="material" color={Colors.secondary} size={15} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Delete</Text>
                   </TouchableOpacity>
                 </View>
@@ -113,29 +156,33 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
 
   },
-  viewItem: {
-    flex: 1,
+  card: {
+    padding: 5,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginHorizontal: 10,
-    marginTop: 10,
-    borderRadius: 5,
-    padding: 10,
+    marginHorizontal: 2,
+    flexWrap: "wrap",
     backgroundColor: Colors.white
   },
   icon: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
+    marginTop: 15
   },
   image: {
     width: 100,
     height: 100,
-    marginRight: 10
+    borderRadius: 5
   },
-  text: {
-    color: Colors.secondary
+  textBlack: {
+    color: Colors.secondary,
+    fontSize: 12,
+    marginHorizontal: 5
+  },
+  textGray: {
+    color: "gray",
+    fontSize: 12,
+    marginHorizontal: 5
   },
   title: {
     fontWeight: "bold",
@@ -148,5 +195,14 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     alignItems: "center"
   },
+  content: {
+    flex: 1, marginLeft: 10,
+    justifyContent: "flex-start",
+    alignItems: "flex-start"
+  },
+  contentRow: {
+    flexDirection: "row",
+    alignItems: "center"
+  }
 
 });

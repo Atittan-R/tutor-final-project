@@ -15,6 +15,12 @@ module.exports = function (app) {
     controller.findAllCourse
   );
 
+  app.post(
+    "/api/course/categories",
+    // [authJwt.verifyToken],
+    controller.findCourseFromCategories
+  );
+
   app.get(
     "/api/course/findOne/:id",
     // [authJwt.verifyToken],
@@ -38,4 +44,18 @@ module.exports = function (app) {
     // [authJwt.verifyToken, authJwt.isTutor],
     controller.deleteCourse
   );
+
+  app.get(
+    "/api/course/home/:major",
+    // [authJwt.verifyToken, authJwt.isTutor],
+    controller.HomeCourse
+  );
+
+
+
+  // app.get(
+  //   "/api/course/find/user",
+  //   // [authJwt.verifyToken, authJwt.isTutor],
+  //   controller.CouserfindAllUser
+  // );
 };

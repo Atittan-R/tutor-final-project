@@ -2,164 +2,178 @@ import React, { useEffect, useState } from 'react'
 import {
     FlatList,
     Image,
+    RefreshControl,
     SafeAreaView,
     StatusBar,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View
 } from 'react-native'
 import { Icon } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
+import { useGlobalVar } from "../../context/GlobalContex";
+import LoadingScreen from "../../components/Loading";
+import avatars from "../../configs/avatars";
 
 export default function Feed({ navigation }) {
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
     const [request, setRequest] = useState([]);
     const [isjoin, setisJoin] = useState([]);
-  
-    const join = async (resId, userId) => {
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const user = JSON.parse(state.userData);
+    console.log("user_id", user.id)
+    const join = async (resId) => {
         try {
             const join_req = await API.post("join", {
-                userId: userId, requestId: resId
+                userId: user.id, requestId: resId
             });
-            console.log(join_req.data.status);
-            isjoin.push({id:resId})
-            setisJoin([...isjoin,{id:resId}])
-            console.log(isjoin);
+            // console.log(join_req.data.status);
+            isjoin.push({ id: resId })
+            setisJoin([...isjoin, { id: resId }])
+            // console.log(isjoin);
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
 
-    const cancel = async (resId, userId) => {
+    const cancel = async (resId) => {
         try {
             const cancel_join = await API.post("join/cancel", {
-                userId: userId, requestId: resId
+                userId: user.id, requestId: resId
             });
-            console.log(cancel_join.data);
-            // isjoin.push({id:resId})
+            // console.log(cancel_join.data);
+            isjoin.push({ id: resId })
             setisJoin(isjoin.filter(x => x.id !== resId))
-            console.log(isjoin);
+            // console.log(isjoin);
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
-    useEffect(async () => {
-        const fetchApi = async () => {
-            try {
-                const fetch_req = await API.get("/request/findAll");
-                const fetch_join = await API.post("/user/join", {
-                    userId: 2,
-                });
-                console.log('====================================');
-                console.log((fetch_join));
-                console.log('====================================');
-                setRequest(fetch_req.data.request)
-                setisJoin(fetch_join.data)
-
-            } catch (error) {
-                console.log('====================================');
-                console.log(error);
-                console.log('====================================');
-                error
-            }
+    const fetchApi = async () => {
+        setLoading(true);
+        try {
+            const fetch_req = await API.get("/request/findAll");
+            const fetch_join = await API.post("/user/join", {
+                userId: user.id,
+            });
+            // console.log((fetch_join));
+            setRequest(fetch_req.data.request)
+            setisJoin(fetch_join.data)
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
         }
-        fetchApi();
-        console.log("data: ", request)
+    }
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchApi().then(() => setRefreshing(false));
+    }, []);
+
+    useEffect(() => {
+        fetchApi();
     }, [])
-    console.log('====================================');
+
     console.log(isjoin);
-    console.log('====================================');
-    const [count, setCount] = useState(0);
+
+    // search bar
+    const [filterItem, setFilterItem] = useState(null)
+    const searchAction = (text) => {
+        setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
+    }
+
     return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container}>
-                <View style={styles.headerBar}>
-                    <TouchableOpacity
-                        style={{ color: Colors.secondary, marginRight: 10 }}
-                        onPress={() => navigation.navigate("Home")}>
-                        <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-                    </TouchableOpacity>
-                    <Text style={styles.textHeader}>Feed Request</Text>
-                    <TouchableOpacity
-                        style={styles.add}
-                        onPress={() => navigation.push("Request")}>
-                        <Icon name="add-circle-outline" type="material" color={Colors.secondary} />
-                    </TouchableOpacity>
-                </View>
-
+            <SafeAreaView style={styles.container} />
+            <View style={styles.headerBar}>
+                <Text style={styles.textHeader}>Feed Request</Text>
+                <TextInput
+                    style={styles.search}
+                    placeholder="Search"
+                    onChangeText={(text) => searchAction(text)}
+                />
+            </View>
+            {loading ? <LoadingScreen /> :
                 <FlatList
-                    data={request}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
+                    }
+                    data={filterItem ? filterItem : request}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) =>
-                    (
-                        <View style={styles.cardView}>
+                        <View style={styles.cardView} key={item.id}>
                             <View style={styles.viewItem}>
-                                <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                                <Image source={avatars[item.user.avatar].image} style={styles.image} />
                                 <Text style={styles.title}>{item.user.username}</Text>
                             </View>
                             <View
                                 style={{
                                     marginTop: 5,
-                                    borderTopColor: Colors.gray,
-                                    borderTopWidth: 1,
                                     display: "flex",
                                     flexWrap: "wrap",
                                     flexDirection: "row",
                                     justifyContent: "space-between",
                                 }}>
                                 <View>
+                                    <Text style={styles.title}>{item.name}</Text>
                                     <View style={styles.viewItem}>
-                                        <Icon name="book" type="material" color={Colors.secondary} style={styles.icon} />
-                                        <Text style={styles.title}>{item.name}</Text>
+                                        <Icon name="schedule" type="material" color={'gray'} size={15}
+                                            style={styles.icon} />
+                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                        <Icon name="event" type="material" color={"gray"} size={15}
+                                            style={styles.icon} />
+                                        <Text style={styles.textGray}>{item.date}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Icon name="event" type="material" color={Colors.secondary}
+                                        <Icon name="category" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.text}>{item.date}</Text>
+                                        <Text style={styles.textGray}>Catagory</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Icon name="schedule" type="material" color={Colors.secondary}
-                                            style={styles.icon} />
-                                        {/* <Text style={styles.text}>{item.time}</Text> */}
-                                        <Text style={styles.text}>{item.time_start}-{item.time_end}</Text>
+                                        <Text style={styles.tag}>tag1</Text>
+                                        <Text style={styles.tag}>tag2</Text>
+                                        <Text style={styles.tag}>tag3</Text>
                                     </View>
                                 </View>
-                                {
-
-                                    isjoin.map((i)=>i.id).includes(item.id) ?
-                                        <TouchableOpacity style={styles.button_cancel}
-                                        onPress={() => cancel(item.id, 2)}>
-                                            <Text style={styles.text}>cancel</Text>
-                                        </TouchableOpacity>
-                                        : <TouchableOpacity style={styles.button} onPress={() =>
-                                            join(item.id, 2)
-                                            // setCount((cnt) => cnt + 1)
-                                        }>
-                                            <Text style={styles.text}>Join</Text>
-                                            <Text style={{ fontSize: 12, color: Colors.secondary }}>+{count}</Text>
-                                        </TouchableOpacity>
-
-
-                                }
-
+                                <View style={styles.positionBTN}>
+                                    {
+                                        isjoin.map((i) => i.id).includes(item.id) ?
+                                            <TouchableOpacity style={styles.button_cancel}
+                                                onPress={() => cancel(item.id)}>
+                                                <Text style={styles.text}>cancel</Text>
+                                            </TouchableOpacity>
+                                            : <TouchableOpacity style={styles.button} onPress={() =>
+                                                join(item.id)
+                                                // setCount((cnt) => cnt + 1)
+                                            }>
+                                                <Text style={styles.text}>Join</Text>
+                                            </TouchableOpacity>
+                                    }
+                                </View>
                             </View>
-                        </View>)} />
-                {/* <Text>{request}</Text> */}
-            </SafeAreaView>
+                        </View>
+                    } />
+            }
         </>
-    )
+    );
 }
-const styles = StyleSheet.create({
+
+export const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    },
+    positionBTN: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
     },
     headerBar: {
         display: "flex",
@@ -169,7 +183,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 10,
-        backgroundColor: Colors.primary
+        backgroundColor: Colors.primary,
+
     },
     textHeader: {
         fontSize: 20,
@@ -177,8 +192,7 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
     },
     cardView: {
-        marginHorizontal: 10,
-        marginTop: 10,
+        marginBottom: 1,
         borderRadius: 5,
         padding: 10,
         backgroundColor: Colors.white
@@ -188,17 +202,18 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
+        marginRight: 50
     },
-    text: {
-        color: Colors.secondary
+    textGray: {
+        color: "gray",
+        fontSize: 12
     },
     title: {
         fontWeight: "bold",
         color: Colors.secondary
     },
     icon: {
-        marginRight: 10,
-        marginVertical: 2
+        margin: 5
     },
     image: {
         width: 30,
@@ -214,19 +229,47 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 5,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        width: 55,
     },
     button_cancel: {
-        backgroundColor: "red",
+        backgroundColor: Colors.gray,
         paddingVertical: 5,
         paddingHorizontal: 5,
         borderRadius: 5,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        width: 55,
+
     },
     add: {
         padding: 10,
         borderRadius: 30,
         left: 120
+    },
+    search: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingVertical: 5,
+        paddingHorizontal: 20,
+        marginLeft: 20,
+        borderRadius: 30,
+        backgroundColor: Colors.gray,
+    },
+    searchBar: {
+        backgroundColor: Colors.primary,
+        paddingBottom: 10,
+    },
+    textBlack: {
+        color: Colors.secondary
+    },
+    tag: {
+        backgroundColor: Colors.gray,
+        padding: 5,
+        marginRight: 5,
+        borderRadius: 5,
+        color: Colors.secondary
     }
 })

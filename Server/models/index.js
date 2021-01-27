@@ -23,6 +23,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require("./user.model")(sequelize, Sequelize);
+db.rate_course = require("./rate_course.model")(sequelize, Sequelize);
 db.role = require("./role.model")(sequelize, Sequelize);
 db.course = require("./course.model")(sequelize, Sequelize);
 db.categories = require("./category.model")(sequelize, Sequelize);
@@ -31,7 +32,11 @@ db.cart = require("./cart.model")(sequelize, Sequelize);
 db.request = require("./request.model")(sequelize, Sequelize);
 db.cartitem = require("./cartItem.model")(sequelize, Sequelize);
 db.take = require("./take.model")(sequelize, Sequelize);
+db.tutorInfo = require("./tutorInfo.model")(sequelize, Sequelize);
+db.token = require("./token.model")(sequelize, Sequelize);
+db.box = require("./box.model")(sequelize, Sequelize);
 
+db.ROLES = ["user", "admin", "tutor"];
 //SECTION USER ROLES
 //NOTE have Roles (many-to-many)
 db.role.belongsToMany(db.user, {
@@ -44,21 +49,38 @@ db.user.belongsToMany(db.role, {
   foreignKey: "userId",
   otherKey: "roleId",
 });
-db.ROLES = ["user", "admin", "tutor"];
+
+db.user.hasOne(db.tutorInfo);
+db.tutorInfo.belongsTo(db.user, {
+  foreignKey: {
+    name: "userId",
+  },
+});
+
+db.user.hasMany(db.box);
+db.box.belongsTo(db.user, {
+  foreignKey: "userId"
+});
+
+db.user.hasMany(db.token, { as: "token" });
+db.token.belongsTo(db.user, {
+  foreignKey: "userId",
+  as: "token",
+});
 
 //NOTE User own Course (one-to-many)
-db.user.hasMany(db.course, { foreignKey: "tutorId", as: "courses" });
+db.user.hasMany(db.course, { as: "tutors" });
 db.course.belongsTo(db.user, {
   foreignKey: "tutorId",
-  as: "user",
+  as: "tutors",
 });
 
 //SECTION Tag and Categories
 //REVIEW Course has Categories (one-to-many)
-db.categories.hasMany(db.course, { as: "courses" });
+db.categories.hasMany(db.course, { as: "CourseCate" });
 db.course.belongsTo(db.categories, {
   foreignKey: "categoryId",
-  as: "categories",
+  as: "CourseCate",
 });
 
 //REVIEW user has many request (one-to-many)
@@ -93,11 +115,13 @@ db.request.belongsToMany(db.tag, {
   through: "tag_request",
   foreignKey: "requestId",
   otherKey: "tagId",
+  as: "tag",
 });
 db.tag.belongsToMany(db.request, {
   through: "tag_request",
   foreignKey: "tagId",
   otherKey: "requestId",
+  as: "requests",
 });
 
 //REVIEW Request has Categories (one-to-many)
@@ -159,28 +183,30 @@ db.request.belongsToMany(db.user, {
   as: "join_users",
 });
 
-// courseenroll 
+// courseenroll
 db.user.belongsToMany(db.course, {
   through: "course_enroll",
   foreignKey: "userId",
-  as: "courseEnroll", })
+  as: "courseEnroll",
+});
 
 db.course.belongsToMany(db.user, {
   through: "course_enroll",
   foreignKey: "courseId",
   as: "courseEnroll",
-})
+});
 
-// attendance 
+// attendance
 db.user.belongsToMany(db.course, {
   through: "attendance",
   foreignKey: "userId",
-  as: "attenDance", })
+  as: "attenDance",
+});
 
 db.course.belongsToMany(db.user, {
   through: "attendance",
   foreignKey: "courseId",
   as: "attenDance",
-})
+});
 
 module.exports = db;

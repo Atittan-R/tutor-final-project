@@ -6,7 +6,7 @@ export default PrimaryButton = (props) => {
     const {label, onPress, disable} = props;
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={[styles.btn,{backgroundColor: disable === false ? Colors.gray : Colors.primary}]} title={label} onPress={onPress} disabled={!disable}>
+            <TouchableOpacity style={[styles.btn,{backgroundColor: !disable ? Colors.gray : Colors.primary}]} title={label} onPress={onPress} disabled={!disable}>
                 <Text style={styles.label}> {label} </Text>
             </TouchableOpacity>
         </View>
