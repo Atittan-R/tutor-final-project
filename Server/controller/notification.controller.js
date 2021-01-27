@@ -47,10 +47,12 @@ const prepareReceiver = async (takeId) => {
             })
             // console.log("id: ",receiver.map(tar => tar.id)[i])
             // console.log("value: ", value.map(v => v.value))
-            let tk = value.map(v => v.value).join(",")
+            let tk = value.map(v => v.value)
+            console.log("tk", tk)
             const exists = savedPushTokens.find((t) => t === tk);
             if (!exists) {
                 savedPushTokens.push(tk)
+                console.log("savedPushTokens",savedPushTokens)
             }
         }
 
@@ -89,7 +91,7 @@ exports.handlePushTokens = async (req, res) => {
             }
         }
 
-        for (let pushToken of savedPushTokens) {
+        for (let pushToken of savedPushTokens[0]) {
             if (!Expo.isExpoPushToken(pushToken)) {
                 console.error(`Push token ${pushToken} is not a valid Expo push token`);
                 continue;
