@@ -187,6 +187,7 @@ export default function Home({ navigation }) {
                             horizontal={true}
                             data={data}
                             keyExtractor={(item) => item.id}
+                            key={data.id}
                             renderItem={({ item: { id, name, description, courseAvatar } }) => (
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate("CourseDetail", { course: id })}
@@ -246,7 +247,7 @@ export default function Home({ navigation }) {
                                                     <Text style={styles.textGray}>{day}</Text>
                                                 </View>
                                                 <View style={styles.courseDetail}>
-                                                    <Rating imageSize={15} startingValue={rate} ractions={5}
+                                                    <Rating imageSize={15} startingValue={rate} reactions={5}
                                                         ratingCount={1} />
                                                     <Text style={styles.textBlack}>{rate}</Text>
                                                     <Icon name="category" type="material" color="gray" size={15} />

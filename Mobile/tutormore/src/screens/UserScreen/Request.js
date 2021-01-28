@@ -12,7 +12,8 @@ import {useGlobalVar} from "../../context/GlobalContex";
 export default function Request({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const current = state.userData;
+    const current = JSON.parse(state.userData);
+
     const [CourseName, setCourseName] = useState("");
     const [day, setDay] = useState("")
     const [claerdate, setClaerDate] = useState(false);
@@ -30,6 +31,8 @@ export default function Request({ navigation }) {
         setTimeEnd(result);
     }
 
+    console.log(current.id);
+
     const creteRequst = async () => {
         try {
 
@@ -42,9 +45,8 @@ export default function Request({ navigation }) {
                 categoryId: catagory,
                 userId: current.id,
                 tagname: tags
-
             });
-            console.log(requst.data);
+
             console.log('====================================');
             clear()
             navigation.navigate("Feed", {
