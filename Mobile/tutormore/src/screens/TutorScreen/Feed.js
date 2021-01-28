@@ -17,6 +17,7 @@ import Colors from '../../configs/Colors';
 import avatars from "../../configs/avatars";
 import API from "../../services/API";
 import LoadingScreen from "../../components/Loading";
+import categories from "../../configs/categories";
 export default function Feed({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -27,19 +28,18 @@ export default function Feed({ navigation }) {
     // console.log("user_id", userid.id)
     const [request, setRequest] = useState([]);
     const taked = async (requestId) => {
+        console.log(request.filter((i) => i.id == requestId));
         navigation.navigate("Home", { screen: "TakeCreateCourse", params: { req: request.filter((i) => i.id == requestId) } })
     }
     const fetchApi = async () => {
+        setLoading(true);
         try {
             const fetch_req = await API.get("/request/findAll");
-
             // console.log(fetch_req);
             setRequest(fetch_req.data.request.filter((i) => i.status == "Available"))
-
+            setLoading(false);
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
         }
     }
 
@@ -48,19 +48,24 @@ export default function Feed({ navigation }) {
         setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
     useEffect(() => {
-        fetchApi();
+        const unsub = navigation.addListener("focus", () => {
+            fetchApi();
+        });
+
+        return unsub;
     }, [])
+
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         fetchApi().then(() => setRefreshing(false));
     }, []);
-    // console.log(request);
+
     return (
         <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <Text style={styles.textHeader}>Feed Request</Text>
+                <Text style={styles.textHeader}>Match Request</Text>
                 <TextInput
                     style={styles.search}
                     placeholder="Search"
@@ -78,7 +83,7 @@ export default function Feed({ navigation }) {
                     renderItem={({ item }) =>
                         <View style={styles.cardView}>
                             <View style={styles.viewItem}>
-                                <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                                <Image source={avatars[item.user.avatar].image} style={styles.image}/>
                                 <Text style={styles.title}>{item.user.username}</Text>
                             </View>
                             <View
@@ -102,12 +107,21 @@ export default function Feed({ navigation }) {
                                     <View style={styles.viewItem}>
                                         <Icon name="category" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>Catagory</Text>
+                                        <Text style={styles.textGray}>{categories[item.categoryId].name}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Text style={styles.tag}>tag1</Text>
-                                        <Text style={styles.tag}>tag2</Text>
-                                        <Text style={styles.tag}>tag3</Text>
+                                        {item.tag.length !== 0 &&
+                                        <FlatList
+                                            horizontal={true}
+                                            data={item.tag}
+                                            showsHorizontalScrollIndicator={false}
+                                            keyExtractor={item => item.id}
+                                            renderItem={({item: {name}}) =>
+                                                <Text style={styles.tag}>
+                                                    {name}
+                                                </Text>
+                                            }/>
+                                        }
                                     </View>
                                 </View>
                                 <View style={styles.positionBTN}>

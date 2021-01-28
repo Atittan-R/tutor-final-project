@@ -30,7 +30,8 @@ export const renderingCheck = () => {
     const [state, dispatch] = authentication;
     const [check, setCheck] = useState(null);
     const [loading, setLoading] = useState(false)
-    const currentUser = JSON.parse(state.userData);
+    let currentUser = JSON.parse(state.userData) || {}
+
     const notificationListener = useRef();
     const responseListener = useRef();
     const navigation = useNavigation();
@@ -43,32 +44,34 @@ export const renderingCheck = () => {
             }
         })
     }
-    useEffect(() => {
-        const checkUser = async () => {
 
-            const store = await AsyncStorage.getItem("userData");
-            const storeUser = JSON.parse(store)
-            try {
-                setLoading(true)
-                console.log("Data Store", storeUser)
-                if (storeUser) {
-                    const res = await API.get("/user/findProfile/" + storeUser.id);
-                    if (res.data === null) {
-                        await AsyncStorage.removeItem("userData");
-                        await AsyncStorage.removeItem("userToken");
-                        await AsyncStorage.removeItem("userRole");
-                        await AsyncStorage.removeItem("userRoles");
-                    } else {
-                        setCheck(res.data)
-                    }
+    const checkUser = async () => {
+        setLoading(true)
+        const store = await AsyncStorage.getItem("userData");
+        const storeUser = JSON.parse(store)
+        try {
+            console.log("Data Store", storeUser)
+            if (storeUser) {
+                const res = await API.get("/user/findProfile/" + storeUser.id);
+                if (res.data === null) {
+                    await AsyncStorage.removeItem("userData");
+                    await AsyncStorage.removeItem("userToken");
+                    await AsyncStorage.removeItem("userRole");
+                    await AsyncStorage.removeItem("userRoles");
+                } else {
+                    setCheck(res.data)
                 }
-                setLoading(false)
-            } catch (e) {
-                console.log(e)
-                setLoading(false)
-                setCheck(false);
             }
+            setLoading(false)
+        } catch (e) {
+            console.log(e)
+            setLoading(false)
+            setCheck(false);
         }
+    }
+
+    useEffect(() => {
+
         checkUser();
 
         registerForPushNotificationsAsync().then(async (token) => {

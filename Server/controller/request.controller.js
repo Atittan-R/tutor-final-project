@@ -7,9 +7,10 @@ const User = db.user;
 const Categorie=db.categories
 const Sequelize = require('sequelize');
 
-exports.createRequest = (req, res) => {
+exports.createRequest =async (req, res) => {
   //Save Request Data to Database
-  Request.create({
+ 
+  const requset = await Request.create({
     name: req.body.name,
     date: req.body.date,
     time_start: req.body.time_start,
@@ -18,33 +19,31 @@ exports.createRequest = (req, res) => {
     categoryId: req.body.categoryId,
     userId: req.body.userId,
     status: "Available",
-  })
+  });
+  
     //Set Tag to tag table
-    .then((request) => {
+   
       if (req.body.tagname) {
         for (i = 0; i < req.body.tagname.length; i++) {
-          Tag.create({
+          const tag=await  Tag.create({
             name: req.body.tagname[i],
-            requestId: request.id,
-            categoryId: request.categoryId,
-          }).then((tag) => {
-            //Set Join table tag_request
-            Request.setTags(tag).then(() => {});
-          });
+            requestId: requset.id,
+            categoryId: requset.categoryId,
+          })
+          //  console.log(requset.id,tag.id);
+          requset.setTag(tag)
         }
         res.status(201).send({
-          request: request,
+          request: requset,
           message: "Request was registered successfully!",
         });
+       
       } else {
         res.status(404).send({
           message: "Not found Tagname !!!",
         });
       }
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+
 };
 
 exports.findAllRequest = (req, res) => {

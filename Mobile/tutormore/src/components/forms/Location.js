@@ -2,23 +2,21 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
-import {
-  responsiveHeight,
-  responsiveWidth,
-  responsiveFontSize
-} from "react-native-responsive-dimensions";
+
 
 export default function Location(props) {
+  const [draggable, setDraggable] =props.draggable
   const [lat, setlat] = props.lat
   const [long, setlong] = props.long
   const [modalVisible, setModalVisible] = props.modal
-  const [draggable, setDraggable] = useState({
-    latitude: lat || 14.8817767,
-    longitude: long || 102.0185075,
+  const [region, setRegion] = useState({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
+    latitude:  14.8817767,
+    longitude:  102.0185075,
+   
   });
-
+  // const mapRef=React.createRef();
   function movementMarker(e) {
     const { latitude, longitude } = e.coordinate;
     setlat(latitude)
@@ -28,20 +26,29 @@ export default function Location(props) {
     // update coordinate
     setDraggable({
       latitude: latitude,
-      longitude: longitude
+      longitude: longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
     });
-
+    
+    console.log(latitude,"=",lat);
+    console.log(longitude,"=",long);
+ 
   }
-  function onClickMap(e) {
-    const { latitude, longitude } = e.coordinate;
-    setlat(latitude)
-    setlong(longitude)
-    setDraggable({
-      latitude: latitude,
-      longitude: longitude
-    });
+ 
+  const map=async(region)=>{
+    console.log('====================================');
+    console.log(region);
+    console.log('====================================');
+   await setDraggable(region);
+   await setRegion(region)
+  //  mapRef.current.animateToRegion(region)
+   setlat(draggable.latitude)
+   setlong(draggable.longitude)
   }
-
+useEffect(() => {
+  setDraggable(draggable)
+}, [draggable])
   return (
     <View style={styles.inputItem}>
       { !modalVisible &&
@@ -50,28 +57,32 @@ export default function Location(props) {
 
       <View style={styles.textDate}>
         <MapView
+        // ref={mapRef}
           style={
             modalVisible ?
               styles.mapfull
               :
               styles.map}
-          region={draggable}
+          // region={region}
+          initialRegion={draggable}
           pitchEnabled={false}
 
           rotateEnabled={false}
 
-          scrollEnabled
+          // scrollEnabled={false}
 
           zoomEnabled
-          // onRegionChangeComplete={(region) => setDraggable(region)}
-        onPress={(e) => onClickMap(e.nativeEvent)}
+          onRegionChangeComplete={(region) => setDraggable(region)}
+        // onPress={(e) => onClickMap(e.nativeEvent)}
         >
           <MapView.Marker
-            draggable
+            // draggable
             coordinate={draggable}
-            title="Aqui estoy"
-            // onDragStart={true}
-            onDragEnd={(e) => movementMarker(e.nativeEvent)}
+            // position={Point} 
+            title="tutor"
+            // onDragStart={(e) => movementMarker(e.nativeEvent)}
+            // onDragEnd={(e) => movementMarker(e.nativeEvent)}
+            
           />
         </MapView>
       </View>
@@ -81,11 +92,15 @@ export default function Location(props) {
 export const styles = StyleSheet.create({
   inputItem: {
     flex: 1,
+    justifyContent:"center",
+  
+   
   },
   textDate: {
     flexDirection: "row",
     flexWrap: "wrap",
     flex: 1,
+    
   },
   drop: {
     height: 20,
@@ -103,11 +118,13 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.gray
   },
   map: {
-    height: 150,
-    width: 230,
+
+    height: 750/5,
+    flex:1,
+    flexWrap:"wrap"
   },
   mapfull: {
     height: 750,
-    flexGrow: 1
+    flex:1
   },
 });
