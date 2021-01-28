@@ -1,4 +1,4 @@
-import React,{useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {NavigationContainer, useNavigation} from "@react-navigation/native";
 import AuthenticationStack from "./AuthenticationStack";
 import {PrivilegeTutor, PrivilegeUser} from "./Privilege";
@@ -9,6 +9,8 @@ import {RegisterTutor} from "../screens/UserScreen";
 import registerForPushNotificationsAsync from "../services/NotificationsService";
 import * as Notifications from "expo-notifications";
 import API from "../services/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoadingScreen from "../components/Loading";
 
 export const role_router = {
     ROLE_USER: <PrivilegeUser/>,
@@ -26,6 +28,8 @@ Notifications.setNotificationHandler({
 export const renderingCheck = () => {
     const {authentication} = useGlobalVar();
     const [state, dispatch] = authentication;
+    const [check, setCheck] = useState(null);
+    const [loading, setLoading] = useState(false)
     const currentUser = JSON.parse(state.userData);
     const notificationListener = useRef();
     const responseListener = useRef();
@@ -40,11 +44,12 @@ export const renderingCheck = () => {
         })
     }
     useEffect( () =>  {
+
         registerForPushNotificationsAsync().then( async (token) => {
                 // console.log(token, "UserData",currentUser.id,)
                 if (currentUser.id && token) {
                     await sendToken(currentUser.id,token);
-                    // console.log("User:",res.data)
+                    console.log("User:",currentUser.id,token)
                 }
             }
         );
@@ -83,18 +88,68 @@ export const renderingCheck = () => {
     }, []);
     // END useEffect
 
-    if (state.userData === null) {
-        return <AuthenticationStack/>
-    } else if (state.userRole) {
-        return role_router[state.userRole]
-    } else if (JSON.parse(state.userRoles).length === 1) {
-        return role_router[JSON.parse(state.userRoles)];
-    } else if (JSON.parse(state.userRoles).length === 2) {
-        return <RoleSelection/>
+    useEffect(()=>{
+        const checkUser = async () =>{
+            setLoading(true)
+            const store =  await AsyncStorage.getItem("userData");
+            const storeUser = JSON.parse(store)
+            try{
+                console.log("stire", storeUser)
+                if(storeUser){
+                    const res = await API.get("/user/findOne/"+storeUser.id);
+                    if(res.data.user === null){
+                        await AsyncStorage.removeItem("userData");
+                        await AsyncStorage.removeItem("userToken");
+                        await AsyncStorage.removeItem("userRole");
+                        await AsyncStorage.removeItem("userRoles");
+                    }else{
+                        setCheck(res.data.user)
+                    }
+                }
+                setLoading(false)
+            }catch (e) {
+                console.log(e)
+                setLoading(false)
+                setCheck( false);
+            }
+        }
+
+        checkUser();
+    },[state.userData])
+
+    if(loading){
+        return <LoadingScreen/>
     }
+
+    if (state.userData === null) {
+        console.log(loading)
+        return <AuthenticationStack/>
+    }else if(state.userData){
+        if(check){
+            // console.log("check",check)
+            if(JSON.parse(state.userRoles).length > 1){
+                return (state.userRole == null ?
+                    <RoleSelection /> :
+                    role_router[state.userRole])
+            }else{
+                return role_router[JSON.parse(state.userRoles)];
+            }
+        }else{
+            console.log("check 1",check)
+            return <AuthenticationStack/>
+        }
+    }
+
+    // else if (user.userRole) {
+    //     return role_router[state.userRole]
+    // } else if (user.userRole.length === 1) {
+    //     return role_router[JSON.parse(state.userRoles)];
+    // } else if (user.userRole.length === 2) {
+    //     return <RoleSelection/>
+    // }
     // return (state.userRole == null ?
-    //     <RoleSelection /> :
-    //     role_router[state.userRole])
+    //     //     <RoleSelection /> :
+    //     //     role_router[state.userRole])
 
 };
 

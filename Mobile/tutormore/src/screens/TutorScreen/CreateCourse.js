@@ -30,8 +30,12 @@ import API from "../../services/API";
 import { SwipeablePanel } from "rn-swipeable-panel";
 import courseAvatars from "../../configs/courseAvatars";
 import avatars from "../../configs/avatars";
+import {useGlobalVar} from "../../context/GlobalContex";
 
 export default function CreateCourse({ navigation }) {
+  const { authentication } = useGlobalVar();
+  const [state, dispatch] = authentication;
+  const current = JSON.parse(state.userData);
   const [modalVisible, setModalVisible] = useState(false);
   const [day, setDay] = useState("");
   const [mytags, setTags] = useState([]);
@@ -72,13 +76,14 @@ export default function CreateCourse({ navigation }) {
         time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
         categoryId: catagory,
         amount: amount,
-        userId: 2,
+        userId: current.id,
         tagname: mytags,
         duration: selectedValue,
         lat: lat.toString(),
         long: long.toString(),
         courseAvatar: courseAvatar,
       });
+      console.log(createCourse)
       clear();
       navigation.navigate("Home", { screen: "Home" });
       ToastAndroid.show("create course success !", ToastAndroid.LONG);
@@ -109,9 +114,9 @@ export default function CreateCourse({ navigation }) {
       <SafeAreaView style={styles.container} />
       <View style={styles.headerBar}>
         <Text style={styles.textHeader}>Create Course</Text>
-        <TouchableOpacity onPress={() => create()}>
-          <Icon name="check" type="material" color={Colors.secondary} />
-        </TouchableOpacity>
+        {/*<TouchableOpacity onPress={() => create()}>*/}
+        {/*  <Icon name="check" type="material" color={Colors.secondary} />*/}
+        {/*</TouchableOpacity>*/}
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
