@@ -1,17 +1,13 @@
 import React, {useState} from "react";
 import {
-    Alert,
     SafeAreaView,
     StatusBar,
     StyleSheet,
     Text,
-    TextInput,
     TouchableOpacity,
     View,
     ToastAndroid,
-    Button,
     Image,
-    Pressable,
     Modal,
 } from "react-native";
 import {Icon} from "react-native-elements";
@@ -48,6 +44,12 @@ export default function CreateCourse({navigation}) {
     const [lat, setlat] = useState(14.8817767);
     const [long, setlong] = useState(102.0185075);
     const [selectedValue, setSelectedValue] = useState("");
+    const [draggable, setDraggable] = useState({
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+        latitude: 14.8817767,
+        longitude: 102.0185075,
+    });
 
     const getTimeStart = (result) => {
         setTimeStart(result);
@@ -55,6 +57,7 @@ export default function CreateCourse({navigation}) {
     const getTimeEnd = (result) => {
         setTimeEnd(result);
     };
+
     const clear = () => {
         setCourseName("");
         setDescription("");
@@ -103,6 +106,7 @@ export default function CreateCourse({navigation}) {
         onClose: () => setIsPanelActive(false),
         onPressCloseButton: () => setIsPanelActive(false),
     });
+
     const changeImage = (id) => {
         setRequireImage(courseAvatars[id].image);
         setCourseAvatar(id);
@@ -157,6 +161,8 @@ export default function CreateCourse({navigation}) {
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)}
                     />
                     <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]}/>
+
+
                     <TouchableOpacity
                         onPress={() => {
                             setModalVisible(true);
@@ -169,20 +175,18 @@ export default function CreateCourse({navigation}) {
                         />
                     </TouchableOpacity>
 
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={modalVisible}
-                    >
+                    <Modal animationType="slide"
+                           transparent={true}
+                           visible={modalVisible}>
                         <View style={styles.headerBar_modal}>
                             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                                 <Icon name="cancel" type="material" color={Colors.secondary}/>
                             </TouchableOpacity>
                         </View>
-
                         <Location
                             lat={[lat, setlat]}
                             long={[long, setlong]}
+                            draggable={[draggable, setDraggable]}
                             modal={[modalVisible, setModalVisible]}
                         />
                     </Modal>
@@ -192,6 +196,7 @@ export default function CreateCourse({navigation}) {
                 </TouchableOpacity>
                 <View style={{marginVertical: 10}}/>
             </ScrollView>
+
             <SwipeablePanel {...panelProps} isActive={isPanelActive}>
                 <View style={styles.row}>
                     <TouchableOpacity onPress={() => changeImage(1)}>
@@ -239,7 +244,7 @@ export default function CreateCourse({navigation}) {
         </>
     );
 }
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.primary,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,

@@ -1,37 +1,58 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import Colors from '../../configs/Colors'
-
+import API from '../../services/API'
+import { useGlobalVar } from "../../context/GlobalContex";
 
 export default function Editprofile(props) {
+    const { authentication } = useGlobalVar();
+    const [state, dipatch] = authentication
+    const currentUser = JSON.parse(state.userData);
     const [modalVisible, setModalVisible] = props.modalVisible
     const [Profile, setProfile] = props.ProfileUser;
-    const [name, setname] = useState(props.profile.username)
-    const [major, setmajor] = useState(props.profile.major)
-    const [tel, settel] = useState(props.profile.phonenumber)
-    const [email, setemail] = useState(props.profile.email)
+    const [name, setname] = props.name
+    const [major, setmajor] =props.major
+    const [tel, settel] = props.tel
+    const [email, setemail] =props.email
 
 
-    const User = { name: "", major: "", tel: "", email: "" }
-
+    // const User = { name: "", major: "", tel: "", email: "" }
+    const Edit= async () => {
+        try {
+            const edit = await API.post("/edit/profile",{
+                username:name,
+                major:major,
+                phonenumber:tel,
+                email:email,
+                id:currentUser.id
+            })
+        
+            console.log(edit.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const save = (name, major, tel, email) => {
-        User.name = name
-        User.major = major
-        User.tel = tel
-        User.email = email
-        console.log(User)
-        setProfile([...[], User])
-        setModalVisible(!modalVisible);
-    }
-    const close = () => {
-        setname(props.profile.name)
-        setmajor(props.profile.major)
-        settel(props.profile.tel)
-        setemail(props.profile.email)
+        Edit()
+        Profile.name = name
+        Profile.major = major
+        Profile.phonenumber = tel
+        Profile.email = email
+        setProfile(Profile)
+        console.log(Profile)
+        // setProfile([...[], User])
         setModalVisible(!modalVisible);
     }
 
+    const close = () => {
+        setname(  Profile.name)
+        setmajor(Profile.major)
+        settel(Profile.phonenumber)
+        setemail(Profile.email)
+        setModalVisible(!modalVisible);
+    }
+    
     return (
 
         <Modal
