@@ -69,6 +69,7 @@ export default function TeachingList({ navigation }) {
 
       {/* body */}
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={Mylist}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (

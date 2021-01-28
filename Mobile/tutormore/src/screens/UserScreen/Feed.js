@@ -102,6 +102,7 @@ export default function Feed({ navigation }) {
             </View>
             {loading ? <LoadingScreen /> :
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
                     }

@@ -128,7 +128,7 @@ export default function Search({ navigation }) {
                     <Text style={styles.textBody}>near me</Text>
                 </TouchableOpacity>
             </View>
-            <ScrollView style={styles.view}>
+            <ScrollView style={styles.view} showsVerticalScrollIndicator={false}>
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={styles.box} />
@@ -149,6 +149,7 @@ export default function Search({ navigation }) {
                     <Text style={styles.textRec}>Request Course</Text>
                 </View>
                 <FlatList
+                    showsHorizontalScrollIndicator={false}
                     data={Request}
                     keyExtractor={item => item.id}
                     horizontal={true}
@@ -177,6 +178,7 @@ export default function Search({ navigation }) {
                     <Text style={styles.textRec}>Course</Text>
                 </View>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     data={Course}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>

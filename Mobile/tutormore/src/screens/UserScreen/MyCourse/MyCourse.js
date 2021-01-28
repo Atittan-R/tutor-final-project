@@ -101,6 +101,7 @@ export default function MyCourse({ navigation, route }) {
         renderPlaceholders()
       ) : (
           <FlatList
+            showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
