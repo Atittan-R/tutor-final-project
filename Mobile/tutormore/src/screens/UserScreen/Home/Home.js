@@ -41,7 +41,7 @@ export default function Home({ navigation }) {
         try {
             const response = await API.get('/course/findAll/')
             const course = await response.data;
-            console.log(course)
+            // console.log(course)
             dispatch(actionCreators.success(course))
         } catch (e) {
             dispatch(actionCreators.failure())
