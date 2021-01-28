@@ -18,11 +18,13 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
 import { actionCreators, initialState, reducer } from "../Reducer";
-
-export default function CourseDetail2({ navigation, route }) {
+import { SwipeablePanel } from 'rn-swipeable-panel';
+import courseAvatars from "../../../configs/courseAvatars";
+import avatars from "../../../configs/avatars";
+export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const [detail, setDetail] = useState({});
+
     const [reduce, loadDispatch] = useReducer(reducer, initialState)
 
     const currentUser = JSON.parse(state.userData);
@@ -41,19 +43,20 @@ export default function CourseDetail2({ navigation, route }) {
             console.log("err", e.message)
         }
     }
-
+    const [draggable, setDraggable] = useState({
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    });
     useEffect(() => {
         courseData();
     }, []);
 
-    const [draggable, setDraggable] = useState({
-        latitude: parseFloat(detail.lat),
-        longitude: parseFloat(detail.long),
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
 
-    console.log(data)
+
+
+    // console.log(currentUser.id, course)
     const enrollData = async () => {
         try {
             const response = await API.post("/enroll/course",
@@ -61,13 +64,19 @@ export default function CourseDetail2({ navigation, route }) {
                     userId: currentUser.id,
                     courseId: course,
                 })
+            const courserate = await API.post("/create/rate",
+                {
+                    userId: currentUser.id,
+                    courseId: course,
+                })
+            console.log("rate ", courserate.data)
             console.log("status ", response.data.status)
             //TODO
             // Generate QRCode
             // Popup QRCode
             // Ask where to go History or Back
             ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", { screen: "MyCourse" })
+            navigation.navigate("Me", { screen: "MyCourse", params: { focus: "focus" } })
         } catch (e) {
             alert(e.response.data.status);
         }
@@ -94,8 +103,36 @@ export default function CourseDetail2({ navigation, route }) {
     };
 
 
-    // console.log("detail: ",detail.tutors.email);
+
+
+    //Panel Open Close
+    const [isPanelActive, setIsPanelActive] = useState(false);
+    const [panelProps, setPanelProps] = useState({
+        fullWidth: true,
+        onlySmall: true,
+        closeOnTouchOutside: true,
+        onClose: () => setIsPanelActive(false),
+        onPressCloseButton: () => setIsPanelActive(false),
+    });
+
     const { data, loading, error } = reduce
+    // const index = data.tutors.experience;
+    // const [exp, setExp] = useState(null);
+    // if (index == '') {
+    //     setExp('')
+    // } else if (index == 1) {
+    //     setExp("None")
+    // } else if (index == 2) {
+    //     setExp("Less than 1 year")
+    // } else if (index == 3) {
+    //     setExp("1 year")
+    // }
+    // else if (index == 4) {
+    //     setExp("2 years")
+    // }
+    // else if (index == 5) {
+    //     setExp("More than 2 years")
+    // }
     if (loading) {
         return <LoadingScreen />
     }
@@ -112,6 +149,7 @@ export default function CourseDetail2({ navigation, route }) {
     }
 
     console.log("data: ", data)
+
     return (
         <>
             {/* header */}
@@ -119,7 +157,7 @@ export default function CourseDetail2({ navigation, route }) {
             <View style={styles.headerBar}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.push("Home")}
+                    onPress={() => navigation.pop()}
                 >
                     <Icon
                         name="arrow-back-outline"
@@ -136,7 +174,7 @@ export default function CourseDetail2({ navigation, route }) {
                 <View style={styles.viewImage}>
                     <View style={styles.bgImage}>
                         <Image
-                            source={require("../../../assets/course/nurse.png")}
+                            source={courseAvatars[data.courseAvatar].image}
                             style={styles.image}
                         />
                     </View>
@@ -199,21 +237,30 @@ export default function CourseDetail2({ navigation, route }) {
                     </View>
                 </View>
                 <View style={styles.viewMap}>
-                    {/* <MapView
+                    <MapView
                         style={styles.map}
-                        region={draggable}
+                        region={{
+                            latitude: parseFloat(data.lat), longitude: parseFloat(data.long),
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
                         onRegionChangeComplete={(region) => setDraggable(region)}
                     >
                         <Marker
-                            coordinate={{ latitude : parseFloat(data.lat) , longitude : parseFloat(data.long) }}
+                            coordinate={{ latitude: parseFloat(data.lat), longitude: parseFloat(data.long) }}
                         />
-                    </MapView> */}
+                    </MapView>
                 </View>
 
                 <View style={styles.line} />
-                <View style={[styles.topic, styles.row]}>
-                    <View style={[styles.column, styles.box]} />
-                    <Text style={styles.textRec}>Tutor Profile</Text>
+                <View style={styles.viewMore}>
+                    <View style={[styles.topic, styles.row]}>
+                        <View style={[styles.column, styles.box]} />
+                        <Text style={styles.textRec}>Tutor Profile</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => setIsPanelActive(true)}>
+                        <Text style={styles.textViewMore}>View More</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
@@ -242,11 +289,39 @@ export default function CourseDetail2({ navigation, route }) {
                         <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                 </View>
+
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
                     <Text style={styles.title}>Leave Course</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
+            <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+                <View style={styles.panelContent}>
+                    <Image source={avatars[data.tutors.avatar].image} style={styles.imageTutor} />
+                    <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.tutors.username ? data.tutors.username : "Not specified"}</Text>
+                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.tutors.date_of_birtth ? data.tutors.date_of_birtth : "Not specified"}</Text>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.tutors.major ? data.tutors.major : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.tutors.email ? data.tutors.email : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="line" type="fontisto" color={Colors.secondary} style={{ marginRight: 15 }} size={19} />
+                        <Text style={styles.text}>{data.tutors.lineId ? data.tutors.lineId : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Text style={[styles.title, { marginRight: 9 }]}>Exp.</Text>
+                        <Text style={styles.text}>{data.tutors.experience ? data.tutors.experience : "Not specified"}</Text>
+                    </View>
+                </View>
+            </SwipeablePanel>
         </>
     );
 }
@@ -380,5 +455,34 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
     },
+    textViewMore: {
+        fontSize: 12,
+        color: "#00b",
+    },
+    viewMore: {
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginRight: 30,
+        flex: 1
+    },
+    topic: {
+        flex: 1,
+        marginBottom: 10,
+    },
+    panelContent: {
+        margin: 20,
+    },
+    imageTutor: {
+        width: 100,
+        height: 100,
+        resizeMode: "contain",
+        alignSelf: "center",
+    },
+    panelRow: {
+        flexDirection: "row",
+        alignItems: "center",
 
+    }
 });
