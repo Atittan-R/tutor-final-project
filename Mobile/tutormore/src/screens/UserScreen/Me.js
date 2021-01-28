@@ -16,6 +16,7 @@ import Colors from "../../configs/Colors";
 import { useGlobalVar } from "../../context/GlobalContex";
 import API from "../../services/API";
 import avatars from "../../configs/avatars";
+import categories from "../../configs/categories";
 
 export default function Me({ navigation }) {
   const { auth, authentication } = useGlobalVar();
@@ -23,7 +24,7 @@ export default function Me({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [Profile, setProfile] = useState({
     username: "",
-    major: "",
+    major: 0,
     phonenumber: "",
     email: "",
     avatar: 0,
@@ -83,7 +84,7 @@ export default function Me({ navigation }) {
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Major</Text>
               <Text style={styles.textNormal}>
-                {Profile.major === null ? "-" : Profile.major}
+                {categories[Profile.major].name}
               </Text>
             </View>
             <View style={styles.viewItem}>

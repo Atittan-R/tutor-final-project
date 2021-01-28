@@ -17,6 +17,7 @@ import API from "../../services/API"
 import { useGlobalVar } from "../../context/GlobalContex";
 import LoadingScreen from "../../components/Loading";
 import avatars from "../../configs/avatars";
+import categories from "../../configs/categories";
 
 export default function Feed({ navigation }) {
     const { authentication } = useGlobalVar();
@@ -47,10 +48,8 @@ export default function Feed({ navigation }) {
             const cancel_join = await API.post("join/cancel", {
                 userId: user.id, requestId: resId
             });
-            // console.log(cancel_join.data);
             isjoin.push({ id: resId })
             setisJoin(isjoin.filter(x => x.id !== resId))
-            // console.log(isjoin);
         } catch (error) {
             console.log(error);
         }
@@ -62,7 +61,8 @@ export default function Feed({ navigation }) {
             const fetch_join = await API.post("/user/join", {
                 userId: user.id,
             });
-            // console.log((fetch_join));
+
+            console.log((fetch_req));
             setRequest(fetch_req.data.request)
             setisJoin(fetch_join.data)
             setLoading(false);
@@ -135,12 +135,22 @@ export default function Feed({ navigation }) {
                                     <View style={styles.viewItem}>
                                         <Icon name="category" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>Catagory</Text>
+                                        <Text style={styles.textGray}>{categories[item.categoryId].name}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Text style={styles.tag}>tag1</Text>
-                                        <Text style={styles.tag}>tag2</Text>
-                                        <Text style={styles.tag}>tag3</Text>
+                                        {/* if no tag dont show*/}
+                                        {item.tag.length !== 0 &&
+                                            <FlatList
+                                                horizontal={true}
+                                                data={item.tag}
+                                                showsHorizontalScrollIndicator={false}
+                                                keyExtractor={item => item.id}
+                                                renderItem={({ item: {name} }) =>
+                                                <Text style={styles.tag}>
+                                                    {name}
+                                                </Text>
+                                            }/>
+                                        }
                                     </View>
                                 </View>
                                 <View style={styles.positionBTN}>

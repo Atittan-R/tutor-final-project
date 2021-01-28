@@ -37,7 +37,7 @@ const Register = ({navigation}) => {
     const [confirmMassage, setConfirmMassage] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [state, dispatch] = useReducer(Confrimation, {confirm: ""});
-    const [catagory, setCatagory] = useState("");
+    const [major, setMajor] = useState(0);
     useEffect(() => {
         setConfirmMassage(checkConfirm(password, state.confirm));
     });
@@ -50,7 +50,7 @@ const Register = ({navigation}) => {
                 username: data.username,
                 phonenumber: data.phoneNumber,
                 avatar: data.avatar,
-                major: data.catagory,
+                major: data.major,
             });
             console.log(signup.data);
             ToastAndroid.show("Register Success!", ToastAndroid.LONG);
@@ -85,7 +85,9 @@ const Register = ({navigation}) => {
     }
     return (
         <>
-
+            {/*<Text>*/}
+            {/*    {`${categories[catagory].id} ${categories[catagory].name}`}*/}
+            {/*</Text>*/}
                 <ScrollView style={{margin: 0, backgroundColor: Colors.white}}>
                     {/*<KeyboardAvoidingView behavior="padding">*/}
                     <View style={styles.container}>
@@ -146,14 +148,11 @@ const Register = ({navigation}) => {
                                     onChangeText={(text) => setPhoneNumber(text)}
                                     autoCompleteType={'off'}
                                 />
-                                {/*<Text>*/}
-                                {/*    {`${categories[0].id} ${categories[0].name}`}*/}
-                                {/*</Text>*/}
                             </View>
                             <Catagory
-            selectedValue={catagory}
-            onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)}
-          />
+                                initLabel={"Major"}
+                                selectedValue={major}
+                                onValueChange={(itemValue, itemIndex) => setMajor(itemValue)} />
                             <View style={styles.policy}>
                                 <Text style={styles.policyText}>
                                     I have read the{" "}
@@ -179,7 +178,7 @@ const Register = ({navigation}) => {
                             <PrimaryButton
                                 label={"Sign Up"}
                                 disable={confirmMassage}
-                                onPress={() => callAPI({email, password, phoneNumber, username, avatar})
+                                onPress={() => callAPI({email, password, phoneNumber, username, avatar, major})
                                 }
                             />
                         </View>

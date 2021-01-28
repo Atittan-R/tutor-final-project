@@ -51,14 +51,14 @@ export const renderingCheck = () => {
             try{
                 console.log("Data Store", storeUser)
                 if(storeUser){
-                    const res = await API.get("/user/findOne/"+storeUser.id);
-                    if(res.data.user === null){
+                    const res = await API.get("/user/findProfile/"+storeUser.id);
+                    if(res.data === null){
                         await AsyncStorage.removeItem("userData");
                         await AsyncStorage.removeItem("userToken");
                         await AsyncStorage.removeItem("userRole");
                         await AsyncStorage.removeItem("userRoles");
                     }else{
-                        setCheck(res.data.user)
+                        setCheck(res.data)
                     }
                 }
                 setLoading(false)

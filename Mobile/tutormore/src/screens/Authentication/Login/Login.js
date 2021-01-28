@@ -56,7 +56,10 @@ export default function Login({navigation}) {
 
                     <Text style={styles.textWrap}>Or Sign in with E-mail</Text>
                     <View style={styles.inputItem}>
-                        <PrimaryInput placeHolder={"Email Address"} onChangeText={setEmail}/>
+                        <PrimaryInput
+                            placeHolder={"Email Address"}
+                            keyboardType={"email-address"}
+                            onChangeText={setEmail}/>
                     </View>
 
                     <View style={styles.inputItem}>
