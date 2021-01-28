@@ -7,7 +7,7 @@ import Colors from '../../configs/Colors'
 import Catagory from '../../components/forms/Catagory';
 import Tag from '../../components/forms/Tag';
 import API from "../../services/API"
-import {useGlobalVar} from "../../context/GlobalContex";
+import { useGlobalVar } from "../../context/GlobalContex";
 
 export default function Request({ navigation }) {
     const { authentication } = useGlobalVar();
@@ -32,6 +32,14 @@ export default function Request({ navigation }) {
 
     const creteRequst = async () => {
         try {
+
+            if (!CourseName.trim()) { alert('Please enter course name'); return; }
+            if (!day.trim()) { alert('Please set the day'); return; }
+            if (catagory === null) { await alert('Please select Catagory'); return; }
+            const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
+            const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
+            const sum = end - start;
+            if (sum <= 60) { alert('Please set time correctly, at least 60 minutes away.'); return; }
 
             const requst = await API.post("request/create", {
                 name: CourseName,
@@ -81,7 +89,10 @@ export default function Request({ navigation }) {
         console.log("CourseName :", CourseName);
         console.log("day :", day);
         console.log("Tags :", tags);
-    }, [CourseName])
+        console.log("start " + TimeStart.getHours());
+        console.log("end " + TimeEnd.getHours());
+        console.log("cat " + catagory);
+    }, [CourseName, tags, TimeStart.getHours(), TimeEnd.getHours(), catagory])
 
     return (
         <>
