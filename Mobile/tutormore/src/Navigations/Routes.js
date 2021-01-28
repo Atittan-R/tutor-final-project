@@ -49,7 +49,7 @@ export const renderingCheck = () => {
             const store =  await AsyncStorage.getItem("userData");
             const storeUser = JSON.parse(store)
             try{
-                console.log("stire", storeUser)
+                console.log("Data Store", storeUser)
                 if(storeUser){
                     const res = await API.get("/user/findOne/"+storeUser.id);
                     if(res.data.user === null){
@@ -68,8 +68,8 @@ export const renderingCheck = () => {
                 setCheck( false);
             }
         }
-
         checkUser();
+
         registerForPushNotificationsAsync().then( async (token) => {
                 // console.log(token, "UserData",currentUser.id,)
                 if (currentUser.id && token) {

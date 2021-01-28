@@ -27,6 +27,7 @@ export default function Me({ navigation }) {
     phonenumber: "",
     email: "",
     avatar: 0,
+    roles:[],
   });
 
   const alertSignOut = () => {
@@ -51,13 +52,17 @@ export default function Me({ navigation }) {
   }
 
   const getUser = async () => {
-    const response = await API.get("/user/findOne/" + user.id)
+    const response = await API.get("/user/findProfile/" + user.id)
     const data = await response.data.user
     setProfile(data)
   }
 
   useEffect(() => {
-    getUser();
+    const unsub = navigation.addListener("focus", () => {
+      getUser();
+    });
+
+    return unsub;
   }, []);
 
   return (
@@ -101,9 +106,9 @@ export default function Me({ navigation }) {
           </View>
 
           <View style={{ padding: 5 }}></View>
-
           <View style={styles.coverArea}>
-            {user.roles.length === 1 && (
+
+            {Profile.roles.length === 1 && (
               <Pressable
                 onPress={() => navigation.navigate("RegisterTutor")}
                 // onPress={() => _retrieveData}
@@ -192,7 +197,8 @@ export default function Me({ navigation }) {
                 />
               </View>
             </Pressable>
-            {user.roles.length === 2 && (
+
+            {Profile.roles.length === 2 && (
               <Pressable
                 onPress={() => navigation.navigate("RoleSelect")}
                 style={({ pressed }) => [
