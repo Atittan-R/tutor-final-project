@@ -50,7 +50,7 @@ const Register = ({navigation}) => {
                 username: data.username,
                 phonenumber: data.phoneNumber,
                 avatar: data.avatar,
-                catagory: data.catagory,
+                major: data.catagory,
             });
             console.log(signup.data);
             ToastAndroid.show("Register Success!", ToastAndroid.LONG);
