@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Colors from "../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
@@ -20,12 +20,17 @@ export default function Location(props) {
   });
 
   function movementMarker(e) {
-    // get coordinate from mapviews
     const { latitude, longitude } = e.coordinate;
+    setlat(latitude)
+    setlong(longitude)
+    // get coordinate from mapviews
+
     // update coordinate
     setDraggable({
-      draggable: { latitude, longitude },
+      latitude: latitude,
+      longitude: longitude
     });
+
   }
   function onClickMap(e) {
     const { latitude, longitude } = e.coordinate;
@@ -33,9 +38,10 @@ export default function Location(props) {
     setlong(longitude)
     setDraggable({
       latitude: latitude,
-      longitude: longitude,
+      longitude: longitude
     });
   }
+
   return (
     <View style={styles.inputItem}>
       { !modalVisible &&
@@ -50,13 +56,21 @@ export default function Location(props) {
               :
               styles.map}
           region={draggable}
-          onRegionChangeComplete={(region) => setDraggable(region)}
-          onPress={(e) => onClickMap(e.nativeEvent)}
+          pitchEnabled={false}
+
+          rotateEnabled={false}
+
+          scrollEnabled
+
+          zoomEnabled
+          // onRegionChangeComplete={(region) => setDraggable(region)}
+        onPress={(e) => onClickMap(e.nativeEvent)}
         >
-          <Marker
+          <MapView.Marker
             draggable
             coordinate={draggable}
-            onDragStart={true}
+            title="Aqui estoy"
+            // onDragStart={true}
             onDragEnd={(e) => movementMarker(e.nativeEvent)}
           />
         </MapView>
