@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { Me, Scanner, TeachingList, CheckList, Attendance } from "../../../screens/TutorScreen"
+import { Me, Scanner, TeachingList, CheckList, Attendance, CourseDetail } from "../../../screens/TutorScreen"
 import { RoleSelection } from "../../../screens/Authentication";
 import EditCourse from "../../../screens/TutorScreen/EditCourse";
 
@@ -27,6 +27,7 @@ const MeStack = () => {
       <Stack.Screen name="CheckList" component={CheckList} />
       <Stack.Screen name="EditCourse" component={EditCourse} />
       <Stack.Screen name="Attendance" component={Attendance} />
+      <Stack.Screen name="CourseDetail" component={CourseDetail} />
     </Stack.Navigator>
 
   )

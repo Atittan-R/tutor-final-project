@@ -16,6 +16,7 @@ import Colors from "../../configs/Colors";
 import { useGlobalVar } from "../../context/GlobalContex";
 import API from "../../services/API";
 import avatars from "../../configs/avatars";
+import categories from "../../configs/categories";
 
 export default function Me({ navigation }) {
   const { auth, authentication } = useGlobalVar();
@@ -27,10 +28,11 @@ export default function Me({ navigation }) {
   const [email, setemail] = useState("")
   const [Profile, setProfile] = useState({
     username: "",
-    major: "",
+    major: 0,
     phonenumber: "",
     email: "",
     avatar: 0,
+    roles:[],
   });
 
   const alertSignOut = () => {
@@ -55,13 +57,17 @@ export default function Me({ navigation }) {
   }
 
   const getUser = async () => {
-    const response = await API.get("/user/findOne/" + user.id)
+    const response = await API.get("/user/findProfile/" + user.id)
     const data = await response.data.user
     setProfile(data)
   }
 
   useEffect(() => {
-    getUser();
+    const unsub = navigation.addListener("focus", () => {
+      getUser();
+    });
+
+    return unsub;
   }, []);
   useEffect(() => {
     
@@ -116,9 +122,9 @@ export default function Me({ navigation }) {
           </View>
 
           <View style={{ padding: 5 }}></View>
-
           <View style={styles.coverArea}>
-            {user.roles.length === 1 && (
+
+            {Profile.roles.length === 1 && (
               <Pressable
                 onPress={() => navigation.navigate("RegisterTutor")}
                 // onPress={() => _retrieveData}
@@ -207,7 +213,8 @@ export default function Me({ navigation }) {
                 />
               </View>
             </Pressable>
-            {user.roles.length === 2 && (
+
+            {Profile.roles.length === 2 && (
               <Pressable
                 onPress={() => navigation.navigate("RoleSelect")}
                 style={({ pressed }) => [

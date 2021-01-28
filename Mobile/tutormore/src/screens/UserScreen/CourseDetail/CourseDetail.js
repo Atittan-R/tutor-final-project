@@ -18,7 +18,9 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
 import { actionCreators, initialState, reducer } from "../Reducer";
-
+import { SwipeablePanel } from 'rn-swipeable-panel';
+import courseAvatars from "../../../configs/courseAvatars";
+import avatars from "../../../configs/avatars";
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -71,7 +73,7 @@ export default function CourseDetail({ navigation, route }) {
             // Popup QRCode
             // Ask where to go History or Back
             ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", { screen: "MyCourse" , params: { focus: "focus" } })
+            navigation.navigate("Me", { screen: "MyCourse", params: { focus: "focus" } })
         } catch (e) {
             alert(e.response.data.status);
         }
@@ -98,8 +100,36 @@ export default function CourseDetail({ navigation, route }) {
     };
 
 
-    // console.log("detail: ",detail.tutors.email);
+
+
+    //Panel Open Close
+    const [isPanelActive, setIsPanelActive] = useState(false);
+    const [panelProps, setPanelProps] = useState({
+        fullWidth: true,
+        onlySmall: true,
+        closeOnTouchOutside: true,
+        onClose: () => setIsPanelActive(false),
+        onPressCloseButton: () => setIsPanelActive(false),
+    });
+
     const { data, loading, error } = reduce
+    // const index = data.tutors.experience;
+    // const [exp, setExp] = useState(null);
+    // if (index == '') {
+    //     setExp('')
+    // } else if (index == 1) {
+    //     setExp("None")
+    // } else if (index == 2) {
+    //     setExp("Less than 1 year")
+    // } else if (index == 3) {
+    //     setExp("1 year")
+    // }
+    // else if (index == 4) {
+    //     setExp("2 years")
+    // }
+    // else if (index == 5) {
+    //     setExp("More than 2 years")
+    // }
     if (loading) {
         return <LoadingScreen />
     }
@@ -115,16 +145,6 @@ export default function CourseDetail({ navigation, route }) {
         )
     }
 
-    // console.log("data: ", data)
-    //Panel Open Close
-    // const [panelProps, setPanelProps] = useState({
-    //     fullWidth: true,
-    //     onlySmall: true,
-    //     closeOnTouchOutside: true,
-    //     onClose: () => setIsPanelActive(false),
-    //     onPressCloseButton: () => setIsPanelActive(false),
-    // });
-    // const [isPanelActive, setIsPanelActive] = useState(false);
     return (
         <>
             {/* header */}
@@ -149,7 +169,7 @@ export default function CourseDetail({ navigation, route }) {
                 <View style={styles.viewImage}>
                     <View style={styles.bgImage}>
                         <Image
-                            source={require("../../../assets/course/nurse.png")}
+                            source={courseAvatars[data.course.courseAvatar].image}
                             style={styles.image}
                         />
                     </View>
@@ -270,9 +290,33 @@ export default function CourseDetail({ navigation, route }) {
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
-            {/* <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-                <Text>Kuy earth</Text>
-            </SwipeablePanel> */}
+            <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+                <View style={styles.panelContent}>
+                    <Image source={avatars[data.course.tutors.avatar].image} style={styles.imageTutor} />
+                    <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
+                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.date_of_birtth ? data.course.tutors.date_of_birtth : "Not specified"}</Text>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.course.tutors.email ? data.course.tutors.email : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="line" type="fontisto" color={Colors.secondary} style={{ marginRight: 15 }} size={19} />
+                        <Text style={styles.text}>{data.course.tutors.lineId ? data.course.tutors.lineId : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Text style={[styles.title, { marginRight: 9 }]}>Exp.</Text>
+                        <Text style={styles.text}>{data.course.tutors.experience ? data.course.tutors.experience : "Not specified"}</Text>
+                    </View>
+                </View>
+            </SwipeablePanel>
         </>
     );
 }
@@ -422,4 +466,18 @@ const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 10,
     },
+    panelContent: {
+        margin: 20,
+    },
+    imageTutor: {
+        width: 100,
+        height: 100,
+        resizeMode: "contain",
+        alignSelf: "center",
+    },
+    panelRow: {
+        flexDirection: "row",
+        alignItems: "center",
+
+    }
 });

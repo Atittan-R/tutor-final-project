@@ -30,7 +30,7 @@ import API from "../../services/API";
 import { SwipeablePanel } from "rn-swipeable-panel";
 import courseAvatars from "../../configs/courseAvatars";
 import avatars from "../../configs/avatars";
-import {useGlobalVar} from "../../context/GlobalContex";
+import { useGlobalVar } from "../../context/GlobalContex";
 
 export default function CreateCourse({ navigation }) {
   const { authentication } = useGlobalVar();
@@ -44,6 +44,7 @@ export default function CreateCourse({ navigation }) {
   const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
   const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0));
   const [coureName, setCourseName] = useState("");
+  const [description, setDescription] = useState("");
   const [courseAvatar, setCourseAvatar] = useState(0);
   const [amount, setAmount] = useState("");
   const [catagory, setCatagory] = useState("");
@@ -70,6 +71,7 @@ export default function CreateCourse({ navigation }) {
 
   const clear = () => {
     setCourseName("");
+    setDescription("");
     setClaerTag(true);
     setDay(null);
     setCatagory(null);
@@ -83,6 +85,7 @@ export default function CreateCourse({ navigation }) {
     try {
       const createCourse = await API.post("course/create", {
         name: coureName,
+        description: description,
         day: day.toString(),
         time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(),
         time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
@@ -97,7 +100,7 @@ export default function CreateCourse({ navigation }) {
       });
       console.log(createCourse)
       clear();
-      navigation.navigate("Home", { screen: "Home" });
+      navigation.navigate("Me", { screen: "TeachingList" });
       ToastAndroid.show("create course success !", ToastAndroid.LONG);
     } catch (error) {
       console.log(error);
@@ -142,6 +145,11 @@ export default function CreateCourse({ navigation }) {
             placeholder={"Course"}
             onTextChange={(text) => setCourseName(text)}
             value={coureName}
+          />
+          <TextInputButton
+            placeholder={"Description"}
+            onTextChange={(text) => setDescription(text)}
+            value={description}
           />
           <ModalDate dayValue={[day, setDay]} />
           <Clock

@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Clock from '../../components/forms/Clock';
 import ModalDate from '../../components/forms/ModalDate';
 import TextInputButton from '../../components/forms/TextInputButton';
 import Colors from '../../configs/Colors'
 import Catagory from '../../components/forms/Catagory';
 import Tag from '../../components/forms/Tag';
-
-
 import API from "../../services/API"
-import { Directions } from 'react-native-gesture-handler';
+import {useGlobalVar} from "../../context/GlobalContex";
 
 export default function Request({ navigation }) {
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+    const current = JSON.parse(state.userData);
+
     const [CourseName, setCourseName] = useState("");
     const [day, setDay] = useState("")
     const [claerdate, setClaerDate] = useState(false);
@@ -30,6 +31,8 @@ export default function Request({ navigation }) {
         setTimeEnd(result);
     }
 
+    console.log(current.id);
+
     const creteRequst = async () => {
         try {
 
@@ -40,11 +43,10 @@ export default function Request({ navigation }) {
                 time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
                 description: Description,
                 categoryId: catagory,
-                userId: 2,
+                userId: current.id,
                 tagname: tags
-
             });
-            console.log(requst.data);
+
             console.log('====================================');
             clear()
             navigation.navigate("Feed", {
@@ -54,8 +56,7 @@ export default function Request({ navigation }) {
             })
 
         } catch (error) {
-
-            if (error.response.status == 404) {
+            if (error.response.status === 404) {
                 clear();
                 navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
             }
@@ -63,9 +64,7 @@ export default function Request({ navigation }) {
                 console.log('====================================');
                 console.log("ERR: ", error.response.status);
                 console.log('====================================');
-
             }
-
         }
     }
     const clear = () => {

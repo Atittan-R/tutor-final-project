@@ -31,6 +31,7 @@ import { SwipeablePanel } from "rn-swipeable-panel";
 export default function TakeCreateCourse({ route, navigation }) {
   const { req } = route.params
   const [coureName, setCourseName] = useState("");
+  const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
   const [catagory, setCatagory] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
@@ -85,7 +86,7 @@ export default function TakeCreateCourse({ route, navigation }) {
       setClaerTag(true);
       setDay(null);
       setCatagory(null);
-      // setDescription("")
+      setDescription("");
       // setTags([])
       setTimeEnd(new Date(0, 0, 0, 0));
       setTimeStart(new Date(0, 0, 0, 0));
@@ -96,6 +97,7 @@ export default function TakeCreateCourse({ route, navigation }) {
         tutorId: currentUser.id,
         requestId: requsetId,
         amount: amount,
+        description: description,
         tagname: mytags,
         duration: selectedValue,
         lat: lat.toString(),
@@ -104,22 +106,12 @@ export default function TakeCreateCourse({ route, navigation }) {
       });
 
       await sendMessage(teke_res.data.id);
-
-      console.log("Hello", teke_res.data.id);
       ToastAndroid.show("create course success !", ToastAndroid.SHORT);
       clear();
-      navigation.navigate("Home", { screen: "Feed" });
+      navigation.navigate("Me", { screen: "TeachingList" });
     } catch (error) {
       console.log(error);
     }
-  }
-  async function sendMessage(takeid) {
-    const res = await API.post("/notification/message", {
-      takeId: takeid,
-      title: "Message",
-      body: "ได้ยัง ไอ่หอยยย"
-    })
-    console.log(res.data)
   }
 
   const [panelProps, setPanelProps] = useState({
@@ -135,6 +127,7 @@ export default function TakeCreateCourse({ route, navigation }) {
   };
   useEffect(() => {
     setCourseName(req.map((i) => i.name).toString())
+    setDescription(req.map((i) => i.description).toString())
     setTimeStart(req.map((i) => i.time_start).toString())
     setTimeEnd(req.map((i) => i.time_end).toString())
     setDay(req.map((i) => i.date).toString())
@@ -163,6 +156,11 @@ export default function TakeCreateCourse({ route, navigation }) {
             onTextChange={(text) => setCourseName(text)}
             value={coureName}
             editable={true}
+          />
+          <TextInputButton
+            placeholder={"Description"}
+            onTextChange={(text) => setDescription(text)}
+            value={description}
           />
           <TextInputButton
             label={"Date"}

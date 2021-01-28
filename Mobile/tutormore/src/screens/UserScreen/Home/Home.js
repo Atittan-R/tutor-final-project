@@ -20,7 +20,7 @@ import LoadingScreen from "../../../components/Loading";
 import { styles } from "./Style";
 import NoDataScreen from "../../../components/Nodata";
 import courseAvatars from "../../../configs/courseAvatars";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
 
 export default function Home({ navigation }) {
     // search bar
@@ -100,7 +100,7 @@ export default function Home({ navigation }) {
                 </TouchableOpacity>
             </View>
             {loading ? <LoadingScreen /> :
-                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                     {/*Category*/}
                     <View style={styles.bg}>
                         <View style={{ marginVertical: 10 }}>
@@ -183,11 +183,14 @@ export default function Home({ navigation }) {
                         </View>
 
                         <FlatList
+                            showsHorizontalScrollIndicator={false}
                             horizontal={true}
                             data={data}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item: { name, description, courseAvatar } }) => (
+                            key={data.id}
+                            renderItem={({ item: { id, name, description, courseAvatar } }) => (
                                 <TouchableOpacity
+                                    onPress={() => navigation.navigate("CourseDetail", { course: id })}
                                     style={styles.listStyle}>
                                     <View style={{ padding: 15 }}>
                                         <Image source={courseAvatars[courseAvatar].image}
@@ -223,9 +226,9 @@ export default function Home({ navigation }) {
                                     <TouchableOpacity
                                         onPress={() => {
                                             // console.log("courseId", id)
-                                            navigation.navigate("CourseDetail", {course: id});
+                                            navigation.navigate("CourseDetail", { course: id });
                                         }}
-                                        style={{ marginTop: 5, }}>
+                                    >
                                         <View style={styles.courseWrap}>
                                             <Image source={courseAvatars[courseAvatar].image}
                                                 style={styles.courseImage} />
@@ -244,7 +247,7 @@ export default function Home({ navigation }) {
                                                     <Text style={styles.textGray}>{day}</Text>
                                                 </View>
                                                 <View style={styles.courseDetail}>
-                                                    <Rating imageSize={15} startingValue={rate} ractions={5}
+                                                    <Rating imageSize={15} startingValue={rate} reactions={5}
                                                         ratingCount={1} />
                                                     <Text style={styles.textBlack}>{rate}</Text>
                                                     <Icon name="category" type="material" color="gray" size={15} />

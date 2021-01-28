@@ -10,13 +10,14 @@ import {
     View
 } from "react-native";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
-import SecondaryButton from "../../../components/buttons/SecondaryButton";
 import PrimaryInput from "../../../components/forms/PrimaryInput";
 import Colors from "../../../configs/Colors";
 import {useGlobalVar} from "../../../context/GlobalContex";
 import API from "../../../services/API";
 import {SwipeablePanel} from 'rn-swipeable-panel';
 import avatars from "../../../configs/avatars";
+import categories from "../../../configs/categories";
+import Catagory from "../../../components/forms/Catagory";
 
 function Confrimation(state, action) {
     switch (action.type) {
@@ -36,7 +37,7 @@ const Register = ({navigation}) => {
     const [confirmMassage, setConfirmMassage] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [state, dispatch] = useReducer(Confrimation, {confirm: ""});
-
+    const [major, setMajor] = useState(0);
     useEffect(() => {
         setConfirmMassage(checkConfirm(password, state.confirm));
     });
@@ -49,6 +50,7 @@ const Register = ({navigation}) => {
                 username: data.username,
                 phonenumber: data.phoneNumber,
                 avatar: data.avatar,
+                major: data.major,
             });
             console.log(signup.data);
             ToastAndroid.show("Register Success!", ToastAndroid.LONG);
@@ -83,21 +85,15 @@ const Register = ({navigation}) => {
     }
     return (
         <>
-
+            {/*<Text>*/}
+            {/*    {`${categories[catagory].id} ${categories[catagory].name}`}*/}
+            {/*</Text>*/}
                 <ScrollView style={{margin: 0, backgroundColor: Colors.white}}>
                     {/*<KeyboardAvoidingView behavior="padding">*/}
                     <View style={styles.container}>
                         <View style={styles.textContainer}>
                             <Text style={styles.textTitle}>Sign Up</Text>
                         </View>
-                        {/* <View style={styles.btnWrapper}>
-          <SecondaryButton
-            label={"Sign Up With Facebook"}
-            btnType={"FACEBOOK"}
-            background={"dodgerblue"}
-            fontColor={"white"}
-          />
-        </View> */}
                         <TouchableOpacity onPress={() => setIsPanelActive(true)}>
                             <Image source={requireImage} style={styles.imageTitle}/>
                             <Text style={styles.text}>Change image</Text>
@@ -153,6 +149,10 @@ const Register = ({navigation}) => {
                                     autoCompleteType={'off'}
                                 />
                             </View>
+                            <Catagory
+                                initLabel={"Major"}
+                                selectedValue={major}
+                                onValueChange={(itemValue, itemIndex) => setMajor(itemValue)} />
                             <View style={styles.policy}>
                                 <Text style={styles.policyText}>
                                     I have read the{" "}
@@ -178,7 +178,7 @@ const Register = ({navigation}) => {
                             <PrimaryButton
                                 label={"Sign Up"}
                                 disable={confirmMassage}
-                                onPress={() => callAPI({email, password, phoneNumber, username, avatar})
+                                onPress={() => callAPI({email, password, phoneNumber, username, avatar, major})
                                 }
                             />
                         </View>

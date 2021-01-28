@@ -13,7 +13,6 @@ import {Icon} from "react-native-elements";
 import Colors from "../../configs/Colors";
 import TextInputButton from "../../components/forms/TextInputButton";
 import Calendar from "../../components/forms/Calendar";
-import CheckBox from "@react-native-community/checkbox";
 import Experience from "../../components/forms/Experience";
 import API from "../../services/API";
 import { useGlobalVar } from "../../context/GlobalContex";
@@ -37,7 +36,7 @@ export default function ResgisterTutor({ navigation }) {
     const getBirthDate = (result) => {
         setBirthDate(result);
     }
-    const [catagory, setCatagory] = useState("");
+    const [catagory, setCatagory] = useState(0);
     const alertEnroll = () => {
         Alert.alert(
             "Register",
@@ -60,7 +59,6 @@ export default function ResgisterTutor({ navigation }) {
 
     const signupTutor = async () => {
         try {
-            // console.log("Hello", firstname,email,surname, phoneNumber,major,birthDath.getDate(),experience)
             const response = await API.post("/tutor/signup/" + currentUser.id, {
                 firstname: firstname,
                 email: email,
@@ -74,10 +72,9 @@ export default function ResgisterTutor({ navigation }) {
             ToastAndroid.show(response.data.message, ToastAndroid.LONG);
             navigation.navigate("RoleSelect");
         } catch (e) {
-
+            alert(e)
         }
     }
-
 
     return (
         <>

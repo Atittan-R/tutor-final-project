@@ -44,6 +44,31 @@ export const renderingCheck = () => {
         })
     }
     useEffect( () =>  {
+        const checkUser = async () =>{
+            setLoading(true)
+            const store =  await AsyncStorage.getItem("userData");
+            const storeUser = JSON.parse(store)
+            try{
+                console.log("Data Store", storeUser)
+                if(storeUser){
+                    const res = await API.get("/user/findProfile/"+storeUser.id);
+                    if(res.data === null){
+                        await AsyncStorage.removeItem("userData");
+                        await AsyncStorage.removeItem("userToken");
+                        await AsyncStorage.removeItem("userRole");
+                        await AsyncStorage.removeItem("userRoles");
+                    }else{
+                        setCheck(res.data)
+                    }
+                }
+                setLoading(false)
+            }catch (e) {
+                console.log(e)
+                setLoading(false)
+                setCheck( false);
+            }
+        }
+        checkUser();
 
         registerForPushNotificationsAsync().then( async (token) => {
                 // console.log(token, "UserData",currentUser.id,)
@@ -85,37 +110,8 @@ export const renderingCheck = () => {
             Notifications.removeNotificationSubscription(responseListener);
         };
 
-    }, []);
+    }, [state.userData]);
     // END useEffect
-
-    useEffect(()=>{
-        const checkUser = async () =>{
-            setLoading(true)
-            const store =  await AsyncStorage.getItem("userData");
-            const storeUser = JSON.parse(store)
-            try{
-                console.log("stire", storeUser)
-                if(storeUser){
-                    const res = await API.get("/user/findOne/"+storeUser.id);
-                    if(res.data.user === null){
-                        await AsyncStorage.removeItem("userData");
-                        await AsyncStorage.removeItem("userToken");
-                        await AsyncStorage.removeItem("userRole");
-                        await AsyncStorage.removeItem("userRoles");
-                    }else{
-                        setCheck(res.data.user)
-                    }
-                }
-                setLoading(false)
-            }catch (e) {
-                console.log(e)
-                setLoading(false)
-                setCheck( false);
-            }
-        }
-
-        checkUser();
-    },[state.userData])
 
     if(loading){
         return <LoadingScreen/>
