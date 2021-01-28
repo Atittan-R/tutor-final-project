@@ -96,8 +96,6 @@ export default function TakeCreateCourse({ route, navigation }) {
       });
 
       await sendMessage(teke_res.data.id);
-
-      console.log("Hello", teke_res.data.id);
       ToastAndroid.show("create course success !", ToastAndroid.SHORT);
       clear();
       navigation.navigate("Home", { screen: "Feed" });
@@ -105,14 +103,6 @@ export default function TakeCreateCourse({ route, navigation }) {
       console.log(error);
     }
   }
-    async function sendMessage(takeid) {
-      const res = await API.post("/notification/message", {
-        takeId: takeid,
-        title: "Message",
-        body: "ได้ยัง ไอ่หอยยย"
-      })
-      console.log(res.data)
-    }
 
     const [panelProps, setPanelProps] = useState({
       fullWidth: true,
