@@ -187,8 +187,9 @@ export default function Home({ navigation }) {
                             horizontal={true}
                             data={data}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item: { name, description, courseAvatar } }) => (
+                            renderItem={({ item: { id, name, description, courseAvatar } }) => (
                                 <TouchableOpacity
+                                    onPress={() => navigation.navigate("CourseDetail", { course: id })}
                                     style={styles.listStyle}>
                                     <View style={{ padding: 15 }}>
                                         <Image source={courseAvatars[courseAvatar].image}
@@ -226,7 +227,7 @@ export default function Home({ navigation }) {
                                             // console.log("courseId", id)
                                             navigation.navigate("CourseDetail", { course: id });
                                         }}
-                                        style={{ marginTop: 5, }}>
+                                    >
                                         <View style={styles.courseWrap}>
                                             <Image source={courseAvatars[courseAvatar].image}
                                                 style={styles.courseImage} />

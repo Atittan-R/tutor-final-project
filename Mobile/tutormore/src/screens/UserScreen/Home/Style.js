@@ -114,7 +114,7 @@ export const styles = StyleSheet.create({
         padding: 5,
         flexDirection: "row",
         marginHorizontal: 2,
-        flexWrap: "wrap"
+        flexWrap: "wrap",
     },
     courseView: {
         flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start"
