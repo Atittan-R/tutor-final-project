@@ -66,6 +66,7 @@ export default function Me({ navigation }) {
     return unsub;
   }, []);
 
+  console.log(Profile)
   return (
     <>
       <ScrollView style={{ backgroundColor: Colors.background }}>

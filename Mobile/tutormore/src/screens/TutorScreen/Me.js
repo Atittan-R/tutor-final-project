@@ -19,6 +19,7 @@ import API from "../../services/API";
 import avatars from "../../configs/avatars";
 import Editprofile from '../../components/forms/Editprofile';
 import {actionCreators, initialState, reducer} from "../UserScreen/Reducer";
+import categories from "../../configs/categories";
 
 export default function Me({navigation, route}) {
     const {auth, authentication} = useGlobalVar();
@@ -28,10 +29,10 @@ export default function Me({navigation, route}) {
     const [Profile, setProfile] = useState([
         {
             username: "",
-            major: "",
             phonenumber: "",
             email: "",
             avatar: 0,
+            major: 0,
         }])
     const alertSignOut = () => {
         Alert.alert(
@@ -70,7 +71,7 @@ export default function Me({navigation, route}) {
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
-                            <Text style={styles.textNormal}>{Profile.major === null ? "-" : Profile.major}</Text>
+                            <Text style={styles.textNormal}>{categories[Profile.major].name}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>
