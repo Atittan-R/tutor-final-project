@@ -17,6 +17,7 @@ import API from "../../../services/API";
 import {SwipeablePanel} from 'rn-swipeable-panel';
 import avatars from "../../../configs/avatars";
 import categories from "../../../configs/categories";
+import Catagory from "../../../components/forms/Catagory";
 
 function Confrimation(state, action) {
     switch (action.type) {
@@ -36,7 +37,7 @@ const Register = ({navigation}) => {
     const [confirmMassage, setConfirmMassage] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [state, dispatch] = useReducer(Confrimation, {confirm: ""});
-
+    const [catagory, setCatagory] = useState("");
     useEffect(() => {
         setConfirmMassage(checkConfirm(password, state.confirm));
     });
@@ -49,6 +50,7 @@ const Register = ({navigation}) => {
                 username: data.username,
                 phonenumber: data.phoneNumber,
                 avatar: data.avatar,
+                catagory: data.catagory,
             });
             console.log(signup.data);
             ToastAndroid.show("Register Success!", ToastAndroid.LONG);
@@ -148,6 +150,10 @@ const Register = ({navigation}) => {
                                 {/*    {`${categories[0].id} ${categories[0].name}`}*/}
                                 {/*</Text>*/}
                             </View>
+                            <Catagory
+            selectedValue={catagory}
+            onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)}
+          />
                             <View style={styles.policy}>
                                 <Text style={styles.policyText}>
                                     I have read the{" "}

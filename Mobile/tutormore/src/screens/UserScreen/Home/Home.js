@@ -20,7 +20,7 @@ import LoadingScreen from "../../../components/Loading";
 import { styles } from "./Style";
 import NoDataScreen from "../../../components/Nodata";
 import courseAvatars from "../../../configs/courseAvatars";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
 
 export default function Home({ navigation }) {
     // search bar
@@ -100,7 +100,7 @@ export default function Home({ navigation }) {
                 </TouchableOpacity>
             </View>
             {loading ? <LoadingScreen /> :
-                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                     {/*Category*/}
                     <View style={styles.bg}>
                         <View style={{ marginVertical: 10 }}>
@@ -183,11 +183,13 @@ export default function Home({ navigation }) {
                         </View>
 
                         <FlatList
+                            showsHorizontalScrollIndicator={false}
                             horizontal={true}
                             data={data}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item: { name, description, courseAvatar } }) => (
+                            renderItem={({ item: { id, name, description, courseAvatar } }) => (
                                 <TouchableOpacity
+                                    onPress={() => navigation.navigate("CourseDetail", { course: id })}
                                     style={styles.listStyle}>
                                     <View style={{ padding: 15 }}>
                                         <Image source={courseAvatars[courseAvatar].image}
@@ -223,9 +225,9 @@ export default function Home({ navigation }) {
                                     <TouchableOpacity
                                         onPress={() => {
                                             // console.log("courseId", id)
-                                            navigation.navigate("CourseDetail", {course: id});
+                                            navigation.navigate("CourseDetail", { course: id });
                                         }}
-                                        style={{ marginTop: 5, }}>
+                                    >
                                         <View style={styles.courseWrap}>
                                             <Image source={courseAvatars[courseAvatar].image}
                                                 style={styles.courseImage} />

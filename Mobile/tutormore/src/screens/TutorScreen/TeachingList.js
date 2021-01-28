@@ -16,7 +16,7 @@ import { Icon, Rating } from "react-native-elements";
 import Colors from "../../configs/Colors";
 import { useGlobalVar } from "../../context/GlobalContex";
 import API from "../../services/API";
-
+import courseAvatars from "../../configs/courseAvatars";
 
 export default function TeachingList({ navigation }) {
   const { authentication } = useGlobalVar();
@@ -25,35 +25,35 @@ export default function TeachingList({ navigation }) {
   const [Mylist, setMylist] = useState()
 
 
-const Delete = async(id) =>{
-  setMylist(Mylist.filter((i)=>i.id!=id))
-  try {
-    const del=await API.delete("/course/delete/"+id)
-  } catch (error) {
-    console.log(error);
+  const Delete = async (id) => {
+    setMylist(Mylist.filter((i) => i.id != id))
+    try {
+      const del = await API.delete("/course/delete/" + id)
+    } catch (error) {
+      console.log(error);
+    }
+
+
   }
+  // const Edit=(id)=>{
+
+  // }
+
+  const fetchlist = async () => {
+    try {
+      const list = await API.post("/user/MyCourse", {
+        userId: currentUser.id
+      })
+      setMylist(list.data)
+    } catch (error) {
+      console.log(error);
+    }
 
 
-}
-// const Edit=(id)=>{
-
-// }
-
-const fetchlist=async()=>{
-  try {
-    const list=await API.post("/user/MyCourse",{
-      userId:currentUser.id
-    })
-    setMylist(list.data)
-  } catch (error) {
-    console.log(error);
   }
-
-
-}
-useEffect(() => {
-  fetchlist()
-}, [])
+  useEffect(() => {
+    fetchlist()
+  }, [])
   return (
     <>
       {/* header */}
@@ -69,15 +69,16 @@ useEffect(() => {
 
       {/* body */}
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={Mylist}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.push("CheckList",{course: item.name,id:item.id })}
-            // key={item.id}
+            onPress={() => navigation.push("CheckList", { course: item.name, id: item.id })}
+          // key={item.id}
           >
             <View style={styles.card}>
-              <Image source={require("../../assets/Appicon.png")} style={styles.image} />
+              <Image source={courseAvatars[item.courseAvatar].image} style={styles.image} />
               <View style={styles.content}>
                 <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
                 <View style={styles.contentRow}>
@@ -93,18 +94,18 @@ useEffect(() => {
                 <View style={styles.icon}>
                   {/* detail */}
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("Home", {screen: "CourseDetail", params: { course: item.id }}) }
+                    onPress={() => navigation.push("CourseDetail", { course: item.id })}
                     style={styles.button}>
-                    <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} size={15} />
+                    <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>
                   </TouchableOpacity>
 
                   {/* edit */}
                   <TouchableOpacity
                     style={styles.button}
-                  onPress={() =>navigation.push("EditCourse", {req: item})}
+                    onPress={() => navigation.push("EditCourse", { req: item })}
                   >
-                    <Icon name="edit" type="material" color={Colors.secondary} size={15} />
+                    <Icon name="edit" type="material" color={Colors.secondary} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Edit</Text>
                   </TouchableOpacity>
 
@@ -123,7 +124,7 @@ useEffect(() => {
                       )
                     }}
                   >
-                    <Icon name="delete-outline" type="material" color={Colors.secondary} size={15} />
+                    <Icon name="delete-outline" type="material" color={Colors.secondary} />
                     <Text style={{ color: Colors.secondary, fontSize: 10 }}>Delete</Text>
                   </TouchableOpacity>
                 </View>
