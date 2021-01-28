@@ -72,10 +72,9 @@ export default function ResgisterTutor({ navigation }) {
             ToastAndroid.show(response.data.message, ToastAndroid.LONG);
             navigation.navigate("RoleSelect");
         } catch (e) {
-
+            alert(e)
         }
     }
-
 
     return (
         <>
