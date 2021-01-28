@@ -10,13 +10,13 @@ import {
     View
 } from "react-native";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
-import SecondaryButton from "../../../components/buttons/SecondaryButton";
 import PrimaryInput from "../../../components/forms/PrimaryInput";
 import Colors from "../../../configs/Colors";
 import {useGlobalVar} from "../../../context/GlobalContex";
 import API from "../../../services/API";
 import {SwipeablePanel} from 'rn-swipeable-panel';
 import avatars from "../../../configs/avatars";
+import categories from "../../../configs/categories";
 
 function Confrimation(state, action) {
     switch (action.type) {
@@ -90,14 +90,6 @@ const Register = ({navigation}) => {
                         <View style={styles.textContainer}>
                             <Text style={styles.textTitle}>Sign Up</Text>
                         </View>
-                        {/* <View style={styles.btnWrapper}>
-          <SecondaryButton
-            label={"Sign Up With Facebook"}
-            btnType={"FACEBOOK"}
-            background={"dodgerblue"}
-            fontColor={"white"}
-          />
-        </View> */}
                         <TouchableOpacity onPress={() => setIsPanelActive(true)}>
                             <Image source={requireImage} style={styles.imageTitle}/>
                             <Text style={styles.text}>Change image</Text>
@@ -152,6 +144,9 @@ const Register = ({navigation}) => {
                                     onChangeText={(text) => setPhoneNumber(text)}
                                     autoCompleteType={'off'}
                                 />
+                                {/*<Text>*/}
+                                {/*    {`${categories[0].id} ${categories[0].name}`}*/}
+                                {/*</Text>*/}
                             </View>
                             <View style={styles.policy}>
                                 <Text style={styles.policyText}>
