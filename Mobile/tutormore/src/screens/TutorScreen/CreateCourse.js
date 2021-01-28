@@ -71,6 +71,7 @@ export default function CreateCourse({ navigation }) {
 
   const create = async () => {
     try {
+
       const createCourse = await API.post("course/create", {
         name: coureName,
         description: description,
