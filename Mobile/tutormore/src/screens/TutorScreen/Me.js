@@ -23,6 +23,10 @@ export default function Me({navigation, route}) {
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
     let localuser = JSON.parse(state.userData);
+    const [name, setname] = useState("")
+    const [major, setmajor] = useState("")
+    const [tel, settel] = useState("")
+    const [email, setemail] = useState("")
     const [Profile, setProfile] = useState(
         {
             username: "",
@@ -54,7 +58,13 @@ export default function Me({navigation, route}) {
         getUser();
     }, []);
 
-    console.log(Profile)
+    useEffect(() => {
+        setname(Profile.username)
+        setmajor(Profile.major)
+        settel(Profile.phonenumber)
+        setemail(Profile.email)
+    }, [Profile])
+
     return (
         <>
             <ScrollView style={{backgroundColor: Colors.background}}>
@@ -83,8 +93,15 @@ export default function Me({navigation, route}) {
                             <Text style={styles.textHeader}>Email</Text>
                             <Text style={styles.textNormal}>{Profile.email === null ? "-" : Profile.email}</Text>
                         </View>
-                        <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={Profile}
-                                     ProfileUser={[Profile, setProfile]}/>
+                        <Editprofile
+                            name={[name, setname]}
+                            major={[major, setmajor]}
+                            tel={[tel, settel]}
+                            email={[email, setemail]}
+                            modalVisible={[modalVisible, setModalVisible]}
+                            profile={Profile}
+                            ProfileUser={[Profile, setProfile]}
+                        />
                     </View>
 
                     <View style={{padding: 5}}></View>
