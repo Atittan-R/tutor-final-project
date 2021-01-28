@@ -47,7 +47,11 @@ export default function Feed({ navigation }) {
         setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
     useEffect(() => {
-        fetchApi();
+        const unsub = navigation.addListener("focus", () => {
+            fetchApi();
+        });
+
+        return unsub;
     }, [])
 
     const onRefresh = React.useCallback(() => {

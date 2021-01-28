@@ -24,10 +24,10 @@ export default function Me({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [Profile, setProfile] = useState({
     username: "",
-    major: 0,
     phonenumber: "",
     email: "",
     avatar: 0,
+    major: 0,
     roles:[],
   });
 
@@ -85,7 +85,7 @@ export default function Me({ navigation }) {
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Major</Text>
               <Text style={styles.textNormal}>
-                {categories[Profile.major].name}
+                {Profile.major === null ? "-" : categories[Profile.major].name}
               </Text>
             </View>
             <View style={styles.viewItem}>

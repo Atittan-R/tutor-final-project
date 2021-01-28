@@ -65,6 +65,7 @@ export default function TakeCreateCourse({route, navigation}) {
         setRequireImage(courseAvatars[id].image);
         setCourseAvatar(id);
     };
+    //image
 
     const getTimeStart = (result) => {
         setTimeStart(result);

@@ -8,8 +8,6 @@ import {
     StatusBar,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View
 } from 'react-native'
 import {Icon} from 'react-native-elements';
@@ -18,7 +16,6 @@ import {useGlobalVar} from "../../context/GlobalContex";
 import API from "../../services/API";
 import avatars from "../../configs/avatars";
 import Editprofile from '../../components/forms/Editprofile';
-import {actionCreators, initialState, reducer} from "../UserScreen/Reducer";
 import categories from "../../configs/categories";
 
 export default function Me({navigation, route}) {
@@ -26,14 +23,16 @@ export default function Me({navigation, route}) {
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
     let localuser = JSON.parse(state.userData);
-    const [Profile, setProfile] = useState([
+    const [Profile, setProfile] = useState(
         {
             username: "",
             phonenumber: "",
             email: "",
             avatar: 0,
             major: 0,
-        }])
+            roles:[]
+        })
+
     const alertSignOut = () => {
         Alert.alert(
             "Sign out",
@@ -45,8 +44,9 @@ export default function Me({navigation, route}) {
         )
     }
     const getUser = async () => {
-        const response = await API.get("/user/findOne/" + localuser.id)
+        const response = await API.get("/user/findProfile/" + localuser.id)
         const data = await response.data.user
+        console.log(data)
         setProfile(data)
     }
 
@@ -54,6 +54,7 @@ export default function Me({navigation, route}) {
         getUser();
     }, []);
 
+    console.log(Profile)
     return (
         <>
             <ScrollView style={{backgroundColor: Colors.background}}>
@@ -71,7 +72,7 @@ export default function Me({navigation, route}) {
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
-                            <Text style={styles.textNormal}>{categories[Profile.major].name}</Text>
+                            <Text style={styles.textNormal}>{Profile.major === null ? "-" : categories[Profile.major].name}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>
