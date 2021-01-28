@@ -10,6 +10,12 @@ module.exports = function (app) {
   //   });
 
   app.get(
+    "/api/course/count/:id",
+    // [authJwt.verifyToken],
+    controller.countUser
+  );
+
+  app.get(
     "/api/course/findAll",
     // [authJwt.verifyToken],
     controller.findAllCourse

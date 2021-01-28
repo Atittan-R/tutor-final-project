@@ -29,14 +29,14 @@ export default function CourseDetail({ navigation, route }) {
 
     const currentUser = JSON.parse(state.userData);
     const { course } = route.params;
-    console.log("Course parameter", course)
+    // console.log("Course parameter", course)
 
     const courseData = async () => {
         loadDispatch(actionCreators.loading())
         try {
             const res = await API.get("/course/findOne/" + course)
             console.log("res: ", res.data.course)
-            const courseDetail = await res.data.course;
+            const courseDetail = await res.data;
             loadDispatch(actionCreators.success(courseDetail));
         } catch (e) {
             loadDispatch(actionCreators.failure())
@@ -52,9 +52,6 @@ export default function CourseDetail({ navigation, route }) {
     useEffect(() => {
         courseData();
     }, []);
-
-
-
 
     // console.log(currentUser.id, course)
     const enrollData = async () => {
@@ -188,42 +185,42 @@ export default function CourseDetail({ navigation, route }) {
                     <Icon name="book" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Course</Text>
-                        <Text style={styles.text}>{data.name}</Text>
+                        <Text style={styles.text}>{data.course.name}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="event" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Date</Text>
-                        <Text style={styles.text}>{data.day}</Text>
+                        <Text style={styles.text}>{data.course.day}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="category" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Category</Text>
-                        <Text style={styles.text}>{data.CourseCate.name}</Text>
+                        <Text style={styles.text}>{data.course.CourseCate.name}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="schedule" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Time</Text>
-                        <Text style={styles.text}>{data.time_start + " - " + data.time_end}</Text>
+                        <Text style={styles.text}>{data.course.time_start + " - " + data.course.time_end}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="timer" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
-                        <Text style={styles.title}>Duraton</Text>
-                        <Text style={styles.text}>{data.duration}</Text>
+                        <Text style={styles.title}>Duration</Text>
+                        <Text style={styles.text}>{data.course.duration}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
-                        <Text style={styles.text}>{data.amount}</Text>
+                        <Text style={styles.text}>{`${data.countEnroll}/${data.course.amount}`}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -240,14 +237,14 @@ export default function CourseDetail({ navigation, route }) {
                     <MapView
                         style={styles.map}
                         region={{
-                            latitude: parseFloat(data.lat), longitude: parseFloat(data.long),
+                            latitude: parseFloat(data.course.lat), longitude: parseFloat(data.course.long),
                             latitudeDelta: 0.01,
                             longitudeDelta: 0.01,
                         }}
                         onRegionChangeComplete={(region) => setDraggable(region)}
                     >
                         <Marker
-                            coordinate={{ latitude: parseFloat(data.lat), longitude: parseFloat(data.long) }}
+                            coordinate={{ latitude: parseFloat(data.course.lat), longitude: parseFloat(data.course.long) }}
                         />
                     </MapView>
                 </View>
@@ -267,14 +264,14 @@ export default function CourseDetail({ navigation, route }) {
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Name</Text>
                         {/*{console.log( detail )}*/}
-                        <Text style={styles.text}>{data.tutors.username ? data.tutors.username : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="school" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Major</Text>
-                        <Text style={styles.text}>{data.tutors.major ? data.tutors.major : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -286,7 +283,7 @@ export default function CourseDetail({ navigation, route }) {
                     />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Line ID</Text>
-                        <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                 </View>
 

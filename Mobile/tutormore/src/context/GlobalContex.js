@@ -80,7 +80,7 @@ export const GlobalProvider = ({ children }) => {
                 return user;
             }
         } catch (error) {
-            alert("Catch! => ", error.response.data.message);
+            alert(error.response.data.message);
         }
     }
 
@@ -93,7 +93,7 @@ export const GlobalProvider = ({ children }) => {
                     // console.log(user)
                     await dispatch({ type: "SIGN_IN", token: user.data.accessToken, user: JSON.stringify(user.data), r: JSON.stringify(user.data.roles) });
                 } catch (e) {
-                    alert(e)
+                   log("sign in: ",e.message)
                 }
             },
             signOut: async () => {
@@ -102,7 +102,6 @@ export const GlobalProvider = ({ children }) => {
                     await AsyncStorage.removeItem("userToken");
                     await AsyncStorage.removeItem("userRole");
                     await AsyncStorage.removeItem("userRoles");
-
                 } catch (e) {
                     alert(e)
                 }
