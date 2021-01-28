@@ -100,104 +100,104 @@ export default function MyCourse({ navigation, route }) {
       {loading ? (
         renderPlaceholders()
       ) : (
-        <FlatList
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          data={data}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("CourseDetail2", { course: item.id })
-              }
-              style={styles.button}
-              key={item.id}
-            >
-              <View style={styles.card}>
-                <Image
-                  source={courseAvatars[item.courseAvatar].image}
-                  style={styles.image}
-                />
-                <View
-                  style={{
-                    flex: 1,
-                    marginLeft: 10,
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Text numberOfLines={1} style={styles.title}>
-                    {item.name}
-                  </Text>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Icon
-                      name="calendar-today"
-                      type="material"
-                      color="gray"
-                      size={15}
-                    />
-                    <Text style={styles.textGray}>
-                      {item.time_start + " - " + item.time_end}
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            data={data}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.push("CourseDetail2", { course: item.id })
+                }
+                style={styles.button}
+                key={item.id}
+              >
+                <View style={styles.card}>
+                  <Image
+                    source={courseAvatars[item.courseAvatar].image}
+                    style={styles.image}
+                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      marginLeft: 10,
+                      justifyContent: "flex-start",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Text numberOfLines={1} style={styles.title}>
+                      {item.name}
                     </Text>
-                    <Icon
-                      name="schedule"
-                      type="material"
-                      color="gray"
-                      size={15}
-                    />
-                    <Text style={styles.textGray}>{item.day}</Text>
-                  </View>
-                  <View style={styles.qrcode}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.push("RatingCourse", {
-                          id: item.id,
-                          name: item.name,
-                          userId: currentUser.id,
-                        })
-                      }
-                    >
-                      {item.status == "Rated" ? (
-                        <Icon
-                          name="star-outline"
-                          type="material"
-                          color={Colors.secondary}
-                        />
-                      ) : (
-                        <Icon
-                          name="star-outline"
-                          type="material"
-                          color={Colors.secondary}
-                        />
-                      )}
-
-                      <Text style={styles.textBlack}>Rating</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={{ alignItems: "center" }}
-                      onPress={() =>
-                        navigation.push("QrCode", {
-                          id: currentUser.id,
-                          name: currentUser.username,
-                        })
-                      }
-                    >
-                      <QRCode
-                        value={[item.id + "/" + currentUser.id].toString()}
-                        size={20}
-                        color={Colors.secondary}
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                      <Icon
+                        name="calendar-today"
+                        type="material"
+                        color="gray"
+                        size={15}
                       />
-                      <Text style={styles.textBlack}>QR Code</Text>
-                    </TouchableOpacity>
+                      <Text style={styles.textGray}>
+                        {item.time_start + " - " + item.time_end}
+                      </Text>
+                      <Icon
+                        name="schedule"
+                        type="material"
+                        color="gray"
+                        size={15}
+                      />
+                      <Text style={styles.textGray}>{item.day}</Text>
+                    </View>
+                    <View style={styles.qrcode}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.push("RatingCourse", {
+                            id: item.id,
+                            name: item.name,
+                            userId: currentUser.id,
+                          })
+                        }
+                      >
+                        {item.status == "Rated" ? (
+                          <Icon
+                            name="star-outline"
+                            type="material"
+                            color={Colors.secondary}
+                          />
+                        ) : (
+                            <Icon
+                              name="star-outline"
+                              type="material"
+                              color={Colors.secondary}
+                            />
+                          )}
+
+                        <Text style={styles.textBlack}>Rating</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={{ alignItems: "center" }}
+                        onPress={() =>
+                          navigation.push("QrCode", {
+                            id: currentUser.id,
+                            name: currentUser.username,
+                          })
+                        }
+                      >
+                        <QRCode
+                          value={[item.id + "/" + currentUser.id].toString()}
+                          size={20}
+                          color={Colors.secondary}
+                        />
+                        <Text style={styles.textBlack}>QR Code</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      )}
+              </TouchableOpacity>
+            )}
+          />
+        )}
     </>
   );
 }

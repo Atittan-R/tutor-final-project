@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import {
-  Button,
   Image,
   Alert,
   SafeAreaView,
@@ -9,185 +8,315 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View, ToastAndroid, RefreshControl,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import Colors from "../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
+import API from "../../services/API";
+import { useGlobalVar } from "../../context/GlobalContex";
+import LoadingScreen from "../../components/Loading";
+import { Linking } from "react-native";
+import { actionCreators, initialState, reducer } from "../../screens/UserScreen/Reducer";
+import { SwipeablePanel } from 'rn-swipeable-panel';
+import courseAvatars from "../../configs/courseAvatars";
+import avatars from "../../configs/avatars";
+export default function CourseDetail({ navigation, route }) {
+  const { authentication } = useGlobalVar();
+  const [state, dispatch] = authentication;
 
-export default function CourseDetail({ navigation }) {
-  const [region, setRegion] = useState({
-    latitude: 51.5079145,
-    longitude: -0.0899163,
+  const [reduce, loadDispatch] = useReducer(reducer, initialState)
+
+  const currentUser = JSON.parse(state.userData);
+  const { course } = route.params;
+  // console.log("Course parameter", course)
+
+  const courseData = async () => {
+    loadDispatch(actionCreators.loading())
+    try {
+      const res = await API.get("/course/findOne/" + course)
+      console.log("res: ", res.data.course)
+      const courseDetail = await res.data;
+      loadDispatch(actionCreators.success(courseDetail));
+    } catch (e) {
+      loadDispatch(actionCreators.failure())
+      console.log("err", e.message)
+    }
+  }
+  const [draggable, setDraggable] = useState({
+    latitude: 0,
+    longitude: 0,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   });
-  const [draggable, setDraggable] = useState({
-    latitude: 51.5078788,
-    longitude: -0.0877321,
-  });
-  function movementMarker(e) {
-    // get coordinate from mapviews
-    const { latitude, longitude } = e.coordinate;
-    // update coordinate
-    setDraggable({
-      draggable: { latitude, longitude },
-    });
-  }
-  function onClickMap(e) {
-    const { latitude, longitude } = e.coordinate;
-    setDraggable({
-      latitude: latitude,
-      longitude: longitude,
-    });
+  useEffect(() => {
+    courseData();
+  }, []);
+
+  // console.log(currentUser.id, course)
+  const enrollData = async () => {
+    try {
+      const response = await API.post("/enroll/course",
+        {
+          userId: currentUser.id,
+          courseId: course,
+        })
+      const courserate = await API.post("/create/rate",
+        {
+          userId: currentUser.id,
+          courseId: course,
+        })
+      console.log("rate ", courserate.data)
+      console.log("status ", response.data.status)
+      //TODO
+      // Generate QRCode
+      // Popup QRCode
+      // Ask where to go History or Back
+      ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
+      navigation.navigate("Me", { screen: "MyCourse", params: { focus: "focus" } })
+    } catch (e) {
+      alert(e.response.data.status);
+    }
   }
 
-  //course details
-  const details = {
-    course: "Database",
-    date: "Mon Wed Fri",
-    time: "17.0-21.0",
-    duration: "1 month",
-    amount: "21/30"
-  }
-  //tutor profile
-  const profile = {
-    name: "Pixels",
-    major: "Information of Technology(ES)",
-    line: "@pixels.ss",
-  };
-
-  const alertConfirm = () => {
+  const alertEnroll = () => {
     Alert.alert(
-      "Confirm",
-      "Are you sure to confirm?",
+      "Enroll",
+      "Are you sure to enroll?",
       [
-        { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
-        { text: "OK", onPress: () => navigation.navigate("Me", { screen: "TeachingList" }) }
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK", onPress: async () => {
+            await enrollData();
+          }
+        },
       ],
       { cancelable: false }
+    );
+  };
+
+
+
+
+  //Panel Open Close
+  const [isPanelActive, setIsPanelActive] = useState(false);
+  const [panelProps, setPanelProps] = useState({
+    fullWidth: true,
+    onlySmall: true,
+    closeOnTouchOutside: true,
+    onClose: () => setIsPanelActive(false),
+    onPressCloseButton: () => setIsPanelActive(false),
+  });
+
+  const { data, loading, error } = reduce
+  // const index = data.tutors.experience;
+  // const [exp, setExp] = useState(null);
+  // if (index == '') {
+  //     setExp('')
+  // } else if (index == 1) {
+  //     setExp("None")
+  // } else if (index == 2) {
+  //     setExp("Less than 1 year")
+  // } else if (index == 3) {
+  //     setExp("1 year")
+  // }
+  // else if (index == 4) {
+  //     setExp("2 years")
+  // }
+  // else if (index == 5) {
+  //     setExp("More than 2 years")
+  // }
+  if (loading) {
+    return <LoadingScreen />
+  }
+
+  if (error) {
+    return (
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <View style={styles.center}>
+          <Text>Failed to load posts!</Text>
+        </View>
+      </ScrollView>
     )
   }
+
+  console.log("data: ", data)
+
   return (
     <>
       {/* header */}
       <SafeAreaView style={styles.container} />
-      <View style={styles.space}>
-        <View style={styles.headerBar}>
-          <TouchableOpacity
-            style={{ color: Colors.secondary, marginRight: 10 }}
-            onPress={() => navigation.pop()}>
-            <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>Database</Text>
-        </View>
+      <View style={styles.headerBar}>
         <TouchableOpacity
-          style={styles.add}
-          onPress={alertConfirm}>
-          <Icon name="check" type="material" color={Colors.secondary} />
+          style={{ color: Colors.secondary, marginRight: 10 }}
+          onPress={() => navigation.pop()}
+        >
+          <Icon
+            name="arrow-back-outline"
+            type="ionicon"
+            color={Colors.secondary}
+          />
+
         </TouchableOpacity>
+        <Text style={styles.textHeader}>Course Name</Text>
       </View>
-
-
 
       {/* body */}
       <ScrollView style={{ backgroundColor: Colors.white }}>
-        <View style={styles.barTitle}>
-          <Text style={{ marginLeft: 20, fontWeight: "bold", color: Colors.secondary }}>Details</Text>
-        </View>
         <View style={styles.viewImage}>
-          <Image source={require("../../assets/Appicon.png")} style={styles.image} />
+          <View style={styles.bgImage}>
+            <Image
+              source={courseAvatars[data.course.courseAvatar].image}
+              style={styles.image}
+            />
+          </View>
+        </View>
+        <View style={styles.line} />
+        <View style={[styles.topic, styles.row]}>
+          <View style={[styles.column, styles.box]} />
+          <Text style={styles.textRec}>Details</Text>
         </View>
         <View style={styles.view}>
           <Icon name="book" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Course</Text>
-            <Text style={styles.text}>{details.course}</Text>
+            <Text style={styles.text}>{data.course.name}</Text>
           </View>
         </View>
         <View style={styles.view}>
           <Icon name="event" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Date</Text>
-            <Text style={styles.text}>{details.date}</Text>
+            <Text style={styles.text}>{data.course.day}</Text>
+          </View>
+        </View>
+        <View style={styles.view}>
+          <Icon name="category" type="material" color={Colors.secondary} />
+          <View style={styles.viewItem}>
+            <Text style={styles.title}>Category</Text>
+            <Text style={styles.text}>{data.course.CourseCate.name}</Text>
           </View>
         </View>
         <View style={styles.view}>
           <Icon name="schedule" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Time</Text>
-            <Text style={styles.text}>{details.time}</Text>
+            <Text style={styles.text}>{data.course.time_start + " - " + data.course.time_end}</Text>
           </View>
         </View>
         <View style={styles.view}>
           <Icon name="timer" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
-            <Text style={styles.title}>Duraton</Text>
-            <Text style={styles.text}>{details.duration}</Text>
+            <Text style={styles.title}>Duration</Text>
+            <Text style={styles.text}>{data.course.duration}</Text>
           </View>
         </View>
         <View style={styles.view}>
           <Icon name="person" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Amount</Text>
-            <Text style={styles.text}>{details.amount}</Text>
+            <Text style={styles.text}>{`${data.countEnroll}/${data.course.amount}`}</Text>
           </View>
         </View>
         <View style={styles.view}>
           <Icon name="place" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Place</Text>
-            <Text style={styles.text}>Suranari, Mueang Nakhon Rat...</Text>
+            <TouchableOpacity
+              onPress={() => Linking.openURL('google.navigation:q=' + draggable.latitude + "," + draggable.longitude)}>
+              <Text style={styles.text}>navigate</Text>
+            </TouchableOpacity>
           </View>
         </View>
-
         <View style={styles.viewMap}>
           <MapView
             style={styles.map}
-            region={region}
-            onRegionChangeComplete={(region) => setRegion(region)}
-            onPress={(e) => onClickMap(e.nativeEvent)}
+            region={{
+              latitude: parseFloat(data.course.lat), longitude: parseFloat(data.course.long),
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+            onRegionChangeComplete={(region) => setDraggable(region)}
           >
             <Marker
-              draggable
-              coordinate={draggable}
-              onDragStart
-              onDragEnd={(e) => movementMarker(e.nativeEvent)}
+              coordinate={{ latitude: parseFloat(data.course.lat), longitude: parseFloat(data.course.long) }}
             />
           </MapView>
         </View>
 
-        <View style={styles.barTitle}>
-          <Text style={{ marginLeft: 20, fontWeight: "bold", color: Colors.secondary }}>Tutor Profile</Text>
+        <View style={styles.line} />
+        <View style={styles.viewMore}>
+          <View style={[styles.topic, styles.row]}>
+            <View style={[styles.column, styles.box]} />
+            <Text style={styles.textRec}>Tutor Profile</Text>
+          </View>
+          <TouchableOpacity onPress={() => setIsPanelActive(true)}>
+            <Text style={styles.textViewMore}>View More</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.view}>
           <Icon name="person" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Name</Text>
-            <Text style={styles.text}>{profile.name}</Text>
+            {/*{console.log( detail )}*/}
+            <Text style={styles.text}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
           </View>
         </View>
         <View style={styles.view}>
           <Icon name="school" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Major</Text>
-            <Text style={styles.text}>{profile.major}</Text>
+            <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
           </View>
         </View>
         <View style={styles.view}>
-          <Icon name="line" type="fontisto" color={Colors.secondary} size={20} />
+          <Icon
+            name="line"
+            type="fontisto"
+            color={Colors.secondary}
+            size={20}
+          />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Line ID</Text>
-            <Text style={styles.text}>{profile.line}</Text>
+            <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
           </View>
         </View>
 
-        {/* <TouchableOpacity
-          style={styles.button}
-          onPress={alertEnroll}>
-          <Text style={styles.title}>Enroll</Text>
-        </TouchableOpacity> */}
+        {/* take out button enroll */}
+        <View style={{ marginVertical: 10 }} />
       </ScrollView>
+      <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+        <View style={styles.panelContent}>
+          <Image source={avatars[data.course.tutors.avatar].image} style={styles.imageTutor} />
+          <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
+          <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.date_of_birtth ? data.course.tutors.date_of_birtth : "Not specified"}</Text>
+          <View style={[styles.panelRow, { alignSelf: "center" }]}>
+            <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+            <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
+          </View>
+          <View style={[styles.panelRow, { alignSelf: "center" }]}>
+            <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+            <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
+          </View>
+          <View style={[styles.panelRow, { alignSelf: "center" }]}>
+            <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+            <Text style={styles.text}>{data.course.tutors.email ? data.course.tutors.email : "Not specified"}</Text>
+          </View>
+          <View style={[styles.panelRow, { alignSelf: "center" }]}>
+            <Icon name="line" type="fontisto" color={Colors.secondary} style={{ marginRight: 15 }} size={19} />
+            <Text style={styles.text}>{data.course.tutors.lineId ? data.course.tutors.lineId : "Not specified"}</Text>
+          </View>
+          <View style={[styles.panelRow, { alignSelf: "center" }]}>
+            <Text style={[styles.title, { marginRight: 9 }]}>Exp.</Text>
+            <Text style={styles.text}>{data.course.tutors.experience ? data.course.tutors.experience : "Not specified"}</Text>
+          </View>
+        </View>
+      </SwipeablePanel>
     </>
   );
 }
@@ -197,53 +326,50 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+  bottom: {
+    paddingBottom: 50,
+  },
   headerBar: {
-    // display: "flex",
-    // flexWrap: "wrap",
+    display: "flex",
+    flexWrap: "wrap",
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.primary,
   },
   textHeader: {
     fontSize: 20,
     fontWeight: "bold",
     color: Colors.secondary,
   },
-  space: {
-    display: "flex",
-    flexWrap: "wrap",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: Colors.primary
-  },
   image: {
-    marginTop: 20,
+    // marginTop: 10,
     width: 100,
     height: 100,
+    resizeMode: "contain"
   },
   viewImage: {
     justifyContent: "center",
     flexDirection: "row",
+    alignItems: "center",
+    // backgroundColor: "red",
+    paddingVertical: 20,
+    flex: 1
+
   },
-  barTitle: {
-    justifyContent: "flex-start",
-    flexDirection: "row",
+  bgImage: {
     backgroundColor: Colors.primary,
-    borderRadius: 5,
-    marginTop: 10,
-    marginHorizontal: 10,
-    paddingVertical: 10,
+    borderRadius: 30,
+    justifyContent: "center",
+    height: 70,
   },
   view: {
     flexDirection: "row",
     marginHorizontal: 30,
     alignItems: "center",
-    marginTop: 10,
-
+    marginTop: 5,
   },
   viewItem: {
     flexDirection: "row",
@@ -251,10 +377,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 10,
     marginTop: 10,
-    flex: 1
+    flex: 1,
   },
   text: {
-    color: Colors.secondary
+    color: Colors.secondary,
   },
   map: {
     height: 200,
@@ -266,7 +392,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    color: Colors.secondary
+    color: Colors.secondary,
   },
   button: {
     justifyContent: "center",
@@ -276,13 +402,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 10,
     paddingVertical: 10,
-    elevation: 2
+    elevation: 2,
   },
   viewButton: {
     justifyContent: "space-evenly",
     flexDirection: "row",
     // alignItems: "stretch",
-    marginTop: 20
+    marginTop: 20,
   },
   centeredView: {
     flex: 1,
@@ -294,11 +420,64 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 5,
     padding: 10,
-    // alignItems: "stretch",
     elevation: 2,
+  },
+  line: {
+    marginVertical: 10,
+    marginHorizontal: 8,
+    paddingVertical: 0.4,
+    backgroundColor: Colors.gray,
+  },
+  box: {
+    marginTop: -10,
+    marginLeft: 8,
+    paddingVertical: 1,
+    paddingHorizontal: 2.5,
+    borderRadius: 30,
+    backgroundColor: Colors.primary,
+  },
+  row: {
+    flexDirection: "row",
+  },
+  column: {
+    flexDirection: "column",
+  },
+  textRec: {
+    flex: 1,
+    alignSelf: "center",
+    color: Colors.secondary,
+    paddingLeft: 5,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  textViewMore: {
+    fontSize: 12,
+    color: "#00b",
+  },
+  viewMore: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginRight: 30,
+    flex: 1
+  },
+  topic: {
+    flex: 1,
+    marginBottom: 10,
+  },
+  panelContent: {
+    margin: 20,
+  },
+  imageTutor: {
+    width: 100,
+    height: 100,
+    resizeMode: "contain",
+    alignSelf: "center",
+  },
+  panelRow: {
+    flexDirection: "row",
+    alignItems: "center",
 
-  },
-  add: {
-    paddingRight: 20,
-  },
+  }
 });

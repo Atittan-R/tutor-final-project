@@ -11,10 +11,10 @@ const CreateCourseStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="CreateCourseStack"
+      initialRouteName="CreateCourse"
     >
       <Stack.Screen name="CreateCourse" component={CreateCourse} />
-      <Stack.Screen name="CourseDetail" component={CourseDetail} />
+
     </Stack.Navigator>
 
   )
