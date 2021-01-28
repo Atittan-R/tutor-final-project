@@ -115,16 +115,6 @@ export default function CourseDetail({ navigation, route }) {
         )
     }
 
-    // console.log("data: ", data)
-    //Panel Open Close
-    // const [panelProps, setPanelProps] = useState({
-    //     fullWidth: true,
-    //     onlySmall: true,
-    //     closeOnTouchOutside: true,
-    //     onClose: () => setIsPanelActive(false),
-    //     onPressCloseButton: () => setIsPanelActive(false),
-    // });
-    // const [isPanelActive, setIsPanelActive] = useState(false);
     return (
         <>
             {/* header */}
