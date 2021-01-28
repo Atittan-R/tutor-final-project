@@ -11,6 +11,7 @@ export default function Search({ navigation }) {
     const [search, setSearch] = useState('');
     const [Request, setRequest] = useState([])
     const [Course, setCourse] = useState([])
+    const [Tag, setTag] = useState([])
     const course = [
         {
             id: "0",
@@ -72,6 +73,25 @@ export default function Search({ navigation }) {
             rate: 3.2,
         },
     ];
+    const fetchTag = async (name) => {
+        console.log("tag: ",name);
+        try {
+            const tag = await API.post("/search/tag", {
+                tag: name
+            })
+            const arr=tag.data
+            const course=[]
+            const request=[]
+            arr.map((i)=>i.courses.map((i)=>course.push(i)))
+            arr.map((i)=>i.courses.map((i)=>request.push(i)))
+            setCourse(course)
+            setRequest(request)
+            // console.log(arr.map((i)=>i.courses));
+            // setCourse(courses.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const fetchCourse = async () => {
         try {
             const courses = await API.post("/search/course", {
@@ -90,13 +110,22 @@ export default function Search({ navigation }) {
                 searchQuerying: search
             })
 
-            console.log(requests.data);
+            // console.log(requests.data);
             setRequest(requests.data)
         } catch (error) {
             console.log(error);
         }
     }
-
+    const fetchtag = async () => {
+        try {
+            const tag = await API.get("/Tagrecommended")
+        
+            // console.log(tag.data);
+            setTag(tag.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         if (search != "") {
             fetchCourse()
@@ -107,6 +136,9 @@ export default function Search({ navigation }) {
         }
 
     }, [search])
+    useEffect(() => {
+        fetchtag()
+    }, [])
     return (
         <>
             <SafeAreaView style={styles.container} />
@@ -135,13 +167,16 @@ export default function Search({ navigation }) {
                     <Text style={styles.textRec}>Trending Tags</Text>
                 </View>
                 <View style={[styles.row, { flexWrap: "wrap" }]}>
-                    <TouchableOpacity onPress={() => navigation.push("TagSearch")}>
-                        <Text style={styles.tag}>Tag1</Text>
+                     <FlatList
+                    data={Tag}
+                    keyExtractor={item => item.id}
+                    horizontal={true}
+                    renderItem={({ item }) =>
+                    <TouchableOpacity onPress={() => fetchTag(item.name)}>
+                        <Text style={styles.tag}>{item.name}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.tag}>Tag2</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.tag}>Tag3</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.tag}>Tag4</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.tag}>Tag5sfsdgrwdgbdfhb</Text></TouchableOpacity>
+                       }
+                       />
                 </View>
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
@@ -159,12 +194,12 @@ export default function Search({ navigation }) {
                                 <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
                                 <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
 
-                                {item.join_users.length > 0 ?
+                                {/* {item.join_users.length > 0 ?
 
                                     <Text style={styles.textBody}>{item.join_users.map((i) => i.joinCount)}</Text>
                                     :
                                     <Text style={styles.textBody}>{0}</Text>
-                                }
+                                } */}
 
                             </View>
                         </TouchableOpacity>

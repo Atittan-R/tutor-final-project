@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   SafeAreaView,
@@ -50,6 +50,14 @@ export default function CreateCourse({ navigation }) {
   const [lat, setlat] = useState(14.8817767);
   const [long, setlong] = useState(102.0185075);
   const [selectedValue, setSelectedValue] = useState("");
+  const [draggable, setDraggable] = useState({
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+    latitude:  14.8817767,
+    longitude:  102.0185075,
+   
+  });
+
 
   const getTimeStart = (result) => {
     setTimeStart(result);
@@ -57,6 +65,9 @@ export default function CreateCourse({ navigation }) {
   const getTimeEnd = (result) => {
     setTimeEnd(result);
   };
+
+
+
   const clear = () => {
     setCourseName("");
     setClaerTag(true);
@@ -66,6 +77,7 @@ export default function CreateCourse({ navigation }) {
     setTimeStart(new Date(0, 0, 0, 0));
     setClaerDate(true);
   };
+
 
   const create = async () => {
     try {
@@ -107,7 +119,9 @@ export default function CreateCourse({ navigation }) {
     setRequireImage(courseAvatars[id].image);
     setCourseAvatar(id);
   };
-
+  useEffect(() => {
+ console.log(draggable)
+  }, [draggable])
   return (
     <>
       {/* header */}
@@ -152,15 +166,17 @@ export default function CreateCourse({ navigation }) {
             onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)}
           />
           <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
-          <TouchableOpacity
+          <TouchableOpacity 
             onPress={() => {
               setModalVisible(true);
             }}
           >
-            <Location
+            <Location 
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
+         
             />
           </TouchableOpacity>
 
@@ -175,9 +191,10 @@ export default function CreateCourse({ navigation }) {
               </TouchableOpacity>
             </View>
 
-            <Location
+            <Location 
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
             />
           </Modal>

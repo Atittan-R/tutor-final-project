@@ -52,6 +52,14 @@ export default function TakeCreateCourse({ route, navigation }) {
   const [requireImage, setRequireImage] = useState(
     require("../../assets/course/picture.png")
   );
+  const [draggable, setDraggable] = useState({
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+    latitude:  14.8817767,
+    longitude:  102.0185075,
+   
+  });
+
   const [isPanelActive, setIsPanelActive] = useState(false);
 
   //TODO
@@ -187,17 +195,20 @@ export default function TakeCreateCourse({ route, navigation }) {
             onTextChange={(text) => setCourseName(text)} value={catagory} editable={false} />
           <Tag
             value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
-           <TouchableOpacity
+          <TouchableOpacity 
             onPress={() => {
               setModalVisible(true);
             }}
           >
-            <Location
+            <Location 
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
+         
             />
           </TouchableOpacity>
+
           <Modal
             animationType="slide"
             transparent={true}
@@ -208,9 +219,11 @@ export default function TakeCreateCourse({ route, navigation }) {
                 <Icon name="cancel" type="material" color={Colors.secondary} />
               </TouchableOpacity>
             </View>
-            <Location
+
+            <Location 
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
             />
           </Modal>

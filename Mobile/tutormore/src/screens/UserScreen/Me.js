@@ -21,6 +21,10 @@ export default function Me({ navigation }) {
   const { auth, authentication } = useGlobalVar();
   const [state, dispatch] = authentication;
   const [modalVisible, setModalVisible] = useState(false);
+  const [name, setname] = useState("")
+  const [major, setmajor] = useState("")
+  const [tel, settel] = useState("")
+  const [email, setemail] = useState("")
   const [Profile, setProfile] = useState({
     username: "",
     major: "",
@@ -59,7 +63,14 @@ export default function Me({ navigation }) {
   useEffect(() => {
     getUser();
   }, []);
+  useEffect(() => {
+    
+    setname(Profile.username)
+    setmajor(Profile.major)
+    settel(Profile.phonenumber)
+    setemail(Profile.email)
 
+}, [Profile])
   return (
     <>
       <ScrollView style={{ backgroundColor: Colors.background }}>
@@ -72,28 +83,32 @@ export default function Me({ navigation }) {
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Name</Text>
               <Text style={styles.textNormal}>
-                {Profile.username === null ? "-" : Profile.username}
+                {Profile.username === null ? "-" : name}
               </Text>
             </View>
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Major</Text>
               <Text style={styles.textNormal}>
-                {Profile.major === null ? "-" : Profile.major}
+                {Profile.major === null ? "-" : major}
               </Text>
             </View>
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Tel.</Text>
               <Text style={styles.textNormal}>
-                {Profile.phonenumber === null ? "-" : Profile.phonenumber}
+                {Profile.phonenumber === null ? "-" : tel}
               </Text>
             </View>
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Email</Text>
               <Text style={styles.textNormal}>
-                {Profile.email === null ? "-" : Profile.email}
+                {Profile.email === null ? "-" : email}
               </Text>
             </View>
             <Editprofile
+              name={[name, setname]}
+              major={[major, setmajor]} 
+              tel={[tel, settel]}
+              email={[email, setemail]}
               modalVisible={[modalVisible, setModalVisible]}
               profile={Profile}
               ProfileUser={[Profile, setProfile]}
