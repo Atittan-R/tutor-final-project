@@ -145,8 +145,6 @@ export default function CourseDetail({ navigation, route }) {
         )
     }
 
-    console.log("data: ", data)
-
     return (
         <>
             {/* header */}

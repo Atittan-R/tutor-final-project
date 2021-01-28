@@ -26,6 +26,7 @@ export default function CourseDetail({ navigation, route }) {
     const [state, dispatch] = authentication;
 
     const [reduce, loadDispatch] = useReducer(reducer, initialState)
+    const { data, loading, error } = reduce;
 
     const currentUser = JSON.parse(state.userData);
     const { course } = route.params;
@@ -35,57 +36,38 @@ export default function CourseDetail({ navigation, route }) {
         loadDispatch(actionCreators.loading())
         try {
             const res = await API.get("/course/findOne/" + course)
-            console.log("res: ", res.data)
-            const courseDetail = await res.data;
+            // console.log("res: ", res.data.course)
+            const courseDetail = await res.data.course;
             loadDispatch(actionCreators.success(courseDetail));
         } catch (e) {
             loadDispatch(actionCreators.failure())
             console.log("err", e.message)
         }
     }
-    const [draggable, setDraggable] = useState({
-        latitude: 0,
-        longitude: 0,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
     useEffect(() => {
         courseData();
     }, []);
 
-
-
-
-    // console.log(currentUser.id, course)
-    const enrollData = async () => {
+    const leaveCourse = async () => {
         try {
-            const response = await API.post("/enroll/course",
+            console.log(currentUser.id)
+            const response = await API.post("/cancel/enroll",
                 {
                     userId: currentUser.id,
                     courseId: course,
                 })
-            const courserate = await API.post("/create/rate",
-                {
-                    userId: currentUser.id,
-                    courseId: course,
-                })
-            console.log("rate ", courserate.data)
-            console.log("status ", response.data.status)
-            //TODO
-            // Generate QRCode
-            // Popup QRCode
-            // Ask where to go History or Back
-            ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", { screen: "MyCourse", params: { focus: "focus" } })
+            console.log("status ", response.data)
+            ToastAndroid.show("You have Leave Course " + response.data.status, ToastAndroid.LONG);
+            navigation.pop()
         } catch (e) {
-            alert(e.response.data.status);
+            alert(e);
         }
     }
 
     const alertEnroll = () => {
         Alert.alert(
             "Enroll",
-            "Are you sure to enroll?",
+            "Are you sure to Leave this Course?",
             [
                 {
                     text: "Cancel",
@@ -94,7 +76,7 @@ export default function CourseDetail({ navigation, route }) {
                 },
                 {
                     text: "OK", onPress: async () => {
-                        await enrollData();
+                        await leaveCourse();
                     }
                 },
             ],
@@ -115,7 +97,7 @@ export default function CourseDetail({ navigation, route }) {
         onPressCloseButton: () => setIsPanelActive(false),
     });
 
-    const { data, loading, error } = reduce
+
     // const index = data.course.tutors.experience;
     // const [exp, setExp] = useState(null);
     // if (index == '') {
@@ -133,6 +115,15 @@ export default function CourseDetail({ navigation, route }) {
     // else if (index == 5) {
     //     setExp("More than 2 years")
     // }
+    // console.log("detail: ",detail.tutors.email);
+
+    const [draggable, setDraggable] = useState({
+        latitude: parseFloat(data.lat),
+        longitude: parseFloat(data.long),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    });
+
     if (loading) {
         return <LoadingScreen />
     }
