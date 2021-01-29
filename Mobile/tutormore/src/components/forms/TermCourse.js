@@ -13,7 +13,7 @@ export default function TermCourse(props) {
           style={styles.drop}
           onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
         >
-          <Picker.Item label="select" value="select" />
+          <Picker.Item label="select" value={0} />
           <Picker.Item label="14 days" value="14 days" />
           <Picker.Item label="1 month" value="1 month" />
           <Picker.Item label="3 months" value="3 months" />

@@ -32,7 +32,7 @@ export default function TakeCreateCourse({ route, navigation }) {
   const { req } = route.params
   const [coureName, setCourseName] = useState("");
   const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("");
   const [catagory, setCatagory] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
   const [lat, setlat] = useState(14.8817767)
@@ -56,9 +56,9 @@ export default function TakeCreateCourse({ route, navigation }) {
   const [draggable, setDraggable] = useState({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
-    latitude:  14.8817767,
-    longitude:  102.0185075,
-   
+    latitude: 14.8817767,
+    longitude: 102.0185075,
+
   });
 
   const [isPanelActive, setIsPanelActive] = useState(false);
@@ -80,6 +80,38 @@ export default function TakeCreateCourse({ route, navigation }) {
     console.log(res.data);
   }
 
+  const [count, setCount] = useState(0);
+  const checkEmpty = () => {
+    if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
+    if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
+    if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
+    setCount(2);
+  }
+  useEffect(() => {
+    console.log("count =>>>>" + count);
+    if (count == 2) {
+      alertTaked();
+    }
+  }, [count]);
+  const alertTaked = () => {
+    Alert.alert(
+      "Taked",
+      "Are you sure to Taked?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK", onPress: async () => {
+            await taked();
+          }
+        },
+      ],
+      { cancelable: false }
+    );
+  };
   const taked = async () => {
     const clear = () => {
       setCourseName("");
@@ -91,6 +123,7 @@ export default function TakeCreateCourse({ route, navigation }) {
       setTimeEnd(new Date(0, 0, 0, 0));
       setTimeStart(new Date(0, 0, 0, 0));
       setClaerDate(true);
+      setCount(0);
     };
     try {
       const teke_res = await API.post("/taked", {
@@ -140,10 +173,6 @@ export default function TakeCreateCourse({ route, navigation }) {
       <SafeAreaView style={styles.container} />
       <View style={styles.headerBar}>
         <Text style={styles.textHeader}>Create Course</Text>
-        <TouchableOpacity
-          onPress={() => taked()}>
-          <Icon name="check" type="material" color={Colors.secondary} />
-        </TouchableOpacity>
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
@@ -193,17 +222,17 @@ export default function TakeCreateCourse({ route, navigation }) {
             onTextChange={(text) => setCourseName(text)} value={catagory} editable={false} />
           <Tag
             value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => {
               setModalVisible(true);
             }}
           >
-            <Location 
+            <Location
               lat={[lat, setlat]}
               long={[long, setlong]}
               draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
-         
+
             />
           </TouchableOpacity>
 
@@ -218,7 +247,7 @@ export default function TakeCreateCourse({ route, navigation }) {
               </TouchableOpacity>
             </View>
 
-            <Location 
+            <Location
               lat={[lat, setlat]}
               long={[long, setlong]}
               draggable={[draggable, setDraggable]}
@@ -226,6 +255,10 @@ export default function TakeCreateCourse({ route, navigation }) {
             />
           </Modal>
         </View>
+        <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
+          <Text style={styles.title}>Take</Text>
+        </TouchableOpacity>
+        <View style={{ marginVertical: 10 }} />
       </ScrollView>
       <SwipeablePanel {...panelProps} isActive={isPanelActive}>
         <View style={styles.row}>
@@ -367,5 +400,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     elevation: 2,
   },
-
+  button: {
+    justifyContent: "center",
+    flexDirection: "row",
+    backgroundColor: Colors.primary,
+    borderRadius: 30,
+    marginTop: 10,
+    paddingVertical: 10,
+    elevation: 2,
+  },
 });

@@ -28,10 +28,10 @@ export default function Me({ navigation }) {
   const [email, setemail] = useState("")
   const [Profile, setProfile] = useState({
     username: "",
-    major: 0,
     phonenumber: "",
     email: "",
     avatar: 0,
+    major: 0,
     roles:[],
   });
 
@@ -69,14 +69,14 @@ export default function Me({ navigation }) {
 
     return unsub;
   }, []);
+  
   useEffect(() => {
-    
     setname(Profile.username)
     setmajor(Profile.major)
     settel(Profile.phonenumber)
     setemail(Profile.email)
-
 }, [Profile])
+
   return (
     <>
       <ScrollView style={{ backgroundColor: Colors.background }}>
@@ -95,7 +95,7 @@ export default function Me({ navigation }) {
             <View style={styles.viewItem}>
               <Text style={styles.textHeader}>Major</Text>
               <Text style={styles.textNormal}>
-                {Profile.major === null ? "-" : major}
+                {Profile.major === null ? "-" : categories[Profile.major].name}
               </Text>
             </View>
             <View style={styles.viewItem}>

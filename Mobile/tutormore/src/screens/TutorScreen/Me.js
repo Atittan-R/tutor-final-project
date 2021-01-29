@@ -8,8 +8,6 @@ import {
     StatusBar,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View
 } from 'react-native'
 import { Icon } from 'react-native-elements';
@@ -18,25 +16,31 @@ import { useGlobalVar } from "../../context/GlobalContex";
 import API from "../../services/API";
 import avatars from "../../configs/avatars";
 import Editprofile from '../../components/forms/Editprofile';
-import { actionCreators, initialState, reducer } from "../UserScreen/Reducer";
+import categories from "../../configs/categories";
 
 export default function Me({ navigation, route }) {
     const { auth, authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
+    const [name, setname] = useState("")
+    const [major, setmajor] = useState("")
+    const [tel, settel] = useState("")
+    const [email, setemail] = useState("")
     let localuser = JSON.parse(state.userData);
     const [name, setname] = useState("")
     const [major, setmajor] = useState("")
     const [tel, settel] = useState("")
     const [email, setemail] = useState("")
-    const [Profile, setProfile] = useState([
+    const [Profile, setProfile] = useState(
         {
             username: "",
-            major: "",
             phonenumber: "",
             email: "",
             avatar: 0,
-        }])
+            major: 0,
+            roles: []
+        })
+
     const alertSignOut = () => {
         Alert.alert(
             "Sign out",
@@ -48,22 +52,23 @@ export default function Me({ navigation, route }) {
         )
     }
     const getUser = async () => {
-        const response = await API.get("/user/findOne/" + localuser.id)
+        const response = await API.get("/user/findProfile/" + localuser.id)
         const data = await response.data.user
+        console.log(data)
         setProfile(data)
     }
 
     useEffect(() => {
         getUser();
     }, []);
-    useEffect(() => {
     
+    useEffect(() => {
         setname(Profile.username)
         setmajor(Profile.major)
         settel(Profile.phonenumber)
         setemail(Profile.email)
-    
     }, [Profile])
+    
     return (
         <>
             <ScrollView style={{ backgroundColor: Colors.background }}>
@@ -81,7 +86,7 @@ export default function Me({ navigation, route }) {
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
-                            <Text style={styles.textNormal}>{Profile.major === null ? "-" : major}</Text>
+                            <Text style={styles.textNormal}>{Profile.major === null ? "-" : categories[Profile.major].name}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>

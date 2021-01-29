@@ -42,6 +42,22 @@ const Register = ({navigation}) => {
         setConfirmMassage(checkConfirm(password, state.confirm));
     });
 
+    const [count, setCount] = useState(0);
+    const checkEmpty = () => {
+    if (!email.trim()) { setCount(1); alert('Please enter email'); return; }
+    if (!username.trim()) { setCount(1); alert('Please enter username'); return; }
+    if (!password.trim()) { setCount(1); alert('Please enter password'); return; }
+    if (!phoneNumber.trim()) { setCount(1); alert('Please enter phone number'); return; }
+    if (major == 0) { setCount(1); alert('Please select term course'); return; }
+    if (toggleCheckBox==false) { setCount(1); alert('Please select checkbox'); return; }
+    setCount(2);
+  }
+  useEffect(() => {
+    console.log("count =>>>>" + count);
+    if (count == 2) {
+        callAPI({email, password, phoneNumber, username, avatar, major});
+    }
+  }, [count]);
     const callAPI = async (data) => {
         try {
             const signup = await API.post("/auth/signup", {
@@ -178,8 +194,7 @@ const Register = ({navigation}) => {
                             <PrimaryButton
                                 label={"Sign Up"}
                                 disable={confirmMassage}
-                                onPress={() => callAPI({email, password, phoneNumber, username, avatar, major})
-                                }
+                                onPress={() =>checkEmpty()}s                            
                             />
                         </View>
                     </View>

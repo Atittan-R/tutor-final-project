@@ -74,19 +74,20 @@ export default function Search({ navigation }) {
         },
     ];
     const fetchTag = async (name) => {
-        console.log("tag: ",name);
+        console.log("tag: ", name);
         try {
             const tag = await API.post("/search/tag", {
                 tag: name
             })
-            const arr= await tag.data
-            const course=[]
-            const request=[]
-            await  arr.map((i)=>i.courses.map((i)=>course.push(i)))
-            await arr.map((i)=>i.requests.map((i)=>request.push(i)))
+            const arr = tag.data
+            const course = []
+            const request = []
+            arr.map((i) => i.courses.map((i) => course.push(i)))
+            arr.map((i) => i.requests.map((i) => request.push(i)))
             setCourse(course)
             setRequest(request)
             console.log(request);
+            // console.log(arr.map((i)=>i.courses));
             // setCourse(courses.data)
         } catch (error) {
             console.log(error);
@@ -119,7 +120,7 @@ export default function Search({ navigation }) {
     const fetchtag = async () => {
         try {
             const tag = await API.get("/Tagrecommended")
-        
+
             // console.log(tag.data);
             setTag(tag.data)
         } catch (error) {
@@ -167,16 +168,17 @@ export default function Search({ navigation }) {
                     <Text style={styles.textRec}>Trending Tags</Text>
                 </View>
                 <View style={[styles.row, { flexWrap: "wrap" }]}>
-                     <FlatList
-                    data={Tag}
-                    keyExtractor={item => item.id}
-                    horizontal={true}
-                    renderItem={({ item }) =>
-                    <TouchableOpacity onPress={() => fetchTag(item.name)}>
-                        <Text style={styles.tag}>{item.name}</Text>
-                    </TouchableOpacity>
-                       }
-                       />
+                    <FlatList
+                        data={Tag}
+                        keyExtractor={item => item.id}
+                        showsHorizontalScrollIndicator={false}
+                        horizontal={true}
+                        renderItem={({ item }) =>
+                            <TouchableOpacity onPress={() => fetchTag(item.name)}>
+                                <Text style={styles.tag}>{item.name}</Text>
+                            </TouchableOpacity>
+                        }
+                    />
                 </View>
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>

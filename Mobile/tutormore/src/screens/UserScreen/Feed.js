@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     FlatList,
     Image,
@@ -11,16 +11,16 @@ import {
     TouchableOpacity,
     View
 } from 'react-native'
-import { Icon } from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import API from "../../services/API"
-import { useGlobalVar } from "../../context/GlobalContex";
+import {useGlobalVar} from "../../context/GlobalContex";
 import LoadingScreen from "../../components/Loading";
 import avatars from "../../configs/avatars";
 import categories from "../../configs/categories";
 
-export default function Feed({ navigation }) {
-    const { authentication } = useGlobalVar();
+export default function Feed({navigation}) {
+    const {authentication} = useGlobalVar();
     const [state, dispatch] = authentication;
     const [request, setRequest] = useState([]);
     const [isjoin, setisJoin] = useState([]);
@@ -35,8 +35,8 @@ export default function Feed({ navigation }) {
                 userId: user.id, requestId: resId
             });
             // console.log(join_req.data.status);
-            isjoin.push({ id: resId })
-            setisJoin([...isjoin, { id: resId }])
+            isjoin.push({id: resId})
+            setisJoin([...isjoin, {id: resId}])
             // console.log(isjoin);
         } catch (error) {
             console.log(error);
@@ -48,7 +48,7 @@ export default function Feed({ navigation }) {
             const cancel_join = await API.post("join/cancel", {
                 userId: user.id, requestId: resId
             });
-            isjoin.push({ id: resId })
+            isjoin.push({id: resId})
             setisJoin(isjoin.filter(x => x.id !== resId))
         } catch (error) {
             console.log(error);
@@ -91,7 +91,7 @@ export default function Feed({ navigation }) {
     return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container} />
+            <SafeAreaView style={styles.container}/>
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Feed Request</Text>
                 <TextInput
@@ -100,18 +100,18 @@ export default function Feed({ navigation }) {
                     onChangeText={(text) => searchAction(text)}
                 />
             </View>
-            {loading ? <LoadingScreen /> :
+            {loading ? <LoadingScreen/> :
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true}/>
                     }
                     data={filterItem ? filterItem : request}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) =>
+                    renderItem={({item}) =>
                         <View style={styles.cardView} key={item.id}>
                             <View style={styles.viewItem}>
-                                <Image source={avatars[item.user.avatar].image} style={styles.image} />
+                                <Image source={avatars[item.user.avatar].image} style={styles.image}/>
                                 <Text style={styles.title}>{item.user.username}</Text>
                             </View>
                             <View
@@ -126,26 +126,26 @@ export default function Feed({ navigation }) {
                                     <Text style={styles.title}>{item.name}</Text>
                                     <View style={styles.viewItem}>
                                         <Icon name="schedule" type="material" color={'gray'} size={15}
-                                            style={styles.icon} />
+                                              style={styles.icon}/>
                                         <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
                                         <Icon name="event" type="material" color={"gray"} size={15}
-                                            style={styles.icon} />
+                                              style={styles.icon}/>
                                         <Text style={styles.textGray}>{item.date}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
                                         <Icon name="category" type="material" color={"gray"} size={15}
-                                            style={styles.icon} />
+                                              style={styles.icon}/>
                                         <Text style={styles.textGray}>{categories[item.categoryId].name}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
                                         {/* if no tag dont show*/}
                                         {item.tag.length !== 0 &&
-                                            <FlatList
-                                                horizontal={true}
-                                                data={item.tag}
-                                                showsHorizontalScrollIndicator={false}
-                                                keyExtractor={item => item.id}
-                                                renderItem={({ item: {name} }) =>
+                                        <FlatList
+                                            horizontal={true}
+                                            data={item.tag}
+                                            showsHorizontalScrollIndicator={false}
+                                            keyExtractor={item => item.id}
+                                            renderItem={({item: {name}}) =>
                                                 <Text style={styles.tag}>
                                                     {name}
                                                 </Text>
@@ -157,7 +157,7 @@ export default function Feed({ navigation }) {
                                     {
                                         isjoin.map((i) => i.id).includes(item.id) ?
                                             <TouchableOpacity style={styles.button_cancel}
-                                                onPress={() => cancel(item.id)}>
+                                                              onPress={() => cancel(item.id)}>
                                                 <Text style={styles.text}>cancel</Text>
                                             </TouchableOpacity>
                                             : <TouchableOpacity style={styles.button} onPress={() =>
@@ -170,7 +170,7 @@ export default function Feed({ navigation }) {
                                 </View>
                             </View>
                         </View>
-                    } />
+                    }/>
             }
         </>
     );
