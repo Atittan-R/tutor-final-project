@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     StyleSheet,
@@ -12,18 +12,21 @@ import {
     Alert,
     Modal
 } from "react-native";
-import {Icon, Rating} from "react-native-elements";
+import { Icon, Rating } from "react-native-elements";
 import Colors from "../../configs/Colors";
-import {useGlobalVar} from "../../context/GlobalContex";
+import { useGlobalVar } from "../../context/GlobalContex";
 import API from "../../services/API";
 import courseAvatars from "../../configs/courseAvatars";
+import NoDataScreen from "../../components/Nodata";
+import LoadingScreen from "../../components/Loading";
 
-export default function TeachingList({navigation}) {
-    const {authentication} = useGlobalVar();
+export default function TeachingList({ navigation }) {
+    const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const currentUser = JSON.parse(state.userData);
     const [Mylist, setMylist] = useState()
-
+    const [error, setError] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const Delete = async (id) => {
         setMylist(Mylist.filter((i) => i.id != id))
@@ -35,13 +38,17 @@ export default function TeachingList({navigation}) {
     }
 
     const fetchlist = async () => {
+        setLoading(true)
         try {
             const list = await API.post("/user/MyCourse", {
                 userId: currentUser.id
             })
             setMylist(list.data)
+            setLoading(false)
+            setError(false)
         } catch (error) {
             console.log(error);
+            setError(true)
         }
     }
 
@@ -49,15 +56,22 @@ export default function TeachingList({navigation}) {
         fetchlist()
     }, [])
 
+    if (loading) {
+        return <LoadingScreen />
+    }
+
+    if (error) {
+        return <NoDataScreen />
+    }
     return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container}/>
+            <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
                 <TouchableOpacity
-                    style={{color: Colors.secondary, marginRight: 10}}
+                    style={{ color: Colors.secondary, marginRight: 10 }}
                     onPress={() => navigation.pop()}>
-                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary}/>
+                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Teaching List</Text>
             </View>
@@ -67,41 +81,41 @@ export default function TeachingList({navigation}) {
                 showsVerticalScrollIndicator={false}
                 data={Mylist}
                 keyExtractor={(item) => item.id}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                     <TouchableOpacity
-                        onPress={() => navigation.push("CourseDetail", {course: item.id})}
-                        // key={item.id}
+                        onPress={() => navigation.push("CheckList", { course: item.name, id: item.id })}
+                    // key={item.id}
                     >
                         <View style={styles.card}>
-                            <Image source={courseAvatars[item.courseAvatar].image} style={styles.image}/>
+                            <Image source={courseAvatars[item.courseAvatar].image} style={styles.image} />
                             <View style={styles.content}>
                                 <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
                                 <View style={styles.contentRow}>
-                                    <Icon name="calendar-today" type="material" color="gray" size={15}/>
+                                    <Icon name="calendar-today" type="material" color="gray" size={15} />
                                     <Text style={styles.textGray}>{item.time_start} {item.time_end}</Text>
-                                    <Icon name="schedule" type="material" color="gray" size={15}/>
+                                    <Icon name="schedule" type="material" color="gray" size={15} />
                                     <Text style={styles.textGray}>{item.day}</Text>
                                 </View>
                                 <View style={styles.contentRow}>
-                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1}/>
+                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
                                     <Text style={styles.textGray}>{item.rate}</Text>
                                 </View>
                                 <View style={styles.icon}>
                                     {/* detail */}
                                     <TouchableOpacity
-                                        onPress={() => navigation.push("CourseDetail", {course: item.id})}
+                                        onPress={() => navigation.push("CourseDetail", { course: item.id })}
                                         style={styles.button}>
-                                        <Icon name="chrome-reader-mode" type="material" color={Colors.secondary}/>
-                                        <Text style={{color: Colors.secondary, fontSize: 10}}>Details</Text>
+                                        <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} />
+                                        <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>
                                     </TouchableOpacity>
 
                                     {/* edit */}
                                     <TouchableOpacity
                                         style={styles.button}
-                                        onPress={() => navigation.push("EditCourse", {req: item})}
+                                        onPress={() => navigation.push("EditCourse", { req: item })}
                                     >
-                                        <Icon name="edit" type="material" color={Colors.secondary}/>
-                                        <Text style={{color: Colors.secondary, fontSize: 10}}>Edit</Text>
+                                        <Icon name="edit" type="material" color={Colors.secondary} />
+                                        <Text style={{ color: Colors.secondary, fontSize: 10 }}>Edit</Text>
                                     </TouchableOpacity>
 
                                     {/* delete */}
@@ -117,20 +131,20 @@ export default function TeachingList({navigation}) {
                                                         onPress: () => console.log("Cancel Pressed"),
                                                         style: "cancel"
                                                     },
-                                                    {text: "OK", onPress: () => Delete(item.id), style: "cancel"}
+                                                    { text: "OK", onPress: () => Delete(item.id), style: "cancel" }
                                                 ],
-                                                {cancelable: false}
+                                                { cancelable: false }
                                             )
                                         }}
                                     >
-                                        <Icon name="delete-outline" type="material" color={Colors.secondary}/>
-                                        <Text style={{color: Colors.secondary, fontSize: 10}}>Delete</Text>
+                                        <Icon name="delete-outline" type="material" color={Colors.secondary} />
+                                        <Text style={{ color: Colors.secondary, fontSize: 10 }}>Delete</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
                     </TouchableOpacity>
-                )}/>
+                )} />
         </>
     );
 }

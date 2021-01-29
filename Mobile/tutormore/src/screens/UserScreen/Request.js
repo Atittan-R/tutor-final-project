@@ -7,8 +7,8 @@ import Colors from '../../configs/Colors'
 import Catagory from '../../components/forms/Catagory';
 import Tag from '../../components/forms/Tag';
 import API from "../../services/API"
-import {useGlobalVar} from "../../context/GlobalContex";
-
+import { useGlobalVar } from "../../context/GlobalContex";
+import AwesomeAlert from 'react-native-awesome-alerts';
 export default function Request({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -20,7 +20,7 @@ export default function Request({ navigation }) {
     const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
     const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
     const [Description, setDescription] = useState("")
-    const [catagory, setCatagory] = useState(null)
+    const [catagory, setCatagory] = useState(0)
     const [tags, setTags] = useState([])
     const [claerTag, setClaerTag] = useState(false)
 
@@ -31,7 +31,24 @@ export default function Request({ navigation }) {
         setTimeEnd(result);
     }
 
-    console.log(current.id);
+    console.log("userId: " + current.id);
+    const [count, setCount] = useState(0);
+    const checkEmpty = () => {
+        const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
+        const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
+        const sum = end - start;
+        if (!CourseName.trim()) { setCount(1); alert('Please enter course name'); return; }
+        if (!day.toString().trim()) { setCount(1); alert('Please set the day'); return; }
+        if (sum < 60) { setCount(1); alert("Please set time correctly, at least  minutes away. Result: " + sum); return; }
+        if (catagory == 0) { setCount(1); alert('Please select Catagory'); return; }
+        setCount(2);
+    }
+    useEffect(() => {
+        console.log("count =>>>>" + count);
+        if (count == 2) {
+            creteRequst();
+        }
+    }, [count]);
 
     const creteRequst = async () => {
         try {
@@ -56,7 +73,7 @@ export default function Request({ navigation }) {
             })
 
         } catch (error) {
-            if (error.response.status === 404) {
+            if (error.response.status == 404) {
                 clear();
                 navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
             }
@@ -77,13 +94,17 @@ export default function Request({ navigation }) {
         setTimeEnd(new Date(0, 0, 0, 0))
         setTimeStart(new Date(0, 0, 0, 0))
         setClaerDate(true)
+        setCount(0)
     }
 
-    useEffect(() => {
-        console.log("CourseName :", CourseName);
-        console.log("day :", day);
-        console.log("Tags :", tags);
-    }, [CourseName])
+    // useEffect(() => {
+    //     console.log("CourseName :", CourseName);
+    //     console.log("day :", day);
+    //     console.log("Tags :", tags);
+    //     console.log("start " + TimeStart.getHours());
+    //     console.log("end " + TimeEnd.getHours());
+    //     console.log("cat " + catagory);
+    // }, [CourseName, tags, TimeStart.getHours(), TimeEnd.getHours(), catagory])
 
     return (
         <>
@@ -108,7 +129,7 @@ export default function Request({ navigation }) {
                     onValueChange={(text) => setCatagory(text)} />
                 <Tag
                     onChangeTags={(tags) => setTags(tags)} value={[tags, setTags]} claerTag={[claerTag, setClaerTag]} />
-                <TouchableOpacity style={styles.button} onPress={() => creteRequst()}>
+                <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
                     <Text style={styles.title}>Submit</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
