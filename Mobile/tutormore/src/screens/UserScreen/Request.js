@@ -94,6 +94,7 @@ export default function Request({ navigation }) {
         setTimeEnd(new Date(0, 0, 0, 0))
         setTimeStart(new Date(0, 0, 0, 0))
         setClaerDate(true)
+        setCount(0)
     }
 
     // useEffect(() => {

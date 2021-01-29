@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StatusBar,
@@ -43,7 +43,7 @@ export default function CreateCourse({ navigation }) {
   const [catagory, setCatagory] = useState("");
   const [lat, setlat] = useState(14.8817767);
   const [long, setlong] = useState(102.0185075);
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState(0);
   const [draggable, setDraggable] = useState({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
@@ -67,8 +67,27 @@ export default function CreateCourse({ navigation }) {
     setTimeEnd(new Date(0, 0, 0, 0));
     setTimeStart(new Date(0, 0, 0, 0));
     setClaerDate(true);
+    setCount(0);
   };
-
+  const [count, setCount] = useState(0);
+  const checkEmpty = () => {
+    const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
+    const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
+    const sum = end - start;
+    if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
+    if (!day.toString().trim()) { setCount(1); alert('Please set the day'); return; }
+    if (sum < 60) { setCount(1); alert("Please set time correctly, at least  minutes away. Result: " + sum); return; }
+    if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
+    if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
+    if (catagory == 0) { setCount(1); alert('Please select Catagory'); return; }
+    setCount(2);
+  }
+  useEffect(() => {
+    console.log("count =>>>>" + count);
+    if (count == 2) {
+      create();
+    }
+  }, [count]);
   const create = async () => {
     try {
       const createCourse = await API.post("course/create", {
@@ -171,6 +190,7 @@ export default function CreateCourse({ navigation }) {
             <Location
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
             />
           </TouchableOpacity>
@@ -191,7 +211,7 @@ export default function CreateCourse({ navigation }) {
             />
           </Modal>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => create()}>
+        <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
           <Text style={styles.title}>Create</Text>
         </TouchableOpacity>
         <View style={{ marginVertical: 10 }} />
