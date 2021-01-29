@@ -22,7 +22,7 @@ exports.createRequest =async (req, res) => {
   });
   
     //Set Tag to tag table
-   
+    console.log(req.body.tagname.length);
       if (req.body.tagname) {
         for (i = 0; i < req.body.tagname.length; i++) {
           const tag=await  Tag.create({
@@ -31,7 +31,7 @@ exports.createRequest =async (req, res) => {
             categoryId: requset.categoryId,
           })
           //  console.log(requset.id,tag.id);
-          requset.setTag(tag)
+          requset.addTag(tag)
         }
         res.status(201).send({
           request: requset,

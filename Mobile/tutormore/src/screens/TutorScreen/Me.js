@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import {
     Alert,
     Image,
@@ -12,19 +12,23 @@ import {
     TouchableOpacity,
     View
 } from 'react-native'
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Colors from '../../configs/Colors';
-import {useGlobalVar} from "../../context/GlobalContex";
+import { useGlobalVar } from "../../context/GlobalContex";
 import API from "../../services/API";
 import avatars from "../../configs/avatars";
 import Editprofile from '../../components/forms/Editprofile';
-import {actionCreators, initialState, reducer} from "../UserScreen/Reducer";
+import { actionCreators, initialState, reducer } from "../UserScreen/Reducer";
 
-export default function Me({navigation, route}) {
-    const {auth, authentication} = useGlobalVar();
+export default function Me({ navigation, route }) {
+    const { auth, authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
     let localuser = JSON.parse(state.userData);
+    const [name, setname] = useState("")
+    const [major, setmajor] = useState("")
+    const [tel, settel] = useState("")
+    const [email, setemail] = useState("")
     const [Profile, setProfile] = useState([
         {
             username: "",
@@ -38,9 +42,9 @@ export default function Me({navigation, route}) {
             "Sign out",
             "Are you sure you want to sign out?",
             [
-                {text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel"},
-                {text: "OK", onPress: () => auth.signOut()}],
-            {cancelable: false}
+                { text: "Cancel", onPress: () => console.log("Cancel Pressed"), style: "cancel" },
+                { text: "OK", onPress: () => auth.signOut() }],
+            { cancelable: false }
         )
     }
     const getUser = async () => {
@@ -52,45 +56,59 @@ export default function Me({navigation, route}) {
     useEffect(() => {
         getUser();
     }, []);
-
+    useEffect(() => {
+    
+        setname(Profile.username)
+        setmajor(Profile.major)
+        settel(Profile.phonenumber)
+        setemail(Profile.email)
+    
+    }, [Profile])
     return (
         <>
-            <ScrollView style={{backgroundColor: Colors.background}}>
+            <ScrollView style={{ backgroundColor: Colors.background }}>
                 <SafeAreaView>
                     <View style={styles.coverArea}>
                         <View style={styles.coverArea}>
                             <Image source={avatars[Profile.avatar ? Profile.avatar : 0].image}
-                                   style={styles.imageProfile}/>
+                                style={styles.imageProfile} />
                         </View>
 
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Name</Text>
 
-                            <Text style={styles.textNormal}>{Profile.username === null ? "-" : Profile.username}</Text>
+                            <Text style={styles.textNormal}>{Profile.username === null ? "-" :name}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
-                            <Text style={styles.textNormal}>{Profile.major === null ? "-" : Profile.major}</Text>
+                            <Text style={styles.textNormal}>{Profile.major === null ? "-" : major}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>
                             <Text
-                                style={styles.textNormal}>{Profile.phonenumber === null ? "-" : Profile.phonenumber}</Text>
+                                style={styles.textNormal}>{Profile.phonenumber === null ? "-" : tel}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Email</Text>
-                            <Text style={styles.textNormal}>{Profile.email === null ? "-" : Profile.email}</Text>
+                            <Text style={styles.textNormal}>{Profile.email === null ? "-" : email}</Text>
                         </View>
-                        <Editprofile modalVisible={[modalVisible, setModalVisible]} profile={Profile}
-                                     ProfileUser={[Profile, setProfile]}/>
+                        <Editprofile
+                            name={[name, setname]}
+                            major={[major, setmajor]}
+                            tel={[tel, settel]}
+                            email={[email, setemail]}
+                            modalVisible={[modalVisible, setModalVisible]}
+                            profile={Profile}
+                            ProfileUser={[Profile, setProfile]}
+                        />
                     </View>
 
-                    <View style={{padding: 5}}></View>
+                    <View style={{ padding: 5 }}></View>
 
                     <View style={styles.coverArea}>
                         <Pressable
-                            onPress={() => navigation.navigate("Course", {screen: 'CreateCourse'})}
-                            style={({pressed}) => [
+                            onPress={() => navigation.navigate("Course", { screen: 'CreateCourse' })}
+                            style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
                                 },
@@ -98,7 +116,7 @@ export default function Me({navigation, route}) {
                             ]}
                         >
                             <View style={styles.viewItem}>
-                                <Icon name="add-task" type="material" color={Colors.secondary}/>
+                                <Icon name="add-task" type="material" color={Colors.secondary} />
                                 <Text style={styles.textNormal}>Create My Course</Text>
                                 <Icon name="navigate-next" type="material" color={Colors.secondary}
                                 />
@@ -106,7 +124,7 @@ export default function Me({navigation, route}) {
                         </Pressable>
                         <Pressable
                             onPress={() => navigation.push("TeachingList")}
-                            style={({pressed}) => [
+                            style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
                                 },
@@ -114,14 +132,14 @@ export default function Me({navigation, route}) {
                             ]}
                         >
                             <View style={styles.viewItem}>
-                                <Icon name="menu-book" type="material" color={Colors.secondary}/>
+                                <Icon name="menu-book" type="material" color={Colors.secondary} />
                                 <Text style={styles.textNormal}>Teaching List</Text>
-                                <Icon name="navigate-next" type="material" color={Colors.secondary}/>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
                             </View>
                         </Pressable>
                         <Pressable
                             onPress={() => navigation.navigate("Feed")}
-                            style={({pressed}) => [
+                            style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
                                 },
@@ -129,7 +147,7 @@ export default function Me({navigation, route}) {
                             ]}
                         >
                             <View style={styles.viewItem}>
-                                <Icon name="book" type="material" color={Colors.secondary}/>
+                                <Icon name="book" type="material" color={Colors.secondary} />
                                 <Text style={styles.textNormal}>Request From User</Text>
                                 <Icon name="navigate-next" type="material" color={Colors.secondary}
                                 />
@@ -137,7 +155,7 @@ export default function Me({navigation, route}) {
                         </Pressable>
                         <Pressable
                             onPress={() => navigation.push("Scanner")}
-                            style={({pressed}) => [
+                            style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
                                 },
@@ -145,16 +163,16 @@ export default function Me({navigation, route}) {
                             ]}
                         >
                             <View style={styles.viewItem}>
-                                <Icon name="qr-code-scanner" type="material" color={Colors.secondary}/>
+                                <Icon name="qr-code-scanner" type="material" color={Colors.secondary} />
                                 <Text style={styles.textNormal}>Scan QR Code</Text>
-                                <Icon name="navigate-next" type="material" color={Colors.secondary}/>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
                             </View>
                         </Pressable>
                         <Pressable
                             onPress={() => {
                                 setModalVisible(true)
                             }}
-                            style={({pressed}) => [
+                            style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
                                 },
@@ -162,14 +180,14 @@ export default function Me({navigation, route}) {
                             ]}
                         >
                             <View style={styles.viewItem}>
-                                <Icon name="edit" type="material" color={Colors.secondary}/>
+                                <Icon name="edit" type="material" color={Colors.secondary} />
                                 <Text style={styles.textNormal}>Edit Profile</Text>
-                                <Icon name="navigate-next" type="material" color={Colors.secondary}/>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
                             </View>
                         </Pressable>
                         <Pressable
                             onPress={() => navigation.navigate("RoleSelect")}
-                            style={({pressed}) => [
+                            style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
                                 },
@@ -177,19 +195,19 @@ export default function Me({navigation, route}) {
                             ]}
                         >
                             <View style={styles.viewItem}>
-                                <Icon name="face" type="material-icons" color={Colors.secondary}/>
+                                <Icon name="face" type="material-icons" color={Colors.secondary} />
                                 <Text style={styles.textNormal}>Select Role</Text>
-                                <Icon name="navigate-next" type="material" color={Colors.secondary}/>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
                             </View>
                         </Pressable>
                     </View>
 
-                    <View style={{padding: 5}}></View>
+                    <View style={{ padding: 5 }}></View>
 
                     <View style={styles.coverArea}>
                         <Pressable
                             onPress={alertSignOut}
-                            style={({pressed}) => [
+                            style={({ pressed }) => [
                                 {
                                     backgroundColor: pressed ? Colors.primary : Colors.white,
                                 },
@@ -197,9 +215,9 @@ export default function Me({navigation, route}) {
                             ]}
                         >
                             <View style={styles.viewItem}>
-                                <Icon name="log-out" type="feather" color={Colors.secondary}/>
+                                <Icon name="log-out" type="feather" color={Colors.secondary} />
                                 <Text style={styles.textNormal}>Sign Out</Text>
-                                <Icon name="navigate-next" type="material" color={Colors.secondary}/>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
                             </View>
                         </Pressable>
                     </View>

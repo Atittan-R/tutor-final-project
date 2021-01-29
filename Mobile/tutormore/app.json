@@ -5,7 +5,12 @@
         "foregroundImage": "./src/assets/tutormoreLogo.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.hongbao.tutormore"
+      "package": "com.hongbao.tutormore",
+      "config": {
+        "googleMaps": {
+            "apiKey": "AIzaSyA_bFvD5GGjZMtqKthDHVTCwXVhuiCAUME"
+        }
+    }
     },
     "assetBundlePatterns": [
       "**/*"

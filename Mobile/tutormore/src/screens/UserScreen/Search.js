@@ -79,14 +79,14 @@ export default function Search({ navigation }) {
             const tag = await API.post("/search/tag", {
                 tag: name
             })
-            const arr=tag.data
+            const arr= await tag.data
             const course=[]
             const request=[]
-            arr.map((i)=>i.courses.map((i)=>course.push(i)))
-            arr.map((i)=>i.courses.map((i)=>request.push(i)))
+            await  arr.map((i)=>i.courses.map((i)=>course.push(i)))
+            await arr.map((i)=>i.requests.map((i)=>request.push(i)))
             setCourse(course)
             setRequest(request)
-            // console.log(arr.map((i)=>i.courses));
+            console.log(request);
             // setCourse(courses.data)
         } catch (error) {
             console.log(error);
