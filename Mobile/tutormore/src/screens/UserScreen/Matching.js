@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements';
+import { FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Icon, Rating } from 'react-native-elements';
 import Colors from '../../configs/Colors';
-import courseAvatars from '../../configs/avatars';
+import courseAvatars from '../../configs/courseAvatars';
 
 export default function Matching({ navigation }) {
 
@@ -21,48 +21,54 @@ export default function Matching({ navigation }) {
         <>
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
+                <TouchableOpacity
+                    onPress={() => navigation.pop()}>
+                    <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
+                </TouchableOpacity>
                 <Text style={styles.textHeader}>Matching</Text>
             </View>
 
-            <View style={styles.line} />
-            <View style={[styles.topic, styles.row]}>
-                <View style={styles.box} />
-                <Text style={styles.textRec}>Course</Text>
-            </View>
-            <FlatList
-                showsVerticalScrollIndicator={false}
-                data={course}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) =>
-                    <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
-                        <View style={
-                            {
-                                backgroundColor: "#fff",
-                                padding: 5,
-                                flexDirection: "row",
-                                marginHorizontal: 2,
-                                flexWrap: "wrap",
-                                marginBottom: 1
-                            }}>
-                            <Image source={{ uri: "https://source.unsplash.com/random" }} style={{ width: 70, height: 70, borderRadius: 5 }} />
-                            <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
-                                <Text style={styles.textTitle}>{item.name}</Text>
-                                <Text numberOfLines={1} style={{
-                                    color: "gray",
-                                    fontSize: 12,
-                                }}>{item.description}</Text>
-                                <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
-                                    <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
-                                    <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
+            <View style={styles.view}>
+                <View style={styles.line} />
+                <View style={[styles.topic, styles.row]}>
+                    <View style={styles.box} />
+                    <Text style={styles.textRec}>Closest course request</Text>
+                </View>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={course}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
+                            <View style={
+                                {
+                                    backgroundColor: "#fff",
+                                    padding: 5,
+                                    flexDirection: "row",
+                                    marginHorizontal: 2,
+                                    flexWrap: "wrap",
+                                    marginBottom: 1
+                                }}>
+                                <Image source={courseAvatars[2].image} style={{ width: 70, height: 70, borderRadius: 5 }} />
+                                <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
+                                    <Text style={styles.textTitle}>{item.name}</Text>
+                                    <Text numberOfLines={1} style={{
+                                        color: "gray",
+                                        fontSize: 12,
+                                    }}>{item.description}</Text>
+                                    <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
+                                        <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                        <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
+                                        <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
+                                        <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
+                                        <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
+                                        <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    </TouchableOpacity>
-                } />
+                        </TouchableOpacity>
+                    } />
+            </View>
         </>
     )
 }
@@ -76,7 +82,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 10,
@@ -86,6 +92,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         color: Colors.secondary,
+        paddingLeft: 10
+    },
+    view: {
+        backgroundColor: Colors.white
     },
     line: {
         marginVertical: 10,
@@ -108,7 +118,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
     },
     topic: {
-        flex: 1,
         marginBottom: 10,
     },
     textRec: {

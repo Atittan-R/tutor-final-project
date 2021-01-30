@@ -11,7 +11,7 @@ const RequestStack = () => {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="Feed"
+            initialRouteName="Request"
         >
             <Stack.Screen name="Request" component={Request} />
             <Stack.Screen name="Matching" component={Matching} />
