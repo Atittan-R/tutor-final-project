@@ -30,7 +30,7 @@ exports.createCourse = (req, res) => {
                         categoryId: course.categoryId,
                     }).then((tag) => {
                         //Set Join table tag_course
-                        course.setTags(tag).then(() => {
+                        course.addTags(tag).then(() => {
                             //Display Response
                         });
                     });

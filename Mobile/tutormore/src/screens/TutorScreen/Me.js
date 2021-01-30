@@ -27,7 +27,6 @@ export default function Me({ navigation, route }) {
     const [tel, settel] = useState("")
     const [email, setemail] = useState("")
     let localuser = JSON.parse(state.userData);
-
     const [Profile, setProfile] = useState(
         {
             username: "",
@@ -79,7 +78,7 @@ export default function Me({ navigation, route }) {
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Name</Text>
 
-                            <Text style={styles.textNormal}>{Profile.username === null ? "-" : Profile.username}</Text>
+                            <Text style={styles.textNormal}>{Profile.username === null ? "-" : name}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
@@ -88,11 +87,11 @@ export default function Me({ navigation, route }) {
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>
                             <Text
-                                style={styles.textNormal}>{Profile.phonenumber === null ? "-" : Profile.phonenumber}</Text>
+                                style={styles.textNormal}>{Profile.phonenumber === null ? "-" : tel}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Email</Text>
-                            <Text style={styles.textNormal}>{Profile.email === null ? "-" : Profile.email}</Text>
+                            <Text style={styles.textNormal}>{Profile.email === null ? "-" : email}</Text>
                         </View>
                         <Editprofile
                             name={[name, setname]}
