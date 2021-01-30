@@ -12,7 +12,7 @@ import QRCode from "react-native-qrcode-svg";
 import Colors from "../../configs/Colors";
 
 export default function QrCode({ navigation, route }) {
-  const { id, name,obj } = route.params;
+  const { name,value } = route.params;
   return (
     <>
       <SafeAreaView style={styles.container} />
@@ -24,7 +24,7 @@ export default function QrCode({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
-        <QRCode value={obj} size={200} color={Colors.secondary} backgroundColor={Colors.primary} />
+        <QRCode value={value} size={200} color={Colors.secondary} backgroundColor={Colors.primary} />
         <Text style={styles.text}>{name}</Text>
       </View>
     </>

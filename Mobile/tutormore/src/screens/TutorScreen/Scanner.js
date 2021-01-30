@@ -19,7 +19,7 @@ export default function Scanner({ navigation }) {
     // data คือข้อมูลที่ได้จากการสแกน
     const handleBarCodeScanned =  async({ type, data }) => {
         setScanned(true);
-        // ;
+        ;
         try {
            const value=data.split('/')
            console.log(value[0],value[1]);
@@ -38,7 +38,7 @@ export default function Scanner({ navigation }) {
     // // console.log('====================================');
     // // console.log(data[0]);
     // // console.log('====================================');
-        // alert(`${data} has been scanned!`);
+        alert(`${data} has been scanned!`);
     };
 
     if (hasPermission === null) {
@@ -60,13 +60,23 @@ export default function Scanner({ navigation }) {
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Scan QR Code</Text>
             </View>
+            
             <View style={styles.scan}>
+                
                 <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                     style={StyleSheet.absoluteFillObject}
                 />
-                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} backgroundColor={Colors.primary} />}
+            
+            {scanned && 
+                     <TouchableOpacity 
+                     onPress={() => setScanned(false)}
+                        style={{ color: Colors.secondary , display:"flex",justifyContent:"flex-start",alignItems:"flex-start"} }>
+                       <Text>Tap to Scan Again</Text>
+                    </TouchableOpacity>
+                }
             </View>
+            
         </>
     )
 }
@@ -94,8 +104,10 @@ const styles = StyleSheet.create({
     scan: {
         flex: 1,
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "flex-end",
+        alignItems:"center",
         backgroundColor: Colors.primary,
+        paddingBottom:30
     },
 });
 
