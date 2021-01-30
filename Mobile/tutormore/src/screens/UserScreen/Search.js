@@ -3,6 +3,7 @@ import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableO
 import { Icon, Rating } from 'react-native-elements';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
+import courseAvatars from '../../configs/courseAvatars';
 import API from '../../services/API';
 
 export default function Search({ navigation }) {
@@ -193,6 +194,7 @@ export default function Search({ navigation }) {
                     renderItem={({ item }) =>
                         <TouchableOpacity>
                             <View style={styles.card}>
+                                
                                 <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
                                 <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
                                 <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
@@ -219,7 +221,7 @@ export default function Search({ navigation }) {
                     data={Course}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course:  item.id })}>
                             <View style={
                                 {
                                     backgroundColor: "#fff",
@@ -229,7 +231,7 @@ export default function Search({ navigation }) {
                                     flexWrap: "wrap",
                                     marginBottom: 1
                                 }}>
-                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={{ width: 70, height: 70, borderRadius: 5 }} />
+                                    <Image source={courseAvatars[item.courseAvatar].image} style={{ width: 70, height: 70, borderRadius: 5 }} />
                                 <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
                                     <Text style={styles.textTitle}>{item.name}</Text>
                                     <Text numberOfLines={1} style={{

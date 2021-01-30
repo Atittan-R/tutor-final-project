@@ -18,10 +18,12 @@ import avatars from "../../configs/avatars";
 import API from "../../services/API";
 import LoadingScreen from "../../components/Loading";
 import categories from "../../configs/categories";
-export default function Feed({ navigation }) {
+import { useNavigation } from '@react-navigation/native';
+export default function Feed() {
+    const navigation = useNavigation();
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const userid = JSON.parse(state.userData);
+    let localuser = JSON.parse(state.userData);
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -34,7 +36,9 @@ export default function Feed({ navigation }) {
     const fetchApi = async () => {
         setLoading(true);
         try {
-            const fetch_req = await API.get("/request/findAll");
+            const fetch_req = await API.post("/request/matching",{
+                categoryId:localuser.major
+            });
             // console.log(fetch_req);
             setRequest(fetch_req.data.request.filter((i) => i.status == "Available"))
             setLoading(false);
@@ -48,7 +52,7 @@ export default function Feed({ navigation }) {
         setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
     useEffect(() => {
-        const unsub = navigation.addListener("focus", () => {
+      const  unsub= navigation.addListener("focus", () => {
             fetchApi();
         });
 
