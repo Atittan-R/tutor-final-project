@@ -180,8 +180,8 @@ export default function MyCourse({ navigation, route }) {
                         style={{ alignItems: "center" }}
                         onPress={() =>
                           navigation.push("QrCode", {
-                            id: currentUser.id,
-                            name: currentUser.username,
+                          value:[item.id + "/" + currentUser.id].toString(),
+                          name:currentUser.username
                           })
                         }
                       >
