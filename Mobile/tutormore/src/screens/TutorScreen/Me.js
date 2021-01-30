@@ -27,10 +27,7 @@ export default function Me({ navigation, route }) {
     const [tel, settel] = useState("")
     const [email, setemail] = useState("")
     let localuser = JSON.parse(state.userData);
-    const [name, setname] = useState("")
-    const [major, setmajor] = useState("")
-    const [tel, settel] = useState("")
-    const [email, setemail] = useState("")
+
     const [Profile, setProfile] = useState(
         {
             username: "",
@@ -61,14 +58,14 @@ export default function Me({ navigation, route }) {
     useEffect(() => {
         getUser();
     }, []);
-    
+
     useEffect(() => {
         setname(Profile.username)
         setmajor(Profile.major)
         settel(Profile.phonenumber)
         setemail(Profile.email)
     }, [Profile])
-    
+
     return (
         <>
             <ScrollView style={{ backgroundColor: Colors.background }}>
