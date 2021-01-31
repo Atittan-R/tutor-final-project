@@ -27,6 +27,7 @@ import API from "../../services/API";
 import { useGlobalVar } from "../../context/GlobalContex";
 import courseAvatars from "../../configs/courseAvatars";
 import { SwipeablePanel } from "rn-swipeable-panel";
+import AlertComponent from '../../components/Alerts';
 
 export default function TakeCreateCourse({ route, navigation }) {
   const { req } = route.params
@@ -42,6 +43,8 @@ export default function TakeCreateCourse({ route, navigation }) {
   const currentUser = JSON.parse(state.userData);
   const [modalVisible, setModalVisible] = useState(false);
   //TODO
+  const [Alert, setAlert] = useState(false)
+  const [msg, setText] = useState('')
   const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
   const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0));
   const [day, setDay] = useState("");
@@ -80,19 +83,31 @@ export default function TakeCreateCourse({ route, navigation }) {
     console.log(res.data);
   }
 
-  // const [count, setCount] = useState(0);
-  // const checkEmpty = () => {
-  //   if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
-  //   if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
-  //   if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
-  //   setCount(2);
-  // }
-  // useEffect(() => {
-  //   console.log("count =>>>>" + count);
-  //   if (count == 2) {
-  //     alertTaked();
-  //   }
-  // }, [count]);
+  const [count, setCount] = useState(0);
+  const checkEmpty = () => {
+    if (!coureName.trim()) { 
+      setCount(1);
+      setAlert(true) 
+      setText('Please enter course name'); 
+      return; }
+    if (selectedValue == 0) { 
+      setCount(1); 
+      setAlert(true)
+      setText('Please select term course'); 
+      return; }
+    if (!amount.trim()) { 
+      setCount(1); 
+      setAlert(true)
+      setText('Please enter amount of seats'); 
+      return; }
+    setCount(2);
+  }
+  useEffect(() => {
+    console.log("count =>>>>" + count);
+    if (count == 2) {
+      alertTaked();
+    }
+  }, [count]);
   const alertTaked = () => {
     Alert.alert(
       "Taked",
@@ -133,8 +148,8 @@ export default function TakeCreateCourse({ route, navigation }) {
         description: description,
         tagname: mytags,
         duration: selectedValue,
-        lat: lat.toString(),
-        long: long.toString(),
+        lat: draggable.latitude,
+        long: draggable.longitud,
         courseAvatar: courseAvatar,
       });
 
@@ -176,6 +191,8 @@ export default function TakeCreateCourse({ route, navigation }) {
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
+        {Alert && 
+                <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]}/>}
           <TouchableOpacity onPress={() => setIsPanelActive(true)}>
             <Image source={requireImage} style={styles.imageTitle} />
             <Text style={styles.text}>Change image</Text>
@@ -255,7 +272,7 @@ export default function TakeCreateCourse({ route, navigation }) {
             />
           </Modal>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => taked()}>
+        <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
           <Text style={styles.title}>Take</Text>
         </TouchableOpacity>
         <View style={{ marginVertical: 10 }} />

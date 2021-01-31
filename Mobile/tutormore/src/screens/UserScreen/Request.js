@@ -8,7 +8,7 @@ import Catagory from '../../components/forms/Catagory';
 import Tag from '../../components/forms/Tag';
 import API from "../../services/API"
 import { useGlobalVar } from "../../context/GlobalContex";
-import AwesomeAlert from 'react-native-awesome-alerts';
+import AlertComponent from '../../components/Alerts';
 export default function Request({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -23,7 +23,8 @@ export default function Request({ navigation }) {
     const [catagory, setCatagory] = useState(0)
     const [tags, setTags] = useState([])
     const [claerTag, setClaerTag] = useState(false)
-
+    const [Alert, setAlert] = useState(false)
+    const [msg, setText] = useState('')
     const getTimeStart = (result) => {
         setTimeStart(result);
     }
@@ -37,11 +38,29 @@ export default function Request({ navigation }) {
         const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
         const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
         const sum = end - start;
-        if (!CourseName.trim()) { setCount(1); alert('Please enter course name'); return; }
-        if (!day.toString().trim()) { setCount(1); alert('Please set the day'); return; }
-        if (sum < 60) { setCount(1); alert("Please set time correctly, at least  minutes away. Result: " + sum); return; }
-        if (catagory == 0) { setCount(1); alert('Please select Catagory'); return; }
+        if (!CourseName.trim()) {
+            setCount(1)
+            setAlert(true)
+            setText("Please set name")
+            return;
+        }
+        if (!day.toString().trim()) { 
+            setCount(1);
+            setAlert(true)
+            setText('Please set the day'); 
+            return; }
+        if (sum < 60) { 
+            setCount(1) 
+            setAlert(true)
+            setText("Please set time correctly, at least  minutes away. Result: ")
+            return; }
+        if (catagory == 0) { 
+        setCount(1); 
+        setAlert(true)
+        setText('Please select Catagory'); 
+        return; }
         setCount(2);
+
     }
     useEffect(() => {
         console.log("count =>>>>" + count);
@@ -50,7 +69,7 @@ export default function Request({ navigation }) {
         }
     }, [count]);
 
-    const creteRequst = async () => {
+    const creteRequst = async () => {    
         try {
 
             const requst = await API.post("request/create", {
@@ -64,9 +83,8 @@ export default function Request({ navigation }) {
                 tagname: tags
             });
 
-            console.log('====================================');
             clear()
-            navigation.push("Matching");
+            navigation.push("Matching", { name: CourseName, day: day.toString(), time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(), categoryId: catagory });
             // navigation.navigate("Feed", {
             //     name: "Feed", onGoBack: () => {
             //         fetchData()
@@ -107,15 +125,25 @@ export default function Request({ navigation }) {
     //     console.log("cat " + catagory);
     // }, [CourseName, tags, TimeStart.getHours(), TimeEnd.getHours(), catagory])
 
+
+
     return (
+        
         <>
+
             {/* header */}
+           
             <SafeAreaView style={styles.container} />
+           
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Request</Text>
             </View>
+
             <ScrollView style={styles.area}>
+        
                 <View style={styles.content}>
+                {Alert && 
+                <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]}/>}
                     <TextInputButton placeholder="Course" value={CourseName}
                         onTextChange={(text) => setCourseName(text)} />
                     <TextInputButton
@@ -125,6 +153,7 @@ export default function Request({ navigation }) {
                     <Clock name="Time Start" callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
                     <Clock name="Time End" callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
                 </View>
+
                 <Catagory
                     selectedValue={catagory}
                     onValueChange={(text) => setCatagory(text)} />
@@ -133,6 +162,7 @@ export default function Request({ navigation }) {
                 <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
                     <Text style={styles.title}>Submit</Text>
                 </TouchableOpacity>
+        
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
         </>

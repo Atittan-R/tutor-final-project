@@ -24,6 +24,7 @@ import API from "../../services/API";
 import { SwipeablePanel } from "rn-swipeable-panel";
 import courseAvatars from "../../configs/courseAvatars";
 import { useGlobalVar } from "../../context/GlobalContex";
+import AlertComponent from '../../components/Alerts';
 
 export default function CreateCourse({ navigation }) {
   const { authentication } = useGlobalVar();
@@ -44,6 +45,8 @@ export default function CreateCourse({ navigation }) {
   const [lat, setlat] = useState(14.8817767);
   const [long, setlong] = useState(102.0185075);
   const [selectedValue, setSelectedValue] = useState(0);
+  const [Alert, setAlert] = useState(false)
+  const [msg, setText] = useState('')
   const [draggable, setDraggable] = useState({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
@@ -74,12 +77,36 @@ export default function CreateCourse({ navigation }) {
     const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
     const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
     const sum = end - start;
-    if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
-    if (!day.toString().trim()) { setCount(1); alert('Please set the day'); return; }
-    if (sum < 60) { setCount(1); alert("Please set time correctly, at least  minutes away. Result: " + sum); return; }
-    if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
-    if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
-    if (catagory == 0) { setCount(1); alert('Please select Catagory'); return; }
+    if (!coureName.trim()) { 
+      setCount(1); 
+      setAlert(true)
+      setText('Please enter course name'); 
+      return; }
+    if (!day.toString().trim()) 
+    { setCount(1); 
+      setAlert(true)
+      setText('Please set the day'); 
+      return; }
+    if (sum < 60) { 
+      setCount(1);
+      setAlert(true) 
+      setText("Please set time correctly, at least  minutes away. Result: "); 
+      return; }
+    if (selectedValue == 0) { 
+      setCount(1); 
+      setAlert(true)
+      setText('Please select term course'); 
+      return; }
+    if (!amount.trim()) { 
+      setCount(1); 
+      setAlert(true)
+      setText('Please enter amount of seats'); 
+      return; }
+    if (catagory == 0) { 
+      setCount(1); 
+      setAlert(true)
+      setText('Please select Catagory'); 
+      return; }
     setCount(2);
   }
   useEffect(() => {
@@ -101,8 +128,8 @@ export default function CreateCourse({ navigation }) {
         userId: current.id,
         tagname: mytags,
         duration: selectedValue,
-        lat: lat.toString(),
-        long: long.toString(),
+        lat: draggable.latitude,
+        long: draggable.longitude,
         courseAvatar: courseAvatar,
       });
       console.log(createCourse)
@@ -112,6 +139,7 @@ export default function CreateCourse({ navigation }) {
     } catch (error) {
       console.log(error);
     }
+  console.log("draggable ",draggable.latitude);
   };
 
   const [requireImage, setRequireImage] = useState(
@@ -130,7 +158,7 @@ export default function CreateCourse({ navigation }) {
     setRequireImage(courseAvatars[id].image);
     setCourseAvatar(id);
   };
-
+ 
   return (
     <>
       {/* header */}
@@ -143,6 +171,8 @@ export default function CreateCourse({ navigation }) {
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
+        {Alert && 
+                <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]}/>}
           <TouchableOpacity onPress={() => setIsPanelActive(true)}>
             <Image source={requireImage} style={styles.imageTitle} />
             <Text style={styles.text}>Change image</Text>

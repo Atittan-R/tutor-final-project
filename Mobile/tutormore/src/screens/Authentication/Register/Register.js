@@ -18,7 +18,7 @@ import {SwipeablePanel} from 'rn-swipeable-panel';
 import avatars from "../../../configs/avatars";
 import categories from "../../../configs/categories";
 import Catagory from "../../../components/forms/Catagory";
-
+import AlertComponent from '../../../components/Alerts';
 function Confrimation(state, action) {
     switch (action.type) {
         case "CONFIRM":
@@ -41,15 +41,40 @@ const Register = ({navigation}) => {
     useEffect(() => {
         setConfirmMassage(checkConfirm(password, state.confirm));
     });
-
+    const [Alert, setAlert] = useState(false)
+    const [msg, setText] = useState('')
     const [count, setCount] = useState(0);
     const checkEmpty = () => {
-    if (!email.trim()) { setCount(1); alert('Please enter email'); return; }
-    if (!username.trim()) { setCount(1); alert('Please enter username'); return; }
-    if (!password.trim()) { setCount(1); alert('Please enter password'); return; }
-    if (!phoneNumber.trim()) { setCount(1); alert('Please enter phone number'); return; }
-    if (major == 0) { setCount(1); alert('Please select term course'); return; }
-    if (toggleCheckBox==false) { setCount(1); alert('Please select checkbox'); return; }
+    if (!email.trim()) { 
+        setCount(1); 
+        setAlert(true)
+        setText('Please enter email'); 
+        return; }
+    if (!username.trim()) { 
+        setCount(1); 
+        setAlert(true)
+        setText('Please enter username'); 
+        return; }
+    if (!password.trim()) { 
+        setCount(1); 
+        setAlert(true)
+        setText('Please enter password'); 
+        return; }
+    if (!phoneNumber.trim()) { 
+        setCount(1); 
+        setAlert(true)
+        setText('Please enter phone number'); 
+        return; }
+    if (major == 0) { 
+        setCount(1); 
+        setAlert(true)
+        setText('Please select term course');
+         return; }
+    if (toggleCheckBox==false) { 
+        setCount(1);
+        setAlert(true) 
+        setText('Please select checkbox'); 
+        return; }
     setCount(2);
   }
   useEffect(() => {
@@ -107,6 +132,8 @@ const Register = ({navigation}) => {
                 <ScrollView style={{margin: 0, backgroundColor: Colors.white}}>
                     {/*<KeyboardAvoidingView behavior="padding">*/}
                     <View style={styles.container}>
+                    {Alert && 
+                <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]}/>}
                         <View style={styles.textContainer}>
                             <Text style={styles.textTitle}>Sign Up</Text>
                         </View>
