@@ -44,21 +44,24 @@ export default function Request({ navigation }) {
             setText("Please set name")
             return;
         }
-        if (!day.toString().trim()) { 
+        if (!day.toString().trim()) {
             setCount(1);
             setAlert(true)
-            setText('Please set the day'); 
-            return; }
-        if (sum < 60) { 
-            setCount(1) 
+            setText('Please set the day');
+            return;
+        }
+        if (sum < 60) {
+            setCount(1)
             setAlert(true)
-            setText("Please set time correctly, at least  minutes away. Result: ")
-            return; }
-        if (catagory == 0) { 
-        setCount(1); 
-        setAlert(true)
-        setText('Please select Catagory'); 
-        return; }
+            setText("Please set time correctly, at least  minutes away. Result: " + sum)
+            return;
+        }
+        if (catagory == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select Catagory');
+            return;
+        }
         setCount(2);
 
     }
@@ -69,7 +72,7 @@ export default function Request({ navigation }) {
         }
     }, [count]);
 
-    const creteRequst = async () => {    
+    const creteRequst = async () => {
         try {
 
             const requst = await API.post("request/create", {
@@ -128,22 +131,22 @@ export default function Request({ navigation }) {
 
 
     return (
-        
+
         <>
 
             {/* header */}
-           
+
             <SafeAreaView style={styles.container} />
-           
+
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Request</Text>
             </View>
 
             <ScrollView style={styles.area}>
-        
+
                 <View style={styles.content}>
-                {Alert && 
-                <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]}/>}
+                    {Alert &&
+                        <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]} />}
                     <TextInputButton placeholder="Course" value={CourseName}
                         onTextChange={(text) => setCourseName(text)} />
                     <TextInputButton
@@ -162,7 +165,7 @@ export default function Request({ navigation }) {
                 <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
                     <Text style={styles.title}>Submit</Text>
                 </TouchableOpacity>
-        
+
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
         </>

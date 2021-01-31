@@ -28,6 +28,7 @@ import API from "../../services/API"
 import { useGlobalVar } from "../../context/GlobalContex";
 import courseAvatars from "../../configs/courseAvatars";
 import { SwipeablePanel } from "rn-swipeable-panel";
+import AlertComponent from "../../components/Alerts";
 
 export default function TakeCreateCourse({ route, navigation }) {
     const { authentication } = useGlobalVar();
@@ -80,17 +81,49 @@ export default function TakeCreateCourse({ route, navigation }) {
         latitude: 14.8817767,
         longitude: 102.0185075,
     });
+    const [msg, setText] = useState("");
+    const [messageAlert, setAlert] = useState(false);
     const [count, setCount] = useState(0);
     const checkEmpty = () => {
         const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
         const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
         const sum = end - start;
-        if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
-        if (!day.toString().trim()) { setCount(1); alert('Please set the day'); return; }
-        if (sum < 60) { setCount(1); alert("Please set time correctly, at least  minutes away. Result: " + sum); return; }
-        if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
-        if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
-        if (catagory == 0) { setCount(1); alert('Please select Catagory'); return; }
+        if (!coureName.trim()) {
+            setCount(1);
+            setAlert(true);
+            setText("Please enter course name");
+            return;
+        }
+        if (!day.toString().trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please set the day');
+            return;
+        }
+        if (sum < 60) {
+            setCount(1);
+            setAlert(true)
+            setText("Please set time correctly, at least  minutes away. Result: ");
+            return;
+        }
+        if (selectedValue == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select term course');
+            return;
+        }
+        if (!amount.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter amount of seats');
+            return;
+        }
+        if (catagory == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select Catagory');
+            return;
+        }
         setCount(2);
     }
     useEffect(() => {
@@ -158,6 +191,7 @@ export default function TakeCreateCourse({ route, navigation }) {
             </View>
             <ScrollView style={styles.area}>
                 <View style={styles.content}>
+                    {messageAlert && <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]} />}
                     <TouchableOpacity onPress={() => setIsPanelActive(true)}>
                         <Image source={requireImage} style={styles.imageTitle} />
                         <Text style={styles.text}>Change image</Text>

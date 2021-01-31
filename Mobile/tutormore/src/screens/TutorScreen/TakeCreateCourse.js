@@ -111,7 +111,6 @@ export default function TakeCreateCourse({ route, navigation }) {
       alertTaked();
     }
   }, [count]);
-
   const alertTaked = () => {
     Alert.alert(
       "Taked",

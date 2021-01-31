@@ -152,7 +152,7 @@ export default function CourseDetail({ navigation, route }) {
             <View style={styles.headerBar}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.push("Home")}
+                    onPress={() => navigation.pop()}
                 >
                     <Icon
                         name="arrow-back-outline"
@@ -161,7 +161,7 @@ export default function CourseDetail({ navigation, route }) {
                     />
 
                 </TouchableOpacity>
-                <Text style={styles.textHeader}>Course Name</Text>
+                <Text style={styles.textHeader}>{data.course.name}</Text>
             </View>
 
             {/* body */}

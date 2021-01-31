@@ -14,14 +14,14 @@ export default function Matching({ navigation, route }) {
                 name: name,
                 time_start: time_start,
                 day: day,
-                category:categoryId
+                category: categoryId
             });
             setCourse(fetch_req.data)
-            console.log("Course: ",fetch_req.data);
-            console.log("name: ",name);
-            console.log("time_start: ",time_start);
-            console.log("day: ",day);
-            console.log("category: ",categoryId);
+            console.log("Course: ", fetch_req.data);
+            console.log("name: ", name);
+            console.log("time_start: ", time_start);
+            console.log("day: ", day);
+            console.log("category: ", categoryId);
         } catch (error) {
             console.log(error);
         }
@@ -38,56 +38,56 @@ export default function Matching({ navigation, route }) {
 
     ];
 
-const Renderlist=()=>{
-    return(
-        <FlatList
-        showsVerticalScrollIndicator={false}
-        data={Course}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) =>
-            <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
-                <View style={
-                    {
-                        backgroundColor: "#fff",
-                        padding: 5,
-                        flexDirection: "row",
-                        marginHorizontal: 2,
-                        flexWrap: "wrap",
-                        marginBottom: 1
-                    }}>
-                    <Image source={courseAvatars[2].image} style={{ width: 70, height: 70, borderRadius: 5 }} />
-                    <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
-                        <Text style={styles.textTitle}>{item.name}</Text>
-                        <Text numberOfLines={1} style={{
-                            color: "gray",
-                            fontSize: 12,
-                        }}>{item.description}</Text>
-                        <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                            <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
-                            <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
-                            <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                            <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
-                            <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
-                            <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
+    const Renderlist = () => {
+        return (
+            <FlatList
+                showsVerticalScrollIndicator={false}
+                data={Course}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) =>
+                    <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
+                        <View style={
+                            {
+                                backgroundColor: "#fff",
+                                padding: 5,
+                                flexDirection: "row",
+                                marginHorizontal: 2,
+                                flexWrap: "wrap",
+                                marginBottom: 1
+                            }}>
+                            <Image source={courseAvatars[2].image} style={{ width: 70, height: 70, borderRadius: 5 }} />
+                            <View style={{ flex: 1, marginLeft: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
+                                <Text style={styles.textTitle}>{item.name}</Text>
+                                <Text numberOfLines={1} style={{
+                                    color: "gray",
+                                    fontSize: 12,
+                                }}>{item.description}</Text>
+                                <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
+                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                    <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
+                                    <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
+                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
+                                    <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
+                                    <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
+                                </View>
+                            </View>
                         </View>
-                    </View>
-                </View>
-            </TouchableOpacity>
-        } />
-    );
-        
-    }
-useEffect(() => {
-    fetchMatching()
-}, [])
+                    </TouchableOpacity>
+                } />
+        );
 
-useEffect(() => {
-    if(Course!=[]){
-        Renderlist()
-    }else{
-        navigation.navigate("Home")
     }
-}, [Course])
+    useEffect(() => {
+        fetchMatching()
+    }, [])
+
+    useEffect(() => {
+        if (Course != []) {
+            Renderlist()
+        } else {
+            navigation.navigate("Home")
+        }
+    }, [Course])
     return (
         <>
             <SafeAreaView style={styles.container} />
@@ -98,15 +98,16 @@ useEffect(() => {
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Matching</Text>
             </View>
-            <Renderlist/>
+
             <View style={styles.view}>
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={styles.box} />
                     <Text style={styles.textRec}>Closest course request</Text>
                 </View>
-               
+                <Renderlist />
             </View>
+
         </>
     )
 }

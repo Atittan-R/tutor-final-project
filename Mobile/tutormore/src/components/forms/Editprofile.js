@@ -4,6 +4,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import Colors from '../../configs/Colors'
 import API from '../../services/API'
 import { useGlobalVar } from "../../context/GlobalContex";
+import Catagory from './Catagory'
 
 export default function Editprofile(props) {
     const { authentication } = useGlobalVar();
@@ -12,22 +13,22 @@ export default function Editprofile(props) {
     const [modalVisible, setModalVisible] = props.modalVisible
     const [Profile, setProfile] = props.ProfileUser;
     const [name, setname] = props.name
-    const [major, setmajor] =props.major
+    const [major, setmajor] = props.major
     const [tel, settel] = props.tel
-    const [email, setemail] =props.email
+    const [email, setemail] = props.email
 
 
     // const User = { name: "", major: "", tel: "", email: "" }
-    const Edit= async () => {
+    const Edit = async () => {
         try {
-            const edit = await API.post("/edit/profile",{
-                username:name,
-                major:major,
-                phonenumber:tel,
-                email:email,
-                id:currentUser.id
+            const edit = await API.post("/edit/profile", {
+                username: name,
+                major: major,
+                phonenumber: tel,
+                email: email,
+                id: currentUser.id
             })
-        
+
             console.log(edit.data);
         } catch (error) {
             console.log(error);
@@ -46,13 +47,13 @@ export default function Editprofile(props) {
     }
 
     const close = () => {
-        setname(  Profile.username)
+        setname(Profile.username)
         setmajor(Profile.major)
         settel(Profile.phonenumber)
         setemail(Profile.email)
         setModalVisible(!modalVisible);
     }
-    
+
     return (
 
         <Modal
@@ -79,7 +80,10 @@ export default function Editprofile(props) {
                         </View>
                         <View style={styles.modalViewText}>
                             <Text style={styles.inputStyleHeard}>Major</Text>
-                            <TextInput value={major} onChangeText={text => setmajor(text)} style={styles.inputStyle} />
+                            <Catagory
+                                selectedValue={major}
+                                onValueChange={(itemValue, itemIndex) => setmajor(itemValue)}
+                            />
                         </View>
                         <View style={styles.modalViewText}>
                             <Text style={styles.inputStyleHeard}>Tel</Text>
