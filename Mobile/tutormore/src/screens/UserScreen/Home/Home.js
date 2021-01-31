@@ -22,12 +22,15 @@ import NoDataScreen from "../../../components/Nodata";
 import courseAvatars from "../../../configs/courseAvatars";
 import { useGlobalVar } from "../../../context/GlobalContex";
 
+import AlertComponent from "../../../components/Alerts";
+
 export default function Home({ navigation }) {
     // search bar
     const { authentication } = useGlobalVar();
     const [a, dispatchA] = authentication;
     let user = JSON.parse(a.userData);
     const [filterItem, setFilterItem] = useState(null)
+    
     const searchAction = (text) => {
         setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
@@ -35,6 +38,8 @@ export default function Home({ navigation }) {
     //pull dawn to refresh data
     const [refreshing, setRefreshing] = useState(false);
     const [state, dispatch] = useReducer(reducer, initialState)
+    const [msg, setText] = useState("");
+    const [err, setError] = useState(false)
 
     async function fetchData() {
         dispatch(actionCreators.loading())
@@ -44,6 +49,9 @@ export default function Home({ navigation }) {
             // console.log(course)
             dispatch(actionCreators.success(course))
         } catch (e) {
+            setText(error.message)
+            setLoading(false)
+            setError(true)
             dispatch(actionCreators.failure())
         }
     }
@@ -76,9 +84,7 @@ export default function Home({ navigation }) {
         return (
             <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                <View style={styles.center}>
-                    <Text>Failed to load posts!</Text>
-                </View>
+                <AlertComponent text={[msg, setText]} alert={[err, setError]} /> 
             </ScrollView>
         )
     }

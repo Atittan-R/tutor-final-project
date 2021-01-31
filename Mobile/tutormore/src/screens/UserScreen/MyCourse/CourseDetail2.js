@@ -21,6 +21,7 @@ import { actionCreators, initialState, reducer } from "../Reducer";
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import courseAvatars from "../../../configs/courseAvatars";
 import avatars from "../../../configs/avatars";
+import categories from "../../../configs/categories";
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -293,7 +294,7 @@ export default function CourseDetail({ navigation, route }) {
                     <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.date_of_birtth ? data.course.tutors.date_of_birtth : "Not specified"}</Text>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.major ? categories[data.course.tutors.major].name : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />

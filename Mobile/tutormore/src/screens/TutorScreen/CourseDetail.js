@@ -137,12 +137,9 @@ export default function CourseDetail({ navigation, route }) {
 
   if (error) {
     return (
-      <ScrollView
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={styles.center}>
-          <Text>Failed to load posts!</Text>
+          <Text>Failed to load Data!</Text>
         </View>
-      </ScrollView>
     )
   }
 

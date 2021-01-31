@@ -19,6 +19,9 @@ import API from "../../services/API";
 import LoadingScreen from "../../components/Loading";
 import categories from "../../configs/categories";
 import { useNavigation } from '@react-navigation/native';
+
+import AlertComponent from "../../components/Alerts";
+
 export default function Feed() {
     const navigation = useNavigation();
     const { authentication } = useGlobalVar();
@@ -26,6 +29,8 @@ export default function Feed() {
     let localuser = JSON.parse(state.userData);
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(false);
+    const [msg, setText] = useState("");
+    const [error, setError] = useState(false)
 
     // console.log("user_id", userid.id)
     const [request, setRequest] = useState([]);
@@ -34,8 +39,8 @@ export default function Feed() {
         navigation.navigate("Home", { screen: "TakeCreateCourse", params: { req: request.filter((i) => i.id == requestId) } })
     }
     const fetchApi = async () => {
-        setLoading(true);
         try {
+            setLoading(true);
             const fetch_req = await API.post("/request/matching",{
                 categoryId:localuser.major
             });
@@ -44,19 +49,18 @@ export default function Feed() {
             setLoading(false);
         } catch (error) {
             console.log(error);
+            setText(error.message)
+            setLoading(false)
+            setError(true)
         }
     }
-
     const [filterItem, setFilterItem] = useState(null)
     const searchAction = (text) => {
         setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
-    useEffect(() => {
-      const  unsub= navigation.addListener("focus", () => {
-            fetchApi();
-        });
 
-        return unsub;
+    useEffect(() => {
+        fetchApi();
     }, [])
 
     const onRefresh = React.useCallback(() => {
@@ -76,7 +80,7 @@ export default function Feed() {
                     onChangeText={(text) => searchAction(text)}
                 />
             </View>
-            {loading ? <LoadingScreen /> :
+            {loading ? <LoadingScreen /> : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> :
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     refreshControl={

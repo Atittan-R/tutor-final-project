@@ -5,9 +5,15 @@ import Colors from '../../configs/Colors';
 import courseAvatars from '../../configs/courseAvatars';
 import API from '../../services/API';
 
+import AlertComponent from "../../components/Alerts";
+
 export default function Matching({ navigation, route }) {
     const { name, day, time_start, categoryId } = route.params
     const [Course, setCourse] = useState([])
+    const [msg, setText] = useState("");
+    const [error, setError] = useState(false)
+    const [loading, setLoading] = useState(false)
+
     const fetchMatching = async () => {
         try {
             const fetch_req = await API.post("/course/matching", {
@@ -24,6 +30,9 @@ export default function Matching({ navigation, route }) {
             console.log("category: ", categoryId);
         } catch (error) {
             console.log(error);
+            setText(error.response.data.message)
+            setLoading(false)
+            setError(true)
         }
     }
 
@@ -45,7 +54,7 @@ export default function Matching({ navigation, route }) {
                 data={Course}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) =>
-                    <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
+                    <TouchableOpaacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
                         <View style={
                             {
                                 backgroundColor: "#fff",
@@ -72,11 +81,12 @@ export default function Matching({ navigation, route }) {
                                 </View>
                             </View>
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpaacity>
                 } />
         );
 
     }
+
     useEffect(() => {
         fetchMatching()
     }, [])
@@ -88,6 +98,7 @@ export default function Matching({ navigation, route }) {
             navigation.navigate("Home")
         }
     }, [Course])
+
     return (
         <>
             <SafeAreaView style={styles.container} />
@@ -98,6 +109,8 @@ export default function Matching({ navigation, route }) {
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Matching</Text>
             </View>
+           
+
 
             <View style={styles.view}>
                 <View style={styles.line} />
@@ -105,7 +118,13 @@ export default function Matching({ navigation, route }) {
                     <View style={styles.box} />
                     <Text style={styles.textRec}>Closest course request</Text>
                 </View>
-                <Renderlist />
+                { loading 
+                    ? <LoadingScreen /> 
+                    : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> 
+                    : data.length === 0 
+                    ? <NoDataScreen data={categories} /> 
+                    : <Renderlist />
+                }
             </View>
 
         </>
