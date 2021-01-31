@@ -21,7 +21,7 @@ import { actionCreators, initialState, reducer } from "../Reducer";
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import courseAvatars from "../../../configs/courseAvatars";
 import avatars from "../../../configs/avatars";
-export default function CourseDetail({ navigation, route }) {
+export default function CourseDetail2({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
 
@@ -36,7 +36,7 @@ export default function CourseDetail({ navigation, route }) {
         loadDispatch(actionCreators.loading())
         try {
             const res = await API.get("/course/findOne/" + course)
-            // console.log("res: ", res.data.course)
+            console.log("res d2: ", res.data.course)
             const courseDetail = await res.data.course;
             loadDispatch(actionCreators.success(courseDetail));
         } catch (e) {
@@ -139,7 +139,7 @@ export default function CourseDetail({ navigation, route }) {
         )
     }
 
-    console.log("data: ", data)
+    // console.log("data: ", data)
 
     return (
         <>
@@ -157,7 +157,7 @@ export default function CourseDetail({ navigation, route }) {
                     />
 
                 </TouchableOpacity>
-                <Text style={styles.textHeader}>{data.course.name}</Text>
+                <Text style={styles.textHeader}>{data.name}</Text>
             </View>
 
             {/* body */}
@@ -165,7 +165,7 @@ export default function CourseDetail({ navigation, route }) {
                 <View style={styles.viewImage}>
                     <View style={styles.bgImage}>
                         <Image
-                            source={courseAvatars[data.course.courseAvatar].image}
+                            source={courseAvatars[data.courseAvatar].image}
                             style={styles.image}
                         />
                     </View>
@@ -179,42 +179,42 @@ export default function CourseDetail({ navigation, route }) {
                     <Icon name="book" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Course</Text>
-                        <Text style={styles.text}>{data.course.name}</Text>
+                        <Text style={styles.text}>{data.name}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="event" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Date</Text>
-                        <Text style={styles.text}>{data.course.day}</Text>
+                        <Text style={styles.text}>{data.day}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="category" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Category</Text>
-                        <Text style={styles.text}>{data.course.CourseCate.name}</Text>
+                        <Text style={styles.text}>{data.CourseCate.name}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="schedule" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Time</Text>
-                        <Text style={styles.text}>{data.course.time_start + " - " + data.course.time_end}</Text>
+                        <Text style={styles.text}>{data.time_start + " - " + data.time_end}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="timer" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Duraton</Text>
-                        <Text style={styles.text}>{data.course.duration}</Text>
+                        <Text style={styles.text}>{data.duration}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
-                        <Text style={styles.text}>{`${data.countEnroll}/${data.course.amount}`}</Text>
+                        <Text style={styles.text}>{`${data.countEnroll}/${data.amount}`}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -231,14 +231,14 @@ export default function CourseDetail({ navigation, route }) {
                     <MapView
                         style={styles.map}
                         region={{
-                            latitude: parseFloat(data.course.lat), longitude: parseFloat(data.course.long),
+                            latitude: parseFloat(data.lat), longitude: parseFloat(data.long),
                             latitudeDelta: 0.01,
                             longitudeDelta: 0.01,
                         }}
                         onRegionChangeComplete={(region) => setDraggable(region)}
                     >
                         <Marker
-                            coordinate={{ latitude: parseFloat(data.course.lat), longitude: parseFloat(data.course.long) }}
+                            coordinate={{ latitude: parseFloat(data.lat), longitude: parseFloat(data.long) }}
                         />
                     </MapView>
                 </View>
@@ -258,26 +258,26 @@ export default function CourseDetail({ navigation, route }) {
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Name</Text>
                         {/*{console.log( detail )}*/}
-                        <Text style={styles.text}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.username ? data.tutors.username : "Not specified"}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon name="school" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Major</Text>
-                        <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.major ? data.tutors.major : "Not specified"}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon
-                        name="line"
-                        type="fontisto"
+                        name="phone"
+                        type="material"
                         color={Colors.secondary}
                         size={20}
                     />
                     <View style={styles.viewItem}>
-                        <Text style={styles.title}>Line ID</Text>
-                        <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
+                        <Text style={styles.title}>Phone Number</Text>
+                        <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                 </View>
 
@@ -288,28 +288,28 @@ export default function CourseDetail({ navigation, route }) {
             </ScrollView>
             <SwipeablePanel {...panelProps} isActive={isPanelActive}>
                 <View style={styles.panelContent}>
-                    <Image source={avatars[data.course.tutors.avatar].image} style={styles.imageTutor} />
-                    <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
-                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.date_of_birtth ? data.course.tutors.date_of_birtth : "Not specified"}</Text>
+                    <Image source={avatars[data.tutors.avatar].image} style={styles.imageTutor} />
+                    <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.tutors.username ? data.tutors.username : "Not specified"}</Text>
+                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.tutors.date_of_birtth ? data.tutors.date_of_birtth : "Not specified"}</Text>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.major ? data.tutors.major : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.email ? data.course.tutors.email : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.email ? data.tutors.email : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="line" type="fontisto" color={Colors.secondary} style={{ marginRight: 15 }} size={19} />
-                        <Text style={styles.text}>{data.course.tutors.lineId ? data.course.tutors.lineId : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.lineId ? data.tutors.lineId : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Text style={[styles.title, { marginRight: 9 }]}>Exp.</Text>
-                        <Text style={styles.text}>{data.course.tutors.experience ? data.course.tutors.experience : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.experience ? data.tutors.experience : "Not specified"}</Text>
                     </View>
                 </View>
             </SwipeablePanel>

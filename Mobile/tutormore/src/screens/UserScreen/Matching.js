@@ -85,7 +85,7 @@ export default function Matching({ navigation, route }) {
         if (Course != []) {
             Renderlist()
         } else {
-            navigation.navigate("Home")
+            alert("No match")
         }
     }, [Course])
     return (
@@ -93,7 +93,7 @@ export default function Matching({ navigation, route }) {
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
                 <TouchableOpacity
-                    onPress={() => navigation.pop()}>
+                    onPress={() => navigation.navigate("Feed")}>
                     <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Matching</Text>

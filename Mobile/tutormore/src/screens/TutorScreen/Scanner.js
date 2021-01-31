@@ -17,22 +17,22 @@ export default function Scanner({ navigation }) {
     }, []);
 
     // data คือข้อมูลที่ได้จากการสแกน
-    const handleBarCodeScanned =  async({ type, data }) => {
+    const handleBarCodeScanned = async ({ type, data }) => {
         setScanned(true);
-       
+
         try {
-           const value=data.split('/')
-        //    console.log(value[0],value[1]);
-            const attendance=await API.post("/attendance",{
-               courseId:parseInt(value[0]),
-               userId:parseInt(value[1])
-             
-             })
-             console.log(attendance.data);
-             alert(attendance.data.status);
-             navigation.navigate("Course", { screen: "TeachingList" })
+            const value = data.split('/')
+            //    console.log(value[0],value[1]);
+            const attendance = await API.post("/attendance", {
+                courseId: parseInt(value[0]),
+                userId: parseInt(value[1])
+
+            })
+            console.log(attendance.data);
+            alert(attendance.data.status);
+            navigation.navigate("Me", { screen: "TeachingList" })
         } catch (error) {
-             alert(error);
+            alert(error);
         }
         // alert(`${data} has been scanned!`);
     };
@@ -56,23 +56,23 @@ export default function Scanner({ navigation }) {
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Scan QR Code</Text>
             </View>
-            
+
             <View style={styles.scan}>
-                
+
                 <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                     style={StyleSheet.absoluteFillObject}
                 />
-            
-            {scanned && 
-                     <TouchableOpacity 
-                     onPress={() => setScanned(false)}
-                        style={{ color: Colors.secondary , display:"flex",justifyContent:"flex-start",alignItems:"flex-start"} }>
-                       <Text>Tap to Scan Again</Text>
+
+                {scanned &&
+                    <TouchableOpacity
+                        onPress={() => setScanned(false)}
+                        style={{ color: Colors.secondary, display: "flex", justifyContent: "flex-start", alignItems: "flex-start" }}>
+                        <Text>Tap to Scan Again</Text>
                     </TouchableOpacity>
                 }
             </View>
-            
+
         </>
     )
 }
@@ -101,9 +101,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "flex-end",
-        alignItems:"center",
+        alignItems: "center",
         backgroundColor: Colors.primary,
-        paddingBottom:30
+        paddingBottom: 30
     },
 });
 

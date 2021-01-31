@@ -114,23 +114,7 @@ export default function CourseDetail({ navigation, route }) {
   });
 
   const { data, loading, error } = reduce
-  // const index = data.tutors.experience;
-  // const [exp, setExp] = useState(null);
-  // if (index == '') {
-  //     setExp('')
-  // } else if (index == 1) {
-  //     setExp("None")
-  // } else if (index == 2) {
-  //     setExp("Less than 1 year")
-  // } else if (index == 3) {
-  //     setExp("1 year")
-  // }
-  // else if (index == 4) {
-  //     setExp("2 years")
-  // }
-  // else if (index == 5) {
-  //     setExp("More than 2 years")
-  // }
+
   if (loading) {
     return <LoadingScreen />
   }
@@ -164,7 +148,7 @@ export default function CourseDetail({ navigation, route }) {
           />
 
         </TouchableOpacity>
-        <Text style={styles.textHeader}>Course Name</Text>
+        <Text style={styles.textHeader}>{data.course.name}</Text>
       </View>
 
       {/* body */}
@@ -277,13 +261,13 @@ export default function CourseDetail({ navigation, route }) {
         </View>
         <View style={styles.view}>
           <Icon
-            name="line"
-            type="fontisto"
+            name="phone"
+            type="material"
             color={Colors.secondary}
             size={20}
           />
           <View style={styles.viewItem}>
-            <Text style={styles.title}>Line ID</Text>
+            <Text style={styles.title}>Phone Number</Text>
             <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
           </View>
         </View>
@@ -298,7 +282,7 @@ export default function CourseDetail({ navigation, route }) {
           <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.date_of_birtth ? data.course.tutors.date_of_birtth : "Not specified"}</Text>
           <View style={[styles.panelRow, { alignSelf: "center" }]}>
             <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-            <Text style={styles.text}>{data.course.tutors.major ? categories[data.course.tutors.major].name: "Not specified"}</Text>
+            <Text style={styles.text}>{data.course.tutors.major ? categories[data.course.tutors.major].name : "Not specified"}</Text>
           </View>
           <View style={[styles.panelRow, { alignSelf: "center" }]}>
             <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />

@@ -24,7 +24,7 @@ export default function ResgisterTutor({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const currentUser = JSON.parse(state.userData);
-    const [Alert, setAlert] = useState(false)
+    const [messageAlert, setAlert] = useState(false)
     const [msg, setText] = useState('')
     const [firstname, setFirstname] = useState('');
     const [surname, setSurname] = useState('');
@@ -42,46 +42,54 @@ export default function ResgisterTutor({ navigation }) {
     const [count, setCount] = useState(0);
     const checkEmpty = () => {
         const date = new Date().getFullYear() - birthDath.getFullYear();
-        if (!firstname.trim()) { 
-            setCount(1); 
+        if (!firstname.trim()) {
+            setCount(1);
             setAlert(true)
             setText('Please enter firstname');
-             return; }
-        if (!surname.trim()) { 
-            setCount(1); 
+            return;
+        }
+        if (!surname.trim()) {
+            setCount(1);
             setAlert(true)
-            setText('Please enter surname'); 
-            return; }
-        if (date < 16) { 
-            setCount(1); 
+            setText('Please enter surname');
+            return;
+        }
+        if (date < 16) {
+            setCount(1);
             setAlert(true)
             setText('You must be 16 years old'); r
-            eturn; }
-        if (!phoneNumber.trim()) { 
-            setCount(1); 
-            setAlert(true)
-            setText('Please enter phone number'); 
-            return; }
-        if (!lineId.trim()) { 
-            setCount(1); 
-            setAlert(true)
-            setText('Please enter line id'); 
-            return; }
-        if (!email.trim()) { 
-            setCount(1); 
-            setAlert(true)
-            setText('Please enter email'); 
-            return; }
-        if (catagory == 0) { 
-            setCount(1); 
-            setAlert(true)
-            setText('Please select Catagory'); 
-            return; }
-        if (experience == 0) { 
+            eturn;
+        }
+        if (!phoneNumber.trim()) {
             setCount(1);
-            setAlert(true) 
-            setText('Please select Experience'); 
-            return; }
+            setAlert(true)
+            setText('Please enter phone number');
+            return;
+        }
+        if (!lineId.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter line id');
+            return;
+        }
+        if (!email.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter email');
+            return;
+        }
+        if (catagory == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select Catagory');
+            return;
+        }
+        if (experience == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select Experience');
+            return;
+        }
         setCount(2);
     }
     useEffect(() => {
@@ -118,7 +126,7 @@ export default function ResgisterTutor({ navigation }) {
                 lastname: surname,
                 major: catagory,
                 phoneNumber: phoneNumber,
-                dob: birthDath,
+                dob: birthDath.getDate() + "/" + birthDath.getMonth() + "/" + birthDath.getFullYear(),
                 exp: experience,
                 lineId: lineId,
             });
@@ -149,8 +157,8 @@ export default function ResgisterTutor({ navigation }) {
 
             {/* body */}
             <ScrollView style={{ backgroundColor: Colors.white, flex: 0 }}>
-            {Alert && 
-                <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]}/>}
+                {messageAlert &&
+                    <AlertComponent text={[msg, setText]} alert={[messageAlert, setAlert]} />}
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={[styles.column, styles.box]} />

@@ -71,11 +71,11 @@ export default function TakeCreateCourse({ route, navigation }) {
   };
 
   async function sendMessage(take_id) {
-    const res = await API.post("/notification/message",{
+    const res = await API.post("/notification/message", {
       takeId: take_id,
       title: "Message!!",
       body: (`${coureName} you was join have been created! :)`),
-    },{
+    }, {
       'Content-Type': 'application/json',
       headers: { Authorization: `key=AAAA1KBucM4:APA91bHJAgptS8HJBJsA5qSu_0wVxfZQcAWM4AwqgftPMDEbK_gUSKAIe2aA5rRMkQUqhGELV4ZDSZNV13Ii6FfUeA99jlp_uEvLFSIuerZo5dcblunkAwxJASymZASqa4LtN-9KSGuG` }
     });
@@ -153,8 +153,8 @@ export default function TakeCreateCourse({ route, navigation }) {
         description: description,
         tagname: mytags,
         duration: selectedValue,
-        lat: draggable.latitude,
-        long: draggable.longitud,
+        lat: draggable.latitude.toString(),
+        long: draggable.longitud.toString(),
         courseAvatar: courseAvatar,
       });
 
