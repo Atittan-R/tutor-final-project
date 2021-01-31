@@ -157,7 +157,7 @@ export default function CourseDetail({ navigation, route }) {
                     />
 
                 </TouchableOpacity>
-                <Text style={styles.textHeader}>Course Name</Text>
+                <Text style={styles.textHeader}>{data.course.name}</Text>
             </View>
 
             {/* body */}

@@ -173,7 +173,7 @@ export default function Search({ navigation }) {
                     keyExtractor={item => item.id}
                     horizontal={true}
                     renderItem={({ item }) =>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
                             <View style={styles.card}>
                                 <Image source={courseAvatars[item.courseAvatar].image} style={styles.image} />
                                 <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
@@ -214,9 +214,6 @@ export default function Search({ navigation }) {
                                     flexWrap: "wrap",
                                     marginBottom: 1,
                                     alignItems: "center",
-                                    // borderBottomWidth: 1,
-                                    // borderBottomColor: Colors.gray,
-
                                 }}>
                                 <Image source={avatars[item.user.avatar].image} style={styles.iamgeUser} />
                                 <Text style={styles.textTitle}>{item.user.username}</Text>
@@ -246,6 +243,7 @@ export default function Search({ navigation }) {
                                 }
                             </View>
                             <View style={{ marginBottom: 10 }}></View>
+                            <View style={{ marginBottom: 0, borderBottomWidth: 1, borderBottomColor: Colors.gray, }}></View>
                         </TouchableOpacity>
                     }
                 />
