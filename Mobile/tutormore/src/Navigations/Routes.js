@@ -60,17 +60,17 @@ export const renderingCheck = () => {
                         await AsyncStorage.removeItem("userToken");
                         await AsyncStorage.removeItem("userRole");
                         await AsyncStorage.removeItem("userRoles");
+                        setCheck(false);
                     } else {
                         console.log("set New User")
                         setCheck(res.data)
-                        await AsyncStorage.setItem("userData", JSON.stringify(res.data));
                     }
                 }
                 setLoading(false)
             } catch (e) {
                 console.log(e)
                 setLoading(false)
-                setCheck(false);
+                setCheck(null);
             }
         }
 
@@ -79,19 +79,17 @@ export const renderingCheck = () => {
 
     useEffect(() => {
         registerForPushNotificationsAsync().then(async (token) => {
-            // console.log(token, "UserData",currentUser.id,)
-            if (currentUser.id && token) {
-                await sendToken(currentUser.id, token);
-                console.log("User:", currentUser.id, token)
+                const store = await AsyncStorage.getItem("userData");
+                const storeUser = JSON.parse(store)
+            if (storeUser.id && token) {
+                await sendToken(storeUser.id, token);
+                console.log("User:", storeUser.id, token)
             }
         }
         );
         // This listener is fired whenever a notification is received while the app is foregrounded
         notificationListener.current = Notifications.addNotificationReceivedListener(
             (notification) => {
-                const { origin } = notification;
-                console.log(notification)
-
                 if (origin === 'selected') {
                     if (notification.request.content.data.course) {
                         console.log("notification: ", notification.request.content.data.course);
@@ -110,7 +108,7 @@ export const renderingCheck = () => {
         // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
         responseListener.current = Notifications.addNotificationResponseReceivedListener(
             (response) => {
-                // console.log("response: ", response);
+                console.log("response: ", response);
             }
         );
         return () => {
@@ -139,21 +137,10 @@ export const renderingCheck = () => {
                 return role_router[JSON.parse(state.userRoles)];
             }
         } else {
-            console.log("check 1", check)
+            console.log("check ", check)
             return <AuthenticationStack />
         }
     }
-
-    // else if (user.userRole) {
-    //     return role_router[state.userRole]
-    // } else if (user.userRole.length === 1) {
-    //     return role_router[JSON.parse(state.userRoles)];
-    // } else if (user.userRole.length === 2) {
-    //     return <RoleSelection/>
-    // }
-    // return (state.userRole == null ?
-    //     //     <RoleSelection /> :
-    //     //     role_router[state.userRole])
 
 };
 

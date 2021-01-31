@@ -10,7 +10,6 @@ module.exports = function (app) {
   //     next();
   //   });
 
-
   //To get Token
   app.post(
     "/api/notification/token",
@@ -27,8 +26,8 @@ module.exports = function (app) {
   );
 };
 
-  // app.post(
-  //   "/api/notification/push",
-  //   // [authJwt.verifyToken],
-  //   controller.sendPushNotification
-  // );
+// app.post(
+//   "/api/notification/push",
+//   // [authJwt.verifyToken],
+//   controller.sendPushNotification
+// );
