@@ -153,8 +153,8 @@ export default function TakeCreateCourse({ route, navigation }) {
         description: description,
         tagname: mytags,
         duration: selectedValue,
-        lat: draggable.latitude,
-        long: draggable.longitud,
+        lat: draggable.latitude.toString(),
+        long: draggable.longitud.toString(),
         courseAvatar: courseAvatar,
       });
 
