@@ -23,6 +23,10 @@ export default function Me({ navigation, route }) {
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
     let localuser = JSON.parse(state.userData);
+    const [name, setname] = useState("")
+    const [major, setmajor] = useState("")
+    const [tel, settel] = useState("")
+    const [email, setemail] = useState("")
     const [Profile, setProfile] = useState(
         {
             username: "",
