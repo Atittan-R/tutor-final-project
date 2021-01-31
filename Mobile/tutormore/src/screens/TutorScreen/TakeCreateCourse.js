@@ -14,14 +14,10 @@ import {
 import { Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Amount from "../../components/forms/Amount";
-import Catagory from "../../components/forms/Catagory";
-import Clock from "../../components/forms/Clock";
 import Location from "../../components/forms/Location";
-import ModalDate from "../../components/forms/ModalDate";
 import Tag from "../../components/forms/Tag";
 import TermCourse from "../../components/forms/TermCourse";
 import TextInputButton from "../../components/forms/TextInputButton";
-import UploadImage from "../../components/forms/UploadImage";
 import Colors from "../../configs/Colors";
 import API from "../../services/API";
 import { useGlobalVar } from "../../context/GlobalContex";
@@ -50,9 +46,7 @@ export default function TakeCreateCourse({ route, navigation }) {
   const [claerTag, setClaerTag] = useState(false);
   const [requsetId, setRequsetId] = useState(0);
   const [courseAvatar, setCourseAvatar] = useState(0);
-  const [requireImage, setRequireImage] = useState(
-    require("../../assets/course/picture.png")
-  );
+  const [requireImage, setRequireImage] = useState( require("../../assets/course/picture.png") );
   const [draggable, setDraggable] = useState({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
@@ -80,19 +74,21 @@ export default function TakeCreateCourse({ route, navigation }) {
     console.log(res.data);
   }
 
-  // const [count, setCount] = useState(0);
-  // const checkEmpty = () => {
-  //   if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
-  //   if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
-  //   if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
-  //   setCount(2);
-  // }
-  // useEffect(() => {
-  //   console.log("count =>>>>" + count);
-  //   if (count == 2) {
-  //     alertTaked();
-  //   }
-  // }, [count]);
+  const [count, setCount] = useState(0);
+  const checkEmpty = () => {
+    if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
+    if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
+    if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
+    setCount(2);
+  }
+
+  useEffect(() => {
+    console.log("count =>>>>" + count);
+    if (count == 2) {
+      alertTaked();
+    }
+  }, [count]);
+
   const alertTaked = () => {
     Alert.alert(
       "Taked",
@@ -255,7 +251,7 @@ export default function TakeCreateCourse({ route, navigation }) {
             />
           </Modal>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => taked()}>
+        <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
           <Text style={styles.title}>Take</Text>
         </TouchableOpacity>
         <View style={{ marginVertical: 10 }} />
