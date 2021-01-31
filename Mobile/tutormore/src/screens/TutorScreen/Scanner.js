@@ -19,10 +19,10 @@ export default function Scanner({ navigation }) {
     // data คือข้อมูลที่ได้จากการสแกน
     const handleBarCodeScanned =  async({ type, data }) => {
         setScanned(true);
-        ;
+       
         try {
            const value=data.split('/')
-           console.log(value[0],value[1]);
+        //    console.log(value[0],value[1]);
             const attendance=await API.post("/attendance",{
                courseId:parseInt(value[0]),
                userId:parseInt(value[1])
@@ -30,15 +30,11 @@ export default function Scanner({ navigation }) {
              })
              console.log(attendance.data);
              alert(attendance.data.status);
-             navigation.navigate("Course", { screen: "Attendance" })
+             navigation.navigate("Course", { screen: "TeachingList" })
         } catch (error) {
              alert(error);
         }
-    // console.log();
-    // // console.log('====================================');
-    // // console.log(data[0]);
-    // // console.log('====================================');
-        alert(`${data} has been scanned!`);
+        // alert(`${data} has been scanned!`);
     };
 
     if (hasPermission === null) {

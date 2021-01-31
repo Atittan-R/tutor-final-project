@@ -181,7 +181,21 @@ exports.findtag = async (req, res) => {
 
                 {
                     model: Course,
-                    attributes: ["name", "id"],
+                    attributes: [   
+                    "id",
+                    "name",
+                    "day",
+                    "time_start",
+                    "time_end",
+                    "duration",
+                    "amount",
+                    "lat",
+                    "long",
+                    "distance",
+                    "createdAt",
+                    "description",
+                    "rate",
+                    "courseAvatar"],
                     through: {
                         attributes: [],
 
@@ -189,8 +203,18 @@ exports.findtag = async (req, res) => {
 
                 },
 
+                {
+                    model: Request,
+                    as:"requests",
+                    attributes: ["id","name","description","time_start","time_end"],
+                    through: {
+                        attributes: [],
 
+                    },
+
+                },
             ],
+
 
 
         })

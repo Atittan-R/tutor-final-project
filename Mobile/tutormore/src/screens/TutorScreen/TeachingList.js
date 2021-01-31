@@ -70,7 +70,7 @@ export default function TeachingList({ navigation }) {
             <View style={styles.headerBar}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.pop()}>
+                    onPress={() => navigation.navigate("Me")}>
                     <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Teaching List</Text>
