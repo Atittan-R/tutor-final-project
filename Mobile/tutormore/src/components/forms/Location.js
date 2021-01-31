@@ -9,13 +9,7 @@ export default function Location(props) {
   const [lat, setlat] = props.lat
   const [long, setlong] = props.long
   const [modalVisible, setModalVisible] = props.modal
-  const [region, setRegion] = useState({
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-    latitude:  14.8817767,
-    longitude:  102.0185075,
-   
-  });
+
   // const mapRef=React.createRef();
   function movementMarker(e) {
     const { latitude, longitude } = e.coordinate;
@@ -36,16 +30,7 @@ export default function Location(props) {
  
   }
  
-  const map=async(region)=>{
-    console.log('====================================');
-    console.log(region);
-    console.log('====================================');
-   await setDraggable(region);
-   await setRegion(region)
-  //  mapRef.current.animateToRegion(region)
-   setlat(draggable.latitude)
-   setlong(draggable.longitude)
-  }
+
 useEffect(() => {
   setDraggable(draggable)
 }, [draggable])

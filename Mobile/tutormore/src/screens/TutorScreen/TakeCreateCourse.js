@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   View,
   ToastAndroid,
-  Modal, Image,
+  Modal,
+  Image,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
@@ -23,21 +24,24 @@ import API from "../../services/API";
 import { useGlobalVar } from "../../context/GlobalContex";
 import courseAvatars from "../../configs/courseAvatars";
 import { SwipeablePanel } from "rn-swipeable-panel";
+import AlertComponent from "../../components/Alerts";
 
 export default function TakeCreateCourse({ route, navigation }) {
-  const { req } = route.params
+  const { req } = route.params;
   const [coureName, setCourseName] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [catagory, setCatagory] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
-  const [lat, setlat] = useState(14.8817767)
-  const [long, setlong] = useState(102.0185075)
+  const [lat, setlat] = useState(14.8817767);
+  const [long, setlong] = useState(102.0185075);
   const { authentication } = useGlobalVar();
-  const [state, dipatch] = authentication
+  const [state, dipatch] = authentication;
   const currentUser = JSON.parse(state.userData);
   const [modalVisible, setModalVisible] = useState(false);
   //TODO
+  const [Alert, setAlert] = useState(false);
+  const [msg, setText] = useState("");
   const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
   const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0));
   const [day, setDay] = useState("");
@@ -46,13 +50,14 @@ export default function TakeCreateCourse({ route, navigation }) {
   const [claerTag, setClaerTag] = useState(false);
   const [requsetId, setRequsetId] = useState(0);
   const [courseAvatar, setCourseAvatar] = useState(0);
-  const [requireImage, setRequireImage] = useState( require("../../assets/course/picture.png") );
+  const [requireImage, setRequireImage] = useState(
+    require("../../assets/course/picture.png")
+  );
   const [draggable, setDraggable] = useState({
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
     latitude: 14.8817767,
     longitude: 102.0185075,
-
   });
 
   const [isPanelActive, setIsPanelActive] = useState(false);
@@ -76,19 +81,32 @@ export default function TakeCreateCourse({ route, navigation }) {
 
   const [count, setCount] = useState(0);
   const checkEmpty = () => {
-    if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
-    if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
-    if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
+    if (!coureName.trim()) {
+      setCount(1);
+      setAlert(true);
+      setText("Please enter course name");
+      return;
+    }
+    if (selectedValue == 0) {
+      setCount(1);
+      setAlert(true);
+      setText("Please select term course");
+      return;
+    }
+    if (!amount.trim()) {
+      setCount(1);
+      setAlert(true);
+      setText("Please enter amount of seats");
+      return;
+    }
     setCount(2);
-  }
-
+  };
   useEffect(() => {
     console.log("count =>>>>" + count);
     if (count == 2) {
       alertTaked();
     }
   }, [count]);
-
   const alertTaked = () => {
     Alert.alert(
       "Taked",
@@ -100,9 +118,10 @@ export default function TakeCreateCourse({ route, navigation }) {
           style: "cancel",
         },
         {
-          text: "OK", onPress: async () => {
+          text: "OK",
+          onPress: async () => {
             await taked();
-          }
+          },
         },
       ],
       { cancelable: false }
@@ -129,8 +148,8 @@ export default function TakeCreateCourse({ route, navigation }) {
         description: description,
         tagname: mytags,
         duration: selectedValue,
-        lat: lat.toString(),
-        long: long.toString(),
+        lat: draggable.latitude,
+        long: draggable.longitud,
         courseAvatar: courseAvatar,
       });
 
@@ -141,7 +160,7 @@ export default function TakeCreateCourse({ route, navigation }) {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const [panelProps, setPanelProps] = useState({
     fullWidth: true,
@@ -155,14 +174,14 @@ export default function TakeCreateCourse({ route, navigation }) {
     setCourseAvatar(id);
   };
   useEffect(() => {
-    setCourseName(req.map((i) => i.name).toString())
-    setDescription(req.map((i) => i.description).toString())
-    setTimeStart(req.map((i) => i.time_start).toString())
-    setTimeEnd(req.map((i) => i.time_end).toString())
-    setDay(req.map((i) => i.date).toString())
-    setCatagory(req.map((i) => i.categories.name).toString())
-    setRequsetId(parseInt(req.map((i) => i.id).toString()))
-  }, [])
+    setCourseName(req.map((i) => i.name).toString());
+    setDescription(req.map((i) => i.description).toString());
+    setTimeStart(req.map((i) => i.time_start).toString());
+    setTimeEnd(req.map((i) => i.time_end).toString());
+    setDay(req.map((i) => i.date).toString());
+    setCatagory(req.map((i) => i.categories.name).toString());
+    setRequsetId(parseInt(req.map((i) => i.id).toString()));
+  }, []);
   return (
     <>
       {/* header */}
@@ -172,6 +191,9 @@ export default function TakeCreateCourse({ route, navigation }) {
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
+          {Alert && (
+            <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]} />
+          )}
           <TouchableOpacity onPress={() => setIsPanelActive(true)}>
             <Image source={requireImage} style={styles.imageTitle} />
             <Text style={styles.text}>Change image</Text>
@@ -215,9 +237,11 @@ export default function TakeCreateCourse({ route, navigation }) {
           />
           <TextInputButton
             label={"Category"}
-            onTextChange={(text) => setCourseName(text)} value={catagory} editable={false} />
-          <Tag
-            value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
+            onTextChange={(text) => setCourseName(text)}
+            value={catagory}
+            editable={false}
+          />
+          <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
           <TouchableOpacity
             onPress={() => {
               setModalVisible(true);
@@ -228,7 +252,6 @@ export default function TakeCreateCourse({ route, navigation }) {
               long={[long, setlong]}
               draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
-
             />
           </TouchableOpacity>
 
