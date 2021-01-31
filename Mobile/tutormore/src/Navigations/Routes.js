@@ -45,8 +45,39 @@ export const renderingCheck = () => {
         })
     }
 
+    useEffect(()=>{
+        const checkUser = async () => {
+            setLoading(true)
+            const store = await AsyncStorage.getItem("userData");
+            const storeUser = JSON.parse(store)
+            try {
+                if (storeUser) {
+                    console.log("Have user Store")
+                    const res = await API.get("/user/findProfile/" + storeUser.id);
+                    if (res.data === null) {
+                        console.log("Remove Data")
+                        await AsyncStorage.removeItem("userData");
+                        await AsyncStorage.removeItem("userToken");
+                        await AsyncStorage.removeItem("userRole");
+                        await AsyncStorage.removeItem("userRoles");
+                    } else {
+                        console.log("set New User")
+                        setCheck(res.data)
+                        await AsyncStorage.setItem("userData", JSON.stringify(res.data));
+                    }
+                }
+                setLoading(false)
+            } catch (e) {
+                console.log(e)
+                setLoading(false)
+                setCheck(false);
+            }
+        }
+
+        checkUser();
+    }, [state.userData])
+
     useEffect(() => {
-        console.log("Register Notification")
         registerForPushNotificationsAsync().then(async (token) => {
             // console.log(token, "UserData",currentUser.id,)
             if (currentUser.id && token) {
@@ -89,38 +120,6 @@ export const renderingCheck = () => {
 
     }, []);
     // END useEffect
-
-    useEffect(()=>{
-        const checkUser = async () => {
-            setLoading(true)
-            const store = await AsyncStorage.getItem("userData");
-            const storeUser = JSON.parse(store)
-            try {
-                if (storeUser) {
-                    console.log("Have user Store")
-                    const res = await API.get("/user/findProfile/" + storeUser.id);
-                    if (res.data === null) {
-                        console.log("Remove Data")
-                        await AsyncStorage.removeItem("userData");
-                        await AsyncStorage.removeItem("userToken");
-                        await AsyncStorage.removeItem("userRole");
-                        await AsyncStorage.removeItem("userRoles");
-                    } else {
-                        console.log("set New User")
-                        setCheck(res.data)
-                        await AsyncStorage.setItem("userData", JSON.stringify(res.data));
-                    }
-                }
-                setLoading(false)
-            } catch (e) {
-                console.log(e)
-                setLoading(false)
-                setCheck(false);
-            }
-        }
-
-        checkUser();
-    }, [state.userData])
 
     if (loading) {
         return <LoadingScreen />

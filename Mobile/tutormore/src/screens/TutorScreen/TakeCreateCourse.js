@@ -40,7 +40,7 @@ export default function TakeCreateCourse({ route, navigation }) {
   const currentUser = JSON.parse(state.userData);
   const [modalVisible, setModalVisible] = useState(false);
   //TODO
-  const [Alert, setAlert] = useState(false);
+  const [messageAlert, setAlert] = useState(false);
   const [msg, setText] = useState("");
   const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
   const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0));
@@ -107,6 +107,7 @@ export default function TakeCreateCourse({ route, navigation }) {
       alertTaked();
     }
   }, [count]);
+
   const alertTaked = () => {
     Alert.alert(
       "Taked",
@@ -127,6 +128,7 @@ export default function TakeCreateCourse({ route, navigation }) {
       { cancelable: false }
     );
   };
+
   const taked = async () => {
     const clear = () => {
       setCourseName("");
@@ -191,8 +193,8 @@ export default function TakeCreateCourse({ route, navigation }) {
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
-          {Alert && (
-            <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]} />
+          {messageAlert && (
+            <AlertComponent text={[msg, setText]} alert={[messageAlert, setAlert]} />
           )}
           <TouchableOpacity onPress={() => setIsPanelActive(true)}>
             <Image source={requireImage} style={styles.imageTitle} />
@@ -409,15 +411,6 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     color: Colors.secondary,
-  },
-  button: {
-    justifyContent: "center",
-    flexDirection: "row",
-    backgroundColor: Colors.primary,
-    borderRadius: 30,
-    marginTop: 10,
-    paddingVertical: 10,
-    elevation: 2,
   },
   button: {
     justifyContent: "center",
