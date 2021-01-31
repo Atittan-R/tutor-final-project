@@ -14,16 +14,19 @@ import NoDataScreen from '../../components/Nodata';
 import Colors from '../../configs/Colors'
 import API from "../../services/API";
 
+import AlertComponent from "../../components/Alerts";
+
 export default function CheckList({ navigation, route, props }) {
     const { course, id } = route.params;
     // const {key}=props
     const [CheckData, setCheckData] = useState()
+    const [msg, setText] = useState("");
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const fetchCheckList = async () => {
-        setLoading(true)
         try {
+            setLoading(true)
             const CheckList = await API.post("/selete/attendance", {
                 courseId: id
             })
@@ -50,6 +53,8 @@ export default function CheckList({ navigation, route, props }) {
             setError(false)
         } catch (error) {
             console.log(error);
+            setText(error.message)
+            setLoading(false)
             setError(true)
         }
     }
@@ -61,13 +66,7 @@ export default function CheckList({ navigation, route, props }) {
     }, [])
     //   console.log(CheckData.map((i)=>i.data));
     // console.log(key);
-    if (loading) {
-        return <LoadingScreen />
-    }
 
-    if (error) {
-        return <NoDataScreen />
-    }
     return (
         <>
             {/* header */}
@@ -83,21 +82,23 @@ export default function CheckList({ navigation, route, props }) {
 
                 </View>
             </View>
-            <FlatList
-                data={CheckData}
-                // keyExtractor={item => item.id}
-                // key={item.id}
-                renderItem={({ item }) =>
-                    <TouchableOpacity
-                        onPress={() => navigation.push("Attendance", { date: item.date, data: item.data })}
-                    >
-                        <View style={styles.card}>
-                            <Text style={styles.title}>{item.date}</Text>
-                            <Icon name="navigate-next" type="material" color={Colors.secondary} />
-                        </View>
-                    </TouchableOpacity>
-                }
-            />
+            {loading ? <LoadingScreen /> : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> :
+                <FlatList
+                    data={CheckData}
+                    // keyExtractor={item => item.id}
+                    // key={item.id}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity
+                            onPress={() => navigation.push("Attendance", { date: item.date, data: item.data })}
+                        >
+                            <View style={styles.card}>
+                                <Text style={styles.title}>{item.date}</Text>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
+                            </View>
+                        </TouchableOpacity>
+                    }
+                />
+            }
         </>
     )
 }

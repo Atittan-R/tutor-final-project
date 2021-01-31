@@ -19,6 +19,8 @@ import LoadingScreen from "../../components/Loading";
 import avatars from "../../configs/avatars";
 import categories from "../../configs/categories";
 
+import AlertComponent from "../../components/Alerts";
+
 export default function Feed({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -26,6 +28,8 @@ export default function Feed({ navigation }) {
     const [isjoin, setisJoin] = useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(false);
+    const [msg, setText] = useState("");
+    const [error, setError] = useState(false)
 
     const user = JSON.parse(state.userData);
     console.log("user_id", user.id)
@@ -40,6 +44,9 @@ export default function Feed({ navigation }) {
             // console.log(isjoin);
         } catch (error) {
             console.log(error);
+            setText(error.message)
+            setLoading(false)
+            setError(true)
         }
     }
 
@@ -55,8 +62,8 @@ export default function Feed({ navigation }) {
         }
     }
     const fetchApi = async () => {
-        setLoading(true);
         try {
+            setLoading(true);
             const fetch_req = await API.get("/request/findAll");
             const fetch_join = await API.post("/user/join", {
                 userId: user.id,
@@ -68,6 +75,9 @@ export default function Feed({ navigation }) {
             setLoading(false);
         } catch (error) {
             console.log(error);
+            setText(error.message)
+            setLoading(false)
+            setError(true)
         }
     }
 
@@ -100,7 +110,7 @@ export default function Feed({ navigation }) {
                     onChangeText={(text) => searchAction(text)}
                 />
             </View>
-            {loading ? <LoadingScreen /> :
+            {loading ? <LoadingScreen /> : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> :
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     refreshControl={

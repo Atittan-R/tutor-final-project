@@ -22,6 +22,7 @@ import { SwipeablePanel } from 'rn-swipeable-panel';
 import courseAvatars from "../../../configs/courseAvatars";
 import avatars from "../../../configs/avatars";
 import { parse } from "react-native-svg";
+import categories from "../../../configs/categories";
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;

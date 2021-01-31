@@ -15,7 +15,6 @@ import Colors from "../../configs/Colors";
 import API from "../../services/API";
 import {useGlobalVar} from "../../context/GlobalContex";
 import LoadingScreen from "../../components/Loading";
-//
 
 const Inbox = () => {
     const { authentication } = useGlobalVar();

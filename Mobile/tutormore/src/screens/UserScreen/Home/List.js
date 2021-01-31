@@ -9,8 +9,12 @@ import LoadingScreen from "../../../components/Loading";
 import NoDataScreen from "../../../components/Nodata";
 import courseAvatars from "../../../configs/courseAvatars";
 
+import AlertComponent from "../../../components/Alerts";
+
 export default function List({ navigation, route }) {
     const { categories } = route.params;
+    const [msg, setText] = useState("");
+    const [err, setError] = useState(false)
     // console.log(categories)
     const [state, dispatch] = useReducer(reducer, initialState)
     const { data, loading, error } = state;
@@ -23,27 +27,14 @@ export default function List({ navigation, route }) {
             console.log("list=> " + response.data)
             dispatch(actionCreators.success(list))
         } catch (e) {
-            alert(e.response.data.message)
+            setText(e.response.data.message)
+            setLoading(false)
+            setError(true)
         }
     };
     useEffect(() => {
         fetchCategory();
     }, []);
-
-    if (loading) {
-        return <LoadingScreen />
-    }
-
-    if (error) {
-        return (
-            <ScrollView style={styles.center}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                <View>
-                    <Text>Failed to load Data!</Text>
-                </View>
-            </ScrollView>
-        )
-    }
 
     return (
         <>
@@ -56,7 +47,7 @@ export default function List({ navigation, route }) {
                 <Text style={styles.textHeader}>{categories}</Text>
                 {/*<Icon name="location-on" type="material" color={Colors.secondary} />*/}
             </View>
-            {data.length === 0 ?
+            {loading ? <LoadingScreen /> : error ? <AlertComponent text={[msg, setText]} alert={[err, setError]} /> : data.length === 0 ?
                 <NoDataScreen data={categories} /> :
                 <View style={styles.view}>
                     <View style={styles.line} />
