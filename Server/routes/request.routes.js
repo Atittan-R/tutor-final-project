@@ -45,6 +45,11 @@ module.exports = function (app) {
       // [authJwt.verifyToken, authJwt.isTutor],
       controller.RequestTag
     );
-    
+
+    app.post(
+      "/api/course/matching",
+      // [authJwt.verifyToken, authJwt.isTutor],
+      controller.matchingCourse
+    );
   };
   

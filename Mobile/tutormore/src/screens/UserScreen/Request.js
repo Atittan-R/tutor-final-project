@@ -66,11 +66,12 @@ export default function Request({ navigation }) {
 
             console.log('====================================');
             clear()
-            navigation.navigate("Feed", {
-                name: "Feed", onGoBack: () => {
-                    fetchData()
-                }
-            })
+            navigation.push("Matching");
+            // navigation.navigate("Feed", {
+            //     name: "Feed", onGoBack: () => {
+            //         fetchData()
+            //     }
+            // })
 
         } catch (error) {
             if (error.response.status == 404) {

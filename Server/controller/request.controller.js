@@ -6,6 +6,8 @@ const Tag = db.tag;
 const User = db.user;
 const Categorie=db.categories
 const Sequelize = require('sequelize');
+const Course=db.course
+const Op = db.Sequelize.Op;
 
 exports.createRequest =async (req, res) => {
   //Save Request Data to Database
@@ -22,7 +24,7 @@ exports.createRequest =async (req, res) => {
   });
   
     //Set Tag to tag table
-   
+    console.log(req.body.tagname.length);
       if (req.body.tagname) {
         for (i = 0; i < req.body.tagname.length; i++) {
           const tag=await  Tag.create({
@@ -31,7 +33,7 @@ exports.createRequest =async (req, res) => {
             categoryId: requset.categoryId,
           })
           //  console.log(requset.id,tag.id);
-          requset.setTag(tag)
+          requset.addTag(tag)
         }
         res.status(201).send({
           request: requset,
@@ -181,4 +183,74 @@ exports.RequestTag =async (req, res) => {
     ],
    })
    res.send(tag)
+}
+
+exports.matchingCourse = async (req, res) => {
+  console.log("time_start" ,(req.body.time_start).split(":"));
+  let time=(req.body.time_start).split(":")
+  let hours_start=parseInt(time[0])-2
+  let hours_end=parseInt(time[0])+2
+  const time_start=hours_start.toString()+":"+time[1]
+  const time_end=hours_end.toString()+":"+time[1]
+  // console.log(hours.toString()+":"+time[1])
+  try {
+      if(req.body.name.length>0){
+          const  course = await Course.findAll({where:{
+            [Op.and]:  [
+             { name:
+              {
+                  [Op.regexp]: '^' + req.body.name
+              }
+            },
+
+             { time_start:{
+                [Op.between]:[time_start,time_end],
+              }
+            },{
+              day:{
+                [Op.substring]:req.body.day
+              }
+            },
+            {
+              categoryId:{
+                [Op.substring]:req.body.category
+              }
+            }
+            ]
+          },
+          
+              attributes: [   
+                  "id",
+                  "name",
+                  "day",
+                  "time_start",
+                  "time_end",
+                  "duration",
+                  "amount",
+                  "lat",
+                  "long",
+                  "distance",
+                  "createdAt",
+                  "description",
+                  "rate",
+                  "categoryId",
+                  "courseAvatar"],
+              include:[
+                {  model:User,
+                  as: "tutors",
+                  attributes:["username"]
+               }
+  
+              ]
+          }
+          
+              )
+              res.status(201).send(course)
+      }else{
+          res.status(404).send("not fond")
+      }
+     
+  } catch (error) {
+      res.status(500).send({ message: error.message });
+  }
 }

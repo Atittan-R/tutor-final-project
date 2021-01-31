@@ -23,10 +23,6 @@ export default function Me({ navigation, route }) {
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
     let localuser = JSON.parse(state.userData);
-    const [name, setname] = useState("")
-    const [major, setmajor] = useState("")
-    const [tel, settel] = useState("")
-    const [email, setemail] = useState("")
     const [Profile, setProfile] = useState(
         {
             username: "",
@@ -57,14 +53,14 @@ export default function Me({ navigation, route }) {
     useEffect(() => {
         getUser();
     }, []);
-    
+
     useEffect(() => {
         setname(Profile.username)
         setmajor(Profile.major)
         settel(Profile.phonenumber)
         setemail(Profile.email)
     }, [Profile])
-    
+
     return (
         <>
             <ScrollView style={{ backgroundColor: Colors.background }}>
@@ -78,7 +74,7 @@ export default function Me({ navigation, route }) {
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Name</Text>
 
-                            <Text style={styles.textNormal}>{Profile.username === null ? "-" : Profile.username}</Text>
+                            <Text style={styles.textNormal}>{Profile.username === null ? "-" : name}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Major</Text>
@@ -87,11 +83,11 @@ export default function Me({ navigation, route }) {
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Tel.</Text>
                             <Text
-                                style={styles.textNormal}>{Profile.phonenumber === null ? "-" : Profile.phonenumber}</Text>
+                                style={styles.textNormal}>{Profile.phonenumber === null ? "-" : tel}</Text>
                         </View>
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Email</Text>
-                            <Text style={styles.textNormal}>{Profile.email === null ? "-" : Profile.email}</Text>
+                            <Text style={styles.textNormal}>{Profile.email === null ? "-" : email}</Text>
                         </View>
                         <Editprofile
                             name={[name, setname]}

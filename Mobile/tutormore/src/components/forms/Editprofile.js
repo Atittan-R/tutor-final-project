@@ -46,7 +46,7 @@ export default function Editprofile(props) {
     }
 
     const close = () => {
-        setname(  Profile.name)
+        setname(  Profile.username)
         setmajor(Profile.major)
         settel(Profile.phonenumber)
         setemail(Profile.email)

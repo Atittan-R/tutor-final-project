@@ -68,7 +68,13 @@ exports.takend = async (req, res) => {
                 },
             }
         );
-
+        await Request.destroy(
+            {
+                where: {
+                    id: req.body.requestId,
+                },
+            }
+        );
         //This line have to send respone to noti (createCourse.id)
         const result = await Take.findByPk(take.id);
         console.log(result.get())

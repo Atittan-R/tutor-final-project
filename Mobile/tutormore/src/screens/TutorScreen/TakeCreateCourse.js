@@ -80,19 +80,19 @@ export default function TakeCreateCourse({ route, navigation }) {
     console.log(res.data);
   }
 
-  const [count, setCount] = useState(0);
-  const checkEmpty = () => {
-    if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
-    if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
-    if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
-    setCount(2);
-  }
-  useEffect(() => {
-    console.log("count =>>>>" + count);
-    if (count == 2) {
-      alertTaked();
-    }
-  }, [count]);
+  // const [count, setCount] = useState(0);
+  // const checkEmpty = () => {
+  //   if (!coureName.trim()) { setCount(1); alert('Please enter course name'); return; }
+  //   if (selectedValue == 0) { setCount(1); alert('Please select term course'); return; }
+  //   if (!amount.trim()) { setCount(1); alert('Please enter amount of seats'); return; }
+  //   setCount(2);
+  // }
+  // useEffect(() => {
+  //   console.log("count =>>>>" + count);
+  //   if (count == 2) {
+  //     alertTaked();
+  //   }
+  // }, [count]);
   const alertTaked = () => {
     Alert.alert(
       "Taked",
@@ -255,7 +255,7 @@ export default function TakeCreateCourse({ route, navigation }) {
             />
           </Modal>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
+        <TouchableOpacity style={styles.button} onPress={() => taked()}>
           <Text style={styles.title}>Take</Text>
         </TouchableOpacity>
         <View style={{ marginVertical: 10 }} />
