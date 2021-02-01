@@ -77,36 +77,42 @@ export default function CreateCourse({ navigation }) {
     const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
     const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
     const sum = end - start;
-    if (!coureName.trim()) { 
-      setCount(1); 
-      setAlert(true)
-      setText('Please enter course name'); 
-      return; }
-    if (!day.toString().trim()) 
-    { setCount(1); 
-      setAlert(true)
-      setText('Please set the day'); 
-      return; }
-    if (sum < 60) { 
+    if (!coureName.trim()) {
       setCount(1);
-      setAlert(true) 
-      setText("Please set time correctly, at least  minutes away. Result: "); 
-      return; }
-    if (selectedValue == 0) { 
-      setCount(1); 
       setAlert(true)
-      setText('Please select term course'); 
-      return; }
-    if (!amount.trim()) { 
-      setCount(1); 
+      setText('Please enter course name');
+      return;
+    }
+    if (!day.toString().trim()) {
+      setCount(1);
       setAlert(true)
-      setText('Please enter amount of seats'); 
-      return; }
-    if (catagory == 0) { 
-      setCount(1); 
+      setText('Please set the day');
+      return;
+    }
+    if (sum < 60) {
+      setCount(1);
       setAlert(true)
-      setText('Please select Catagory'); 
-      return; }
+      setText("Please set time correctly, at least  minutes away. Result: ");
+      return;
+    }
+    if (selectedValue == 0) {
+      setCount(1);
+      setAlert(true)
+      setText('Please select term course');
+      return;
+    }
+    if (!amount.trim()) {
+      setCount(1);
+      setAlert(true)
+      setText('Please enter amount of seats');
+      return;
+    }
+    if (catagory == 0) {
+      setCount(1);
+      setAlert(true)
+      setText('Please select Catagory');
+      return;
+    }
     setCount(2);
   }
   useEffect(() => {
@@ -128,8 +134,8 @@ export default function CreateCourse({ navigation }) {
         userId: current.id,
         tagname: mytags,
         duration: selectedValue,
-        lat: draggable.latitude,
-        long: draggable.longitude,
+        lat: draggable.latitude.toString(),
+        long: draggable.longitude.toString(),
         courseAvatar: courseAvatar,
       });
       console.log(createCourse)
@@ -139,7 +145,7 @@ export default function CreateCourse({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-  console.log("draggable ",draggable.latitude);
+    console.log("draggable ", draggable.latitude);
   };
 
   const [requireImage, setRequireImage] = useState(
@@ -158,7 +164,7 @@ export default function CreateCourse({ navigation }) {
     setRequireImage(courseAvatars[id].image);
     setCourseAvatar(id);
   };
- 
+
   return (
     <>
       {/* header */}
@@ -171,8 +177,8 @@ export default function CreateCourse({ navigation }) {
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
-        {Alert && 
-                <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]}/>}
+          {Alert &&
+            <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]} />}
           <TouchableOpacity onPress={() => setIsPanelActive(true)}>
             <Image source={requireImage} style={styles.imageTitle} />
             <Text style={styles.text}>Change image</Text>

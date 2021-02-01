@@ -21,6 +21,7 @@ import { actionCreators, initialState, reducer } from "../Reducer";
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import courseAvatars from "../../../configs/courseAvatars";
 import avatars from "../../../configs/avatars";
+import { parse } from "react-native-svg";
 import categories from "../../../configs/categories";
 export default function CourseDetail({ navigation, route }) {
     const { authentication } = useGlobalVar();
@@ -36,7 +37,7 @@ export default function CourseDetail({ navigation, route }) {
         loadDispatch(actionCreators.loading())
         try {
             const res = await API.get("/course/findOne/" + course)
-            console.log("res: ", res.data.course)
+            console.log("res d1: ", res.data.course)
             const courseDetail = await res.data;
             loadDispatch(actionCreators.success(courseDetail));
         } catch (e) {
@@ -145,6 +146,7 @@ export default function CourseDetail({ navigation, route }) {
             </ScrollView>
         )
     }
+    console.log(data)
 
     return (
         <>
@@ -219,7 +221,11 @@ export default function CourseDetail({ navigation, route }) {
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
-                        <Text style={styles.text}>{`${data.countEnroll}/${data.course.amount}`}</Text>
+                        {
+                            data.course.courseEnroll.length === 0
+                                ? <Text style={styles.text}> 0/{data.course.amount}</Text>
+                                : <Text style={styles.text}> {data.course.courseEnroll.map((i) => i.courseEnrollCount)}/{data.course.amount}</Text>
+                        }
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -270,18 +276,18 @@ export default function CourseDetail({ navigation, route }) {
                     <Icon name="school" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Major</Text>
-                        <Text style={styles.text}>{data.course.tutors.major ? data.course.tutors.major : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.CourseCate.name ? data.course.CourseCate.name : "Not specified"}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
                     <Icon
-                        name="line"
-                        type="fontisto"
+                        name="phone"
+                        type="material"
                         color={Colors.secondary}
                         size={20}
                     />
                     <View style={styles.viewItem}>
-                        <Text style={styles.title}>Line ID</Text>
+                        <Text style={styles.title}>Phone Number</Text>
                         <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                 </View>
@@ -295,26 +301,26 @@ export default function CourseDetail({ navigation, route }) {
                 <View style={styles.panelContent}>
                     <Image source={avatars[data.course.tutors.avatar].image} style={styles.imageTutor} />
                     <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
-                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.date_of_birtth ? data.course.tutors.date_of_birtth : "Not specified"}</Text>
+                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.tutor_info.date_of_birth ? data.course.tutors.tutor_info.date_of_birth : "Not specified"}</Text>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.major ? categories[data.course.tutors.major].name : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.CourseCate.name ? data.course.CourseCate.name : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.phonenumber ? data.course.tutors.phonenumber : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.tutor_info.phoneNumber ? data.course.tutors.tutor_info.phoneNumber : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.email ? data.course.tutors.email : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.tutor_info.email ? data.course.tutors.tutor_info.email : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="line" type="fontisto" color={Colors.secondary} style={{ marginRight: 15 }} size={19} />
-                        <Text style={styles.text}>{data.course.tutors.lineId ? data.course.tutors.lineId : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.tutor_info.lineId ? data.course.tutors.tutor_info.lineId : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Text style={[styles.title, { marginRight: 9 }]}>Exp.</Text>
-                        <Text style={styles.text}>{data.course.tutors.experience ? data.course.tutors.experience : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.tutor_info.experience ? data.course.tutors.tutor_info.experience : "Not specified"}</Text>
                     </View>
                 </View>
             </SwipeablePanel>

@@ -119,16 +119,6 @@ export default function Request({ navigation }) {
         setCount(0)
     }
 
-    // useEffect(() => {
-    //     console.log("CourseName :", CourseName);
-    //     console.log("day :", day);
-    //     console.log("Tags :", tags);
-    //     console.log("start " + TimeStart.getHours());
-    //     console.log("end " + TimeEnd.getHours());
-    //     console.log("cat " + catagory);
-    // }, [CourseName, tags, TimeStart.getHours(), TimeEnd.getHours(), catagory])
-
-
 
     return (
 
