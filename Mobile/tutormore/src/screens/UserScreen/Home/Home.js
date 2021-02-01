@@ -30,7 +30,7 @@ export default function Home({ navigation }) {
     const [a, dispatchA] = authentication;
     let user = JSON.parse(a.userData);
     const [filterItem, setFilterItem] = useState(null)
-    
+
     const searchAction = (text) => {
         setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
@@ -40,7 +40,19 @@ export default function Home({ navigation }) {
     const [state, dispatch] = useReducer(reducer, initialState)
     const [msg, setText] = useState("");
     const [err, setError] = useState(false)
+    const [Recommend,setRecommend]=useState([])
 
+    const recommend = async () =>{
+        try {
+            const response = await API.get('/course/recommend')
+            setRecommend(response.data)
+            // console.log(course)
+        } catch (e) {
+            setText(error.message)
+            setLoading(false)
+            setError(true)
+        }
+    }
     async function fetchData() {
         dispatch(actionCreators.loading())
         try {
@@ -78,6 +90,7 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         fetchData()
+        recommend()
     }, [])
 
     if (error) {
@@ -191,7 +204,7 @@ export default function Home({ navigation }) {
                         <FlatList
                             showsHorizontalScrollIndicator={false}
                             horizontal={true}
-                            data={data}
+                            data={Recommend}
                             keyExtractor={(item) => item.id}
                             key={data.id}
                             renderItem={({ item: { id, name, description, courseAvatar } }) => (

@@ -10,7 +10,7 @@ export default function NoDataScreen({data}) {
             alignItems: "center",
             backgroundColor: Colors.white
         }}>
-            <Text style={{textAlign: "center", fontSize: 35, color: "#B5B5B5"}}>No Data {"\n" + data? data : ""}</Text>
+            <Text style={{textAlign: "center", fontSize: 20, color: "#B5B5B5"}}>No Data {"\n" + data? data : ""}</Text>
         </View>
     );
 }

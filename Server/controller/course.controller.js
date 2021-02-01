@@ -4,6 +4,7 @@ const Tag = db.tag;
 const User = db.user;
 const Categories = db.categories;
 const Sequelize = require('sequelize');
+const { rate_course } = require("../models");
 
 exports.createCourse = (req, res) => {
     //Save Course Data to Database
@@ -288,6 +289,19 @@ exports.countUser = async (req, res) => {
         res.status(202).send({message: raw})
     } catch (e) {
         console.log(e.message)
+        res.status(500).send({message: e.message})
+    }
+}
+
+exports.CourseRecommend = async (req, res) => {
+    try {
+        const course= await Course.findAll(
+            {
+                order:rate
+            }
+        )
+        res.status(200).send(course)
+    } catch (error) {
         res.status(500).send({message: e.message})
     }
 }

@@ -6,6 +6,7 @@ import courseAvatars from '../../configs/courseAvatars';
 import API from '../../services/API';
 
 import AlertComponent from "../../components/Alerts";
+import NoDataScreen from '../../components/Nodata';
 
 export default function Matching({ navigation, route }) {
     const { name, day, time_start, categoryId } = route.params
@@ -16,13 +17,15 @@ export default function Matching({ navigation, route }) {
 
     const fetchMatching = async () => {
         try {
+            setLoading(true)
             const fetch_req = await API.post("/course/matching", {
                 name: name,
                 time_start: time_start,
                 day: day,
                 category: categoryId
             });
-            setCourse(fetch_req.data)
+            await setCourse(fetch_req.data)
+            setLoading(false)
             console.log("Course: ", fetch_req.data);
             console.log("name: ", name);
             console.log("time_start: ", time_start);
@@ -54,7 +57,7 @@ export default function Matching({ navigation, route }) {
                 data={Course}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) =>
-                    <TouchableOpaacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
+                    <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
                         <View style={
                             {
                                 backgroundColor: "#fff",
@@ -81,7 +84,7 @@ export default function Matching({ navigation, route }) {
                                 </View>
                             </View>
                         </View>
-                    </TouchableOpaacity>
+                    </TouchableOpacity>
                 } />
         );
 
@@ -121,8 +124,10 @@ export default function Matching({ navigation, route }) {
                 { loading 
                     ? <LoadingScreen /> 
                     : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> 
-                    : data.length === 0 
-                    ? <NoDataScreen data={categories} /> 
+                    : Course.length === 0 
+                    ? <View style={{flex:1, paddingVertical: 300}}>
+                        <NoDataScreen data={"Course Match"} /> 
+                        </View>
                     : <Renderlist />
                 }
             </View>

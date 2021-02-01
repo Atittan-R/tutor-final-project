@@ -57,7 +57,11 @@ module.exports = function (app) {
     controller.HomeCourse
   );
 
-
+  app.get(
+    "/api/course/recommend",
+    // [authJwt.verifyToken, authJwt.isTutor],
+    controller.CourseRecommend
+  );
 
   // app.get(
   //   "/api/course/find/user",
