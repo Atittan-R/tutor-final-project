@@ -99,7 +99,7 @@ export default function CourseDetail2({ navigation, route }) {
     });
 
 
-    // const index = data.course.tutors.experience;
+    // const index = data. tutors.experience;
     // const [exp, setExp] = useState(null);
     // if (index == '') {
     //     setExp('')
@@ -215,7 +215,11 @@ export default function CourseDetail2({ navigation, route }) {
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
-                        <Text style={styles.text}>{`${data.countEnroll}/${data.amount}`}</Text>
+                        {
+                            data.courseEnroll.length === 0
+                                ? <Text style={styles.text}> 0/{data.amount}</Text>
+                                : <Text style={styles.text}> {data.courseEnroll.map((i) => i.courseEnrollCount)}/{data.amount}</Text>
+                        }
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -291,26 +295,26 @@ export default function CourseDetail2({ navigation, route }) {
                 <View style={styles.panelContent}>
                     <Image source={avatars[data.tutors.avatar].image} style={styles.imageTutor} />
                     <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.tutors.username ? data.tutors.username : "Not specified"}</Text>
-                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.tutors.date_of_birtth ? data.tutors.date_of_birtth : "Not specified"}</Text>
+                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.tutors.tutor_info.date_of_birth ? data.tutors.tutor_info.date_of_birth : "Not specified"}</Text>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.major ? categories[data.course.tutors.major].name : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.CourseCate.name ? data.CourseCate.name : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.tutor_info.phoneNumber ? data.tutors.tutor_info.phoneNumber : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.tutors.email ? data.tutors.email : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.tutor_info.email ? data.tutors.tutor_info.email : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="line" type="fontisto" color={Colors.secondary} style={{ marginRight: 15 }} size={19} />
-                        <Text style={styles.text}>{data.tutors.lineId ? data.tutors.lineId : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.tutor_info.lineId ? data.tutors.tutor_info.lineId : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Text style={[styles.title, { marginRight: 9 }]}>Exp.</Text>
-                        <Text style={styles.text}>{data.tutors.experience ? data.tutors.experience : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.tutors.tutor_info.experience ? data.tutors.tutor_info.experience : "Not specified"}</Text>
                     </View>
                 </View>
             </SwipeablePanel>

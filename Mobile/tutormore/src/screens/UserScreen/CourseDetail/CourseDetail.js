@@ -222,7 +222,6 @@ export default function CourseDetail({ navigation, route }) {
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
                         {
-
                             data.course.courseEnroll.length === 0
                                 ? <Text style={styles.text}> 0/{data.course.amount}</Text>
                                 : <Text style={styles.text}> {data.course.courseEnroll.map((i) => i.courseEnrollCount)}/{data.course.amount}</Text>
@@ -309,7 +308,7 @@ export default function CourseDetail({ navigation, route }) {
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
-                        <Text style={styles.text}>{data.course.tutors.tutor_info.phonenumber ? data.course.tutors.tutor_info.phonenumber : "Not specified"}</Text>
+                        <Text style={styles.text}>{data.course.tutors.tutor_info.phoneNumber ? data.course.tutors.tutor_info.phoneNumber : "Not specified"}</Text>
                     </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
