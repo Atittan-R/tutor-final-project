@@ -9,49 +9,64 @@ import {
     View
 } from 'react-native'
 import { Icon } from 'react-native-elements'
+import LoadingScreen from '../../components/Loading';
+import NoDataScreen from '../../components/Nodata';
 import Colors from '../../configs/Colors'
 import API from "../../services/API";
 
-export default function CheckList({ navigation, route ,props}) {
-    const {course,id}  = route.params;
+import AlertComponent from "../../components/Alerts";
+
+export default function CheckList({ navigation, route, props }) {
+    const { course, id } = route.params;
     // const {key}=props
-    const [CheckData, setCheckData] = useState()     
-    const fetchCheckList=async()=>{
+    const [CheckData, setCheckData] = useState()
+    const [msg, setText] = useState("");
+    const [error, setError] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const fetchCheckList = async () => {
         try {
-          const CheckList=await API.post("/selete/attendance",{
-            courseId:id
-          })
-        const data=(CheckList.data)
-        const groups = await data.reduce((groups, day) => {
-            const date = day.createdAt.split('T')[0];
-            if (!groups[date]) {
-              groups[date] = [];
-            }
-            groups[date].push(day);
-            return groups;
-          },{});
-          
-          // Edit: to add it in the array format instead
-          const groupArrays = await Object.keys(groups).map((date) => {
-            return {
-              date,
-              data: groups[date]
-            };
-          });
-          setCheckData(groupArrays);
+            setLoading(true)
+            const CheckList = await API.post("/selete/attendance", {
+                courseId: id
+            })
+            const data = (CheckList.data)
+            const groups = await data.reduce((groups, day) => {
+                const date = day.createdAt.split('T')[0];
+                if (!groups[date]) {
+                    groups[date] = [];
+                }
+                groups[date].push(day);
+                return groups;
+
+            }, {});
+
+            // Edit: to add it in the array format instead
+            const groupArrays = await Object.keys(groups).map((date) => {
+                return {
+                    date,
+                    data: groups[date]
+                };
+            });
+            setCheckData(groupArrays);
+            setLoading(false)
+            setError(false)
         } catch (error) {
-          console.log(error);
-      
+            console.log(error);
+            setText(error.message)
+            setLoading(false)
+            setError(true)
         }
     }
-      
-      
-      useEffect(() => {
+
+
+    useEffect(() => {
         fetchCheckList()
         // console.log(key);
-      }, [])
+    }, [])
     //   console.log(CheckData.map((i)=>i.data));
     // console.log(key);
+
     return (
         <>
             {/* header */}
@@ -64,24 +79,26 @@ export default function CheckList({ navigation, route ,props}) {
                         <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                     </TouchableOpacity>
                     <Text style={styles.textHeader} numberOfLines={1}>{course}</Text>
-                 
+
                 </View>
             </View>
-            <FlatList
-                data={CheckData}
-                // keyExtractor={item => item.id}
-                // key={item.id}
-                renderItem={({ item }) =>
-                    <TouchableOpacity
-                        onPress={() => navigation.push("Attendance", {date: item.date ,data:item.data})}
-                    >
-                        <View style={styles.card}>
-                            <Text style={styles.title}>{item.date}</Text>
-                            <Icon name="navigate-next" type="material" color={Colors.secondary} />
-                        </View>
-                    </TouchableOpacity>
-                }
-            />
+            {loading ? <LoadingScreen /> : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> :
+                <FlatList
+                    data={CheckData}
+                    // keyExtractor={item => item.id}
+                    // key={item.id}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity
+                            onPress={() => navigation.push("Attendance", { date: item.date, data: item.data })}
+                        >
+                            <View style={styles.card}>
+                                <Text style={styles.title}>{item.date}</Text>
+                                <Icon name="navigate-next" type="material" color={Colors.secondary} />
+                            </View>
+                        </TouchableOpacity>
+                    }
+                />
+            }
         </>
     )
 }

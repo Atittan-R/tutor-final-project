@@ -1,34 +1,76 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Clock from '../../components/forms/Clock';
 import ModalDate from '../../components/forms/ModalDate';
 import TextInputButton from '../../components/forms/TextInputButton';
 import Colors from '../../configs/Colors'
 import Catagory from '../../components/forms/Catagory';
 import Tag from '../../components/forms/Tag';
-
-
 import API from "../../services/API"
-import { Directions } from 'react-native-gesture-handler';
-
+import { useGlobalVar } from "../../context/GlobalContex";
+import AlertComponent from '../../components/Alerts';
 export default function Request({ navigation }) {
+    const { authentication } = useGlobalVar();
+    const [state, dispatch] = authentication;
+    const current = JSON.parse(state.userData);
+
     const [CourseName, setCourseName] = useState("");
     const [day, setDay] = useState("")
     const [claerdate, setClaerDate] = useState(false);
     const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
     const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0))
     const [Description, setDescription] = useState("")
-    const [catagory, setCatagory] = useState(null)
+    const [catagory, setCatagory] = useState(0)
     const [tags, setTags] = useState([])
     const [claerTag, setClaerTag] = useState(false)
-
+    const [Alert, setAlert] = useState(false)
+    const [msg, setText] = useState('')
     const getTimeStart = (result) => {
         setTimeStart(result);
     }
     const getTimeEnd = (result) => {
         setTimeEnd(result);
     }
+
+    console.log("userId: " + current.id);
+    const [count, setCount] = useState(0);
+    const checkEmpty = () => {
+        const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
+        const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
+        const sum = end - start;
+        if (!CourseName.trim()) {
+            setCount(1)
+            setAlert(true)
+            setText("Please set name")
+            return;
+        }
+        if (!day.toString().trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please set the day');
+            return;
+        }
+        if (sum < 60) {
+            setCount(1)
+            setAlert(true)
+            setText("Please set time correctly, at least  minutes away. Result: " + sum)
+            return;
+        }
+        if (catagory == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select Catagory');
+            return;
+        }
+        setCount(2);
+
+    }
+    useEffect(() => {
+        console.log("count =>>>>" + count);
+        if (count == 2) {
+            creteRequst();
+        }
+    }, [count]);
 
     const creteRequst = async () => {
         try {
@@ -40,32 +82,23 @@ export default function Request({ navigation }) {
                 time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
                 description: Description,
                 categoryId: catagory,
-                userId: 2,
+                userId: current.id,
                 tagname: tags
-
             });
-            console.log(requst.data);
-            console.log('====================================');
+
             clear()
-            navigation.navigate("Feed", {
-                name: "Feed", onGoBack: () => {
-                    fetchData()
-                }
-            })
+            navigation.push("Matching", { name: CourseName, day: day.toString(), time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(), categoryId: catagory });
 
         } catch (error) {
-
             if (error.response.status == 404) {
                 clear();
-                navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
+                navigation.navigate("Feed", { name: "Feed" })
             }
             else {
                 console.log('====================================');
                 console.log("ERR: ", error.response.status);
                 console.log('====================================');
-
             }
-
         }
     }
     const clear = () => {
@@ -78,23 +111,27 @@ export default function Request({ navigation }) {
         setTimeEnd(new Date(0, 0, 0, 0))
         setTimeStart(new Date(0, 0, 0, 0))
         setClaerDate(true)
+        setCount(0)
     }
 
-    useEffect(() => {
-        console.log("CourseName :", CourseName);
-        console.log("day :", day);
-        console.log("Tags :", tags);
-    }, [CourseName])
 
     return (
+
         <>
+
             {/* header */}
+
             <SafeAreaView style={styles.container} />
+
             <View style={styles.headerBar}>
                 <Text style={styles.textHeader}>Create Request</Text>
             </View>
+
             <ScrollView style={styles.area}>
+
                 <View style={styles.content}>
+                    {Alert &&
+                        <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]} />}
                     <TextInputButton placeholder="Course" value={CourseName}
                         onTextChange={(text) => setCourseName(text)} />
                     <TextInputButton
@@ -109,9 +146,10 @@ export default function Request({ navigation }) {
                     onValueChange={(text) => setCatagory(text)} />
                 <Tag
                     onChangeTags={(tags) => setTags(tags)} value={[tags, setTags]} claerTag={[claerTag, setClaerTag]} />
-                <TouchableOpacity style={styles.button} onPress={() => creteRequst()}>
+                <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
                     <Text style={styles.title}>Submit</Text>
                 </TouchableOpacity>
+
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
         </>

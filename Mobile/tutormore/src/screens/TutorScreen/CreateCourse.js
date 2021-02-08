@@ -1,22 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Alert,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   ToastAndroid,
-  Button,
   Image,
-  Pressable,
   Modal,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
-import Amount from "../../components/forms/Amount";
 import Catagory from "../../components/forms/Catagory";
 import Clock from "../../components/forms/Clock";
 import Location from "../../components/forms/Location";
@@ -24,14 +19,17 @@ import ModalDate from "../../components/forms/ModalDate";
 import Tag from "../../components/forms/Tag";
 import TermCourse from "../../components/forms/TermCourse";
 import TextInputButton from "../../components/forms/TextInputButton";
-import UploadImage from "../../components/forms/UploadImage";
 import Colors from "../../configs/Colors";
 import API from "../../services/API";
 import { SwipeablePanel } from "rn-swipeable-panel";
 import courseAvatars from "../../configs/courseAvatars";
-import avatars from "../../configs/avatars";
+import { useGlobalVar } from "../../context/GlobalContex";
+import AlertComponent from '../../components/Alerts';
 
 export default function CreateCourse({ navigation }) {
+  const { authentication } = useGlobalVar();
+  const [state, dispatch] = authentication;
+  const current = JSON.parse(state.userData);
   const [modalVisible, setModalVisible] = useState(false);
   const [day, setDay] = useState("");
   const [mytags, setTags] = useState([]);
@@ -40,12 +38,21 @@ export default function CreateCourse({ navigation }) {
   const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
   const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0));
   const [coureName, setCourseName] = useState("");
+  const [description, setDescription] = useState("");
   const [courseAvatar, setCourseAvatar] = useState(0);
   const [amount, setAmount] = useState("");
   const [catagory, setCatagory] = useState("");
   const [lat, setlat] = useState(14.8817767);
   const [long, setlong] = useState(102.0185075);
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState(0);
+  const [Alert, setAlert] = useState(false)
+  const [msg, setText] = useState('')
+  const [draggable, setDraggable] = useState({
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+    latitude: 14.8817767,
+    longitude: 102.0185075,
+  });
 
   const getTimeStart = (result) => {
     setTimeStart(result);
@@ -53,38 +60,92 @@ export default function CreateCourse({ navigation }) {
   const getTimeEnd = (result) => {
     setTimeEnd(result);
   };
+
   const clear = () => {
     setCourseName("");
+    setDescription("");
     setClaerTag(true);
     setDay(null);
     setCatagory(null);
     setTimeEnd(new Date(0, 0, 0, 0));
     setTimeStart(new Date(0, 0, 0, 0));
     setClaerDate(true);
+    setCount(0);
   };
-
+  const [count, setCount] = useState(0);
+  const checkEmpty = () => {
+    const start = (TimeStart.getHours() * 60) + TimeStart.getMinutes();
+    const end = (TimeEnd.getHours() * 60) + TimeEnd.getMinutes();
+    const sum = end - start;
+    if (!coureName.trim()) {
+      setCount(1);
+      setAlert(true)
+      setText('Please enter course name');
+      return;
+    }
+    if (!day.toString().trim()) {
+      setCount(1);
+      setAlert(true)
+      setText('Please set the day');
+      return;
+    }
+    if (sum < 60) {
+      setCount(1);
+      setAlert(true)
+      setText("Please set time correctly, at least  minutes away. Result: ");
+      return;
+    }
+    if (selectedValue == 0) {
+      setCount(1);
+      setAlert(true)
+      setText('Please select term course');
+      return;
+    }
+    if (!amount.trim()) {
+      setCount(1);
+      setAlert(true)
+      setText('Please enter amount of seats');
+      return;
+    }
+    if (catagory == 0) {
+      setCount(1);
+      setAlert(true)
+      setText('Please select Catagory');
+      return;
+    }
+    setCount(2);
+  }
+  useEffect(() => {
+    console.log("count =>>>>" + count);
+    if (count == 2) {
+      create();
+    }
+  }, [count]);
   const create = async () => {
     try {
       const createCourse = await API.post("course/create", {
         name: coureName,
+        description: description,
         day: day.toString(),
         time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(),
         time_end: TimeEnd.getHours() + ":" + TimeEnd.getMinutes(),
         categoryId: catagory,
         amount: amount,
-        userId: 2,
+        userId: current.id,
         tagname: mytags,
         duration: selectedValue,
-        lat: lat.toString(),
-        long: long.toString(),
+        lat: draggable.latitude.toString(),
+        long: draggable.longitude.toString(),
         courseAvatar: courseAvatar,
       });
+      console.log(createCourse)
       clear();
-      navigation.navigate("Home", { screen: "Home" });
+      navigation.navigate("Me", { screen: "TeachingList" });
       ToastAndroid.show("create course success !", ToastAndroid.LONG);
     } catch (error) {
       console.log(error);
     }
+    console.log("draggable ", draggable.latitude);
   };
 
   const [requireImage, setRequireImage] = useState(
@@ -98,6 +159,7 @@ export default function CreateCourse({ navigation }) {
     onClose: () => setIsPanelActive(false),
     onPressCloseButton: () => setIsPanelActive(false),
   });
+
   const changeImage = (id) => {
     setRequireImage(courseAvatars[id].image);
     setCourseAvatar(id);
@@ -109,12 +171,14 @@ export default function CreateCourse({ navigation }) {
       <SafeAreaView style={styles.container} />
       <View style={styles.headerBar}>
         <Text style={styles.textHeader}>Create Course</Text>
-        <TouchableOpacity onPress={() => create()}>
-          <Icon name="check" type="material" color={Colors.secondary} />
-        </TouchableOpacity>
+        {/*<TouchableOpacity onPress={() => create()}>*/}
+        {/*  <Icon name="check" type="material" color={Colors.secondary} />*/}
+        {/*</TouchableOpacity>*/}
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
+          {Alert &&
+            <AlertComponent text={[msg, setText]} alert={[Alert, setAlert]} />}
           <TouchableOpacity onPress={() => setIsPanelActive(true)}>
             <Image source={requireImage} style={styles.imageTitle} />
             <Text style={styles.text}>Change image</Text>
@@ -123,6 +187,11 @@ export default function CreateCourse({ navigation }) {
             placeholder={"Course"}
             onTextChange={(text) => setCourseName(text)}
             value={coureName}
+          />
+          <TextInputButton
+            placeholder={"Description"}
+            onTextChange={(text) => setDescription(text)}
+            value={description}
           />
           <ModalDate dayValue={[day, setDay]} />
           <Clock
@@ -147,6 +216,8 @@ export default function CreateCourse({ navigation }) {
             onValueChange={(itemValue, itemIndex) => setCatagory(itemValue)}
           />
           <Tag value={[mytags, setTags]} claerTag={[claerTag, setClaerTag]} />
+
+
           <TouchableOpacity
             onPress={() => {
               setModalVisible(true);
@@ -155,33 +226,33 @@ export default function CreateCourse({ navigation }) {
             <Location
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
             />
           </TouchableOpacity>
 
-          <Modal
-            animationType="slide"
+          <Modal animationType="slide"
             transparent={true}
-            visible={modalVisible}
-          >
+            visible={modalVisible}>
             <View style={styles.headerBar_modal}>
               <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <Icon name="cancel" type="material" color={Colors.secondary} />
               </TouchableOpacity>
             </View>
-
             <Location
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
             />
           </Modal>
         </View>
-        <TouchableOpacity style={styles.button} onPress={() => create()}>
+        <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
           <Text style={styles.title}>Create</Text>
         </TouchableOpacity>
         <View style={{ marginVertical: 10 }} />
       </ScrollView>
+
       <SwipeablePanel {...panelProps} isActive={isPanelActive}>
         <View style={styles.row}>
           <TouchableOpacity onPress={() => changeImage(1)}>
@@ -229,7 +300,7 @@ export default function CreateCourse({ navigation }) {
     </>
   );
 }
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.primary,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,

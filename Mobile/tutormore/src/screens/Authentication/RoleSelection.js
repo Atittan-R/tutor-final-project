@@ -29,12 +29,17 @@ export default function RoleSelection({ navigation }) {
 
     const onSubmitHandler = async (role) => {
         // console.log("Set new Role to")
-        dispatch({ type: "ROLE_ENTRY", role: role });
-        navigation.jumpTo("Home", { screen: "Home" })
+        await dispatch({ type: "ROLE_ENTRY", role: role });
+        if (role === "ROLE_USER") {
+            navigation.navigate("Home", { screen: "Home" })
+        } else {
+            navigation.navigate("Home", { screen: "Feed" })
+        }
     };
     return (
-        <View style={styles.container}>
-            <View style={{ marginHorizontal: 20, flexWrap: "wrap", flex: 1 }}>
+        <>
+            <View style={styles.container} />
+            <View style={{ marginHorizontal: 0, flex: 1, backgroundColor: Colors.background, paddingHorizontal: 20 }}>
                 <View style={{ marginTop: 64 }}>
                     <Text style={{ fontSize: 36 }}>One</Text>
                     <Text style={{ fontSize: 36 }}>More thing!</Text>
@@ -136,20 +141,20 @@ export default function RoleSelection({ navigation }) {
                     </View>
                 </View>
             </View>
-        </View>
+        </>
     );
 };
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: Colors.background,
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
     row: {
         flexDirection: "row",
         flexWrap: "wrap",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
         alignItems: "center"
     },
     column: {

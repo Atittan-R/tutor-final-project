@@ -17,58 +17,72 @@ import Colors from '../../configs/Colors';
 import avatars from "../../configs/avatars";
 import API from "../../services/API";
 import LoadingScreen from "../../components/Loading";
-export default function Feed({ navigation }) {
+import categories from "../../configs/categories";
+import { useNavigation } from '@react-navigation/native';
+
+import AlertComponent from "../../components/Alerts";
+
+export default function Feed() {
+    const navigation = useNavigation();
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const userid = JSON.parse(state.userData);
+    let localuser = JSON.parse(state.userData);
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(false);
+    const [msg, setText] = useState("");
+    const [error, setError] = useState(false)
 
     // console.log("user_id", userid.id)
     const [request, setRequest] = useState([]);
     const taked = async (requestId) => {
+        console.log(request.filter((i) => i.id == requestId));
         navigation.navigate("Home", { screen: "TakeCreateCourse", params: { req: request.filter((i) => i.id == requestId) } })
     }
     const fetchApi = async () => {
         try {
-            const fetch_req = await API.get("/request/findAll");
-
+            setLoading(true);
+            const fetch_req = await API.post("/request/matching",{
+                categoryId:localuser.major
+            });
             // console.log(fetch_req);
             setRequest(fetch_req.data.request.filter((i) => i.status == "Available"))
-
+            setLoading(false);
         } catch (error) {
-            console.log('====================================');
             console.log(error);
-            console.log('====================================');
+            setText(error.message)
+            setLoading(false)
+            setError(true)
         }
     }
-
     const [filterItem, setFilterItem] = useState(null)
     const searchAction = (text) => {
         setFilterItem(request.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
+
     useEffect(() => {
         fetchApi();
     }, [])
+
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         fetchApi().then(() => setRefreshing(false));
     }, []);
-    // console.log(request);
+
     return (
         <>
             {/* header */}
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
-                <Text style={styles.textHeader}>Feed Request</Text>
+                <Text style={styles.textHeader}>Match Request</Text>
                 <TextInput
                     style={styles.search}
                     placeholder="Search"
                     onChangeText={(text) => searchAction(text)}
                 />
             </View>
-            {loading ? <LoadingScreen /> :
+            {loading ? <LoadingScreen /> : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> :
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
                     }
@@ -77,7 +91,7 @@ export default function Feed({ navigation }) {
                     renderItem={({ item }) =>
                         <View style={styles.cardView}>
                             <View style={styles.viewItem}>
-                                <Image source={require("../../assets/profile.jpg")} style={styles.image} />
+                                <Image source={avatars[item.user.avatar].image} style={styles.image}/>
                                 <Text style={styles.title}>{item.user.username}</Text>
                             </View>
                             <View
@@ -93,7 +107,7 @@ export default function Feed({ navigation }) {
                                     <View style={styles.viewItem}>
                                         <Icon name="schedule" type="material" color={'gray'} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                        <Text style={styles.textGray}>{item.time_start.substring(0,5)} - {item.time_end.substring(0,5)}</Text>
                                         <Icon name="event" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
                                         <Text style={styles.textGray}>{item.date}</Text>
@@ -101,12 +115,21 @@ export default function Feed({ navigation }) {
                                     <View style={styles.viewItem}>
                                         <Icon name="category" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>Catagory</Text>
+                                        <Text style={styles.textGray}>{categories[item.categoryId].name}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Text style={styles.tag}>tag1</Text>
-                                        <Text style={styles.tag}>tag2</Text>
-                                        <Text style={styles.tag}>tag3</Text>
+                                        {item.tag.length !== 0 &&
+                                        <FlatList
+                                            horizontal={true}
+                                            data={item.tag}
+                                            showsHorizontalScrollIndicator={false}
+                                            keyExtractor={item => item.id}
+                                            renderItem={({item: {name}}) =>
+                                                <Text style={styles.tag}>
+                                                    {name}
+                                                </Text>
+                                            }/>
+                                        }
                                     </View>
                                 </View>
                                 <View style={styles.positionBTN}>

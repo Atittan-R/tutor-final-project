@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     View, ToastAndroid, RefreshControl,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import {Icon, Rating} from "react-native-elements";
 import Colors from "../../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
 import API from "../../../services/API";
@@ -18,12 +18,15 @@ import { useGlobalVar } from "../../../context/GlobalContex";
 import LoadingScreen from "../../../components/Loading";
 import { Linking } from "react-native";
 import { actionCreators, initialState, reducer } from "../Reducer";
-
+import { SwipeablePanel } from 'rn-swipeable-panel';
+import courseAvatars from "../../../configs/courseAvatars";
+import avatars from "../../../configs/avatars";
 export default function CourseDetail2({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
-    const [detail, setDetail] = useState({});
+
     const [reduce, loadDispatch] = useReducer(reducer, initialState)
+    const { data, loading, error } = reduce;
 
     const currentUser = JSON.parse(state.userData);
     const { course } = route.params;
@@ -33,7 +36,7 @@ export default function CourseDetail2({ navigation, route }) {
         loadDispatch(actionCreators.loading())
         try {
             const res = await API.get("/course/findOne/" + course)
-            console.log("res: ", res.data.course)
+            console.log("res d2: ", res.data.course)
             const courseDetail = await res.data.course;
             loadDispatch(actionCreators.success(courseDetail));
         } catch (e) {
@@ -41,42 +44,30 @@ export default function CourseDetail2({ navigation, route }) {
             console.log("err", e.message)
         }
     }
-
     useEffect(() => {
         courseData();
     }, []);
 
-    const [draggable, setDraggable] = useState({
-        latitude: parseFloat(detail.lat),
-        longitude: parseFloat(detail.long),
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
-
-    console.log(data)
-    const enrollData = async () => {
+    const leaveCourse = async () => {
         try {
-            const response = await API.post("/enroll/course",
+            console.log(currentUser.id)
+            const response = await API.post("/cancel/enroll",
                 {
                     userId: currentUser.id,
                     courseId: course,
                 })
-            console.log("status ", response.data.status)
-            //TODO
-            // Generate QRCode
-            // Popup QRCode
-            // Ask where to go History or Back
-            ToastAndroid.show("Enroll " + response.data.status, ToastAndroid.LONG);
-            navigation.navigate("Me", { screen: "MyCourse" })
+            console.log("status ", response.data)
+            ToastAndroid.show("You have Leave Course " + response.data.status, ToastAndroid.LONG);
+            navigation.pop()
         } catch (e) {
-            alert(e.response.data.status);
+            alert(e);
         }
     }
 
     const alertEnroll = () => {
         Alert.alert(
             "Enroll",
-            "Are you sure to enroll?",
+            "Are you sure to Leave this Course?",
             [
                 {
                     text: "Cancel",
@@ -85,7 +76,7 @@ export default function CourseDetail2({ navigation, route }) {
                 },
                 {
                     text: "OK", onPress: async () => {
-                        await enrollData();
+                        await leaveCourse();
                     }
                 },
             ],
@@ -94,8 +85,43 @@ export default function CourseDetail2({ navigation, route }) {
     };
 
 
+    //Panel Open Close
+    const [isPanelActive, setIsPanelActive] = useState(false);
+    const [panelProps, setPanelProps] = useState({
+        fullWidth: true,
+        onlySmall: true,
+        closeOnTouchOutside: true,
+        onClose: () => setIsPanelActive(false),
+        onPressCloseButton: () => setIsPanelActive(false),
+    });
+
+
+    // const index = data. tutors.experience;
+    // const [exp, setExp] = useState(null);
+    // if (index == '') {
+    //     setExp('')
+    // } else if (index == 1) {
+    //     setExp("None")
+    // } else if (index == 2) {
+    //     setExp("Less than 1 year")
+    // } else if (index == 3) {
+    //     setExp("1 year")
+    // }
+    // else if (index == 4) {
+    //     setExp("2 years")
+    // }
+    // else if (index == 5) {
+    //     setExp("More than 2 years")
+    // }
     // console.log("detail: ",detail.tutors.email);
-    const { data, loading, error } = reduce
+
+    const [draggable, setDraggable] = useState({
+        latitude: parseFloat(data.lat),
+        longitude: parseFloat(data.long),
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    });
+
     if (loading) {
         return <LoadingScreen />
     }
@@ -111,7 +137,8 @@ export default function CourseDetail2({ navigation, route }) {
         )
     }
 
-    console.log("data: ", data)
+    // console.log("data: ", data)
+
     return (
         <>
             {/* header */}
@@ -119,7 +146,7 @@ export default function CourseDetail2({ navigation, route }) {
             <View style={styles.headerBar}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
-                    onPress={() => navigation.push("Home")}
+                    onPress={() => navigation.pop()}
                 >
                     <Icon
                         name="arrow-back-outline"
@@ -128,7 +155,7 @@ export default function CourseDetail2({ navigation, route }) {
                     />
 
                 </TouchableOpacity>
-                <Text style={styles.textHeader}>Course Name</Text>
+                <Text style={styles.textHeader}>{data.name}</Text>
             </View>
 
             {/* body */}
@@ -136,7 +163,7 @@ export default function CourseDetail2({ navigation, route }) {
                 <View style={styles.viewImage}>
                     <View style={styles.bgImage}>
                         <Image
-                            source={require("../../../assets/course/nurse.png")}
+                            source={courseAvatars[data.courseAvatar].image}
                             style={styles.image}
                         />
                     </View>
@@ -171,7 +198,7 @@ export default function CourseDetail2({ navigation, route }) {
                     <Icon name="schedule" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Time</Text>
-                        <Text style={styles.text}>{data.time_start + " - " + data.time_end}</Text>
+                        <Text style={styles.text}>{data.time_start.substring(0,5) + " - " + data.time_end.substring(0,5)}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -185,7 +212,11 @@ export default function CourseDetail2({ navigation, route }) {
                     <Icon name="person" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Amount</Text>
-                        <Text style={styles.text}>{data.amount}</Text>
+                        {
+                            data.courseEnroll.length === 0
+                                ? <Text style={styles.text}> 0/{data.amount}</Text>
+                                : <Text style={styles.text}> {data.courseEnroll.map((i) => i.courseEnrollCount)}/{data.amount}</Text>
+                        }
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -199,21 +230,30 @@ export default function CourseDetail2({ navigation, route }) {
                     </View>
                 </View>
                 <View style={styles.viewMap}>
-                    {/* <MapView
+                    <MapView
                         style={styles.map}
-                        region={draggable}
+                        region={{
+                            latitude: parseFloat(data.lat), longitude: parseFloat(data.long),
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
                         onRegionChangeComplete={(region) => setDraggable(region)}
                     >
                         <Marker
-                            coordinate={{ latitude : parseFloat(data.lat) , longitude : parseFloat(data.long) }}
+                            coordinate={{ latitude: parseFloat(data.lat), longitude: parseFloat(data.long) }}
                         />
-                    </MapView> */}
+                    </MapView>
                 </View>
 
                 <View style={styles.line} />
-                <View style={[styles.topic, styles.row]}>
-                    <View style={[styles.column, styles.box]} />
-                    <Text style={styles.textRec}>Tutor Profile</Text>
+                <View style={styles.viewMore}>
+                    <View style={[styles.topic, styles.row]}>
+                        <View style={[styles.column, styles.box]} />
+                        <Text style={styles.textRec}>Tutor Profile</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => setIsPanelActive(true)}>
+                        <Text style={styles.textViewMore}>View More</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.view}>
                     <Icon name="person" type="material" color={Colors.secondary} />
@@ -232,21 +272,53 @@ export default function CourseDetail2({ navigation, route }) {
                 </View>
                 <View style={styles.view}>
                     <Icon
-                        name="line"
-                        type="fontisto"
+                        name="phone"
+                        type="material"
                         color={Colors.secondary}
                         size={20}
                     />
                     <View style={styles.viewItem}>
-                        <Text style={styles.title}>Line ID</Text>
+                        <Text style={styles.title}>Phone Number</Text>
                         <Text style={styles.text}>{data.tutors.phonenumber ? data.tutors.phonenumber : "Not specified"}</Text>
                     </View>
                 </View>
+
                 <TouchableOpacity style={styles.button} onPress={alertEnroll}>
                     <Text style={styles.title}>Leave Course</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />
             </ScrollView>
+            <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+                <View style={styles.panelContent}>
+                    <Image source={avatars[data.tutors.avatar].image} style={styles.imageTutor} />
+                    <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.tutors.username ? data.tutors.username : "Not specified"}</Text>
+
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Rating imageSize={15} startingValue={data.tutors.tutor_info.rate} fractions={5} ratingCount={5} />
+                        <Text style={styles.text}>   {data.tutors.tutor_info.rate}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.CourseCate.name ? data.CourseCate.name : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="phone" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.tutors.tutor_info.phoneNumber ? data.tutors.tutor_info.phoneNumber : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="mail" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
+                        <Text style={styles.text}>{data.tutors.tutor_info.email ? data.tutors.tutor_info.email : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Icon name="line" type="fontisto" color={Colors.secondary} style={{ marginRight: 15 }} size={19} />
+                        <Text style={styles.text}>{data.tutors.tutor_info.lineId ? data.tutors.tutor_info.lineId : "Not specified"}</Text>
+                    </View>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Text style={[styles.title, { marginRight: 9 }]}>Exp.</Text>
+                        <Text style={styles.text}>{data.tutors.tutor_info.experience ? data.tutors.tutor_info.experience : "Not specified"}</Text>
+                    </View>
+                </View>
+            </SwipeablePanel>
         </>
     );
 }
@@ -380,5 +452,34 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
     },
+    textViewMore: {
+        fontSize: 12,
+        color: "#00b",
+    },
+    viewMore: {
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginRight: 30,
+        flex: 1
+    },
+    topic: {
+        flex: 1,
+        marginBottom: 10,
+    },
+    panelContent: {
+        margin: 20,
+    },
+    imageTutor: {
+        width: 100,
+        height: 100,
+        resizeMode: "contain",
+        alignSelf: "center",
+    },
+    panelRow: {
+        flexDirection: "row",
+        alignItems: "center",
 
+    }
 });

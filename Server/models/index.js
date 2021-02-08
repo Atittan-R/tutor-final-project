@@ -114,13 +114,13 @@ db.tag.belongsToMany(db.course, {
 db.request.belongsToMany(db.tag, {
   through: "tag_request",
   foreignKey: "requestId",
-  otherKey: "tagId",
+  // otherKey: "tagId",
   as: "tag",
 });
 db.tag.belongsToMany(db.request, {
   through: "tag_request",
   foreignKey: "tagId",
-  otherKey: "requestId",
+  // otherKey: "requestId",
   as: "requests",
 });
 

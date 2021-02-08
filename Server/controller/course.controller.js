@@ -4,6 +4,7 @@ const Tag = db.tag;
 const User = db.user;
 const Categories = db.categories;
 const Sequelize = require('sequelize');
+const { rate_course } = require("../models");
 
 exports.createCourse = (req, res) => {
     //Save Course Data to Database
@@ -30,7 +31,7 @@ exports.createCourse = (req, res) => {
                         categoryId: course.categoryId,
                     }).then((tag) => {
                         //Set Join table tag_course
-                        course.setTags(tag).then(() => {
+                        course.addTags(tag).then(() => {
                             //Display Response
                         });
                     });
@@ -128,23 +129,46 @@ exports.findCourseFromCategories = async (req, res) => {
 exports.findOneCourse = async (req, res) => {
     const id = req.params.id;
     try{
+        const student = await Course.findByPk(id, {
+            attributes: {
+                include: [
+                    "id",
+                    "name",
+                    "day",
+                    "time_start",
+                    [Sequelize.fn("COUNT", Sequelize.col("name")), "courseEnrollCount"],
+                ],
+            },
+            include: [
+                {
+                    model: User,
+                    attributes: ["id", "username"],
+                    as: "courseEnroll",
+                    through: {
+                        attributes: [],
+                    },
+                },
+            ],
+        });
+
+        const raw = await student.dataValues.courseEnrollCount
         const course = await Course.findByPk(id, {
             attributes: [
-                "id",
-                "name",
-                "day",
-                "time_start",
-                "time_end",
-                "duration",
-                "amount",
-                "lat",
-                "long",
-                "distance",
-                "createdAt",
-                "description",
-                "rate",
-                "courseAvatar",
-            ],
+                    "id",
+                    "name",
+                    "day",
+                    "time_start",
+                    "time_end",
+                    "duration",
+                    "amount",
+                    "lat",
+                    "long",
+                    "distance",
+                    "createdAt",
+                    "description",
+                    "rate",
+                    "courseAvatar",
+                ],
             include: [
                 {
                     model: Categories,
@@ -154,10 +178,10 @@ exports.findOneCourse = async (req, res) => {
                 {
                     model: User,
                     as: "tutors",
-                },
+                }
             ],
         })
-        res.status(202).send({course});
+        res.status(202).send({course, countEnroll: raw});
     }catch (e) {
         res.status(500).send({message: e.message});
     }
@@ -239,5 +263,45 @@ exports.HomeCourse = async (req, res) => {
     }catch (e){
         res.status(500).send({message: e.message})
     }
+}
 
+exports.countUser = async (req, res) => {
+    try {
+        const course = await Course.findByPk(req.params.id, {
+            attributes: {
+                include: [
+                    [Sequelize.fn("COUNT", Sequelize.col("name")), "courseEnrollCount"],
+                ],
+            },
+            include: [
+                {
+                    model: User,
+                    attributes: ["id", "username"],
+                    as: "courseEnroll",
+                    through: {
+                        attributes: [],
+                    },
+                },
+            ],
+        });
+
+        const raw = await course.dataValues.courseEnrollCount
+        res.status(202).send({message: raw})
+    } catch (e) {
+        console.log(e.message)
+        res.status(500).send({message: e.message})
+    }
+}
+
+exports.CourseRecommend = async (req, res) => {
+    try {
+        const course= await Course.findAll(
+            {
+                order:rate
+            }
+        )
+        res.status(200).send(course)
+    } catch (error) {
+        res.status(500).send({message: e.message})
+    }
 }

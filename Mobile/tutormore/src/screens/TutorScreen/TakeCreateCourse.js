@@ -9,30 +9,28 @@ import {
   TouchableOpacity,
   View,
   ToastAndroid,
-  Modal, Image,
+  Modal,
+  Image,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import Amount from "../../components/forms/Amount";
-import Catagory from "../../components/forms/Catagory";
-import Clock from "../../components/forms/Clock";
 import Location from "../../components/forms/Location";
-import ModalDate from "../../components/forms/ModalDate";
 import Tag from "../../components/forms/Tag";
 import TermCourse from "../../components/forms/TermCourse";
 import TextInputButton from "../../components/forms/TextInputButton";
-import UploadImage from "../../components/forms/UploadImage";
 import Colors from "../../configs/Colors";
 import API from "../../services/API";
 import { useGlobalVar } from "../../context/GlobalContex";
 import courseAvatars from "../../configs/courseAvatars";
 import { SwipeablePanel } from "rn-swipeable-panel";
+import AlertComponent from "../../components/Alerts";
 
 export default function TakeCreateCourse({ route, navigation }) {
   const { req } = route.params;
-  const [modalVisible, setModalVisible] = useState(false);
   const [coureName, setCourseName] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
   const [catagory, setCatagory] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
   const [lat, setlat] = useState(14.8817767);
@@ -40,8 +38,10 @@ export default function TakeCreateCourse({ route, navigation }) {
   const { authentication } = useGlobalVar();
   const [state, dipatch] = authentication;
   const currentUser = JSON.parse(state.userData);
-
+  const [modalVisible, setModalVisible] = useState(false);
   //TODO
+  const [messageAlert, setAlert] = useState(false);
+  const [msg, setText] = useState("");
   const [TimeStart, setTimeStart] = useState(new Date(0, 0, 0, 0));
   const [TimeEnd, setTimeEnd] = useState(new Date(0, 0, 0, 0));
   const [day, setDay] = useState("");
@@ -53,6 +53,13 @@ export default function TakeCreateCourse({ route, navigation }) {
   const [requireImage, setRequireImage] = useState(
     require("../../assets/course/picture.png")
   );
+  const [draggable, setDraggable] = useState({
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+    latitude: 14.8817767,
+    longitude: 102.0185075,
+  });
+
   const [isPanelActive, setIsPanelActive] = useState(false);
 
   //TODO
@@ -63,58 +70,100 @@ export default function TakeCreateCourse({ route, navigation }) {
     setTimeEnd(result);
   };
 
-  async function sendMessage(takeid) {
+  async function sendMessage(take_id) {
     const res = await API.post("/notification/message", {
-      takeId: takeid,
-      title: "Message!!",
-      body: "Course you was join have been created! :)",
+      takeId: take_id,
+      title: `${ coureName } has new message!!`,
+      body: (`${coureName} you was join have been created! :) \n${description} `),
     });
     console.log(res.data);
   }
 
+  const [count, setCount] = useState(0);
+  const checkEmpty = () => {
+    if (!coureName.trim()) {
+      setCount(1);
+      setAlert(true);
+      setText("Please enter course name");
+      return;
+    }
+    if (selectedValue == 0) {
+      setCount(1);
+      setAlert(true);
+      setText("Please select term course");
+      return;
+    }
+    if (!amount.trim()) {
+      setCount(1);
+      setAlert(true);
+      setText("Please enter amount of seats");
+      return;
+    }
+    setCount(2);
+  };
+
+  useEffect(() => {
+    console.log("count =>>>>" + count);
+    if (count == 2) {
+      alertTaked();
+    }
+  }, [count]);
+
+  const alertTaked = () => {
+    Alert.alert(
+      "Taked",
+      "Are you sure to Taked?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            await taked();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const clear = () => {
+    setCourseName("");
+    setClaerTag(true);
+    setDay(null);
+    setCatagory(null);
+    setDescription("");
+    setTimeEnd(new Date(0, 0, 0, 0));
+    setTimeStart(new Date(0, 0, 0, 0));
+    setClaerDate(true);
+    setCount(0);
+  };
+
   const taked = async () => {
-    const clear = () => {
-      setCourseName("");
-      setClaerTag(true);
-      setDay(null);
-      setCatagory(null);
-      // setDescription("")
-      // setTags([])
-      setTimeEnd(new Date(0, 0, 0, 0));
-      setTimeStart(new Date(0, 0, 0, 0));
-      setClaerDate(true);
-    };
     try {
       const teke_res = await API.post("/taked", {
         tutorId: currentUser.id,
         requestId: requsetId,
         amount: amount,
+        description: description,
         tagname: mytags,
         duration: selectedValue,
-        lat: lat.toString(),
-        long: long.toString(),
+        lat: draggable.latitude.toString(),
+        long: draggable.longitude.toString(),
         courseAvatar: courseAvatar,
       });
 
       await sendMessage(teke_res.data.id);
-
-      console.log("Hello", teke_res.data.id);
       ToastAndroid.show("create course success !", ToastAndroid.SHORT);
       clear();
-      navigation.navigate("Home", { screen: "Feed" });
+      navigation.navigate("Me", { screen: "TeachingList" });
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    setCourseName(req.map((i) => i.name).toString());
-    setTimeStart(req.map((i) => i.time_start).toString());
-    setTimeEnd(req.map((i) => i.time_end).toString());
-    setDay(req.map((i) => i.date).toString());
-    setCatagory(req.map((i) => i.categories.name).toString());
-    setRequsetId(parseInt(req.map((i) => i.id).toString()));
-  }, []);
 
   const [panelProps, setPanelProps] = useState({
     fullWidth: true,
@@ -127,6 +176,15 @@ export default function TakeCreateCourse({ route, navigation }) {
     setRequireImage(courseAvatars[id].image);
     setCourseAvatar(id);
   };
+  useEffect(() => {
+    setCourseName(req.map((i) => i.name).toString());
+    setDescription(req.map((i) => i.description).toString());
+    setTimeStart(req.map((i) => i.time_start).toString());
+    setTimeEnd(req.map((i) => i.time_end).toString());
+    setDay(req.map((i) => i.date).toString());
+    setCatagory(req.map((i) => i.categories.name).toString());
+    setRequsetId(parseInt(req.map((i) => i.id).toString()));
+  }, []);
   return (
     <>
       {/* header */}
@@ -136,6 +194,9 @@ export default function TakeCreateCourse({ route, navigation }) {
       </View>
       <ScrollView style={styles.area}>
         <View style={styles.content}>
+          {messageAlert && (
+            <AlertComponent text={[msg, setText]} alert={[messageAlert, setAlert]} />
+          )}
           <TouchableOpacity onPress={() => setIsPanelActive(true)}>
             <Image source={requireImage} style={styles.imageTitle} />
             <Text style={styles.text}>Change image</Text>
@@ -145,6 +206,11 @@ export default function TakeCreateCourse({ route, navigation }) {
             onTextChange={(text) => setCourseName(text)}
             value={coureName}
             editable={true}
+          />
+          <TextInputButton
+            placeholder={"Description"}
+            onTextChange={(text) => setDescription(text)}
+            value={description}
           />
           <TextInputButton
             label={"Date"}
@@ -164,7 +230,6 @@ export default function TakeCreateCourse({ route, navigation }) {
             value={TimeEnd}
             editable={false}
           />
-
           <TermCourse value={[selectedValue, setSelectedValue]} />
           <TextInputButton
             label={"Amount"}
@@ -188,14 +253,11 @@ export default function TakeCreateCourse({ route, navigation }) {
             <Location
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={() => taked()}>
-            <Text style={styles.title}>Create</Text>
-          </TouchableOpacity>
-          <View style={{ marginVertical: 10 }} />
           <Modal
             animationType="slide"
             transparent={true}
@@ -210,54 +272,59 @@ export default function TakeCreateCourse({ route, navigation }) {
             <Location
               lat={[lat, setlat]}
               long={[long, setlong]}
+              draggable={[draggable, setDraggable]}
               modal={[modalVisible, setModalVisible]}
             />
           </Modal>
         </View>
+        <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
+          <Text style={styles.title}>Take</Text>
+        </TouchableOpacity>
+        <View style={{ marginVertical: 10 }} />
       </ScrollView>
       <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => changeImage(1)}>
-                <Image source={courseAvatars[1].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(2)}>
-                <Image source={courseAvatars[2].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(3)}>
-                <Image source={courseAvatars[3].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(4)}>
-                <Image source={courseAvatars[4].image} style={styles.image} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => changeImage(5)}>
-                <Image source={courseAvatars[5].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(6)}>
-                <Image source={courseAvatars[6].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(7)}>
-                <Image source={courseAvatars[7].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(8)}>
-                <Image source={courseAvatars[8].image} style={styles.image} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => changeImage(9)}>
-                <Image source={courseAvatars[9].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(10)}>
-                <Image source={courseAvatars[10].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(11)}>
-                <Image source={courseAvatars[11].image} style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeImage(12)}>
-                <Image source={courseAvatars[12].image} style={styles.image} />
-              </TouchableOpacity>
-            </View>
+        <View style={styles.row}>
+          <TouchableOpacity onPress={() => changeImage(1)}>
+            <Image source={courseAvatars[1].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(2)}>
+            <Image source={courseAvatars[2].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(3)}>
+            <Image source={courseAvatars[3].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(4)}>
+            <Image source={courseAvatars[4].image} style={styles.image} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.row}>
+          <TouchableOpacity onPress={() => changeImage(5)}>
+            <Image source={courseAvatars[5].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(6)}>
+            <Image source={courseAvatars[6].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(7)}>
+            <Image source={courseAvatars[7].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(8)}>
+            <Image source={courseAvatars[8].image} style={styles.image} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.row}>
+          <TouchableOpacity onPress={() => changeImage(9)}>
+            <Image source={courseAvatars[9].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(10)}>
+            <Image source={courseAvatars[10].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(11)}>
+            <Image source={courseAvatars[11].image} style={styles.image} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeImage(12)}>
+            <Image source={courseAvatars[12].image} style={styles.image} />
+          </TouchableOpacity>
+        </View>
       </SwipeablePanel>
     </>
   );

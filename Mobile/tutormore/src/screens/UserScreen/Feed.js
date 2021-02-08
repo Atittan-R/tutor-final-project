@@ -17,6 +17,9 @@ import API from "../../services/API"
 import { useGlobalVar } from "../../context/GlobalContex";
 import LoadingScreen from "../../components/Loading";
 import avatars from "../../configs/avatars";
+import categories from "../../configs/categories";
+
+import AlertComponent from "../../components/Alerts";
 
 export default function Feed({ navigation }) {
     const { authentication } = useGlobalVar();
@@ -25,49 +28,54 @@ export default function Feed({ navigation }) {
     const [isjoin, setisJoin] = useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
     const [loading, setLoading] = useState(false);
+    const [msg, setText] = useState("");
+    const [error, setError] = useState(false)
 
     const user = JSON.parse(state.userData);
     console.log("user_id", user.id)
     const join = async (resId) => {
         try {
-            const join_req = await API.post("join", {
+            await API.post("join", {
                 userId: user.id, requestId: resId
             });
-            // console.log(join_req.data.status);
             isjoin.push({ id: resId })
             setisJoin([...isjoin, { id: resId }])
-            // console.log(isjoin);
         } catch (error) {
             console.log(error);
+            setText(error.message)
+            setLoading(false)
+            setError(true)
         }
     }
 
     const cancel = async (resId) => {
         try {
-            const cancel_join = await API.post("join/cancel", {
+            await API.post("join/cancel", {
                 userId: user.id, requestId: resId
             });
-            // console.log(cancel_join.data);
             isjoin.push({ id: resId })
             setisJoin(isjoin.filter(x => x.id !== resId))
-            // console.log(isjoin);
         } catch (error) {
             console.log(error);
         }
     }
     const fetchApi = async () => {
-        setLoading(true);
         try {
+            setLoading(true);
             const fetch_req = await API.get("/request/findAll");
             const fetch_join = await API.post("/user/join", {
                 userId: user.id,
             });
-            // console.log((fetch_join));
+
+            console.log((fetch_req));
             setRequest(fetch_req.data.request)
             setisJoin(fetch_join.data)
             setLoading(false);
         } catch (error) {
             console.log(error);
+            setText(error.message)
+            setLoading(false)
+            setError(true)
         }
     }
 
@@ -100,8 +108,9 @@ export default function Feed({ navigation }) {
                     onChangeText={(text) => searchAction(text)}
                 />
             </View>
-            {loading ? <LoadingScreen /> :
+            {loading ? <LoadingScreen /> : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} /> :
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} enabled={true} />
                     }
@@ -126,7 +135,7 @@ export default function Feed({ navigation }) {
                                     <View style={styles.viewItem}>
                                         <Icon name="schedule" type="material" color={'gray'} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                        <Text style={styles.textGray}>{item.time_start.substring(0,5)}-{item.time_end.substring(0,5)}</Text>
                                         <Icon name="event" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
                                         <Text style={styles.textGray}>{item.date}</Text>
@@ -134,12 +143,22 @@ export default function Feed({ navigation }) {
                                     <View style={styles.viewItem}>
                                         <Icon name="category" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>Catagory</Text>
+                                        <Text style={styles.textGray}>{categories[item.categoryId].name}</Text>
                                     </View>
                                     <View style={styles.viewItem}>
-                                        <Text style={styles.tag}>tag1</Text>
-                                        <Text style={styles.tag}>tag2</Text>
-                                        <Text style={styles.tag}>tag3</Text>
+                                        {/* if no tag dont show*/}
+                                        {item.tag.length !== 0 &&
+                                            <FlatList
+                                                horizontal={true}
+                                                data={item.tag}
+                                                showsHorizontalScrollIndicator={false}
+                                                keyExtractor={item => item.id}
+                                                renderItem={({ item: { name } }) =>
+                                                    <Text style={styles.tag}>
+                                                        {name}
+                                                    </Text>
+                                                } />
+                                        }
                                     </View>
                                 </View>
                                 <View style={styles.positionBTN}>

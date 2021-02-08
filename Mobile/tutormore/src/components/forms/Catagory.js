@@ -4,7 +4,10 @@ import Colors from "../../configs/Colors";
 import { Picker } from "@react-native-community/picker";
 
 export default function Catagory(props) {
-  const { selectedValue, onValueChange } = props;
+  let { selectedValue, onValueChange, initLabel } = props;
+  if(!initLabel){
+    initLabel = "Category";
+  }
   return (
     <View style={styles.inputItem}>
       <View style={styles.textDate}>
@@ -13,7 +16,7 @@ export default function Catagory(props) {
           style={styles.drop}
           onValueChange={onValueChange}
         >
-          <Picker.Item label="Catagory" value={null} />
+          <Picker.Item label={initLabel} value={0} />
           <Picker.Item label="General Education" value={1} />
           <Picker.Item label="Management Technology" value={2} />
           <Picker.Item label="Engineering" value={3} />

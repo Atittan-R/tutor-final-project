@@ -10,6 +10,12 @@ module.exports = function (app) {
   //   });
 
   app.get(
+    "/api/course/count/:id",
+    // [authJwt.verifyToken],
+    controller.countUser
+  );
+
+  app.get(
     "/api/course/findAll",
     // [authJwt.verifyToken],
     controller.findAllCourse
@@ -51,7 +57,11 @@ module.exports = function (app) {
     controller.HomeCourse
   );
 
-
+  app.get(
+    "/api/course/recommend",
+    // [authJwt.verifyToken, authJwt.isTutor],
+    controller.CourseRecommend
+  );
 
   // app.get(
   //   "/api/course/find/user",

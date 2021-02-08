@@ -5,35 +5,41 @@
         "foregroundImage": "./src/assets/tutormoreLogo.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.hongbao.tutormore"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "icon": "./src/assets/tutormoreLogo.png",
-    "ios": {
-      "supportsTablet": true
-    },
-    "name": "tutormore",
-    "notification": {
+      "package": "com.hongbao.tutormore",
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA_bFvD5GGjZMtqKthDHVTCwXVhuiCAUME"
+        }
+      }
+      },
+      "assetBundlePatterns": [
+        "**/*"
+      ],
       "icon": "./src/assets/tutormoreLogo.png",
-      "color": "#BAE367",
-      "iosDisplayInForeground": true,
-      "androidMode": "default"
-    },
-    "orientation": "default",
-    "slug": "tutormore",
-    "splash": {
-      "image": "./src/assets/images/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "version": "1.0.0",
-    "web": {
-      "favicon": "./src/assets/images/favicon.png"
+      "ios": {
+        "supportsTablet": true
+      },
+      "name": "tutormore",
+      "notification": {
+        "icon": "./src/assets/NotiIcon.png",
+        "color": "#BAE367",
+        "iosDisplayInForeground": true,
+        "androidMode": "default"
+      },
+      "orientation": "default",
+      "slug": "tutormore",
+      "splash": {
+        "image": "./src/assets/images/splash.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#ffffff"
+      },
+      "updates": {
+        "fallbackToCacheTimeout": 0
+      },
+      "version": "1.0.0",
+      "web": {
+        "favicon": "./src/assets/images/favicon.png"
+      }
     }
   }
-}

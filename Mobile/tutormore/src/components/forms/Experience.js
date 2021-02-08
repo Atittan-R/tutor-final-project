@@ -13,12 +13,12 @@ export default function Experience(props) {
           style={styles.drop}
           onValueChange={onValueChange}
         >
-          <Picker.Item label="select" value={null} />
-          <Picker.Item label="None" value={1} />
-          <Picker.Item label="Less than 1 year" value={2} />
-          <Picker.Item label="1 year" value={3} />
-          <Picker.Item label="2 years" value={4} />
-          <Picker.Item label="More than 2 years" value={5} />
+          <Picker.Item label="select" value={0} />
+          <Picker.Item label="None" value={"None"} />
+          <Picker.Item label="Less than 1 year" value={"Less than 1 year"} />
+          <Picker.Item label="1 year" value={"1 year"} />
+          <Picker.Item label="2 years" value={"2 years"} />
+          <Picker.Item label="More than 2 years" value={"More than 2 years"} />
         </Picker>
       </View>
     </View>

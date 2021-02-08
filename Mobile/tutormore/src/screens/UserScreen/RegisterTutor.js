@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     Alert,
     SafeAreaView,
@@ -9,22 +9,23 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import {Icon} from "react-native-elements";
+import { Icon } from "react-native-elements";
 import Colors from "../../configs/Colors";
 import TextInputButton from "../../components/forms/TextInputButton";
 import Calendar from "../../components/forms/Calendar";
-import CheckBox from "@react-native-community/checkbox";
 import Experience from "../../components/forms/Experience";
 import API from "../../services/API";
 import { useGlobalVar } from "../../context/GlobalContex";
 import Catagory from "../../components/forms/Catagory";
 import { StackActions } from '@react-navigation/native';
+import AlertComponent from '../../components/Alerts';
 
 export default function ResgisterTutor({ navigation }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const currentUser = JSON.parse(state.userData);
-
+    const [messageAlert, setAlert] = useState(false)
+    const [msg, setText] = useState('')
     const [firstname, setFirstname] = useState('');
     const [surname, setSurname] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -32,12 +33,71 @@ export default function ResgisterTutor({ navigation }) {
     const [email, setEmail] = useState('');
     const [major, setMajor] = useState('');
     const [birthDath, setBirthDate] = useState(new Date());
-    const [experience, setExperience] = useState(null);
+    const [experience, setExperience] = useState(0);
     const [claerdate, setClaerDate] = useState(false);
     const getBirthDate = (result) => {
         setBirthDate(result);
     }
-    const [catagory, setCatagory] = useState("");
+    const [catagory, setCatagory] = useState(0);
+    const [count, setCount] = useState(0);
+    const checkEmpty = () => {
+        const date = new Date().getFullYear() - birthDath.getFullYear();
+        if (!firstname.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter firstname');
+            return;
+        }
+        if (!surname.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter surname');
+            return;
+        }
+        if (date < 16) {
+            setCount(1);
+            setAlert(true)
+            setText('You must be 16 years old'); r
+            eturn;
+        }
+        if (!phoneNumber.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter phone number');
+            return;
+        }
+        if (!lineId.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter line id');
+            return;
+        }
+        if (!email.trim()) {
+            setCount(1);
+            setAlert(true)
+            setText('Please enter email');
+            return;
+        }
+        if (catagory == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select Catagory');
+            return;
+        }
+        if (experience == 0) {
+            setCount(1);
+            setAlert(true)
+            setText('Please select Experience');
+            return;
+        }
+        setCount(2);
+    }
+    useEffect(() => {
+        console.log("count =>>>>" + count);
+        if (count == 2) {
+            alertEnroll();
+        }
+    }, [count]);
     const alertEnroll = () => {
         Alert.alert(
             "Register",
@@ -54,35 +114,33 @@ export default function ResgisterTutor({ navigation }) {
                     }
                 },
             ],
-            {cancelable: false}
+            { cancelable: false }
         );
     };
 
     const signupTutor = async () => {
         try {
-            // console.log("Hello", firstname,email,surname, phoneNumber,major,birthDath.getDate(),experience)
             const response = await API.post("/tutor/signup/" + currentUser.id, {
                 firstname: firstname,
                 email: email,
                 lastname: surname,
                 major: catagory,
                 phoneNumber: phoneNumber,
-                dob: birthDath,
+                dob: birthDath.getDate() + "/" + birthDath.getMonth() + "/" + birthDath.getFullYear(),
                 exp: experience,
                 lineId: lineId,
             });
             ToastAndroid.show(response.data.message, ToastAndroid.LONG);
             navigation.navigate("RoleSelect");
         } catch (e) {
-
+            alert(e)
         }
     }
-
 
     return (
         <>
             {/* header */}
-            <SafeAreaView style={styles.container}/>
+            <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
@@ -99,6 +157,8 @@ export default function ResgisterTutor({ navigation }) {
 
             {/* body */}
             <ScrollView style={{ backgroundColor: Colors.white, flex: 0 }}>
+                {messageAlert &&
+                    <AlertComponent text={[msg, setText]} alert={[messageAlert, setAlert]} />}
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={[styles.column, styles.box]} />
@@ -113,15 +173,15 @@ export default function ResgisterTutor({ navigation }) {
                         onTextChange={(text) => setSurname(text)} />
                     <Calendar
                         callback={getBirthDate}
-                        claerdate={[claerdate, setClaerDate]}/>
+                        claerdate={[claerdate, setClaerDate]} />
                     <TextInputButton
                         placeholder={"Phone Number"}
                         onTextChange={(text) => setPhoneNumber(text)}
-                        keyboardType={"phone-pad"}/>
+                        keyboardType={"phone-pad"} />
                     <TextInputButton
                         placeholder={"Line ID"}
                         onTextChange={(text) => setLineId(text)}
-                        keyboardType={"email-address"}/>
+                        keyboardType={"email-address"} />
                     <TextInputButton
                         placeholder={"Email"}
                         onTextChange={(text) => setEmail(text)}
@@ -134,10 +194,10 @@ export default function ResgisterTutor({ navigation }) {
                         onValueChange={(itemValue, itemIndex) => setCatagory(itemIndex)} />
                     <Experience
                         selectedValue={experience}
-                        onValueChange={(text) => setExperience(text)}/>
+                        onValueChange={(text) => setExperience(text)} />
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={alertEnroll}>
+                <TouchableOpacity style={styles.button} onPress={() => checkEmpty()}>
                     <Text style={styles.title}>Submit</Text>
                 </TouchableOpacity>
                 <View style={{ marginVertical: 10 }} />

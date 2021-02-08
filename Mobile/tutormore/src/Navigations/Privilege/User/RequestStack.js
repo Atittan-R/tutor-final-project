@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack";
-import { Request } from "../../../screens/UserScreen"
+import { Request, Matching } from "../../../screens/UserScreen"
 
 
 const Stack = createStackNavigator();
@@ -11,10 +11,10 @@ const RequestStack = () => {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="Feed"
+            initialRouteName="Request"
         >
             <Stack.Screen name="Request" component={Request} />
-
+            <Stack.Screen name="Matching" component={Matching} />
         </Stack.Navigator>
 
     )

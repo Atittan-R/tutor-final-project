@@ -5,12 +5,35 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
 import API from '../../services/API';
 
-export default function TagSearch({ navigation }) {
+export default function TagSearch({ navigation ,route}) {
 
     // search bar
+    const { Tag } = route.params
     const [search, setSearch] = useState('');
     const [Request, setRequest] = useState([])
     const [Course, setCourse] = useState([])
+    const test=
+        [
+            {
+                "id": 11,
+                "courses": [
+                    {
+                        "name": "Asian Study",
+                        "id": 96
+                    }
+                ]
+            },
+            {
+                "id": 14,
+                "courses": [
+                    {
+                        "name": "Asian Study",
+                        "id": 96
+                    }
+                ]
+            }
+        ]
+    
     const course = [
         {
             id: "0",
@@ -72,44 +95,58 @@ export default function TagSearch({ navigation }) {
             rate: 3.2,
         },
     ];
-    // const fetchCourse = async () => {
-    //     try {
-    //         const courses = await API.post("/search/course", {
-    //             searchQuerying: search
-    //         })
+    const fetchTag = async () => {
+        console.log("tag: ",Tag);
+        try {
+            const tag = await API.post("/search/tag", {
+                tag: Tag
+            })
 
-    //         // console.log(courses.data);
-    //         setCourse(courses.data)
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    // const fetchRequest = async () => {
-    //     try {
-    //         const requests = await API.post("/search/request", {
-    //             searchQuerying: search
-    //         })
-
-    //         console.log(requests.data);
-    //         setRequest(requests.data)
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     if (search != "") {
-    //         fetchCourse()
-    //         fetchRequest()
-    //     } else {
-    //         setRequest([])
-    //         setCourse([])
-    //     }
-
-    // }, [search])
+          
+            const arr=tag.data
+            const course=[]
+            arr.map((i)=>i.courses.map((i)=>course.push(i)))
+            setCourse(course)
+            console.log(Course);
+            // setCourse(courses.data)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+ 
+    useEffect(() => {
+     fetchTag()
+    }, [])
     return (
         <>
             <SafeAreaView style={styles.container} />
+            <View style={styles.line} />
+                <View style={[styles.topic, styles.row]}>
+                    <View style={styles.box} />
+                    <Text style={styles.textRec}>Request Course</Text>
+                </View>
+                <FlatList
+                    data={course}
+                    keyExtractor={item => item.id}
+                    horizontal={true}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity>
+                            <View style={styles.card}>
+                                <Image source={{ uri: "https://source.unsplash.com/random" }} style={styles.image} />
+                                <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
+                                <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
+
+                                {/* {item.join_users.length > 0 ?
+
+                                    <Text style={styles.textBody}>{item.join_users.map((i) => i.joinCount)}</Text>
+                                    :
+                                    <Text style={styles.textBody}>{0}</Text>
+                                } */}
+
+                            </View>
+                        </TouchableOpacity>
+                    }
+                />
             <View style={styles.viewItem}>
                 <TouchableOpacity
                     style={{ color: Colors.secondary, marginRight: 10 }}
@@ -119,7 +156,7 @@ export default function TagSearch({ navigation }) {
                 <Text style={styles.textHeader}>Course Name</Text>
             </View>
             <FlatList
-                data={course}
+                data={Course}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) =>
                     <TouchableOpacity>
@@ -137,10 +174,10 @@ export default function TagSearch({ navigation }) {
                                 <Text style={styles.textTitle}>{item.name}</Text>
                                 <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
                                 <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                    <Rating imageSize={15} startingValue={item.rate} fractions={5} ratingCount={1} />
                                     <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
                                     <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
+                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start.substring(0,5)} {item.time_end.substring(0,5)}</Text>
                                     <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
                                     <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
                                 </View>

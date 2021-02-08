@@ -20,7 +20,9 @@ import LoadingScreen from "../../../components/Loading";
 import { styles } from "./Style";
 import NoDataScreen from "../../../components/Nodata";
 import courseAvatars from "../../../configs/courseAvatars";
-import {useGlobalVar} from "../../../context/GlobalContex";
+import { useGlobalVar } from "../../../context/GlobalContex";
+
+import AlertComponent from "../../../components/Alerts";
 
 export default function Home({ navigation }) {
     // search bar
@@ -28,6 +30,7 @@ export default function Home({ navigation }) {
     const [a, dispatchA] = authentication;
     let user = JSON.parse(a.userData);
     const [filterItem, setFilterItem] = useState(null)
+
     const searchAction = (text) => {
         setFilterItem(data.filter(item => item.name.toLowerCase().includes(text.toLowerCase())))
     }
@@ -35,15 +38,30 @@ export default function Home({ navigation }) {
     //pull dawn to refresh data
     const [refreshing, setRefreshing] = useState(false);
     const [state, dispatch] = useReducer(reducer, initialState)
+    const [msg, setText] = useState("");
+    const [err, setError] = useState(false)
+    const [Recommend,setRecommend]=useState([])
 
+    const recommend = async () =>{
+        try {
+            const response = await API.get('/course/recommend')
+            setRecommend(response.data)
+            // console.log(course)
+        } catch (e) {
+            setText(error.message)
+            setError(true)
+        }
+    }
     async function fetchData() {
         dispatch(actionCreators.loading())
         try {
             const response = await API.get('/course/findAll/')
             const course = await response.data;
-            console.log(course)
+            // console.log(course)
             dispatch(actionCreators.success(course))
         } catch (e) {
+            setText(error.message)
+            setError(true)
             dispatch(actionCreators.failure())
         }
     }
@@ -70,15 +88,14 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         fetchData()
+        recommend()
     }, [])
 
     if (error) {
         return (
             <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                <View style={styles.center}>
-                    <Text>Failed to load posts!</Text>
-                </View>
+                <AlertComponent text={[msg, setText]} alert={[err, setError]} /> 
             </ScrollView>
         )
     }
@@ -100,7 +117,7 @@ export default function Home({ navigation }) {
                 </TouchableOpacity>
             </View>
             {loading ? <LoadingScreen /> :
-                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                     {/*Category*/}
                     <View style={styles.bg}>
                         <View style={{ marginVertical: 10 }}>
@@ -179,15 +196,18 @@ export default function Home({ navigation }) {
                                 <View style={[styles.column, styles.box]} />
                                 <Text style={[styles.column, styles.textRec]}>Recommend</Text>
                             </View>
-                            <TouchableOpacity><Text style={styles.textViewMore}>View More</Text></TouchableOpacity>
+                            <TouchableOpacity><Text style={styles.textViewMore}></Text></TouchableOpacity>
                         </View>
 
                         <FlatList
+                            showsHorizontalScrollIndicator={false}
                             horizontal={true}
-                            data={data}
+                            data={Recommend}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item: { name, description, courseAvatar } }) => (
+                            key={data.id}
+                            renderItem={({ item: { id, name, description, courseAvatar } }) => (
                                 <TouchableOpacity
+                                    onPress={() => navigation.navigate("CourseDetail", { course: id })}
                                     style={styles.listStyle}>
                                     <View style={{ padding: 15 }}>
                                         <Image source={courseAvatars[courseAvatar].image}
@@ -212,7 +232,7 @@ export default function Home({ navigation }) {
                                 <View style={[styles.column, styles.box]} />
                                 <Text style={[styles.column, styles.textRec]}>All Course</Text>
                             </View>
-                            <TouchableOpacity><Text style={styles.textViewMore}>View More</Text></TouchableOpacity>
+                            <TouchableOpacity><Text style={styles.textViewMore}></Text></TouchableOpacity>
                         </View>
                         {data.length === 0 ?
                             <NoDataScreen /> :
@@ -223,9 +243,9 @@ export default function Home({ navigation }) {
                                     <TouchableOpacity
                                         onPress={() => {
                                             // console.log("courseId", id)
-                                            navigation.navigate("CourseDetail", {course: id});
+                                            navigation.navigate("CourseDetail", { course: id });
                                         }}
-                                        style={{ marginTop: 5, }}>
+                                    >
                                         <View style={styles.courseWrap}>
                                             <Image source={courseAvatars[courseAvatar].image}
                                                 style={styles.courseImage} />
@@ -239,12 +259,12 @@ export default function Home({ navigation }) {
                                                 <View style={styles.courseViewDetail}>
                                                     <Icon name="schedule" type="material" color="gray" size={15} />
                                                     <Text
-                                                        style={styles.textGray}>{time_start + " - " + time_end}</Text>
+                                                        style={styles.textGray}>{time_start.substring(0,5) + " - " + time_end.substring(0,5)}</Text>
                                                     <Icon name="calendar-today" type="material" color="gray" size={15} />
                                                     <Text style={styles.textGray}>{day}</Text>
                                                 </View>
                                                 <View style={styles.courseDetail}>
-                                                    <Rating imageSize={15} startingValue={rate} ractions={5}
+                                                    <Rating imageSize={15} startingValue={rate} reactions={5}
                                                         ratingCount={1} />
                                                     <Text style={styles.textBlack}>{rate}</Text>
                                                     <Icon name="category" type="material" color="gray" size={15} />
