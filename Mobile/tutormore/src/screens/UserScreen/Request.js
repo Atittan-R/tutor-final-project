@@ -88,16 +88,11 @@ export default function Request({ navigation }) {
 
             clear()
             navigation.push("Matching", { name: CourseName, day: day.toString(), time_start: TimeStart.getHours() + ":" + TimeStart.getMinutes(), categoryId: catagory });
-            // navigation.navigate("Feed", {
-            //     name: "Feed", onGoBack: () => {
-            //         fetchData()
-            //     }
-            // })
 
         } catch (error) {
             if (error.response.status == 404) {
                 clear();
-                navigation.navigate("Feed", { name: "Feed", onGoBack: () => onRefreshh() })
+                navigation.navigate("Feed", { name: "Feed" })
             }
             else {
                 console.log('====================================');
@@ -146,7 +141,6 @@ export default function Request({ navigation }) {
                     <Clock name="Time Start" callback={getTimeStart} claerdate={[claerdate, setClaerDate]} />
                     <Clock name="Time End" callback={getTimeEnd} claerdate={[claerdate, setClaerDate]} />
                 </View>
-
                 <Catagory
                     selectedValue={catagory}
                     onValueChange={(text) => setCatagory(text)} />

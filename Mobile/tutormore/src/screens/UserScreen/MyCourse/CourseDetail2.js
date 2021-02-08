@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     View, ToastAndroid, RefreshControl,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import {Icon, Rating} from "react-native-elements";
 import Colors from "../../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
 import API from "../../../services/API";
@@ -21,7 +21,6 @@ import { actionCreators, initialState, reducer } from "../Reducer";
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import courseAvatars from "../../../configs/courseAvatars";
 import avatars from "../../../configs/avatars";
-import categories from "../../../configs/categories";
 export default function CourseDetail2({ navigation, route }) {
     const { authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
@@ -84,8 +83,6 @@ export default function CourseDetail2({ navigation, route }) {
             { cancelable: false }
         );
     };
-
-
 
 
     //Panel Open Close
@@ -201,7 +198,7 @@ export default function CourseDetail2({ navigation, route }) {
                     <Icon name="schedule" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Time</Text>
-                        <Text style={styles.text}>{data.time_start + " - " + data.time_end}</Text>
+                        <Text style={styles.text}>{data.time_start.substring(0,5) + " - " + data.time_end.substring(0,5)}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -295,7 +292,11 @@ export default function CourseDetail2({ navigation, route }) {
                 <View style={styles.panelContent}>
                     <Image source={avatars[data.tutors.avatar].image} style={styles.imageTutor} />
                     <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.tutors.username ? data.tutors.username : "Not specified"}</Text>
-                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.tutors.tutor_info.date_of_birth ? data.tutors.tutor_info.date_of_birth : "Not specified"}</Text>
+
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Rating imageSize={15} startingValue={data.tutors.tutor_info.rate} fractions={5} ratingCount={5} />
+                        <Text style={styles.text}>   {data.tutors.tutor_info.rate}</Text>
+                    </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
                         <Text style={styles.text}>{data.CourseCate.name ? data.CourseCate.name : "Not specified"}</Text>

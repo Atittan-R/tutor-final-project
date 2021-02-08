@@ -26,7 +26,6 @@ export default function Scanner({ navigation }) {
             const attendance = await API.post("/attendance", {
                 courseId: parseInt(value[0]),
                 userId: parseInt(value[1])
-
             })
             console.log(attendance.data);
             alert(attendance.data.status);

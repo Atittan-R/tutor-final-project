@@ -22,7 +22,7 @@
       },
       "name": "tutormore",
       "notification": {
-        "icon": "./src/assets/tutormoreLogo.png",
+        "icon": "./src/assets/NotiIcon.png",
         "color": "#BAE367",
         "iosDisplayInForeground": true,
         "androidMode": "default"

@@ -29,7 +29,7 @@ export default function RoleSelection({ navigation }) {
 
     const onSubmitHandler = async (role) => {
         // console.log("Set new Role to")
-        dispatch({ type: "ROLE_ENTRY", role: role });
+        await dispatch({ type: "ROLE_ENTRY", role: role });
         if (role === "ROLE_USER") {
             navigation.navigate("Home", { screen: "Home" })
         } else {

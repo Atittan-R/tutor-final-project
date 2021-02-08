@@ -21,13 +21,12 @@ export default function Search({ navigation }) {
     const [course, setcourse] = useState([])
     const [location, setLocation] = useState(null);
     const [search, setSearch] = useState('');
-
+    const [errorMessage, setErrorMsg] = useState('');
     const updateSearch = (search) => {
         setSearch({ search });
     };
 
     const calculateDistance = (lat, long) => {
-
         var dis = getDistance(
             { latitude: location.coords.latitude, longitude: location.coords.longitude },
             { latitude: parseFloat(lat), longitude: parseFloat(long) }
@@ -37,37 +36,20 @@ export default function Search({ navigation }) {
     };
 
     const fecth = async () => {
-        setLoading(true)
         try{
+            setLoading(true)
             const courses = await API.get("course/findAll");
-            //  console.log(courses.data)
             await courses.data.map((i) => i.distance = calculateDistance(i.lat, i.long));
             await courses.data.sort((a, b) => (a.distance - b.distance))
+            let a = await courses.data.filter(i => i.distance <= 20.00)
+            setcourse(a)
             setLoading(false)
-            console.log('====================================');
-            //  console.log(course.sort((a, b) =>  (a.distance - b.distance)))
-            console.log(courses.data)
-            console.log('====================================');
-            setcourse(courses.data)
-        }catch(error){
+        }catch(error) {
             setText(error.response.data.message)
             setLoading(false)
             setError(true)
         }
-        
     }
-    const tag = [
-        {
-            id: "0",
-            name: "Computer ",
-            description: "จะสอนให้น้องๆ นะครับ ทุกคนเป็นคนดี ไม่ดื้อตั้งใจเเรียน",
-            time: "17.0-21.0",
-            date: "Mon Wed Fri",
-            tutors: "Pixels",
-            rate: 2.2,
-            distance: 0.8
-        },
-    ];
 
     useEffect(() => {
         (async () => {
@@ -76,13 +58,9 @@ export default function Search({ navigation }) {
                 setErrorMsg('Permission to access location was denied');
                 return;
             }
-
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
-
-
         })();
-
     }, []);
 
     useEffect(() => {
@@ -93,25 +71,14 @@ export default function Search({ navigation }) {
             console.log(location);
             console.log('====================================');
         }
-
     }, [location])
+
     console.log(location);
-    //       let text = 'Waiting..';
 
-    //   if (errorMsg) {
-    //     text = errorMsg;
-    //   } else if (location) {
-    //     text = JSON.stringify(location.coords.latitude, location.coords.longitude);
-
-    //   }
-    // console.log(course);
-
-    const onRefresh = useCallback( async () => {
-        setRefreshing(true);
-        await fetch()
-        setRefreshing(false);
-    }, []);
-    
+    // const onRefresh = useCallback(() => {
+    //     setRefreshing(true);
+    //     fetch().then(() => setRefreshing(false));
+    // }, []);
 
     return (
         <>
@@ -134,15 +101,15 @@ export default function Search({ navigation }) {
                     ? <LoadingScreen />
                     : error ? <AlertComponent text={[msg, setText]} alert={[error, setError]} />
                     : course.length === 0
-                    ? <View style={{ flex: 1, paddingVertical: 300 }}>
+                    ? <View style={{ flex: 1, paddingVertical: 250 }}>
                                 <NoDataScreen data={"Near You"} />
                             </View>
                     : <FlatList
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                         data={course}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) =>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
                                 <View style={
                                     {
                                         backgroundColor: "#fff",
@@ -157,12 +124,12 @@ export default function Search({ navigation }) {
                                         <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
                                         <View style={{ flexDirection: "row", alignItems: "center" }}>
                                             <Icon name="schedule" type="material" color="gray" size={15} />
-                                            <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                            <Text style={styles.textGray}>{item.time_start.substring(0,5)}-{item.time_end.substring(0,5)}</Text>
                                             <Icon name="calendar-today" type="material" color="gray" size={15} />
                                             <Text style={styles.textGray}>{item.day}</Text>
                                         </View>
                                         <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                            <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                            <Rating imageSize={15} startingValue={item.rate} fractions={5} ratingCount={1} />
                                             <Text style={styles.textBlack}>{item.rate}</Text>
                                             <Icon name="outlined-flag" type="material" color={Colors.secondary} size={15} />
                                             <Text style={styles.textBlack}>{item.distance} km.</Text>

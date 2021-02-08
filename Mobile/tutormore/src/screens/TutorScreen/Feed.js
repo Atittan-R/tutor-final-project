@@ -107,7 +107,7 @@ export default function Feed() {
                                     <View style={styles.viewItem}>
                                         <Icon name="schedule" type="material" color={'gray'} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                        <Text style={styles.textGray}>{item.time_start.substring(0,5)} - {item.time_end.substring(0,5)}</Text>
                                         <Icon name="event" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
                                         <Text style={styles.textGray}>{item.date}</Text>

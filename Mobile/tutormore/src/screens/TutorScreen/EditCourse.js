@@ -163,7 +163,7 @@ export default function TakeCreateCourse({ route, navigation }) {
                 duration: selectedValue,
                 tagname: mytags,
                 lat: draggable.latitude.toString(),
-                long: draggable.longitud.toString(),
+                long: draggable.longitude.toString(),
                 day: day.toString(),
                 courseAvatar: courseAvatar,
                 description: description,
@@ -207,10 +207,10 @@ export default function TakeCreateCourse({ route, navigation }) {
                     <ModalDate dayValue={[day, setDay]} />
                     <Clock
                         label={"Time Start"} callback={getTimeStart} claerdate={[claerdate, setClaerDate]}
-                        value={req.time_start} />
+                        value={req.time_start.substring(0,5)} />
                     <Clock
                         label={"Time End"} callback={getTimeEnd} claerdate={[claerdate, setClaerDate]}
-                        value={req.time_end} />
+                        value={req.time_end.substring(0,5)} />
 
                     <TermCourse value={[selectedValue, setSelectedValue]} />
                     <TextInputButton

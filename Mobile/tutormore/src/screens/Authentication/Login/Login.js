@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Image, Text, View} from "react-native";
 import {ScrollView} from "react-native-gesture-handler";
 import PrimaryButton from "../../../components/buttons/PrimaryButton";
-import SecondaryButton from "../../../components/buttons/SecondaryButton";
 import PrimaryInput from "../../../components/forms/PrimaryInput";
 import {useGlobalVar} from "../../../context/GlobalContex";
 import {styles} from "./styles";
@@ -44,17 +43,6 @@ export default function Login({navigation}) {
                 />
                 <Text style={styles.title}>SIGN IN</Text>
                 <View styles={styles.contentContainer}>
-                    <View style={styles.btnWrap}>
-                        <SecondaryButton
-                            style={styles.btnItemWrap}
-                            label={"Continue With Facebook"}
-                            btnType={"FACEBOOK"}
-                            background={"dodgerblue"}
-                            fontColor={"white"}
-                        />
-                    </View>
-
-                    <Text style={styles.textWrap}>Or Sign in with E-mail</Text>
                     <View style={styles.inputItem}>
                         <PrimaryInput
                             placeHolder={"Email Address"}
@@ -72,9 +60,8 @@ export default function Login({navigation}) {
 
                     <View style={styles.loginBtnWrapper}>
                         <PrimaryButton label={"LOG IN"} onPress={() => auth.signIn({email, password})} disable={true}/>
-                        {/*<PrimaryButton label={"LOG IN"} onPress={() => console.log({email, password})} disable={true}/>*/}
                     </View>
-                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                    <Text style={styles.forgotPassword}></Text>
                 </View>
 
                 <View style={styles.footerWrapper}>

@@ -49,7 +49,6 @@ export default function Home({ navigation }) {
             // console.log(course)
         } catch (e) {
             setText(error.message)
-            setLoading(false)
             setError(true)
         }
     }
@@ -62,7 +61,6 @@ export default function Home({ navigation }) {
             dispatch(actionCreators.success(course))
         } catch (e) {
             setText(error.message)
-            setLoading(false)
             setError(true)
             dispatch(actionCreators.failure())
         }
@@ -198,7 +196,7 @@ export default function Home({ navigation }) {
                                 <View style={[styles.column, styles.box]} />
                                 <Text style={[styles.column, styles.textRec]}>Recommend</Text>
                             </View>
-                            <TouchableOpacity><Text style={styles.textViewMore}>View More</Text></TouchableOpacity>
+                            <TouchableOpacity><Text style={styles.textViewMore}></Text></TouchableOpacity>
                         </View>
 
                         <FlatList
@@ -234,7 +232,7 @@ export default function Home({ navigation }) {
                                 <View style={[styles.column, styles.box]} />
                                 <Text style={[styles.column, styles.textRec]}>All Course</Text>
                             </View>
-                            <TouchableOpacity><Text style={styles.textViewMore}>View More</Text></TouchableOpacity>
+                            <TouchableOpacity><Text style={styles.textViewMore}></Text></TouchableOpacity>
                         </View>
                         {data.length === 0 ?
                             <NoDataScreen /> :
@@ -261,7 +259,7 @@ export default function Home({ navigation }) {
                                                 <View style={styles.courseViewDetail}>
                                                     <Icon name="schedule" type="material" color="gray" size={15} />
                                                     <Text
-                                                        style={styles.textGray}>{time_start + " - " + time_end}</Text>
+                                                        style={styles.textGray}>{time_start.substring(0,5) + " - " + time_end.substring(0,5)}</Text>
                                                     <Icon name="calendar-today" type="material" color="gray" size={15} />
                                                     <Text style={styles.textGray}>{day}</Text>
                                                 </View>

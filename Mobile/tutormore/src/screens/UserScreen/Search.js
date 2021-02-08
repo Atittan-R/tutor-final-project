@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import {
+    Image,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from 'react-native'
 import { Icon, Rating } from 'react-native-elements';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Colors from '../../configs/Colors';
@@ -7,6 +16,7 @@ import courseAvatars from '../../configs/courseAvatars';
 import API from '../../services/API';
 import avatars from "../../configs/avatars";
 import { useGlobalVar } from "../../context/GlobalContex";
+import NoDataScreen from "../../components/Nodata";
 export default function Search({ navigation }) {
 
     // search bar
@@ -76,9 +86,7 @@ export default function Search({ navigation }) {
             const courses = await API.post("/search/course", {
                 searchQuerying: search
             })
-
-            // console.log(courses.data);
-            setCourse(courses.data)
+            await setCourse(courses.data)
         } catch (error) {
             console.log(error);
         }
@@ -101,13 +109,13 @@ export default function Search({ navigation }) {
     const fetchtag = async () => {
         try {
             const tag = await API.get("/Tagrecommended")
-
             // console.log(tag.data);
             setTag(tag.data)
         } catch (error) {
             console.log(error);
         }
     }
+
     useEffect(() => {
         if (search != "") {
             fetchCourse()
@@ -118,9 +126,98 @@ export default function Search({ navigation }) {
         }
 
     }, [search])
+
     useEffect(() => {
         fetchtag()
     }, [])
+
+    const CourseComponent = () =>{
+       return (
+           <FlatList
+           showsHorizontalScrollIndicator={false}
+           data={Course}
+           keyExtractor={item => item.id}
+           horizontal={true}
+           renderItem={({item:{ id, courseAvatar, name, description, rate}}) =>
+               <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", {course: id})}>
+                   <View style={styles.card}>
+                       <Image source={courseAvatars[courseAvatar].image} style={styles.image}/>
+                       <Text style={[styles.textTitle, {marginTop: 10}]}>{name}</Text>
+                       <Text numberOfLines={1}
+                             style={{color: "gray", fontSize: 12,}}>{description}</Text>
+                       <View style={{flexDirection: "row", alignItems: "center", marginTop: 15}}>
+                           <Rating imageSize={15} startingValue={rate} fractions={5} ratingCount={1}/>
+                           <Text style={[styles.textBody, {marginHorizontal: 5}]}>{rate}</Text>
+                       </View>
+                   </View>
+               </TouchableOpacity>
+           }
+       />);
+    }
+
+    const RequestComponent =()=>{
+        return (
+            <FlatList
+                showsVerticalScrollIndicator={false}
+                data={Request}
+                keyExtractor={item => item.id}
+                renderItem={({item:{ id,date, name, time_start, user,description, time_end}}) =>
+                    <View style={{marginHorizontal: 10,}}>
+                        <View style={
+                            {
+                                backgroundColor: "#fff",
+                                padding: 5,
+                                flexDirection: "row",
+                                marginHorizontal: 2,
+                                flexWrap: "wrap",
+                                marginBottom: 1,
+                                alignItems: "center",
+                            }}>
+                            <Image source={avatars[user.avatar].image} style={styles.iamgeUser}/>
+                            <Text style={styles.textTitle}>{user.username}</Text>
+                        </View>
+                        <View style={{
+                            flex: 1,
+                            marginTop: 10,
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start"
+                        }}>
+                            <Text style={styles.textTitle}>{name}</Text>
+                            <Text numberOfLines={1} style={{
+                                color: "gray",
+                                fontSize: 12,
+                            }}>{description}</Text>
+                            <View style={{flexDirection: "row", alignItems: "center", marginTop: 15}}>
+                                <Icon name="schedule" type="material" color={Colors.secondary} size={15}/>
+                                <Text
+                                    style={[styles.textBody, {marginHorizontal: 5,}]}>{time_start.substring(0,5)} {time_end.substring(0,5)}</Text>
+                                <Icon name="calendar-today" type="material" color={Colors.secondary} size={15}/>
+                                <Text style={[styles.textBody, {marginHorizontal: 5}]}>{date}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.positionBTN}>
+                            {
+                                isjoin.map((i) => i.id).includes(id) ?
+                                    <TouchableOpacity style={styles.buttonCancel}
+                                                      onPress={() => cancel(id)}>
+                                        <Text style={styles.text}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    : <TouchableOpacity style={styles.buttonJoin} onPress={() => join(id)}>
+                                        <Text style={styles.text}>Join</Text>
+                                    </TouchableOpacity>
+                            }
+                        </View>
+                        <View style={{marginBottom: 10}} />
+                        <View style={{
+                            marginBottom: 0,
+                            borderBottomWidth: 1,
+                            borderBottomColor: Colors.gray,
+                        }} />
+                    </View>
+                }
+            />
+        );
+    }
     return (
         <>
             <SafeAreaView style={styles.container} />
@@ -167,86 +264,20 @@ export default function Search({ navigation }) {
                     <View style={styles.box} />
                     <Text style={styles.textRec}>Course</Text>
                 </View>
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    data={Course}
-                    keyExtractor={item => item.id}
-                    horizontal={true}
-                    renderItem={({ item }) =>
-                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })}>
-                            <View style={styles.card}>
-                                <Image source={courseAvatars[item.courseAvatar].image} style={styles.image} />
-                                <Text style={[styles.textTitle, { marginTop: 10 }]}>{item.name}</Text>
-                                <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
-                                <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
-                                </View>
-                                {/* {item.join_users.length > 0 ?
-
-                                    <Text style={styles.textBody}>{item.join_users.map((i) => i.joinCount)}</Text>
-                                    :
-                                    <Text style={styles.textBody}>{0}</Text>
-                                } */}
-
-                            </View>
-                        </TouchableOpacity>
-                    }
-                />
+                { Course.length === 0  || Course === []
+                    ? <NoDataScreen data={""}/>
+                    : <CourseComponent />
+                }
 
                 <View style={styles.line} />
                 <View style={[styles.topic, styles.row]}>
                     <View style={styles.box} />
                     <Text style={styles.textRec}>Request Course</Text>
                 </View>
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={Request}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) =>
-                        <TouchableOpacity onPress={() => navigation.navigate("CourseDetail", { course: item.id })} style={{ marginHorizontal: 10, }}>
-                            <View style={
-                                {
-                                    backgroundColor: "#fff",
-                                    padding: 5,
-                                    flexDirection: "row",
-                                    marginHorizontal: 2,
-                                    flexWrap: "wrap",
-                                    marginBottom: 1,
-                                    alignItems: "center",
-                                }}>
-                                <Image source={avatars[item.user.avatar].image} style={styles.iamgeUser} />
-                                <Text style={styles.textTitle}>{item.user.username}</Text>
-                            </View>
-                            <View style={{ flex: 1, marginTop: 10, justifyContent: "flex-start", alignItems: "flex-start" }} >
-                                <Text style={styles.textTitle}>{item.name}</Text>
-                                <Text numberOfLines={1} style={{
-                                    color: "gray",
-                                    fontSize: 12,
-                                }}>{item.description}</Text>
-                                <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                    <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
-                                    <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.positionBTN}>
-                                {
-                                    isjoin.map((i) => i.id).includes(item.id) ?
-                                        <TouchableOpacity style={styles.buttonCancel} onPress={() => cancel(item.id)}>
-                                            <Text style={styles.text}>Cancel</Text>
-                                        </TouchableOpacity>
-                                        : <TouchableOpacity style={styles.buttonJoin} onPress={() => join(item.id)}>
-                                            <Text style={styles.text}>Join</Text>
-                                        </TouchableOpacity>
-                                }
-                            </View>
-                            <View style={{ marginBottom: 10 }}></View>
-                            <View style={{ marginBottom: 0, borderBottomWidth: 1, borderBottomColor: Colors.gray, }}></View>
-                        </TouchableOpacity>
-                    }
-                />
+                { Request.length === 0 || Request === []
+                    ? <NoDataScreen data={""} />
+                    : <RequestComponent />
+                }
             </ScrollView>
         </>
     )

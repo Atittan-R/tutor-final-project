@@ -174,10 +174,10 @@ export default function TagSearch({ navigation ,route}) {
                                 <Text style={styles.textTitle}>{item.name}</Text>
                                 <Text numberOfLines={1} style={{ color: "gray", fontSize: 12, }}>{item.description}</Text>
                                 <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                    <Rating imageSize={15} startingValue={item.rate} fractions={5} ratingCount={1} />
                                     <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
                                     <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
+                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start.substring(0,5)} {item.time_end.substring(0,5)}</Text>
                                     <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
                                     <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
                                 </View>

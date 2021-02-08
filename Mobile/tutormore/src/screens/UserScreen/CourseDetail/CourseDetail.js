@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     View, ToastAndroid, RefreshControl,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import {Icon, Rating} from "react-native-elements";
 import Colors from "../../../configs/Colors";
 import MapView, { Marker } from "react-native-maps";
 import API from "../../../services/API";
@@ -207,7 +207,7 @@ export default function CourseDetail({ navigation, route }) {
                     <Icon name="schedule" type="material" color={Colors.secondary} />
                     <View style={styles.viewItem}>
                         <Text style={styles.title}>Time</Text>
-                        <Text style={styles.text}>{data.course.time_start + " - " + data.course.time_end}</Text>
+                        <Text style={styles.text}>{data.course.time_start.substring(0,5) + " - " + data.course.time_end.substring(0,5)}</Text>
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -301,7 +301,10 @@ export default function CourseDetail({ navigation, route }) {
                 <View style={styles.panelContent}>
                     <Image source={avatars[data.course.tutors.avatar].image} style={styles.imageTutor} />
                     <Text style={[styles.textHeader, { alignSelf: "center" }]}>{data.course.tutors.username ? data.course.tutors.username : "Not specified"}</Text>
-                    <Text style={[styles.text, { alignSelf: "center" }]}>{data.course.tutors.tutor_info.date_of_birth ? data.course.tutors.tutor_info.date_of_birth : "Not specified"}</Text>
+                    <View style={[styles.panelRow, { alignSelf: "center" }]}>
+                        <Rating imageSize={15} startingValue={data.course.tutors.tutor_info.rate} fractions={5} ratingCount={5} />
+                        <Text style={styles.text}>   {data.course.tutors.tutor_info.rate}</Text>
+                    </View>
                     <View style={[styles.panelRow, { alignSelf: "center" }]}>
                         <Icon name="school" type="material" color={Colors.secondary} style={{ marginRight: 15 }} size={20} />
                         <Text style={styles.text}>{data.course.CourseCate.name ? data.course.CourseCate.name : "Not specified"}</Text>

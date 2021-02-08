@@ -139,7 +139,7 @@ export default function MyCourse({ navigation, route }) {
                         size={15}
                       />
                       <Text style={styles.textGray}>
-                        {item.time_start + " - " + item.time_end}
+                        {item.time_start.substring(0,5) + " - " + item.time_end.substring(0,5)}
                       </Text>
                       <Icon
                         name="schedule"

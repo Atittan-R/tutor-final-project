@@ -82,12 +82,12 @@ export default function List({ navigation, route }) {
                                         <View style={{ flexDirection: "row", alignItems: "center" }}>
                                             <Icon name="schedule" type="material" color="gray" size={15} />
                                             <Text
-                                                style={styles.textGray}>{item.time_start + " - " + item.time_end}</Text>
+                                                style={styles.textGray}>{item.time_start.substring(0,5) + " - " + item.time_end.substring(0,5)}</Text>
                                             <Icon name="calendar-today" type="material" color="gray" size={15} />
                                             <Text style={styles.textGray}>{item.day}</Text>
                                         </View>
                                         <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                            <Rating imageSize={15} startingValue={item.rate} ractions={5}
+                                            <Rating imageSize={15} startingValue={item.rate} fractions={5}
                                                 ratingCount={1} />
                                             <Text style={styles.textBlack}>{item.rate}</Text>
                                             <Icon name="category" type="material" color="gray" size={15} />

@@ -83,7 +83,7 @@ export default function TeachingList({ navigation }) {
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        onPress={() => navigation.push("CheckList", { course: item.name, id: item.id })}
+                        onPress={() => navigation.push("CourseDetail", { course: item.id })}
                     // key={item.id}
                     >
                         <View style={styles.card}>
@@ -92,21 +92,21 @@ export default function TeachingList({ navigation }) {
                                 <Text numberOfLines={1} style={styles.title}>{item.name}</Text>
                                 <View style={styles.contentRow}>
                                     <Icon name="calendar-today" type="material" color="gray" size={15} />
-                                    <Text style={styles.textGray}>{item.time_start} {item.time_end}</Text>
+                                    <Text style={styles.textGray}>{item.time_start.substring(0,5)} - {item.time_end.substring(0,5)}</Text>
                                     <Icon name="schedule" type="material" color="gray" size={15} />
                                     <Text style={styles.textGray}>{item.day}</Text>
                                 </View>
                                 <View style={styles.contentRow}>
-                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                    <Rating imageSize={15} startingValue={item.rate} fractions={5} ratingCount={1} />
                                     <Text style={styles.textGray}>{item.rate}</Text>
                                 </View>
                                 <View style={styles.icon}>
                                     {/* detail */}
                                     <TouchableOpacity
-                                        onPress={() => navigation.push("CourseDetail", { course: item.id })}
+                                        onPress={() =>  navigation.push("CheckList", { course: item.name, id: item.id })}
                                         style={styles.button}>
                                         <Icon name="chrome-reader-mode" type="material" color={Colors.secondary} />
-                                        <Text style={{ color: Colors.secondary, fontSize: 10 }}>Details</Text>
+                                        <Text style={{ color: Colors.secondary, fontSize: 10 }}>Attendances</Text>
                                     </TouchableOpacity>
 
                                     {/* edit */}

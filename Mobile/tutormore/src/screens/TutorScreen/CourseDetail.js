@@ -100,9 +100,6 @@ export default function CourseDetail({ navigation, route }) {
     );
   };
 
-
-
-
   //Panel Open Close
   const [isPanelActive, setIsPanelActive] = useState(false);
   const [panelProps, setPanelProps] = useState({
@@ -188,7 +185,7 @@ export default function CourseDetail({ navigation, route }) {
           <Icon name="schedule" type="material" color={Colors.secondary} />
           <View style={styles.viewItem}>
             <Text style={styles.title}>Time</Text>
-            <Text style={styles.text}>{data.course.time_start + " - " + data.course.time_end}</Text>
+            <Text style={styles.text}>{data.course.time_start.substring(0,5) + " - " + data.course.time_end.substring(0,5)}</Text>
           </View>
         </View>
         <View style={styles.view}>

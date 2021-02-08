@@ -7,7 +7,7 @@ import {
     ScrollView,
     StatusBar,
     StyleSheet,
-    Text,
+    Text, TouchableOpacity,
     View
 } from 'react-native'
 import { Icon } from 'react-native-elements';
@@ -17,16 +17,27 @@ import API from "../../services/API";
 import avatars from "../../configs/avatars";
 import Editprofile from '../../components/forms/Editprofile';
 import categories from "../../configs/categories";
+import {SwipeablePanel} from "rn-swipeable-panel";
 
 export default function Me({ navigation, route }) {
     const { auth, authentication } = useGlobalVar();
     const [state, dispatch] = authentication;
     const [modalVisible, setModalVisible] = useState(false);
+    const [avatar, setAvatar] = useState(0);
+    const [isPanelActive, setIsPanelActive] = useState(false);
     let localuser = JSON.parse(state.userData);
     const [name, setname] = useState("")
     const [major, setmajor] = useState("")
     const [tel, settel] = useState("")
     const [email, setemail] = useState("")
+    const [requireImage, setRequireImage] = useState(0);
+    const [panelProps, setPanelProps] = useState({
+        fullWidth: true,
+        openLarge: true,
+        showCloseButton: true,
+        onClose: () => setIsPanelActive(false),
+        onPressCloseButton: () => setIsPanelActive(false),
+    });
     const [Profile, setProfile] = useState(
         {
             username: "",
@@ -36,6 +47,11 @@ export default function Me({ navigation, route }) {
             major: 0,
             roles: []
         })
+
+    const changeImage = (avatarId) => {
+        //Set Image to Frontend
+        setRequireImage(avatarId);
+    }
 
     const alertSignOut = () => {
         Alert.alert(
@@ -47,6 +63,22 @@ export default function Me({ navigation, route }) {
             { cancelable: false }
         )
     }
+    const updateAvatar = async (newAvatar) =>{
+        console.log(newAvatar)
+        try {
+            const edit = await API.post("/edit/profile", {
+                id:  localuser.id,
+                avatar: newAvatar,
+            })
+            await setIsPanelActive(false)
+            await getUser();
+            setRequireImage(0);
+            console.log(edit.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getUser = async () => {
         const response = await API.get("/user/findProfile/" + localuser.id)
         const data = await response.data.user
@@ -70,10 +102,10 @@ export default function Me({ navigation, route }) {
             <ScrollView style={{ backgroundColor: Colors.background }}>
                 <SafeAreaView>
                     <View style={styles.coverArea}>
-                        <View style={styles.coverArea}>
-                            <Image source={avatars[Profile.avatar ? Profile.avatar : 0].image}
-                                style={styles.imageProfile} />
-                        </View>
+                        <TouchableOpacity style={styles.coverArea} onPress={() => setIsPanelActive(true)}>
+                            <Image source={avatars[Profile.avatar].image} style={styles.imageProfile} />
+                            <Text style={styles.text}>Change image</Text>
+                        </TouchableOpacity>
 
                         <View style={styles.viewItem}>
                             <Text style={styles.textHeader}>Name</Text>
@@ -98,7 +130,9 @@ export default function Me({ navigation, route }) {
                             major={[major, setmajor]}
                             tel={[tel, settel]}
                             email={[email, setemail]}
+                            avatar={[avatar,setAvatar]}
                             modalVisible={[modalVisible, setModalVisible]}
+                            setIsPanelActive={[isPanelActive, setIsPanelActive]}
                             profile={Profile}
                             ProfileUser={[Profile, setProfile]}
                         />
@@ -224,7 +258,62 @@ export default function Me({ navigation, route }) {
                     </View>
                 </SafeAreaView>
             </ScrollView>
-
+            <SwipeablePanel {...panelProps} isActive={isPanelActive}>
+                <View style={styles.row}>
+                    <View style={{alignItems:"center"}}>
+                        <Text style={{textAlign: "center",marginBottom: 20,}}>Select your image</Text>
+                        <Image source={avatars[requireImage].image} style={styles.imageChange}/>
+                    </View>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(1)}>
+                        <Image source={avatars[1].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(2)}>
+                        <Image source={avatars[2].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(3)}>
+                        <Image source={avatars[3].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(4)}>
+                        <Image source={avatars[4].image} style={styles.image}/>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(5)}>
+                        <Image source={avatars[5].image}
+                               style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(6)}>
+                        <Image source={avatars[6].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(7)}>
+                        <Image source={avatars[7].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(8)}>
+                        <Image source={avatars[8].image} style={styles.image}/>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.row}>
+                    <TouchableOpacity onPress={() => changeImage(9)}>
+                        <Image source={avatars[9].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(10)}>
+                        <Image source={avatars[10].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(11)}>
+                        <Image source={avatars[11].image} style={styles.image}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => changeImage(12)}>
+                        <Image source={avatars[12].image} style={styles.image}/>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity onPress={() => updateAvatar(requireImage)} style={{backgroundColor: Colors.primary, padding: 15, margin: 20, borderRadius: 20}}>
+                        <Text style={{textAlign: "center"}}>Save</Text>
+                    </TouchableOpacity>
+                </View>
+            </SwipeablePanel>
         </>
     )
 }
@@ -274,5 +363,27 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 0,
     },
-
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 5,
+    },
+    row: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        paddingTop: 10,
+        marginTop: 15
+    },
+    imageChange:{
+        width: 80,
+        height: 80,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    text: {
+        color: Colors.gray,
+        alignSelf: "center",
+        // fontWeight: "bold"
+    },
 })

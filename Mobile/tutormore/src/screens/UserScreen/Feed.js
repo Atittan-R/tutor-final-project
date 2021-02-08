@@ -35,13 +35,11 @@ export default function Feed({ navigation }) {
     console.log("user_id", user.id)
     const join = async (resId) => {
         try {
-            const join_req = await API.post("join", {
+            await API.post("join", {
                 userId: user.id, requestId: resId
             });
-            // console.log(join_req.data.status);
             isjoin.push({ id: resId })
             setisJoin([...isjoin, { id: resId }])
-            // console.log(isjoin);
         } catch (error) {
             console.log(error);
             setText(error.message)
@@ -52,7 +50,7 @@ export default function Feed({ navigation }) {
 
     const cancel = async (resId) => {
         try {
-            const cancel_join = await API.post("join/cancel", {
+            await API.post("join/cancel", {
                 userId: user.id, requestId: resId
             });
             isjoin.push({ id: resId })
@@ -137,7 +135,7 @@ export default function Feed({ navigation }) {
                                     <View style={styles.viewItem}>
                                         <Icon name="schedule" type="material" color={'gray'} size={15}
                                             style={styles.icon} />
-                                        <Text style={styles.textGray}>{item.time_start}-{item.time_end}</Text>
+                                        <Text style={styles.textGray}>{item.time_start.substring(0,5)}-{item.time_end.substring(0,5)}</Text>
                                         <Icon name="event" type="material" color={"gray"} size={15}
                                             style={styles.icon} />
                                         <Text style={styles.textGray}>{item.date}</Text>

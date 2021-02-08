@@ -4,7 +4,7 @@ import { Icon, Rating } from 'react-native-elements';
 import Colors from '../../configs/Colors';
 import courseAvatars from '../../configs/courseAvatars';
 import API from '../../services/API';
-
+import LoadingScreen from "../../components/Loading";
 import AlertComponent from "../../components/Alerts";
 import NoDataScreen from '../../components/Nodata';
 
@@ -75,10 +75,10 @@ export default function Matching({ navigation, route }) {
                                     fontSize: 12,
                                 }}>{item.description}</Text>
                                 <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}>
-                                    <Rating imageSize={15} startingValue={item.rate} ractions={5} ratingCount={1} />
+                                    <Rating imageSize={15} startingValue={item.rate} fractions={5} ratingCount={1} />
                                     <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.rate}</Text>
                                     <Icon name="schedule" type="material" color={Colors.secondary} size={15} />
-                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start} {item.time_end}</Text>
+                                    <Text style={[styles.textBody, { marginHorizontal: 5, }]}>{item.time_start.substring(0,5)} {item.time_end.substring(0,5)}</Text>
                                     <Icon name="calendar-today" type="material" color={Colors.secondary} size={15} />
                                     <Text style={[styles.textBody, { marginHorizontal: 5 }]}>{item.date}</Text>
                                 </View>
@@ -107,7 +107,7 @@ export default function Matching({ navigation, route }) {
             <SafeAreaView style={styles.container} />
             <View style={styles.headerBar}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("Feed")}>
+                    onPress={() => navigation.pop()}>
                     <Icon name="arrow-back-outline" type="ionicon" color={Colors.secondary} />
                 </TouchableOpacity>
                 <Text style={styles.textHeader}>Matching</Text>

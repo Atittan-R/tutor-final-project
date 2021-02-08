@@ -13,7 +13,6 @@ import { useGlobalVar } from "../../context/GlobalContex";
 import Colors from "../../configs/Colors";
 import ProductCard from "../../components/cards/ProductCard/ProductCard";
 import { Icon } from "react-native-elements";
-import LoadingScreen from "../../components/Loading";
 
 export default function Home({ navigation }) {
   const { auth } = useGlobalVar();
